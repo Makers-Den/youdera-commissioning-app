@@ -1,9 +1,9 @@
-const path = require('path')
+const path = require('path');
 
-const fromRoot = d => path.join(__dirname, d)
+const fromRoot = d => path.join(__dirname, d);
 
 module.exports = {
-  roots: [fromRoot('apps/next-app'), fromRoot('apps/server')],
+  roots: [fromRoot('apps/commissioning'), fromRoot('apps/server')],
   resetMocks: true,
   coveragePathIgnorePatterns: [],
   collectCoverageFrom: ['<rootDir>/src/**/*.{js,ts,tsx}'],
@@ -17,6 +17,6 @@ module.exports = {
   moduleDirectories: ['node_modules'],
   moduleFileExtensions: ['js', 'jsx', 'json', 'ts', 'tsx'],
   moduleNameMapper: {
-    '@src/(.*)': fromRoot('apps/next-app/src/$1'),
+    '@src/(.*)': fromRoot('apps/commissioning/src/$1'),
   },
-}
+};
