@@ -68,5 +68,9 @@
     "*.json": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "clsx": "^1.2.1",
+    "tailwind-merge": "^1.6.2"
   }
 }
