@@ -8,8 +8,11 @@ module.exports = {
     extend: {
       colors: {
         redtest: '#ff9966',
-      }
+      },
+      fontFamily: {
+        roboto: 'Roboto',
+      },
     },
   },
   plugins: [],
-}
+};
