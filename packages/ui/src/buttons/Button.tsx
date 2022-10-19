@@ -77,7 +77,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const disabled = isLoading || buttonDisabled;
-
+    console.log(buttonVariantStyles[variant])
     return (
       <button
         ref={ref}
@@ -90,26 +90,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           buttonVariantStyles[variant],
           'disabled:cursor-not-allowed',
           isLoading &&
-          'relative text-transparent transition-none hover:text-transparent disabled:cursor-wait',
+          `relative hover:${buttonVariantStyles[variant][0]} active:${buttonVariantStyles[variant][0]} text-transparent transition-none hover:text-transparent disabled:cursor-wait`,
           className
         )}
         {...rest}
       >
         {icon && icon}
-        {isLoading && (
-          <div
-            className={clsxm(
-              'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
-              {
-                'text-white': ['primary', 'dark'].includes(variant),
-                'text-black': ['light'].includes(variant),
-                'text-primary-500': ['outline', 'ghost'].includes(variant),
-              }
-            )}
-          >
-            <LoadingIcon color={['additional-white', 'additional-gray'].includes(variant) ? 'darkGray' : 'white'} />
-          </div>
-        )}
+        {isLoading &&
+          <LoadingIcon color={['additional-white', 'additional-gray'].includes(variant) ? 'darkGray' : 'white'} />
+        }
         {children}
       </button>
     );
