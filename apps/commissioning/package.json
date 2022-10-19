@@ -13,7 +13,6 @@
     "next": "12.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "server": "*",
     "ui": "*",
     "clsx": "^1.2.1",
     "tailwind-merge": "^1.6.2"
