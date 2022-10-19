@@ -1,6 +1,6 @@
 import * as React from 'react';
 // import { ImSpinner2 } from 'react-icons/im';
-
+import LoadingIcon from '../loadingIcon/LoadingIcon'
 import clsxm from '../../lib/clsxm';
 
 export enum ButtonVariant {
@@ -59,6 +59,7 @@ export const buttonVariantStyles: {
 
 type ButtonProps = {
   isLoading?: boolean;
+  icon?: SVGElement
   variant?: keyof typeof ButtonVariant;
 } & React.ComponentPropsWithRef<'button'>;
 
@@ -69,6 +70,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       className,
       disabled: buttonDisabled,
       isLoading,
+      icon,
       variant = 'main-orange',
       ...rest
     },
@@ -93,6 +95,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {...rest}
       >
+        {icon && icon}
         {isLoading && (
           <div
             className={clsxm(
@@ -104,7 +107,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               }
             )}
           >
-            <div className='animate-spin' />
+            <LoadingIcon color={['additional-white', 'additional-gray'].includes(variant) ? 'darkGray' : 'white'} />
           </div>
         )}
         {children}

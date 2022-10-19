@@ -13,12 +13,25 @@ const Home = () => (
     <BodyText weight='medium'>Test of boldness</BodyText>
     <BodyText weight='bold'>Test of boldness</BodyText>
 
+    <div className='py-5' />
+
     <Button variant='main-orange'>MAIN-ORANGE</Button>
     <Button variant='main-green'>MAIN-GREEN</Button>
     <Button variant='main-gray'>MAIN-GRAY</Button>
     <Button variant='additional-gray'>ADDITIONAL-GRAY</Button>
     <Button variant='additional-white'>ADDITIONAL-WHITE</Button>
     <Button variant='danger'>DANGER</Button>
+
+    <div className='py-5' />
+
+    <Button variant='main-orange' isLoading={!!'true'}>Loading</Button>
+    <Button variant='main-green' isLoading={!!'true'}>Loading</Button>
+    <Button variant='main-gray' isLoading={!!'true'}>Loading</Button>
+    <Button variant='additional-gray' isLoading={!!'true'}>Loading</Button>
+    <Button variant='additional-white' isLoading={!!'true'}>Loading</Button>
+    <Button variant='danger' isLoading={!!'true'}>Loading</Button>
+
+    <div className='py-5' />
   </div>
 )
 
