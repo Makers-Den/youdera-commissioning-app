@@ -77,7 +77,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const disabled = isLoading || buttonDisabled;
-    console.log(buttonVariantStyles[variant])
+
+    const disableShadowOnHover = () => {
+      if (!!buttonVariantStyles[variant].filter(s => s.includes('drop-shadow-buttonOnAction')).length)
+        return 'hover:drop-shadow-button'
+    }
+
     return (
       <button
         ref={ref}
@@ -87,10 +92,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           'inline-flex items-center rounded px-4 py-2 font-semibold',
           'focus:outline-none focus-visible:ring focus-visible:ring-primary-500',
           'transition-colors duration-75',
+          'transition-[filter] will-change-[filter]',
           buttonVariantStyles[variant],
           'disabled:cursor-not-allowed',
           isLoading &&
-          `relative hover:${buttonVariantStyles[variant][0]} active:${buttonVariantStyles[variant][0]} text-transparent transition-none hover:text-transparent disabled:cursor-wait`,
+          `relative hover:${buttonVariantStyles[variant][0]} active:${buttonVariantStyles[variant][0]} ${disableShadowOnHover()} text-transparent transition-none hover:text-transparent disabled:cursor-wait`,
           className
         )}
         {...rest}

@@ -54,7 +54,7 @@ module.exports = {
       },
 
       dropShadow: {
-        button: '0px 4px 8px rgba(0, 0, 0, 0.25)',
+        button: '0px 3px 4px rgba(0, 0, 0, 0.25)',
         buttonOnAction: '0px 1px 3px rgba(0, 0, 0, 0.25)',
       },
     },
