@@ -19,7 +19,7 @@ export const buttonVariantStyles: {
     'bg-orange text-white',
     'border border-orange',
     'filter drop-shadow-button',
-    'hover:drop-shadow-buttonOnAction',
+    'hover:drop-shadow-buttonOnAction hover:',
     'active:bg-orange-secondary',
   ],
   'main-green': [
@@ -45,8 +45,8 @@ export const buttonVariantStyles: {
   'additional-white': [
     'bg-white-secondary text-darkGray',
     'border-2 border-[#C0C9DF]',
-    'hover:bg-darkGray',
-    'active:bg-darkGray-secondary',
+    'hover:bg-darkGray hover:text-white hover:border-darkGray',
+    'active:bg-darkGray-secondary active:border-[#C0C9DF]',
   ],
   'danger': [
     'bg-pink text-white',
@@ -78,10 +78,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const disabled = isLoading || buttonDisabled;
 
-    const disableShadowOnHover = () => {
-      if (!!buttonVariantStyles[variant].filter(s => s.includes('drop-shadow-buttonOnAction')).length)
-        return 'hover:drop-shadow-button'
-    }
+    const disableHoverEffects = () => buttonVariantStyles[variant].filter(s => !s.includes('hover'))
 
     return (
       <button
@@ -89,14 +86,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         type='button'
         disabled={disabled}
         className={clsxm(
-          'inline-flex items-center rounded px-4 py-2 font-semibold',
+          'inline-flex items-center justify-center rounded px-4 py-2 font-semibold',
           'focus:outline-none focus-visible:ring focus-visible:ring-primary-500',
           'transition-colors duration-75',
           'transition-[filter] will-change-[filter]',
-          buttonVariantStyles[variant],
+          isLoading ? disableHoverEffects() : buttonVariantStyles[variant],
           'disabled:cursor-not-allowed',
           isLoading &&
-          `relative hover:${buttonVariantStyles[variant][0]} active:${buttonVariantStyles[variant][0]} ${disableShadowOnHover()} text-transparent transition-none hover:text-transparent disabled:cursor-wait`,
+          `relative text-transparent transition-none hover:text-transparent disabled:cursor-wait`,
           className
         )}
         {...rest}
