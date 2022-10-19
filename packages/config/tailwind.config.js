@@ -23,6 +23,10 @@ module.exports = {
           DEFAULT: '#E3E6F2',
           secondary: '#D9DDE9',
         },
+        darkerGray: {
+          DEFAULT: '#505364',
+          secondary: '#454856',
+        },
         white: {
           DEFAULT: '#FFFFFF',
           secondary: '#F6F7FA',
@@ -35,10 +39,6 @@ module.exports = {
           DEFAULT: '#FF504E',
           secondary: '#F14A48',
         },
-        darkerGray: {
-          DEFAULT: '#505364',
-          secondary: '#454856',
-        },
         blue: {
           DEFAULT: '#0011FF',
           secondary: '#0614E0',
@@ -48,8 +48,14 @@ module.exports = {
           secondary: '#EFC000',
         },
       },
+
       fontFamily: {
         roboto: 'Roboto',
+      },
+
+      dropShadow: {
+        button: '0px 4px 8px rgba(0, 0, 0, 0.25)',
+        buttonOnAction: '0px 1px 3px rgba(0, 0, 0, 0.25)',
       },
     },
   },
