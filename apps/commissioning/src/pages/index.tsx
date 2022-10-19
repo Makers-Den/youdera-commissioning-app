@@ -2,6 +2,7 @@ import React from 'react'
 
 import { H1, H2, H3, BodyText } from 'ui/typography/Typography'
 import { Button } from 'ui/buttons/Button'
+import { Input } from 'ui/inputs/Input'
 
 const Home = () => (
   <div className="flex items-center justify-center min-h-screen py-2 space-x-8">
@@ -34,6 +35,9 @@ const Home = () => (
       <Button variant='danger' isLoading={!!'true'}>Loading</Button>
     </div>
 
+    <div className="flex flex-col space-y-8">
+      <Input label='Label Test' />
+    </div>
   </div>
 )
 
