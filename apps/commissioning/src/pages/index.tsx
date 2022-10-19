@@ -1,8 +1,8 @@
 import React from 'react'
 
 import Head from 'next/head'
-import { Button } from 'ui/src/Button'
-import { H1, H2, H3, BodyText } from 'ui/src/typography/Typography'
+import { Button } from 'ui/Button'
+import { H1, H2, H3, BodyText } from 'ui/typography/Typography'
 
 const Home = () => (
   <div className="flex flex-col items-center justify-center min-h-screen py-2">
