@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "next": "12.3.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "server": "*",
     "ui": "*",
     "clsx": "^1.2.1",
@@ -20,7 +20,8 @@
   },
   "devDependencies": {
     "@types/node": "^17.0.0",
-    "@types/react": "^17.0.37",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
     "autoprefixer": "^10.4.0",
     "config": "*",
     "eslint": "^8.5.0",
