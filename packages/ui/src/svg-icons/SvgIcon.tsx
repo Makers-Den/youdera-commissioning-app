@@ -1,11 +1,12 @@
 import { SVGProps } from 'react';
-import { FaCalendarAlt, FaCheck } from 'react-icons/fa';
+import { FaCalendarAlt, FaCheck, FaTimes } from 'react-icons/fa';
 
 export type SvgIconComponent = (props: SVGProps<SVGSVGElement>) => JSX.Element;
 
 const iconMap = {
 	Calendar: FaCalendarAlt,
-	Check: FaCheck
+	Check: FaCheck,
+	Cross: FaTimes
 };
 
 export type IconName = keyof typeof iconMap;
