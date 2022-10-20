@@ -20,7 +20,7 @@ module.exports = {
   ],
   framework: "@storybook/react",
   core: {
-    builder: "@storybook/builder-vite",
+    builder: "webpack5",
   },
   // The default should be ok for us, this here for testing
   typescript: {
@@ -32,21 +32,28 @@ module.exports = {
       propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
     },
   },
-  async viteFinal(config, { configType }) {
-    // customize the Vite config here
-    return {
-      ...config,
-      resolve: {
-        alias: [
-          {
-            find: "ui",
-            replacement: path.resolve(
-              __dirname,
-              "../../../packages/ui/src"
-            ),
+  webpackFinal: (config) => {
+    config.module.rules.push({
+      test: /\.css$/,
+      use: [
+        {
+          loader: "postcss-loader",
+          options: {
+            postcssOptions: {
+              plugins: [require("tailwindcss"), require("autoprefixer")],
+            },
           },
-        ],
-      },
+        },
+      ],
+      include: path.resolve(__dirname, "../"),
+    });
+    config.resolve.alias = {
+      ...config.resolve?.alias,
+      "ui": path.resolve(
+        __dirname,
+        "../../../packages/ui/src"
+      ),
     };
+    return config;
   },
 };

@@ -14,11 +14,10 @@ export default {
       },
 } as Meta;
 
-const Template: Story = (args) => <Typography {...args} className="storybook-styles-debug-test ui-styles-debug-test">This is some cool text</Typography>;
+const Template: Story = (args) => <Typography {...args}>This is some cool text</Typography>;
 
 export const H1 = Template.bind({
     variant: 'h1',
-    className: 'asd'
 });
 export const H2 = Template.bind({
     variant: 'h2'

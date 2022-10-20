@@ -3,20 +3,7 @@
 
 console.log("preview.js loaded");
 
-import "ui/styles.css";
-import './globals.css';
-
-/*
-export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
-  controls: {
-    matchers: {
-      color: /(background|color)$/i,
-      date: /Date$/,
-    },
-  },
-  previewTabs: {
-    'storybook/docs/panel': { index: -1 },
-  },
-};
-*/
+// Forcing usage of loaders as advised here:
+// https://stackoverflow.com/a/70805809/1115128
+import "!style-loader!css-loader!postcss-loader!ui/styles.css";
+import '!style-loader!css-loader!postcss-loader!./globals.css';
