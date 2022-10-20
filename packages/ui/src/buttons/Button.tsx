@@ -1,6 +1,6 @@
 import * as React from 'react';
 // import { ImSpinner2 } from 'react-icons/im';
-import LoadingIcon from '../loadingIcon/LoadingIcon'
+import LoadingIcon from '../loading-icon/LoadingIcon'
 import clsxm from '../../lib/clsxm';
 
 export enum ButtonVariant {

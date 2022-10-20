@@ -1,11 +1,15 @@
 import * as React from 'react';
 import clsxm from '../../lib/clsxm';
 import { BodyText } from '../typography/Typography';
+import { Combobox } from '@headlessui/react';
+import { SvgIcon, IconName } from '../svg-icons/SvgIcon';
 
 type InputProps = {
-  label: string,
-  disabled?: boolean
-  icon?: SVGElement;
+  label: string;
+  placeholder?: string;
+  disabled?: boolean;
+  icon?: IconName;
+  units?: string;
   valid?: boolean;
   invalid?: boolean;
 } & React.ComponentPropsWithRef<'input'>;
@@ -20,29 +24,42 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       valid,
       invalid,
       icon,
+      units,
+      placeholder,
       ...rest
     },
-    ref
+    ref,
   ) => {
     return (
       <div>
-        <BodyText className='mb-3 text-darkGray-secondary'>{label}</BodyText>
-        <input
-          ref={ref}
-          type='input'
-          disabled={disabled}
-          className={clsxm(
-            'inline-flex items-center justify-center rounded px-3 py-2',
-            'font-medium text-darkGray-secondary',
-            'border-[1px] border-gray-secondary',
-            'focus:outline-none focus-visible:ring focus-visible:ring-primary-500', //??
-            'transition-colors duration-75',
-            'disabled:cursor-not-allowed',
-            className
-          )}
-          {...rest}
-        />
+        <BodyText className="mb-2 text-darkGray-secondary text-sm">{label}</BodyText>
+        <div className="relative">
+          <Combobox>
+            <Combobox.Input
+              onChange={() => console.log('works')}
+              ref={ref}
+              type="input"
+              placeholder={placeholder}
+              disabled={disabled}
+              className={clsxm(
+                'inline-flex items-center justify-center rounded px-3 py-2',
+                'font-medium text-darkGray-secondary',
+                'placeholder:font-normal',
+                'border-[1px] border-gray-secondary',
+                'focus:outline-none focus-visible:ring-1 focus-visible:ring-orange', //??
+                'transition-colors duration-75',
+                'disabled:cursor-not-allowed',
+                className,
+              )}
+              {...rest}
+            />
+            <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2 text-sm text-darkGray-secondary">
+              {icon && <SvgIcon name={icon} />}
+              {units && units}
+            </Combobox.Button>
+          </Combobox>
+        </div>
       </div>
     );
-  }
+  },
 );

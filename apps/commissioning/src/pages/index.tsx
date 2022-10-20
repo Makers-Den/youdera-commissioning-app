@@ -36,7 +36,9 @@ const Home = () => (
     </div>
 
     <div className="flex flex-col space-y-8">
-      <Input label='Label Test' />
+      <Input label='Label Test' placeholder='Placeholder' icon='Calendar' />
+      <Input label='Label Test' placeholder='Placeholder' units='kWh/kWp' />
+
     </div>
   </div>
 )
