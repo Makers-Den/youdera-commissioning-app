@@ -6,45 +6,67 @@ import { SvgIcon, IconName } from '../svg-icons/SvgIcon';
 
 type InputProps = {
   label: string;
+  value: string;
   placeholder?: string;
   disabled?: boolean;
   icon?: IconName;
   units?: string;
-  valid?: boolean;
-  invalid?: boolean;
+  validity?: 'valid' | 'invalid';
+  mandatory?: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClickRightElement?: () => void;
 } & React.ComponentPropsWithRef<'input'>;
+
+const validityStyle = {
+  valid: {
+    icon: 'fill-green',
+    units: 'text-green',
+    input: 'focus-visible:ring-0 border-green'
+  },
+  invalid: {
+    icon: 'fill-pink',
+    units: 'text-pink',
+    input: 'focus-visible:ring-0 border-pink'
+  }
+}
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
       children,
       className,
+      value,
       label,
       disabled,
-      valid,
-      invalid,
-      icon,
+      validity,
       units,
+      icon = !units ? (validity === 'valid' ? 'Check' : validity === 'invalid' ? 'Cross' : undefined) : undefined,
       placeholder,
+      mandatory,
+      onChange,
+      onClickRightElement,
       ...rest
     },
     ref,
   ) => {
+
     const [rightElementColor, setRightElementColor] = React.useState<string>(
       'text-gray-secondary fill-gray-secondary',
     );
+
     const handleRightColorChange = (color: string) => {
-      setRightElementColor(color);
+      !validity && setRightElementColor(color);
     };
+
     return (
       <div>
         <BodyText className="mb-2 text-darkGray-secondary text-sm">
-          {label}
+          {label}{mandatory && '*'}
         </BodyText>
         <div className="relative">
-          <Combobox>
+          <Combobox value={value}>
             <Combobox.Input
-              onChange={() => console.log('works')}
+              onChange={onChange}
               ref={ref}
               type="input"
               placeholder={placeholder}
@@ -59,17 +81,30 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 'focus:outline-none focus-visible:ring-1 focus-visible:ring-orange',
                 'transition-colors duration-75',
                 'disabled:cursor-not-allowed',
+                validity && validityStyle[validity].input,
                 className,
               )}
               {...rest}
             />
-            <Combobox.Button className={`absolute inset-y-0 right-0 flex items-center pr-2 text-sm text-darkGray-secondary ${rightElementColor}`}>
-              {icon && <SvgIcon name={icon} className='fill-inherit' />}
-              {units && units}
+            <Combobox.Button
+              className={`absolute inset-y-0 right-0 flex items-center pr-2 text-sm text-darkGray-secondary ${rightElementColor}`}
+              onClick={onClickRightElement}
+            >
+              {icon &&
+                <SvgIcon
+                  name={icon}
+                  className={validity ? validityStyle[validity].icon : 'fill-inherit'}
+                />
+              }
+              {units &&
+                <span className={validity ? validityStyle[validity].units : 'text-inherit'}>
+                  {units}
+                </span>
+              }
             </Combobox.Button>
           </Combobox>
         </div>
-      </div>
+      </div >
     );
   },
 );
