@@ -35,6 +35,7 @@ To build all apps and packages, run the following command:
 
 ```
 cd my-turborepo
+yarn install
 yarn run build
 ```
 
@@ -44,8 +45,13 @@ To develop all apps and packages, run the following command:
 
 ```
 cd my-turborepo
+yarn install
 yarn run dev
 ```
+
+### Commit Message Convention
+
+This starter is using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), it is mandatory to use it to commit changes.
 
 ### Remote Caching
 
