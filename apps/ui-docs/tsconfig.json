@@ -1,12 +1,18 @@
 {
-  "extends": "tsconfig/nextjs.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Storybook",
+  "extends": "tsconfig/base.json",
   "compilerOptions": {
+    "jsx": "preserve",
+    "noEmit": true,
+    "target": "es5",
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"],
       "ui/*": ["../../packages/ui/src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "include": ["**/*.ts", "**/*.tsx"],
+
 }

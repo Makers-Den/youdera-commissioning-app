@@ -3,3 +3,8 @@
 * {
 	font-family: 'Roboto';
 }
+
+.ui-styles-debug-test {
+  color: red;
+  border: 1px solid green;
+}
