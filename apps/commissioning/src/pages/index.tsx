@@ -56,8 +56,8 @@ const Home = () => {
         <Input label='Label Test' placeholder='Mandatory' icon='Calendar' mandatory onChange={handleValueChange} value={value} />
       </div>
 
-      <Checkbox checked={checked} label='Something' onClick={() => setChecked(!checked)} />
-      <Checkbox checked={checked} onClick={() => setChecked(!checked)} />
+      <Checkbox isChecked={checked} label='Something' onClick={() => setChecked(!checked)} />
+      <Checkbox isChecked={checked} onClick={() => setChecked(!checked)} />
     </div>)
 }
 
