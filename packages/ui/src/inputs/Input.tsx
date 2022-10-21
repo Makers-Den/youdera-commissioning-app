@@ -87,7 +87,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               {...rest}
             />
             <Combobox.Button
-              className={`absolute inset-y-0 right-0 flex items-center pr-2 text-sm text-darkGray-secondary ${rightElementColor}`}
+              className={`absolute inset-y-0 right-0 flex items-center pr-2 text-sm text-darkGray-secondary ${rightElementColor} ${!onClickRightElement ? 'hover:cursor-default' : ''}`}
               onClick={onClickRightElement}
             >
               {icon &&
