@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Checkbox } from 'ui/checkboxes/Checkbox';
 import { Input } from 'ui/inputs/Input';
-import { UnderlineLink } from 'ui/links/UnderlineLink';
-import { BodyText, Label } from 'ui/typography/Typography';
+import { Footer } from 'ui/footer/Footer';
 import Image from 'next/image';
 import Logo from 'ui/logo.png';
 import { Button } from 'ui/buttons/Button';
+import { Label } from 'ui/typography/Typography';
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -53,18 +53,7 @@ const Login = () => {
         <Button variant='main-green'>LOGIN</Button>
       </div>
 
-      <footer className="w-screen flex items-center justify-between px-10 absolute bottom-4">
-        <section className="flex space-x-8">
-          <UnderlineLink openNewTab href="google.com">
-            Legal Notice
-          </UnderlineLink>
-          <div className="h-5 w-0 border-r-2 border-gray rounded" />
-          <UnderlineLink openNewTab href="google.com">
-            Privacy Policy
-          </UnderlineLink>
-        </section>
-        <BodyText>© 2022 Younergy Solar SA. All Rights Reserved.</BodyText>
-      </footer>
+      <Footer />
     </div>
   );
 };
