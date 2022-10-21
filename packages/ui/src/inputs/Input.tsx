@@ -19,12 +19,12 @@ type InputProps = {
 
 const validityStyle = {
   valid: {
-    icon: 'fill-green',
+    icon: 'fill-green h-4 w-4',
     units: 'text-green',
     input: 'focus-visible:ring-0 border-green'
   },
   invalid: {
-    icon: 'fill-pink',
+    icon: 'fill-pink h-4 w-4',
     units: 'text-pink',
     input: 'focus-visible:ring-0 border-pink'
   }
@@ -63,7 +63,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <BodyText className="mb-2 text-darkGray-secondary text-sm">
           {label}{mandatory && '*'}
         </BodyText>
-        <div className="relative">
+        <div className="relative max-w-fit">
           <Combobox value={value}>
             <Combobox.Input
               onChange={onChange}
@@ -93,7 +93,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               {icon &&
                 <SvgIcon
                   name={icon}
-                  className={validity ? validityStyle[validity].icon : 'fill-inherit'}
+                  className={validity ? validityStyle[validity].icon : 'fill-inherit h-4 w-4'}
                 />
               }
               {units &&
