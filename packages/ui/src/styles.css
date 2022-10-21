@@ -2,9 +2,10 @@
 
 * {
 	font-family: 'Roboto';
+	@apply text-darkGray-secondary
 }
 
 .ui-styles-debug-test {
-  color: red;
-  border: 1px solid green;
+	color: red;
+	border: 1px solid green;
 }
