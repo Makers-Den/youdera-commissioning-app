@@ -39,14 +39,14 @@ export const buttonVariantStyles: {
   'additional-gray': [
     'bg-gray text-darkGray',
     'border border-gray',
-    'hover:bg-gray-secondary',
-    'active:bg-[#CDD2E0]',
+    'hover:bg-gray-secondary hover:border-gray-secondary',
+    'active:bg-[#CDD2E0] active:border-[#CDD2E0]',
   ],
   'additional-white': [
     'bg-white-secondary text-darkGray',
     'border-2 border-[#C0C9DF]',
     'hover:bg-darkGray hover:text-white hover:border-darkGray',
-    'active:bg-darkGray-secondary active:border-[#C0C9DF]',
+    'active:bg-darkGray-secondary active:border-darkGray-secondary',
   ],
   'danger': [
     'bg-pink text-white',
@@ -78,7 +78,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const disabled = isLoading || buttonDisabled;
 
-    const disableHoverEffects = () => buttonVariantStyles[variant].filter(s => !s.includes('hover'))
+    const disablePseudoClasses = () => buttonVariantStyles[variant].filter(s => !s.includes('hover')).filter(s => !s.includes('active'))
 
     return (
       <button
@@ -86,23 +86,20 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         type='button'
         disabled={disabled}
         className={clsxm(
-          'inline-flex items-center justify-center rounded px-4 py-2 font-semibold',
+          'inline-flex items-center justify-center rounded px-4 h-[40px] font-semibold',
           'focus:outline-none focus-visible:ring focus-visible:ring-primary-500',
-          'transition-colors duration-75',
+          'transition-colors duration-150',
           'transition-[filter] will-change-[filter]',
-          isLoading ? disableHoverEffects() : buttonVariantStyles[variant],
+          isLoading ? disablePseudoClasses() : buttonVariantStyles[variant],
           'disabled:cursor-not-allowed',
           isLoading &&
-          `relative text-transparent transition-none hover:text-transparent disabled:cursor-wait`,
+          `relative text-transparent text  transition-none hover:text-transparent disabled:cursor-wait`,
           className
         )}
         {...rest}
       >
-        {icon && icon}
-        {isLoading &&
-          <LoadingIcon color={['additional-white', 'additional-gray'].includes(variant) ? 'darkGray' : 'white'} />
-        }
-        {children}
+        {isLoading && <LoadingIcon color={['additional-white', 'additional-gray'].includes(variant) ? 'darkGray' : 'white'} />}
+        {children}{icon && icon}
       </button>
     );
   }
