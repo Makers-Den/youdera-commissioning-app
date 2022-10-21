@@ -7,6 +7,7 @@ export type TypographyVariant =
   | 'h1'
   | 'h2'
   | 'h3'
+  | 'label'
 
 export type TypographyWeight =
   | 'normal'
@@ -29,7 +30,8 @@ export interface TypographyProps {
   | 'strong'
   | 'ul'
   | 'ol'
-  | 'li';
+  | 'li'
+  | 'label';
   className?: string;
   children?: React.ReactNode;
   id?: string;
@@ -40,24 +42,24 @@ export interface TypographyProps {
 export const variantToClasses: { [key in TypographyVariant]: string[] } = {
   body: [
     'text-base',
-    'text-current',
-    'font-roboto'
+    'text-current'
   ],
   h1: [
     'text-3xl',
-    'text-current',
-    'font-roboto'
+    'text-current'
   ],
   h2: [
     'text-2xl',
-    'text-current',
-    'font-roboto'
+    'text-current'
   ],
   h3: [
     'text-lg',
-    'text-current',
-    'font-roboto'
+    'text-current'
   ],
+  label: [
+    'text-[14px]',
+    'text-current'
+  ]
 };
 
 export const weightToClasses: { [key in TypographyWeight]: string[] } = {
@@ -105,6 +107,10 @@ export const H2 = (props: TypographyPropsWithoutVariant) => (
 
 export const H3 = (props: TypographyPropsWithoutVariant) => (
   <Typography variant='h3' as='h3' {...props} />
+);
+
+export const Label = (props: TypographyPropsWithoutVariant) => (
+  <Typography variant='label' as='label' {...props} />
 );
 
 /** For big statistics numbers. Looks like h1 style, but isn't a semantic h1 */
