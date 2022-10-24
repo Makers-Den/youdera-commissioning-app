@@ -57,7 +57,7 @@ export const buttonVariantStyles: {
   ]
 };
 
-type ButtonProps = {
+export type ButtonProps = {
   isLoading?: boolean;
   icon?: SVGElement
   variant?: keyof typeof ButtonVariant;

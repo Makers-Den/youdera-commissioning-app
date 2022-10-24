@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import Link from 'next/link'
+
 import { Checkbox } from 'ui/checkboxes/Checkbox';
 import { Input } from 'ui/inputs/Input';
-import { Footer } from 'ui/footer/Footer';
 import Image from 'next/image';
 import Logo from 'ui/logo.png';
 import { Button } from 'ui/buttons/Button';
 import { Label } from 'ui/typography/Typography';
+import { Layout } from 'ui/layout/Layout'
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -18,10 +20,19 @@ const Login = () => {
 
   const [rememberUser, setRememberUser] = useState<boolean>(false);
   const handleChangeRememberUser = (): void => setRememberUser(!rememberUser);
-
+  const links = [
+    {
+      name: 'Legal Notice',
+      href: 'google.com'
+    },
+    {
+      name: 'Privacy Policy',
+      href: 'google.com'
+    }
+  ]
   return (
-    <div className='w-screen h-screen flex flex-col items-center justify-center'>
-      <div className="flex flex-col space-y-7 max-w-fit">
+    <Layout links={links}>
+      <div className="flex flex-col space-y-7 max-w-fit h-full mt-auto">
         <Image src={Logo} alt="logo" objectFit='contain' height={60} />
         <div className='space-y-4'>
           <Input
@@ -30,7 +41,7 @@ const Login = () => {
             onChange={handleChangeEmail}
             value={email}
             icon="Envelope"
-            className="w-64"
+            width='64'
           />
           <Input
             label="Password"
@@ -39,7 +50,7 @@ const Login = () => {
             onChange={handleChangePassword}
             value={password}
             type='password'
-            className="w-64"
+            width='64'
           />
         </div>
         <div className="flex items-center justify-between gap">
@@ -48,13 +59,11 @@ const Login = () => {
             onClick={handleChangeRememberUser}
             isChecked={rememberUser}
           />
-          <Label className="font-medium underline">Forgot password?</Label>
+          <Link href='/forgotten-password' passHref><Label className="font-medium underline hover:cursor-pointer">Forgot password?</Label></Link>
         </div>
         <Button variant='main-green'>LOGIN</Button>
       </div>
-
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 
