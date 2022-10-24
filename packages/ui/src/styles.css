@@ -4,6 +4,10 @@
   font-family: 'Roboto';
 }
 
+body {
+  @apply text-darkGray-secondary;
+}
+
 .ui-styles-debug-test {
   color: red;
   border: 1px solid green;

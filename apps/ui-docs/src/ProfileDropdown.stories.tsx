@@ -1,5 +1,5 @@
 import React from 'react';
-import { ComponentMeta, ComponentStory, Meta, Story } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ProfileDropdown } from 'ui/profile-dropdown/ProfileDropdown';
 import { Typography } from 'ui/typography/Typography';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
