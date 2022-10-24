@@ -18,5 +18,5 @@ WithLabel.args = {
 
 export const Enabled = Template.bind({});
 Enabled.args = {
-  enabled: true
+  checked: true
 };
