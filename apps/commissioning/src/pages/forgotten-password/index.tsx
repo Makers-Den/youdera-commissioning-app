@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Input } from 'ui/inputs/Input';
 import { Button } from 'ui/buttons/Button';
-import { Footer } from 'ui/footer/Footer'
 import { H2, BodyText } from 'ui/typography/Typography';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import Link from 'next/link';
