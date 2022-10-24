@@ -1,6 +1,6 @@
 import * as React from 'react';
 // import { ImSpinner2 } from 'react-icons/im';
-import LoadingIcon from '../loading-icon/LoadingIcon'
+import LoadingIcon from '../loading-icon/LoadingIcon';
 import clsxm from '../../lib/clsxm';
 
 export enum ButtonVariant {
@@ -9,7 +9,7 @@ export enum ButtonVariant {
   'main-gray',
   'additional-gray',
   'additional-white',
-  'danger'
+  'danger',
 }
 
 export const buttonVariantStyles: {
@@ -18,22 +18,22 @@ export const buttonVariantStyles: {
   'main-orange': [
     'bg-orange text-white',
     'border border-orange',
-    'filter drop-shadow-button',
-    'hover:drop-shadow-buttonOnAction hover:',
+    'filter drop-shadow-medium',
+    'hover:drop-shadow-small hover:',
     'active:bg-orange-secondary',
   ],
   'main-green': [
     'bg-green text-white',
     'border border-green',
-    'filter drop-shadow-button',
-    'hover:drop-shadow-buttonOnAction',
+    'filter drop-shadow-medium',
+    'hover:drop-shadow-small',
     'active:bg-green-secondary',
   ],
   'main-gray': [
     'bg-darkGray text-white',
     'border border-darkGray',
-    'filter drop-shadow-button',
-    'hover:drop-shadow-buttonOnAction',
+    'filter drop-shadow-medium',
+    'hover:drop-shadow-small',
     'active:bg-darkGray-secondary',
   ],
   'additional-gray': [
@@ -48,18 +48,18 @@ export const buttonVariantStyles: {
     'hover:bg-darkGray hover:text-white hover:border-darkGray',
     'active:bg-darkGray-secondary active:border-darkGray-secondary',
   ],
-  'danger': [
+  danger: [
     'bg-pink text-white',
     'border border-orange',
-    'filter drop-shadow-button',
-    'hover:drop-shadow-buttonOnAction',
+    'filter drop-shadow-medium',
+    'hover:drop-shadow-small',
     'active:bg-pink-secondary',
-  ]
+  ],
 };
 
 type ButtonProps = {
   isLoading?: boolean;
-  icon?: SVGElement
+  icon?: SVGElement;
   variant?: keyof typeof ButtonVariant;
 } & React.ComponentPropsWithRef<'button'>;
 
@@ -74,16 +74,19 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant = 'main-orange',
       ...rest
     },
-    ref
+    ref,
   ) => {
     const disabled = isLoading || buttonDisabled;
 
-    const disablePseudoClasses = () => buttonVariantStyles[variant].filter(s => !s.includes('hover')).filter(s => !s.includes('active'))
+    const disablePseudoClasses = () =>
+      buttonVariantStyles[variant]
+        .filter(s => !s.includes('hover'))
+        .filter(s => !s.includes('active'));
 
     return (
       <button
         ref={ref}
-        type='button'
+        type="button"
         disabled={disabled}
         className={clsxm(
           'inline-flex items-center justify-center rounded px-4 h-[40px] font-semibold',
@@ -93,14 +96,23 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           isLoading ? disablePseudoClasses() : buttonVariantStyles[variant],
           'disabled:cursor-not-allowed',
           isLoading &&
-          `relative text-transparent text  transition-none hover:text-transparent disabled:cursor-wait`,
-          className
+            `relative text-transparent text  transition-none hover:text-transparent disabled:cursor-wait`,
+          className,
         )}
         {...rest}
       >
-        {isLoading && <LoadingIcon color={['additional-white', 'additional-gray'].includes(variant) ? 'darkGray' : 'white'} />}
-        {children}{icon && icon}
+        {isLoading && (
+          <LoadingIcon
+            color={
+              ['additional-white', 'additional-gray'].includes(variant)
+                ? 'darkGray'
+                : 'white'
+            }
+          />
+        )}
+        {children}
+        {icon && icon}
       </button>
     );
-  }
+  },
 );

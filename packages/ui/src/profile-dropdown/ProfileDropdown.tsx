@@ -26,7 +26,7 @@ export function ProfileDropdown({
   subTitle,
 }: ProfileDropdownProps) {
   return (
-    <Menu as={'div'} className="relative">
+    <Menu as={'div'} className="relative w-max">
       {({ open }) => (
         <>
           <Menu.Button className={'flex items-center space-x-3 pr-7 pl-1'}>
@@ -59,11 +59,13 @@ export function ProfileDropdown({
           >
             <Menu.Items
               as="div"
-              className={'absolute bg-white rounded drop-shadow-lg w-full'}
+              className={
+                'absolute bg-white rounded-xl drop-shadow-large w-full'
+              }
             >
               <div className="bg-inherit w-5 aspect-square absolute rotate-45 -top-2 rounded right-6" />
               <ul className="px-6 py-5">
-                {items.map(({ key, children }) => {
+                {items?.map(({ key, children }) => {
                   return (
                     <Menu.Item as="li" key={key}>
                       {children}

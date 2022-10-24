@@ -3,7 +3,6 @@ module.exports = {
   content: [
     'src/**/*.{js,ts,jsx,tsx}',
     '../../packages/ui/src/**/*.{js,ts,jsx,tsx}',
-
   ],
   theme: {
     extend: {
@@ -55,8 +54,9 @@ module.exports = {
       },
 
       dropShadow: {
-        button: '0px 3px 4px rgba(0, 0, 0, 0.25)',
-        buttonOnAction: '0px 1px 3px rgba(0, 0, 0, 0.25)',
+        small: '0px 1px 3px rgba(0, 0, 0, 0.25)',
+        medium: '0px 3px 4px rgba(0, 0, 0, 0.25)',
+        large: '0px 7px 15px rgba(40, 46, 124, 0.1)',
       },
     },
   },
