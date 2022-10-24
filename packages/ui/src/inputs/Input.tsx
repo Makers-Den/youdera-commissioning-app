@@ -4,7 +4,7 @@ import { BodyText } from '../typography/Typography';
 import { Combobox } from '@headlessui/react';
 import { SvgIcon, IconName } from '../svg-icons/SvgIcon';
 
-type InputProps = {
+export type InputProps = {
   label: string;
   value: string;
   placeholder?: string;
