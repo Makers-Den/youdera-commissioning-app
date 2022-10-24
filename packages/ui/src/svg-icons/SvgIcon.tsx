@@ -1,5 +1,5 @@
 import { SVGProps } from 'react';
-import { FaCalendarAlt, FaCheck, FaTimes } from 'react-icons/fa';
+import { FaCalendarAlt, FaCheck, FaTimes, FaEnvelope, FaUnlockAlt } from 'react-icons/fa';
 import { ChevronDown } from './icons/ChevronDown';
 import { LogOut } from './icons/LogOut';
 import { Settings } from './icons/Settings';
@@ -10,6 +10,8 @@ const iconMap = {
   Calendar: FaCalendarAlt,
   Check: FaCheck,
   Cross: FaTimes,
+  Envelope: FaEnvelope,
+  Unlock: FaUnlockAlt,
   ChevronDown: ChevronDown,
   Settings: Settings,
   LogOut: LogOut,

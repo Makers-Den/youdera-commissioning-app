@@ -1,5 +1,6 @@
 import * as React from "react";
 import { SvgIcon } from "../svg-icons/SvgIcon";
+import { Label } from "../typography/Typography";
 
 type CheckboxProps = {
   isChecked: boolean;
@@ -39,9 +40,9 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         </label>
 
         {label &&
-          <label className="text-gray-secondary ml-2">
+          <Label className="text-gray-secondary ml-2">
             {label}
-          </label>
+          </Label>
         }
       </div>
     );
