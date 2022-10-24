@@ -16,9 +16,14 @@ export default {
 
 const Template: Story = (args) => <Typography {...args}>This is some cool text</Typography>;
 
-export const H1 = Template.bind({
-  variant: 'h1',
-});
-export const H2 = Template.bind({
-  variant: 'h2'
-});
+export const H1 = Template.bind({});
+H1.args = { variant: 'h1' };
+export const H2 = Template.bind({});
+H2.args = { variant: 'h2' };
+export const H3 = Template.bind({});
+H3.args = { variant: 'h3' };
+export const Body = Template.bind({});
+Body.args = { variant: 'body' };
+export const Label = Template.bind({});
+Label.args = { variant: 'label' };
+
