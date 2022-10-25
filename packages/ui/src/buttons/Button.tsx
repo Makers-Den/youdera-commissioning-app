@@ -88,14 +88,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         type="button"
         disabled={disabled}
         className={clsxm(
-          'inline-flex items-center justify-center rounded px-4 h-[40px] font-semibold',
+          'inline-flex items-center justify-center rounded px-4 h-[40px] font-black',
+          'tracking-[1px] text-sm',
           'focus:outline-none focus-visible:ring focus-visible:ring-primary-500',
           'transition-colors duration-150',
           'transition-[filter] will-change-[filter]',
           isLoading ? disablePseudoClasses() : buttonVariantStyles[variant],
           'disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:border-0 disabled:drop-shadow-none',
           isLoading &&
-          `relative text-transparent text  transition-none hover:text-transparent disabled:cursor-wait`,
+          `relative text-transparent text  transition-none hover:text-transparent cursor-wait`,
           className,
         )}
         {...rest}
