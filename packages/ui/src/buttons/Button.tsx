@@ -68,7 +68,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     {
       children,
       className,
-      disabled: disabledButton,
+      disabled: buttonDisabled,
       isLoading,
       icon,
       variant = 'main-orange',
@@ -76,7 +76,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
-    const disabled = disabledButton && !isLoading
+    const disabled = buttonDisabled && !isLoading
     const disablePseudoClasses = () =>
       buttonVariantStyles[variant]
         .filter(s => !s.includes('hover'))
