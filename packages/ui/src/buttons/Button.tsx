@@ -113,7 +113,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           )}
 
           <div className="flex items-center">
-            {icon && <SvgIcon name={icon} />}
+            {icon && <SvgIcon name={icon} className={'h-6'} />}
             {icon && children && <div className='pr-2' />}
             {children}
           </div>
