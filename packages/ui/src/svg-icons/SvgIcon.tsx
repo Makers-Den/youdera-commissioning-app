@@ -1,7 +1,15 @@
 import { SVGProps } from 'react';
-import { FaCalendarAlt, FaCheck, FaTimes, FaEnvelope, FaUnlockAlt } from 'react-icons/fa';
+import {
+  FaCalendarAlt,
+  FaCheck,
+  FaTimes,
+  FaEnvelope,
+  FaUnlockAlt,
+} from 'react-icons/fa';
 import { ChevronDown } from './icons/ChevronDown';
+import { ChevronRight } from './icons/ChevronRight';
 import { LogOut } from './icons/LogOut';
+import { SafetyHelmet } from './icons/SafetyHelmet';
 import { Settings } from './icons/Settings';
 
 export type SvgIconComponent = (props: SVGProps<SVGSVGElement>) => JSX.Element;
@@ -15,6 +23,8 @@ const iconMap = {
   ChevronDown: ChevronDown,
   Settings: Settings,
   LogOut: LogOut,
+  ChevronRight: ChevronRight,
+  SafetyHelmet: SafetyHelmet,
 };
 
 export type IconName = keyof typeof iconMap;
