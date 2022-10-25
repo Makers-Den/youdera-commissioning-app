@@ -70,6 +70,7 @@ const Home = () => {
         <Button variant="additional-gray">ADDITIONAL-GRAY</Button>
         <Button variant="additional-white">ADDITIONAL-WHITE</Button>
         <Button variant="danger">DANGER</Button>
+        <Button variant="danger" disabled>DISABLED</Button>
       </div>
 
       <div className="flex flex-col space-y-8">
