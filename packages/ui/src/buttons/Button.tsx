@@ -16,44 +16,44 @@ export const buttonVariantStyles: {
   [key in keyof typeof ButtonVariant]: string[];
 } = {
   'main-orange': [
-    'bg-orange text-white',
-    'border border-orange',
+    'bg-orange-400 text-white',
+    'border border-orange-400',
     'filter drop-shadow-medium',
     'hover:drop-shadow-small hover:',
-    'active:bg-orange-secondary',
+    'active:bg-orange-600',
   ],
   'main-green': [
-    'bg-green text-white',
-    'border border-green',
+    'bg-green-400 text-white',
+    'border border-green-400',
     'filter drop-shadow-medium',
     'hover:drop-shadow-small',
-    'active:bg-green-secondary',
+    'active:bg-green-600',
   ],
   'main-gray': [
-    'bg-darkGray text-white',
-    'border border-darkGray',
+    'bg-gray-600 text-white',
+    'border border-gray-600',
     'filter drop-shadow-medium',
     'hover:drop-shadow-small',
-    'active:bg-darkGray-secondary',
+    'active:bg-gray-700',
   ],
   'additional-gray': [
-    'bg-gray text-darkGray',
-    'border border-gray',
-    'hover:bg-gray-secondary hover:border-gray-secondary',
+    'bg-gray-300 text-gray-600',
+    'border border-gray-300',
+    'hover:bg-gray-400 hover:border-gray-400',
     'active:bg-[#CDD2E0] active:border-[#CDD2E0]',
   ],
   'additional-white': [
-    'bg-white-secondary text-darkGray',
-    'border-2 border-[#C0C9DF]',
-    'hover:bg-darkGray hover:text-white hover:border-darkGray',
-    'active:bg-darkGray-secondary active:border-darkGray-secondary',
+    'bg-gray-100 text-gray-600',
+    'border border-gray-500',
+    'hover:bg-gray-600 hover:text-white hover:border-gray-600',
+    'active:bg-gray-700 active:text-white active:border-gray-700',
   ],
-  danger: [
-    'bg-pink text-white',
-    'border border-orange',
+  'danger': [
+    'bg-red-400 text-white',
+    'border border-red-400',
     'filter drop-shadow-medium',
     'hover:drop-shadow-small',
-    'active:bg-pink-secondary',
+    'active:bg-red-600 active:border-red-600',
   ],
 };
 
@@ -96,22 +96,24 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           isLoading ? disablePseudoClasses() : buttonVariantStyles[variant],
           'disabled:cursor-not-allowed',
           isLoading &&
-            `relative text-transparent text  transition-none hover:text-transparent disabled:cursor-wait`,
+          `relative text-transparent text  transition-none hover:text-transparent disabled:cursor-wait`,
           className,
         )}
         {...rest}
       >
-        {isLoading && (
-          <LoadingIcon
-            color={
-              ['additional-white', 'additional-gray'].includes(variant)
-                ? 'darkGray'
-                : 'white'
-            }
-          />
-        )}
-        {children}
-        {icon && icon}
+        <>
+          {isLoading && (
+            <LoadingIcon
+              color={
+                ['additional-white', 'additional-gray'].includes(variant)
+                  ? 'darkGray'
+                  : 'white'
+              }
+            />
+          )}
+          {children}
+          {icon && icon}
+        </>
       </button>
     );
   },

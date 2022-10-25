@@ -26,10 +26,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             ?
             <span
               aria-hidden="true"
-              className={`w-4 h-4 rounded-sm border-2 border-gray-secondary`}
+              className={`w-4 h-4 rounded-sm border-2 border-gray-400`}
             />
             :
-            <span className="bg-green w-4 h-4 rounded-sm">
+            <span className="bg-green-400 w-4 h-4 rounded-sm">
               <SvgIcon
                 name="Check"
                 aria-hidden="true"
@@ -40,7 +40,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         </label>
 
         {label &&
-          <Label className="text-gray-secondary ml-2">
+          <Label className="text-gray-400 ml-2">
             {label}
           </Label>
         }

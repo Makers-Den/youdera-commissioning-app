@@ -5,7 +5,7 @@
 }
 
 body {
-  @apply text-darkGray-secondary;
+  @apply text-gray-700;
 }
 
 .ui-styles-debug-test {

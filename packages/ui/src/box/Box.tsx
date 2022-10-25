@@ -22,7 +22,7 @@ export type BoxHeaderProps = {
 export function BoxHeader({ className, children }: BoxHeaderProps) {
   return (
     <div className={clsxm('pr-8 flex items-center', className)}>
-      <div className="bg-orange h-full min-h-[28px] w-1 rounded-r-full relative mr-7" />
+      <div className="bg-orange-400 h-full min-h-[28px] w-1 rounded-r-full relative mr-7" />
       {children}
     </div>
   );
