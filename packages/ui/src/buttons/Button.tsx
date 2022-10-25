@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import { ImSpinner2 } from 'react-icons/im';
 import LoadingIcon from '../loading-icon/LoadingIcon';
 import clsxm from '../../lib/clsxm';
 
@@ -59,7 +58,7 @@ export const buttonVariantStyles: {
 
 export type ButtonProps = {
   isLoading?: boolean;
-  icon?: SVGElement;
+  icon?: React.ReactNode;
   variant?: keyof typeof ButtonVariant;
 } & React.ComponentPropsWithRef<'button'>;
 
@@ -88,8 +87,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         type="button"
         disabled={disabled}
         className={clsxm(
-          'inline-flex items-center justify-center rounded px-4 h-[40px] font-black',
-          'tracking-[1px] text-sm',
+          'inline-flex items-center justify-center rounded px-4 h-[40px]',
+          'tracking-[1px] text-sm font-black',
           'focus:outline-none focus-visible:ring focus-visible:ring-primary-500',
           'transition-colors duration-150',
           'transition-[filter] will-change-[filter]',
@@ -111,8 +110,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               }
             />
           )}
-          {children}
-          {icon && icon}
+
+          <div className="flex items-center">
+            {icon}
+            {icon && children && <div className='pr-2' />}
+            {children}
+          </div>
         </>
       </button>
     );
