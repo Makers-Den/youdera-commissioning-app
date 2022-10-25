@@ -65,7 +65,7 @@ export function Typography({
     as,
     {
       className: clsxm(
-        'text-darkGray-secondary',
+        'text-gray-700',
         variantToClasses[variant],
         weightToClasses[weight],
         className,

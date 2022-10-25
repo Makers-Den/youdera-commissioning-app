@@ -17,7 +17,7 @@ export const Footer: React.FC<PrimaryFooterProps> = ({ links }) => (
 					<UnderlineLink openNewTab href={link.href} >
 						{link.name}
 					</UnderlineLink>
-					{idx !== links.length - 1 && <div className="h-5 w-0 border-r-2 border-gray rounded" />}
+					{idx !== links.length - 1 && <div className="h-5 w-0 border-r-2 border-gray-300 rounded" />}
 				</div>
 			))}
 

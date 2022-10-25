@@ -26,7 +26,7 @@ const ForgottenPassword = () => {
   }
 
   //  TODO: Function for resending the emails.
-  const handleResendEmail = () => alert('Email sent')
+  const handleResendEmail = () => undefined
 
   const links = [
     {
@@ -43,7 +43,7 @@ const ForgottenPassword = () => {
     <Layout links={links}>
       {!nextStep ?
         <div className="flex flex-col max-w-fit items-center mt-auto">
-          <SvgIcon name='Unlock' className='mb-10 fill-gray-secondary w-16 h-16' />
+          <SvgIcon name='Unlock' className='mb-10 fill-gray-400 w-16 h-16' />
           <H2 className='font-medium mb-2'>Forgot Password?</H2>
           <BodyText className='mb-8'>No worries, we&apos;ll send you reset instructions.</BodyText>
           <Input
@@ -61,11 +61,11 @@ const ForgottenPassword = () => {
         </div>
         :
         <div className="flex flex-col max-w-fit items-center mt-auto">
-          <SvgIcon name='Unlock' className='mb-10 fill-gray-secondary w-16 h-16' />
+          <SvgIcon name='Unlock' className='mb-10 fill-gray-400 w-16 h-16' />
           <H2 className='font-medium mb-2'>Check Your Email</H2>
           <BodyText className='mb-1'>We sent a password reset link to</BodyText>
           <BodyText className='font-medium'>{email}</BodyText>
-          <div className='w-24 border-b-2 border-gray rounded my-8' />
+          <div className='w-24 border-b-2 border-gray-400 rounded my-8' />
           <BodyText className='mb-3'>Didn&apos;t receive the email?</BodyText>
           <Button variant='additional-gray' className="w-64" onClick={handleResendEmail}>CLICK TO RESEND</Button>
         </div>

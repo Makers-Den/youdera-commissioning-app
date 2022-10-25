@@ -18,14 +18,14 @@ export type ToggleProps = {
 export const Toggle = function Toggle({ label, checked, onChange, className, ...rest }: ToggleProps, ref) {
   return (
     <Switch.Group
-      as="div" 
+      as="div"
       className={clsxm('flex items-center', className)}
     >
       <Switch
         checked={checked}
         onChange={onChange}
         className={clsxm(
-          checked ? 'bg-green' : 'bg-darkGray',
+          checked ? 'bg-green-400' : 'bg-gray-600',
           'relative inline-flex h-5 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none',
           className
         )}
@@ -41,7 +41,7 @@ export const Toggle = function Toggle({ label, checked, onChange, className, ...
       </Switch>
       {(label) && (
         <Switch.Label as="span" className="ml-3">
-          <span className="text-lg font-medium text-darkGray">{label}</span>
+          <span className="text-lg font-medium text-gray-600">{label}</span>
         </Switch.Label>
       )}
     </Switch.Group>

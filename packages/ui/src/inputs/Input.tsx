@@ -20,14 +20,14 @@ export type InputProps = {
 
 const validityStyle = {
   valid: {
-    icon: 'fill-green h-4 w-4',
-    units: 'text-green',
-    input: 'focus-visible:ring-0 border-green'
+    icon: 'fill-green-400 h-4 w-4',
+    units: 'text-green-400',
+    input: 'focus-visible:ring-0 border-green-400'
   },
   invalid: {
-    icon: 'fill-pink h-4 w-4',
-    units: 'text-pink',
-    input: 'focus-visible:ring-0 border-pink'
+    icon: 'fill-red-400 h-4 w-4',
+    units: 'text-red-400',
+    input: 'focus-visible:ring-0 border-red-400'
   }
 }
 
@@ -53,7 +53,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ) => {
 
     const [rightElementColor, setRightElementColor] = React.useState<string>(
-      'text-gray-secondary fill-gray-secondary',
+      'text-gray-600 fill-gray-500',
     );
 
     const handleRightColorChange = (color: string) => {
@@ -62,7 +62,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div className={className}>
-        <BodyText className="mb-2 text-darkGray-secondary text-sm">
+        <BodyText className="mb-2 text-gray-700 text-sm">
           {label}{mandatory && '*'}
         </BodyText>
         <div className="relative max-w-fit">
@@ -73,14 +73,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               type="input"
               placeholder={placeholder}
               disabled={disabled}
-              onFocus={() => handleRightColorChange('text-orange fill-orange')}
-              onBlur={() => handleRightColorChange('text-gray-secondary fill-gray-secondary')}
+              onFocus={() => handleRightColorChange('text-orange-400 fill-orange-400')}
+              onBlur={() => handleRightColorChange('text-gray-600 fill-gray-500')}
               className={clsxm(
                 'inline-flex items-center justify-center rounded px-3 py-2',
-                'font-medium text-darkGray-secondary',
+                'font-medium text-gray-700',
                 'placeholder:font-normal',
-                'border-[1px] border-gray-secondary',
-                'focus:outline-none focus-visible:ring-1 focus-visible:ring-orange',
+                'border-[1px] border-gray-400',
+                'focus:outline-none focus-visible:ring-1 focus-visible:ring-orange-400',
                 'transition-colors duration-75',
                 'disabled:cursor-not-allowed',
                 validity && validityStyle[validity].input,
@@ -89,7 +89,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               {...rest}
             />
             <Combobox.Button
-              className={`absolute inset-y-0 right-0 flex items-center pr-2 text-sm text-darkGray-secondary ${rightElementColor} ${!onClickRightElement ? 'hover:cursor-default' : ''}`}
+              className={`absolute inset-y-0 right-0 flex items-center pr-2 text-sm ${rightElementColor} ${!onClickRightElement ? 'hover:cursor-default' : ''}`}
               onClick={onClickRightElement}
             >
               {icon &&

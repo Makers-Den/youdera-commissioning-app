@@ -27,7 +27,7 @@ const Home = () => {
               key: 'set',
               children: (
                 <Typography className="flex text-sm py-1">
-                  <SvgIcon name="Settings" className="text-orange w-5 mr-3" />
+                  <SvgIcon name="Settings" className="text-orange-400 w-5 mr-3" />
                   Setting
                 </Typography>
               ),
@@ -38,7 +38,7 @@ const Home = () => {
                 <Typography className="flex text-sm py-1">
                   <SvgIcon
                     name="LogOut"
-                    className="text-orange w-5 mr-3"
+                    className="text-orange-400 w-5 mr-3"
                     color="rgb(245 126 2 / 1)"
                   />
                   Logout

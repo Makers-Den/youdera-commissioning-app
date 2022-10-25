@@ -7,45 +7,96 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // orange: {
+        //   DEFAULT: '#F57E02',
+        //   secondary: '#EA7A04',
+        // },
+        // green: {
+        //   DEFAULT: '#5CB85C',
+        //   secondary: '#58B158',
+        // },
+        // darkGray: {
+        //   DEFAULT: '#6D7381',
+        //   secondary: '#656B7A',
+        // },
+        // gray: {
+        //   DEFAULT: '#E3E6F2',
+        //   secondary: '#D9DDE9',
+        // },
+        // darkerGray: {
+        //   DEFAULT: '#505364',
+        //   secondary: '#454856',
+        // },
+        // white: {
+        //   DEFAULT: '#FFFFFF',
+        //   secondary: '#F6F7FA',
+        // },
+        // purple: {
+        //   DEFAULT: '#7058E1',
+        //   secondary: '#5437D7',
+        // },
+        // pink: {
+        //   DEFAULT: '#FF504E',
+        //   secondary: '#F14A48',
+        // },
+        // blue: {
+        //   DEFAULT: '#0011FF',
+        //   secondary: '#0614E0',
+        // },
+        // yellow: {
+        //   DEFAULT: '#FFCD00',
+        //   secondary: '#EFC000',
+        // },
         orange: {
-          DEFAULT: '#F57E02',
-          secondary: '#EA7A04',
+          default: '#F57E02',
+          100: '#FFE0B2',
+          300: '#F0950D',
+          400: '#F57E02',
+          600: '#EA7A04',
         },
         green: {
-          DEFAULT: '#5CB85C',
-          secondary: '#58B158',
-        },
-        darkGray: {
-          DEFAULT: '#6D7381',
-          secondary: '#656B7A',
+          default: '#5CB85C',
+          100: '#DCEDC8',
+          300: '#70B71C',
+          400: '#5CB85C',
+          600: '#58B158',
         },
         gray: {
-          DEFAULT: '#E3E6F2',
-          secondary: '#D9DDE9',
-        },
-        darkerGray: {
-          DEFAULT: '#505364',
-          secondary: '#454856',
-        },
-        white: {
-          DEFAULT: '#FFFFFF',
-          secondary: '#F6F7FA',
-        },
-        purple: {
-          DEFAULT: '#7058E1',
-          secondary: '#5437D7',
-        },
-        pink: {
-          DEFAULT: '#FF504E',
-          secondary: '#F14A48',
-        },
-        blue: {
-          DEFAULT: '#0011FF',
-          secondary: '#0614E0',
+          default: '#D9DDE9',
+          100: '#F6F7FA',
+          300: '#E3E6F2',
+          400: '#D9DDE9',
+          500: '#C0C9DF',
+          600: '#6D7381',
+          700: '#656B7A',
+          800: '#505364',
+          900: '#454856',
         },
         yellow: {
-          DEFAULT: '#FFCD00',
-          secondary: '#EFC000',
+          default: '#FFCD00',
+          400: '#FFCD00',
+          600: '#EFC000',
+        },
+        blue: {
+          default: '#3A9BEB',
+          200: '#BBDEFB',
+          400: '#3A9BEB',
+          700: '#0011FF',
+          800: '#0614E0',
+        },
+        red: {
+          default: '#FF504E',
+          100: '#FFCCBC',
+          300: '#FF602E',
+          400: '#FF504E',
+          600: '#F14A48',
+        },
+        purple: {
+          default: '#CD54E1',
+          200: '#E1BEE7',
+          400: '#CD54E1',
+          600: '#7058E1',
+          800: '#5437D7',
         },
       },
 
