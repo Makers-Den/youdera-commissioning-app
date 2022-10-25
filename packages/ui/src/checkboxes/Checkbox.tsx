@@ -26,7 +26,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             ?
             <span
               aria-hidden="true"
-              className={`w-4 h-4 rounded-sm border-2 border-gray-400`}
+              className={`w-4 h-4 rounded-sm border-2 border-gray-500`}
             />
             :
             <span className="bg-green-400 w-4 h-4 rounded-sm">
@@ -40,7 +40,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         </label>
 
         {label &&
-          <Label className="text-gray-400 ml-2">
+          <Label className="text-gray-500 ml-2 font-medium">
             {label}
           </Label>
         }
