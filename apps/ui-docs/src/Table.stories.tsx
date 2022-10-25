@@ -2,15 +2,20 @@ import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 import { H2 } from 'ui/typography/Typography';
+import { CenterWrapper } from './utils/CenterWrapper';
 
 export default {
   component: Table,
   title: 'Components/Table',
 } as ComponentMeta<typeof Table>;
 
-const Template: ComponentStory<typeof Table> = args => <Table {...args} />;
+const Template: ComponentStory<typeof Table> = args => (
+  <CenterWrapper>
+    <Table {...args} />
+  </CenterWrapper>
+);
 
-export const Default = Template.bind({});
+export const Overview = Template.bind({});
 
 const columnNames = [
   'Name',
@@ -32,7 +37,7 @@ function fakeValues() {
   return result;
 }
 
-Default.args = {
+Overview.args = {
   children: (
     <Table>
       <Thead>

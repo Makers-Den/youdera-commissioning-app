@@ -1,6 +1,7 @@
 import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Input } from 'ui/inputs/Input';
+import { CenterWrapper } from './utils/CenterWrapper';
 
 export default {
   component: Input,
@@ -9,6 +10,10 @@ export default {
 
 type StoryType = ComponentStory<typeof Input>;
 
-const Template: ComponentStory<typeof Input> = args => <Input {...args} />;
+const Template: ComponentStory<typeof Input> = args => (
+  <CenterWrapper>
+    <Input {...args} />
+  </CenterWrapper>
+);
 
 export const Default: StoryType = Template.bind({});

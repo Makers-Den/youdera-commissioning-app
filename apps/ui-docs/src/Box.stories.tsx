@@ -3,17 +3,22 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
 import { H2 } from 'ui/typography/Typography';
+import { CenterWrapper } from './utils/CenterWrapper';
 
 export default {
   component: Box,
   title: 'Components/Box',
 } as ComponentMeta<typeof Box>;
 
-const Template: ComponentStory<typeof Box> = args => <Box {...args} />;
+const Template: ComponentStory<typeof Box> = args => (
+  <CenterWrapper>
+    <Box {...args} />
+  </CenterWrapper>
+);
 
-export const Default = Template.bind({});
+export const Overview = Template.bind({});
 
-Default.args = {
+Overview.args = {
   children: (
     <>
       <BoxHeader>

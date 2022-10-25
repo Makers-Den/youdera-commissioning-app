@@ -3,6 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ProfileDropdown } from 'ui/profile-dropdown/ProfileDropdown';
 import { Typography } from 'ui/typography/Typography';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
+import { CenterWrapper } from './utils/CenterWrapper';
 
 export default {
   component: ProfileDropdown,
@@ -10,12 +11,14 @@ export default {
 } as ComponentMeta<typeof ProfileDropdown>;
 
 const Template: ComponentStory<typeof ProfileDropdown> = args => (
-  <ProfileDropdown {...args} />
+  <CenterWrapper>
+    <ProfileDropdown {...args} />
+  </CenterWrapper>
 );
 
-export const Default = Template.bind({});
+export const Overview = Template.bind({});
 
-Default.args = {
+Overview.args = {
   items: [
     {
       key: 'set',
