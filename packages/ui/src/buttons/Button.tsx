@@ -76,8 +76,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
-    const disabled = isLoading || buttonDisabled;
-
+    const disabled = buttonDisabled && !isLoading
     const disablePseudoClasses = () =>
       buttonVariantStyles[variant]
         .filter(s => !s.includes('hover'))
@@ -94,7 +93,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           'transition-colors duration-150',
           'transition-[filter] will-change-[filter]',
           isLoading ? disablePseudoClasses() : buttonVariantStyles[variant],
-          'disabled:cursor-not-allowed',
+          'disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:border-0 disabled:drop-shadow-none',
           isLoading &&
           `relative text-transparent text  transition-none hover:text-transparent disabled:cursor-wait`,
           className,
