@@ -145,6 +145,14 @@ const Home = () => {
           onChange={handleValueChange}
           value={value}
         />
+        <Input
+          label="Label Test"
+          placeholder="Disabled"
+          onChange={handleValueChange}
+          icon="Calendar"
+          value={value}
+          disabled={!!true}
+        />
       </div>
 
       <Checkbox
