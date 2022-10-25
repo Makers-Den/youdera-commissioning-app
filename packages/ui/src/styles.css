@@ -12,3 +12,12 @@ body {
   color: red;
   border: 1px solid green;
 }
+
+@tailwind utilities;
+
+@layer utilities {
+  .table-spacing {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+  }
+}
