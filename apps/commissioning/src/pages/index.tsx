@@ -102,7 +102,7 @@ const Home = () => {
         <Button variant="additional-white">ADDITIONAL-WHITE</Button>
         <Button variant="danger">DANGER</Button>
         <Button variant="danger" disabled>DISABLED</Button>
-        <Button variant="danger" icon={<SvgIcon name='Calendar' />}>NORMAL</Button>
+        <Button variant="danger" icon='Calendar'>NORMAL</Button>
       </div>
 
       <div className="flex flex-col space-y-8">
@@ -194,7 +194,7 @@ const Home = () => {
       />
       <Checkbox isChecked={checked} onClick={() => setChecked(!checked)} />
 
-    </div>
+    </div >
   );
 };
 

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import LoadingIcon from '../loading-icon/LoadingIcon';
 import clsxm from '../../lib/clsxm';
+import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
 
 export enum ButtonVariant {
   'main-orange',
@@ -58,7 +59,7 @@ export const buttonVariantStyles: {
 
 export type ButtonProps = {
   isLoading?: boolean;
-  icon?: React.ReactNode;
+  icon?: IconName;
   variant?: keyof typeof ButtonVariant;
 } & React.ComponentPropsWithRef<'button'>;
 
@@ -112,7 +113,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           )}
 
           <div className="flex items-center">
-            {icon}
+            {icon && <SvgIcon name={icon} />}
             {icon && children && <div className='pr-2' />}
             {children}
           </div>
