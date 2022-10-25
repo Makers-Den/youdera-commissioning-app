@@ -8,7 +8,6 @@ export type InputProps = {
   label: string;
   value: string;
   placeholder?: string;
-  disabled?: boolean;
   icon?: IconName;
   units?: string;
   validity?: 'valid' | 'invalid';
@@ -52,9 +51,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     ref,
   ) => {
 
-    const [rightElementColor, setRightElementColor] = React.useState<string>(
-      'text-gray-600 fill-gray-500',
-    );
+    const [rightElementColor, setRightElementColor] = React.useState<string>('text-gray-600 fill-gray-500');
 
     const handleRightColorChange = (color: string) => {
       !validity && setRightElementColor(color);
@@ -66,24 +63,23 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {label}{mandatory && '*'}
         </BodyText>
         <div className="relative max-w-fit">
-          <Combobox value={value} >
+          <Combobox value={value} disabled={disabled}>
             <Combobox.Input
               onChange={onChange}
               ref={ref}
               type="input"
               placeholder={placeholder}
-              disabled={disabled}
               onFocus={() => handleRightColorChange('text-orange-400 fill-orange-400')}
               onBlur={() => handleRightColorChange('text-gray-600 fill-gray-500')}
               className={clsxm(
                 'inline-flex items-center justify-center rounded px-3 py-2',
-                'font-medium text-gray-700',
+                'font-medium text-gray-800 bg-gray-100',
                 'placeholder:font-normal',
                 'border-[1px] border-gray-400',
                 'focus:outline-none focus-visible:ring-1 focus-visible:ring-orange-400',
                 'transition-colors duration-75',
-                'disabled:cursor-not-allowed',
                 validity && validityStyle[validity].input,
+                'disabled:cursor-not-allowed disabled:bg-gray-400 disabled:border-gray-500 disabled:placeholder:text-gray-800 disabled:placeholder:font-medium',
                 `w-${width}`
               )}
               {...rest}

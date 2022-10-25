@@ -34,7 +34,7 @@ export function ProfileDropdown({
             <div className="flex flex-col items-start">
               <Typography
                 weight="bold"
-                className="text-gray-800 flex text-sm"
+                className="text-gray-1000 flex text-sm"
               >
                 {title}
                 <SvgIcon
