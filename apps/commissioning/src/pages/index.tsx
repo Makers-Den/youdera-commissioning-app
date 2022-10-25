@@ -6,6 +6,7 @@ import { Input } from 'ui/inputs/Input';
 import { Checkbox } from 'ui/checkboxes/Checkbox';
 import { ProfileDropdown } from 'ui/profile-dropdown/ProfileDropdown';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
+import { NavHeader } from 'ui/nav-header/NavHeader';
 
 
 const Home = () => {
@@ -19,7 +20,37 @@ const Home = () => {
     setV(e.target.value);
   };
   return (
-    <div className="flex items-center justify-center min-h-screen py-2 space-x-8">
+    <div className="flex items-center justify-center min-h-screen space-x-8 flex-wrap">
+      <NavHeader
+        items={[
+          {
+            key: 'set',
+            children: (
+              <Typography className="flex text-sm py-1">
+                <SvgIcon name="Settings" className="text-orange-400 w-5 mr-3" />
+                Setting
+              </Typography>
+            ),
+          },
+          {
+            key: 'log',
+            children: (
+              <Typography className="flex text-sm py-1">
+                <SvgIcon
+                  name="LogOut"
+                  className="text-orange-400 w-5 mr-3"
+                  color="rgb(245 126 2 / 1)"
+                />
+                Logout
+              </Typography>
+            ),
+          },
+        ]}
+        imgSrc="https://v.wpimg.pl/MTkyNjg0YjUKGzhZSEtvIElDbAMOEmF2Hlt0SEgIfWQTVigDC1U_MRsWYA0VRT01HAlgGgsfLCQCVjhbSFQkJxsVLxNIVSA2Dh1hCFNSdGxbSXtHBgB6MkZNelwDHXUwD0BjWF4FdWcPSyoOAVEudhY"
+        imgAlt="avatar"
+        title="Johny Joe"
+        subTitle="Roofer"
+      />
       <div>
         <ProfileDropdown
           items={[
@@ -161,6 +192,7 @@ const Home = () => {
         onClick={() => setChecked(!checked)}
       />
       <Checkbox isChecked={checked} onClick={() => setChecked(!checked)} />
+
     </div>
   );
 };
