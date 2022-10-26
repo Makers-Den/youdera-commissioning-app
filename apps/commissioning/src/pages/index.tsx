@@ -236,7 +236,7 @@ const Home = () => {
       />
       <Checkbox isChecked={checked} onClick={() => setChecked(!checked)} />
       <input type='range' max='359' onChange={handeValueNumberChange} value={valueNumber} />
-      <Compass azimut={valueNumber} />
+      <Compass rotationAngle={parseInt(valueNumber, 10)} />
     </div >
   );
 };
