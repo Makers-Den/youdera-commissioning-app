@@ -21,8 +21,6 @@ const Home = () => {
     setV(e.target.value);
   };
 
-  const [numberValue, setNumberValue] = React.useState<number>(0);
-
   return (
     <div className="flex items-center justify-center min-h-screen space-x-8 flex-wrap">
       <NavHeader
@@ -226,7 +224,7 @@ const Home = () => {
           value={value}
           disabled={!!true}
         />
-        <NumberInput label='Label' placeholder='Number Input' setValue={setNumberValue} value={numberValue} />
+        <NumberInput label='Label' placeholder='Number Input' setValue={setValue} value={value} />
       </div>
 
       <Checkbox

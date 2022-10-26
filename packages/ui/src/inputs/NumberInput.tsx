@@ -6,11 +6,11 @@ import { SvgIcon, IconName } from '../svg-icons/SvgIcon';
 
 export type NumberInputProps = {
   label: string;
-  value: number;
+  value: string;
   placeholder?: string;
   mandatory?: boolean;
   width?: string;
-  setValue: React.Dispatch<React.SetStateAction<number>>
+  setValue: React.Dispatch<React.SetStateAction<string>>
 } & React.ComponentPropsWithRef<'input'>;
 
 export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
@@ -29,8 +29,6 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     },
     ref,
   ) => {
-
-    const [inputValue, setInputValue] = React.useState<number>()
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setValue(e.target.value)
@@ -66,8 +64,8 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             />
 
             <Combobox.Button className={`absolute top-1/2 -translate-y-1/2 right-0 flex flex-col items-center pr-2 text-sm fill-gray-500`}>
-              <SvgIcon name={'CaretUp'} className='fill-inherit h-4 mt-1' onClick={() => handleInputIncrement(1)}></SvgIcon>
-              <SvgIcon name={'CaretDown'} className='fill-inherit h-4 mb-1' onClick={() => handleInputIncrement(-1)}></SvgIcon>
+              <SvgIcon name={'CaretUp'} className='fill-inherit h-4 mt-1 mr-2' ></SvgIcon>
+              <SvgIcon name={'CaretDown'} className='fill-inherit h-4 mb-1 mr-2' ></SvgIcon>
             </Combobox.Button>
           </Combobox>
         </div>
