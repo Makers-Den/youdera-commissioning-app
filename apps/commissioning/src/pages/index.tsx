@@ -13,6 +13,11 @@ const Home = () => {
   const [value, setValue] = React.useState<string>('');
   const [v, setV] = React.useState<string>('');
   const [checked, setChecked] = React.useState<boolean>(false);
+
+  const [valueNumber, setValueNumber] = React.useState<string>('0');
+  const handeValueNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValueNumber(e.target.value);
+  };
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
@@ -230,7 +235,8 @@ const Home = () => {
         onClick={() => setChecked(!checked)}
       />
       <Checkbox isChecked={checked} onClick={() => setChecked(!checked)} />
-      <Compass />
+      <input type='range' max='359' onChange={handeValueNumberChange} value={valueNumber} />
+      <Compass azimut={valueNumber} />
     </div >
   );
 };

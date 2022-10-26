@@ -2,24 +2,24 @@ import React from 'react'
 import { CompassArrow } from '../svg-icons/icons/CompassArrow'
 import { CompassBackground } from '../svg-icons/icons/CompassBackground'
 import clsxm from '../../lib/clsxm';
-
-export const Compass = () => {
+type CompassProps = {
+  azimut: string;
+  className: string;
+}
+export const Compass: React.FC<CompassProps> = ({ azimut, className }) => {
   return (
-    <div className='relative border-2 border-red-300 w-20 h-20'>
-
+    <div className={clsxm('relative border-2 border-red-300 w-32 h-32', className)}>
       <CompassArrow className={clsxm(
-        'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20'
-      )} />
-      <CompassBackground className={clsxm(
-        'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0')}
+        'absolute h-full w-5/12 top-1/2 left-1/2 z-20 origin-center',
+        '-translate-x-1/2 -translate-y-1/2'
+      )}
+        style={{ transform: `translate(-50%,-50%) rotate(${azimut}deg) `, transformOrigin: 'center' }}
       />
-
-      {/* <div className={clsxm(
-        'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
-        'h-[70.5px] w-[70.5px] bg-white border-[13.5px] border-gray-500 rounded-full'
-      )} />
-      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-full w-[1.5px] bg-white'></div>
-      <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[1.5px] bg-white'></div> */}
+      <CompassBackground className={clsxm(
+        'absolute top-1/2 left-1/2 z-0 h-full w-full',
+        '-translate-x-1/2 -translate-y-1/2'
+      )}
+      />
     </div>
   )
 }
