@@ -4,25 +4,24 @@ import clsxm from '../../lib/clsxm';
 import { SvgIcon } from '../svg-icons/SvgIcon';
 import { Typography } from '../typography/Typography';
 
-export type SelectOption<Value> = {
+export type SelectOption = {
   key: string;
   label: ReactNode;
-  value: Value;
 };
 
-export type SelectProps<Value> = {
+export type SelectProps = {
   label: string;
   placeholder: string;
   name?: string;
-  options: SelectOption<Value>[];
-  defaultValue?: SelectOption<Value>;
-  value?: SelectOption<Value>;
-  onChange?: (value: SelectOption<Value>) => void;
+  options: SelectOption[];
+  defaultValue?: SelectOption;
+  value?: SelectOption;
+  onChange?: (value: SelectOption) => void;
   mandatory?: boolean;
   wrapperClassName?: string;
 };
 
-export function Select<Value>({
+export function Select({
   label,
   name,
   placeholder,
@@ -32,7 +31,7 @@ export function Select<Value>({
   defaultValue,
   mandatory,
   wrapperClassName,
-}: SelectProps<Value>) {
+}: SelectProps) {
   return (
     <label>
       <Typography variant="label">
@@ -53,6 +52,7 @@ export function Select<Value>({
                 'rounded-md text-left drop-shadow-large border',
                 'cursor-pointer',
                 'flex justify-between items-center',
+                'transition-all',
                 open
                   ? 'border-orange-400 bg-white'
                   : 'bg-gray-100 border-gray-500',
@@ -66,7 +66,10 @@ export function Select<Value>({
                     </Typography>
                     <SvgIcon
                       name="ChevronDown"
-                      className={clsxm('w-3 ml-4', open && 'rotate-180')}
+                      className={clsxm(
+                        'w-3 ml-4 transition-all',
+                        open && 'rotate-180',
+                      )}
                     />
                   </>
                 );
@@ -92,7 +95,7 @@ export function Select<Value>({
                   return (
                     <Listbox.Option
                       key={key}
-                      className={`cursor-default select-none py-2 pl-3 pr-4 flex justify-between items-center hover:bg-gray-500`}
+                      className={`cursor-pointer select-none py-2 pl-3 pr-4 flex justify-between items-center hover:bg-gray-100`}
                       value={option}
                     >
                       {({ selected }) => (

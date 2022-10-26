@@ -16,13 +16,12 @@ const Template: ComponentStory<typeof Select> = args => (
 );
 
 function createOptions() {
-  const options: SelectOption<number>[] = [];
+  const options: SelectOption[] = [];
 
   for (let i = 0; i < 10; i++) {
     options.push({
       key: `${i}`,
       label: `T-${i}00`,
-      value: i,
     });
   }
 
