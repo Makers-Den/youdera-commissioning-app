@@ -7,12 +7,17 @@ import { Checkbox } from 'ui/checkboxes/Checkbox';
 import { ProfileDropdown } from 'ui/profile-dropdown/ProfileDropdown';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { NavHeader } from 'ui/nav-header/NavHeader';
-
+import { Compass } from 'ui/compass/Compass'
 
 const Home = () => {
   const [value, setValue] = React.useState<string>('');
   const [v, setV] = React.useState<string>('');
   const [checked, setChecked] = React.useState<boolean>(false);
+
+  const [valueNumber, setValueNumber] = React.useState<string>('0');
+  const handeValueNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValueNumber(e.target.value);
+  };
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
@@ -230,7 +235,8 @@ const Home = () => {
         onClick={() => setChecked(!checked)}
       />
       <Checkbox isChecked={checked} onClick={() => setChecked(!checked)} />
-
+      <input type='range' max='359' onChange={handeValueNumberChange} value={valueNumber} />
+      <Compass rotationAngle={parseInt(valueNumber, 10)} />
     </div >
   );
 };
