@@ -39,6 +39,7 @@ type SelectedOptionsCountProps = {
 function SelectedOptionsCount({ count }: SelectedOptionsCountProps) {
   return (
     <div
+      onClick={e => e.stopPropagation()}
       className={clsxm(
         'aspect-square px-2 rounded-full flex items-center justify-center text-sm transition-all',
         count > 0 ? 'bg-orange-400 text-white' : 'text-gray-800 bg-gray-300',
@@ -84,6 +85,7 @@ export function MultiSelect({
         name={name}
         defaultValue={defaultValue}
         multiple
+        by="key"
       >
         {({ open }) => (
           <div className={clsxm('relative mt-1', wrapperClassName)}>
@@ -99,46 +101,38 @@ export function MultiSelect({
                   : 'bg-gray-100 border-gray-500',
               )}
             >
-              {({ value: values }) => {
-                return (
-                  <>
-                    <Typography
-                      variant="body"
-                      className="flex gap-1 flex-wrap w-full"
-                    >
-                      {values?.length > 0
-                        ? (values as MultiSelectOption[] | undefined)?.map(
-                            ({ label, key }) => {
-                              return (
-                                <SelectedOptions
-                                  key={key}
-                                  label={label.selected}
-                                  onDelete={event => {
-                                    const filteredOptions = values.filter(
-                                      (value: MultiSelectOption) =>
-                                        value.key !== key,
-                                    );
-                                    onChange(filteredOptions);
-                                  }}
-                                />
-                              );
-                            },
-                          )
-                        : placeholder}
-                    </Typography>
-                    <div className="flex">
-                      <SelectedOptionsCount count={values?.length || 0} />
-                      <SvgIcon
-                        name="ChevronDown"
-                        className={clsxm(
-                          'w-3 ml-2 transition-all',
-                          open && 'rotate-180',
-                        )}
-                      />
-                    </div>
-                  </>
-                );
-              }}
+              <Typography
+                variant="body"
+                className="flex gap-1 flex-wrap w-full"
+              >
+                {value?.length > 0
+                  ? value.map(({ label, key }) => {
+                      return (
+                        <SelectedOptions
+                          key={key}
+                          label={label.selected}
+                          onDelete={event => {
+                            event.stopPropagation();
+                            const filteredOptions = value.filter(
+                              val => val.key !== key,
+                            );
+                            onChange(filteredOptions);
+                          }}
+                        />
+                      );
+                    })
+                  : placeholder}
+              </Typography>
+              <div className="flex">
+                <SelectedOptionsCount count={value?.length || 0} />
+                <SvgIcon
+                  name="ChevronDown"
+                  className={clsxm(
+                    'w-3 ml-2 transition-all',
+                    open && 'rotate-180',
+                  )}
+                />
+              </div>
             </Listbox.Button>
             <Transition
               show={open}

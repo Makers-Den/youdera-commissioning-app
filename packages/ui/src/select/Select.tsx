@@ -43,6 +43,7 @@ export function Select({
         onChange={onChange}
         name={name}
         defaultValue={defaultValue}
+        by="key"
       >
         {({ open }) => (
           <div className={clsxm('relative mt-1', wrapperClassName)}>
