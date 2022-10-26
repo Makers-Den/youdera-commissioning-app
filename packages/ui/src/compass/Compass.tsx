@@ -4,7 +4,7 @@ import { CompassBackground } from '../svg-icons/icons/CompassBackground'
 import clsxm from '../../lib/clsxm';
 type CompassProps = {
   azimut: string;
-  className: string;
+  className?: string;
 }
 export const Compass: React.FC<CompassProps> = ({ azimut, className }) => {
   return (
