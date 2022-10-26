@@ -8,7 +8,7 @@ type CompassProps = {
 }
 export const Compass: React.FC<CompassProps> = ({ azimut, className }) => {
   return (
-    <div className={clsxm('relative border-2 border-red-300 w-32 h-32', className)}>
+    <div className={clsxm('relative w-32 h-32', className)}>
       <CompassArrow className={clsxm(
         'absolute h-full w-5/12 top-1/2 left-1/2 z-20 origin-center',
         '-translate-x-1/2 -translate-y-1/2'
