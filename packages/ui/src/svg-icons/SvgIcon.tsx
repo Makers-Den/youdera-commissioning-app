@@ -5,6 +5,8 @@ import {
   FaTimes,
   FaEnvelope,
   FaUnlockAlt,
+  FaCaretUp,
+  FaCaretDown
 } from 'react-icons/fa';
 import { ChevronDown } from './icons/ChevronDown';
 import { ChevronRight } from './icons/ChevronRight';
@@ -25,6 +27,8 @@ const iconMap = {
   LogOut: LogOut,
   ChevronRight: ChevronRight,
   SafetyHelmet: SafetyHelmet,
+  CaretUp: FaCaretUp,
+  CaretDown: FaCaretDown
 };
 
 export type IconName = keyof typeof iconMap;

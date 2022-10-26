@@ -3,6 +3,7 @@ import React from 'react';
 import { H1, H2, H3, BodyText, Typography } from 'ui/typography/Typography';
 import { Button } from 'ui/buttons/Button';
 import { Input } from 'ui/inputs/Input';
+import { NumberInput } from 'ui/inputs/NumberInput'
 import { Checkbox } from 'ui/checkboxes/Checkbox';
 import { ProfileDropdown } from 'ui/profile-dropdown/ProfileDropdown';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
@@ -19,6 +20,9 @@ const Home = () => {
   const handleVChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setV(e.target.value);
   };
+
+  const [numberValue, setNumberValue] = React.useState<number>(0);
+
   return (
     <div className="flex items-center justify-center min-h-screen space-x-8 flex-wrap">
       <NavHeader
@@ -222,6 +226,7 @@ const Home = () => {
           value={value}
           disabled={!!true}
         />
+        <NumberInput label='Label' placeholder='Number Input' setValue={setNumberValue} value={numberValue} />
       </div>
 
       <Checkbox
