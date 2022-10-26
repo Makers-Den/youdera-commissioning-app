@@ -7,7 +7,7 @@ import { Checkbox } from 'ui/checkboxes/Checkbox';
 import { ProfileDropdown } from 'ui/profile-dropdown/ProfileDropdown';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { NavHeader } from 'ui/nav-header/NavHeader';
-
+import { Compass } from 'ui/compass/Compass'
 
 const Home = () => {
   const [value, setValue] = React.useState<string>('');
@@ -230,7 +230,7 @@ const Home = () => {
         onClick={() => setChecked(!checked)}
       />
       <Checkbox isChecked={checked} onClick={() => setChecked(!checked)} />
-
+      <Compass />
     </div >
   );
 };
