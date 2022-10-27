@@ -44,7 +44,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     };
 
     return (
-      <div className={className}>
+      <div className={clsxm('max-w-fit', className)}>
         <BodyText className="mb-2 text-gray-700 text-sm">
           {label}
           {mandatory && '*'}
