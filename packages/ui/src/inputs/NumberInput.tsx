@@ -66,7 +66,8 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               'border-[1px] border-gray-400',
               'focus:outline-none focus-visible:ring-1 focus-visible:ring-orange-400',
               'transition-colors duration-75',
-              'disabled:cursor-not-allowed disabled:bg-gray-400 disabled:border-gray-500 disabled:placeholder:text-gray-800 disabled:placeholder:font-medium',
+              'disabled:cursor-not-allowed disabled:bg-gray-400 disabled:border-gray-500',
+              'disabled:placeholder:text-gray-800 disabled:placeholder:font-medium',
               `w-${width}`,
             )}
             {...rest}
@@ -77,9 +78,11 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             <span className="unit pointer-events-none select-none inline-block whitespace-pre max-w[100% - 16px] ml-1" />
           </div>
 
-          <button
-            className={`absolute top-1/2 -translate-y-1/2 right-0 flex flex-col items-center pr-[5.5px] text-sm fill-gray-500`}
-          >
+          <div
+            className={clsxm(
+              'absolute top-1/2 -translate-y-1/2 right-0 pointer-events-none',
+              'flex flex-col items-center pr-[5.5px] fill-gray-500'
+            )}>
             <SvgIcon
               name={'CaretUp'}
               className="fill-inherit h-4 mt-1 mr-2 spin-button-up"
@@ -88,7 +91,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               name={'CaretDown'}
               className="fill-inherit h-4 mb-1 mr-2 spin-button-down"
             ></SvgIcon>
-          </button>
+          </div>
         </div>
       </div>
     );
