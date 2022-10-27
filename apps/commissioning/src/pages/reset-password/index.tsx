@@ -1,0 +1,102 @@
+import React, { useState } from 'react';
+import { Button } from 'ui/buttons/Button';
+import { Input } from 'ui/inputs/Input';
+import { Layout } from 'ui/layout/Layout';
+import { SvgIcon } from 'ui/svg-icons/SvgIcon';
+import { BodyText, H2 } from 'ui/typography/Typography';
+
+const ForgottenPassword = () => {
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [isPasswordValid, setIsPasswordValid] = useState<
+    'valid' | 'invalid' | undefined
+  >();
+  const [nextStep, setNextStep] = useState<boolean>(false);
+
+  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => (
+    setPassword(e.target.value));
+
+  const handleChangeConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => (
+    setConfirmPassword(e.target.value));
+
+  const confirmReset = () => {
+    if (password === confirmPassword && password.length >= 8) {
+      setNextStep(true)
+    }
+    else {
+      setIsPasswordValid('invalid')
+    }
+  };
+
+  //  TODO: Function for resending the emails.
+
+  const links = [
+    {
+      name: 'Legal Notice',
+      href: 'google.com',
+    },
+    {
+      name: 'Privacy Policy',
+      href: 'google.com',
+    },
+  ];
+
+  return (
+    <Layout links={links}>
+      {!nextStep ?
+        <div className="flex flex-col max-w-fit items-center mt-auto">
+          <SvgIcon name="Unlock" className="mb-10 fill-gray-400 w-16 h-16" />
+          <H2 className="font-medium mb-2">Set New Password</H2>
+          <BodyText className="mb-8 text-center">
+            Your password must be different to<br />previously used passwords.
+          </BodyText>
+          <Input
+            label="Password"
+            placeholder="*********"
+            type='password'
+            onChange={handleChangePassword}
+            value={password}
+            icon="Unlock"
+            className="mb-4"
+            width="64"
+          />
+          <Input
+            label="Confirm password"
+            placeholder="*********"
+            type='password'
+            onChange={handleChangeConfirmPassword}
+            value={confirmPassword}
+            icon="Unlock"
+            className="mb-8"
+            width="64"
+            validity={isPasswordValid}
+          />
+          <Button
+            variant="main-green"
+            className="w-64 mb-3"
+            onClick={confirmReset}
+          >
+            RESET PASSWORD
+          </Button>
+        </div>
+        :
+        <div className="flex flex-col max-w-fit items-center mt-auto">
+          <SvgIcon name="ThumbsUp" className="mb-5 fill-gray-400 w-18 h-16" />
+          <H2 className="font-medium mb-2">Reset Password</H2>
+          <BodyText className="mb-8 text-center">
+            Your password has been successfully reset.<br />Click below to log in magically.
+          </BodyText>
+          <Button
+            variant="additional-gray"
+            className="w-64 mb-3"
+            onClick={() => undefined} // TODO: handler
+          >
+            CONTINUE
+          </Button>
+        </div>
+      }
+    </Layout>
+  );
+};
+
+export default ForgottenPassword;

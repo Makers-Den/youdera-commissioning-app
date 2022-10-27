@@ -8,6 +8,9 @@ import { Layout } from 'ui/layout/Layout';
 import Logo from 'ui/logo.png';
 import { Label } from 'ui/typography/Typography';
 
+// eslint-disable-next-line import/no-relative-packages
+import clsxm from '../../../../../packages/ui/lib/clsxm';
+
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -19,6 +22,19 @@ const Login = () => {
 
   const [rememberUser, setRememberUser] = useState<boolean>(false);
   const handleChangeRememberUser = (): void => setRememberUser(!rememberUser);
+
+  const [areCredentialsValid, setAreCredentialsValid] = useState<'valid' | 'invalid' | undefined>();
+
+  const handleOnLogin = () => {
+    // TODO: Login logic, for now its hardcoded values for front
+    // eslint-disable-next-line no-empty
+    if (password === '12345678') {
+
+    }
+    else {
+      setAreCredentialsValid('invalid')
+    }
+  }
   const links = [
     {
       name: 'Legal Notice',
@@ -50,6 +66,7 @@ const Login = () => {
             value={password}
             type="password"
             width="64"
+            validity={areCredentialsValid}
           />
         </div>
         <div className="flex items-center justify-between gap">
@@ -59,12 +76,12 @@ const Login = () => {
             isChecked={rememberUser}
           />
           <Link href="/forgotten-password" passHref>
-            <Label className="font-medium underline hover:cursor-pointer">
+            <Label className={clsxm("font-medium underline hover:cursor-pointer", areCredentialsValid && "text-red-400")}>
               Forgot password?
             </Label>
           </Link>
         </div>
-        <Button variant="main-green">LOGIN</Button>
+        <Button variant="main-green" onClick={handleOnLogin}>LOGIN</Button>
       </div>
     </Layout>
   );
