@@ -10,13 +10,13 @@
   "types": "./src/index.tsx",
   "license": "MIT",
   "dependencies": {
+    "@types/react": "^18.0.21",
     "@headlessui/react": "^1.7.3",
     "react-icons": "^4.6.0",
     "clsx": "^1.2.1",
     "tailwind-merge": "^1.6.2"
   },
   "devDependencies": {
-    "@types/react": "^18.0.21",
     "autoprefixer": "^10.4.0",
     "config": "*",
     "postcss": "^8.4.5",
