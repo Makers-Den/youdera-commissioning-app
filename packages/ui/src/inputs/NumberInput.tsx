@@ -10,7 +10,8 @@ export type NumberInputProps = {
   placeholder?: string;
   mandatory?: boolean;
   width?: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>
+  unit?: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
 } & React.ComponentPropsWithRef<'input'>;
 
 export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
@@ -24,45 +25,39 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       placeholder,
       mandatory,
       width,
+      unit,
       setValue,
       ...rest
     },
     ref,
   ) => {
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setValue(e.target.value)
-    }
-
-    const fillBuffer = (e: any) => {
-      // Clear the buffer if input gets wiped
+    const handleInputChange = (e: React.ChangeEvent<any>) => {
+      setValue(e.target.value);
       if (e.target.value.length === 0) {
-        e.target.parentElement.querySelector('.suffix span').textContent = "";
+        e.target.parentElement.querySelector('.suffix .unit').innerHTML = '';
         return;
       }
 
       // Using a filler char will prevent the suffix to be overwritten with the input
-      const extraFiller = e.target.value.length ? '0' : '';
-
-      e.target.parentElement.querySelector('.suffix span').textContent = e.target.value + extraFiller;
-    }
+      e.target.parentElement.querySelector('.suffix .unit').innerHTML = unit ?? '';
+      e.target.parentElement.querySelector('.suffix .filler').innerHTML = e.target.value;
+    };
 
     return (
       <div className={className}>
-
         <BodyText className="mb-2 text-gray-700 text-sm">
-          {label}{mandatory && '*'}
+          {label}
+          {mandatory && '*'}
         </BodyText>
 
         <div className="relative max-w-fit">
           <input
-            value={value} disabled={disabled}
+            value={value}
+            disabled={disabled}
             onChange={handleInputChange}
             ref={ref}
             min={0}
             type="number"
-            onKeyDown={fillBuffer}
-            onKeyUp={fillBuffer}
             placeholder={placeholder}
             className={clsxm(
               'inline-flex items-center justify-center rounded px-3 py-2',
@@ -72,20 +67,30 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               'focus:outline-none focus-visible:ring-1 focus-visible:ring-orange-400',
               'transition-colors duration-75',
               'disabled:cursor-not-allowed disabled:bg-gray-400 disabled:border-gray-500 disabled:placeholder:text-gray-800 disabled:placeholder:font-medium',
-              `w-${width}`
+              `w-${width}`,
             )}
             {...rest}
           />
+
           <div className="suffix absolute top-[9px] pointer-events-none w-full pl-3">
-            <span className="pointer-events-none select-none inline-block whitespace-pre max-w[100% - 16px] opacity-0">5000</span>
-            <span className="pointer-events-none select-none">&deg;</span>
+            <span className="filler pointer-events-none select-none opacity-0" />
+            <span className="unit pointer-events-none select-none inline-block whitespace-pre max-w[100% - 16px] ml-1" />
           </div>
-          <button className={`absolute top-1/2 -translate-y-1/2 right-0 flex flex-col items-center pr-[5.5px] text-sm fill-gray-500`}>
-            <SvgIcon name={'CaretUp'} className='fill-inherit h-4 mt-1 mr-2 spin-button-up' ></SvgIcon>
-            <SvgIcon name={'CaretDown'} className='fill-inherit h-4 mb-1 mr-2 spin-button-down' ></SvgIcon>
+
+          <button
+            className={`absolute top-1/2 -translate-y-1/2 right-0 flex flex-col items-center pr-[5.5px] text-sm fill-gray-500`}
+          >
+            <SvgIcon
+              name={'CaretUp'}
+              className="fill-inherit h-4 mt-1 mr-2 spin-button-up"
+            ></SvgIcon>
+            <SvgIcon
+              name={'CaretDown'}
+              className="fill-inherit h-4 mb-1 mr-2 spin-button-down"
+            ></SvgIcon>
           </button>
         </div>
-      </div >
+      </div>
     );
   },
 );

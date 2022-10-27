@@ -229,7 +229,7 @@ const Home = () => {
           value={value}
           disabled={!!true}
         />
-        <NumberInput label='Label' placeholder='Number Input' setValue={setValue} value={value} />
+        <NumberInput label='Label' placeholder='Number Input' setValue={setValue} value={value} unit='&deg;' />
       </div>
 
       <Checkbox
