@@ -4,7 +4,7 @@ import {
   FaCheck,
   FaTimes,
   FaEnvelope,
-  FaUnlockAlt,
+  FaUnlockAlt
 } from 'react-icons/fa';
 import { ChevronDown } from './icons/ChevronDown';
 import { ChevronRight } from './icons/ChevronRight';
@@ -12,6 +12,8 @@ import { Close } from './icons/Cross';
 import { LogOut } from './icons/LogOut';
 import { SafetyHelmet } from './icons/SafetyHelmet';
 import { Settings } from './icons/Settings';
+import { CaretUp } from './icons/CaretUp';
+import { CaretDown } from './icons/CaretDown';
 
 export type SvgIconComponent = (props: SVGProps<SVGSVGElement>) => JSX.Element;
 
@@ -21,12 +23,14 @@ const iconMap = {
   Cross: FaTimes,
   Envelope: FaEnvelope,
   Unlock: FaUnlockAlt,
-  ChevronDown: ChevronDown,
-  Settings: Settings,
-  LogOut: LogOut,
-  ChevronRight: ChevronRight,
-  SafetyHelmet: SafetyHelmet,
-  Close: Close,
+  ChevronDown,
+  Settings,
+  LogOut,
+  ChevronRight,
+  SafetyHelmet,
+  CaretUp,
+  CaretDown,
+  Close,
 };
 
 export type IconName = keyof typeof iconMap;

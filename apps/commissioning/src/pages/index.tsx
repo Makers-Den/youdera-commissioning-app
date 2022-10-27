@@ -1,8 +1,9 @@
 import React from 'react';
 import { Button } from 'ui/buttons/Button';
+import { Input } from 'ui/inputs/Input';
+import { NumberInput } from 'ui/inputs/NumberInput'
 import { Checkbox } from 'ui/checkboxes/Checkbox';
 import { Compass } from 'ui/compass/Compass';
-import { Input } from 'ui/inputs/Input';
 import { NavHeader } from 'ui/nav-header/NavHeader';
 import { ProfileDropdown } from 'ui/profile-dropdown/ProfileDropdown';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
@@ -23,6 +24,7 @@ const Home = () => {
   const handleVChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setV(e.target.value);
   };
+
   return (
     <div className="flex items-center justify-center min-h-screen space-x-8 flex-wrap">
       <NavHeader
@@ -233,6 +235,7 @@ const Home = () => {
           value={value}
           disabled={!!true}
         />
+        <NumberInput label='Label' placeholder='Number Input' setValue={setValue} value={value} unit='&deg;' />
       </div>
 
       <Checkbox
