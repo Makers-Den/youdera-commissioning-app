@@ -70,7 +70,6 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               'disabled:placeholder:text-gray-800 disabled:placeholder:font-medium',
               `w-${width}`,
             )}
-            // eslint-disable-next-line react/jsx-props-no-spreading
             {...rest}
           />
 
@@ -86,11 +85,11 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             )}>
             <SvgIcon
               name='CaretUp'
-              className="fill-inherit h-4 -mb-[5px]"
+              className="fill-inherit h-[6px] mb-[4px] hover:fill-orange-400"
             />
             <SvgIcon
               name='CaretDown'
-              className="fill-inherit h-4"
+              className="fill-inherit h-[6px]"
             />
           </div>
         </div>
