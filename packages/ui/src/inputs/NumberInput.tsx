@@ -34,40 +34,56 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       setValue(e.target.value)
     }
 
-    const handleInputIncrement = (i: number) => {
-      setValue(value + i)
+    const fillBuffer = (e: any) => {
+      // Clear the buffer if input gets wiped
+      if (e.target.value.length === 0) {
+        e.target.parentElement.querySelector('.suffix span').textContent = "";
+        return;
+      }
+
+      // Using a filler char will prevent the suffix to be overwritten with the input
+      const extraFiller = e.target.value.length ? '0' : '';
+
+      e.target.parentElement.querySelector('.suffix span').textContent = e.target.value + extraFiller;
     }
+
     return (
       <div className={className}>
+
         <BodyText className="mb-2 text-gray-700 text-sm">
           {label}{mandatory && '*'}
         </BodyText>
-        <div className="relative max-w-fit">
-          <Combobox value={value} disabled={disabled}>
-            <Combobox.Input
-              onChange={handleInputChange}
-              ref={ref}
-              min={0}
-              type="number"
-              placeholder={placeholder}
-              className={clsxm(
-                'inline-flex items-center justify-center rounded px-3 py-2',
-                'font-medium text-gray-800 bg-gray-100',
-                'placeholder:font-normal',
-                'border-[1px] border-gray-400',
-                'focus:outline-none focus-visible:ring-1 focus-visible:ring-orange-400',
-                'transition-colors duration-75',
-                'disabled:cursor-not-allowed disabled:bg-gray-400 disabled:border-gray-500 disabled:placeholder:text-gray-800 disabled:placeholder:font-medium',
-                `w-${width}`
-              )}
-              {...rest}
-            />
 
-            <Combobox.Button className={`absolute top-1/2 -translate-y-1/2 right-0 flex flex-col items-center pr-[5.5px] text-sm fill-gray-500`}>
-              <SvgIcon name={'CaretUp'} className='fill-inherit h-4 mt-1 mr-2 spin-button-up' ></SvgIcon>
-              <SvgIcon name={'CaretDown'} className='fill-inherit h-4 mb-1 mr-2 spin-button-down' ></SvgIcon>
-            </Combobox.Button>
-          </Combobox>
+        <div className="relative max-w-fit">
+          <input
+            value={value} disabled={disabled}
+            onChange={handleInputChange}
+            ref={ref}
+            min={0}
+            type="number"
+            onKeyDown={fillBuffer}
+            onKeyUp={fillBuffer}
+            placeholder={placeholder}
+            className={clsxm(
+              'inline-flex items-center justify-center rounded px-3 py-2',
+              'font-medium text-gray-800 bg-gray-100',
+              'placeholder:font-normal',
+              'border-[1px] border-gray-400',
+              'focus:outline-none focus-visible:ring-1 focus-visible:ring-orange-400',
+              'transition-colors duration-75',
+              'disabled:cursor-not-allowed disabled:bg-gray-400 disabled:border-gray-500 disabled:placeholder:text-gray-800 disabled:placeholder:font-medium',
+              `w-${width}`
+            )}
+            {...rest}
+          />
+          <div className="suffix absolute top-[9px] pointer-events-none w-full pl-3">
+            <span className="pointer-events-none select-none inline-block whitespace-pre max-w[100% - 16px] opacity-0">5000</span>
+            <span className="pointer-events-none select-none">&deg;</span>
+          </div>
+          <button className={`absolute top-1/2 -translate-y-1/2 right-0 flex flex-col items-center pr-[5.5px] text-sm fill-gray-500`}>
+            <SvgIcon name={'CaretUp'} className='fill-inherit h-4 mt-1 mr-2 spin-button-up' ></SvgIcon>
+            <SvgIcon name={'CaretDown'} className='fill-inherit h-4 mb-1 mr-2 spin-button-down' ></SvgIcon>
+          </button>
         </div>
       </div >
     );
