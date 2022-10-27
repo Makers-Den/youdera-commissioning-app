@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meta, Story, ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Checkbox } from 'ui/checkboxes/Checkbox';
 import { CenterWrapper } from './utils/CenterWrapper';
 

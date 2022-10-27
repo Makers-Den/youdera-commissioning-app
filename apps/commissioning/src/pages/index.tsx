@@ -1,14 +1,13 @@
 import React from 'react';
-
-import { H1, H2, H3, BodyText, Typography } from 'ui/typography/Typography';
 import { Button } from 'ui/buttons/Button';
 import { Input } from 'ui/inputs/Input';
 import { NumberInput } from 'ui/inputs/NumberInput'
 import { Checkbox } from 'ui/checkboxes/Checkbox';
+import { Compass } from 'ui/compass/Compass';
+import { NavHeader } from 'ui/nav-header/NavHeader';
 import { ProfileDropdown } from 'ui/profile-dropdown/ProfileDropdown';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
-import { NavHeader } from 'ui/nav-header/NavHeader';
-import { Compass } from 'ui/compass/Compass'
+import { BodyText, H1, H2, H3, Typography } from 'ui/typography/Typography';
 
 const Home = () => {
   const [value, setValue] = React.useState<string>('');
@@ -29,7 +28,7 @@ const Home = () => {
   return (
     <div className="flex items-center justify-center min-h-screen space-x-8 flex-wrap">
       <NavHeader
-        header='Project 1'
+        header="Project 1"
         items={[
           {
             key: 'set',
@@ -59,10 +58,10 @@ const Home = () => {
         title="Johny Joe"
         subTitle="Roofer"
       />
-      <div className='w-screen border-t-[1px]' />
+      <div className="w-screen border-t-[1px]" />
       <NavHeader
-        variant='logo'
-        header='Project 1'
+        variant="logo"
+        header="Project 1"
         items={[
           {
             key: 'set',
@@ -93,7 +92,7 @@ const Home = () => {
         subTitle="Roofer"
       />
 
-      <div className='w-screen border-t-[1px]  mb-10' />
+      <div className="w-screen border-t-[1px]  mb-10" />
 
       <div>
         <ProfileDropdown
@@ -102,7 +101,10 @@ const Home = () => {
               key: 'set',
               children: (
                 <Typography className="flex text-sm py-1">
-                  <SvgIcon name="Settings" className="text-orange-400 w-5 mr-3" />
+                  <SvgIcon
+                    name="Settings"
+                    className="text-orange-400 w-5 mr-3"
+                  />
                   Setting
                 </Typography>
               ),
@@ -145,8 +147,12 @@ const Home = () => {
         <Button variant="additional-gray">ADDITIONAL-GRAY</Button>
         <Button variant="additional-white">ADDITIONAL-WHITE</Button>
         <Button variant="danger">DANGER</Button>
-        <Button variant="danger" disabled>DISABLED</Button>
-        <Button variant="danger" icon='Calendar'>NORMAL</Button>
+        <Button variant="danger" disabled>
+          DISABLED
+        </Button>
+        <Button variant="danger" icon="Calendar">
+          NORMAL
+        </Button>
       </div>
 
       <div className="flex flex-col space-y-8">
@@ -238,9 +244,14 @@ const Home = () => {
         onClick={() => setChecked(!checked)}
       />
       <Checkbox isChecked={checked} onClick={() => setChecked(!checked)} />
-      <input type='range' max='359' onChange={handeValueNumberChange} value={valueNumber} />
+      <input
+        type="range"
+        max="359"
+        onChange={handeValueNumberChange}
+        value={valueNumber}
+      />
       <Compass rotationAngle={parseInt(valueNumber, 10)} />
-    </div >
+    </div>
   );
 };
 

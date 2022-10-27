@@ -23,7 +23,7 @@ export const NavHeader: React.FC<NavHeaderProps> = ({
   subTitle,
   variant,
   header,
-  onClick
+  onClick,
 }) => {
   return (
     <div className="flex w-screen justify-between items-center mb-auto p-7">

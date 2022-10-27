@@ -33,8 +33,8 @@ export const UnstyledLink = React.forwardRef<
   return (
     <a
       ref={ref}
-      target='_blank'
-      rel='noopener noreferrer'
+      target="_blank"
+      rel="noopener noreferrer"
       href={href}
       {...rest}
       className={clsxm('cursor-newtab', className)}

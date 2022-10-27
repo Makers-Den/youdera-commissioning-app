@@ -1,7 +1,6 @@
 import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
-import { H2 } from 'ui/typography/Typography';
 import { CenterWrapper } from './utils/CenterWrapper';
 
 export default {

@@ -1,8 +1,6 @@
 import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { CardLink } from 'ui/card-link/CardLink';
-import { Button } from 'ui/buttons/Button';
-import { H2 } from 'ui/typography/Typography';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { CenterWrapper } from './utils/CenterWrapper';
 
