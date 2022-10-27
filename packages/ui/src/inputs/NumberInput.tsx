@@ -1,8 +1,8 @@
 import * as React from 'react';
+
 import clsxm from '../../lib/clsxm';
 import { BodyText } from '../typography/Typography';
-import { Combobox } from '@headlessui/react';
-import { SvgIcon, IconName } from '../svg-icons/SvgIcon';
+import { SvgIcon } from '../svg-icons/SvgIcon';
 
 export type NumberInputProps = {
   label: string;
@@ -84,13 +84,13 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               'flex flex-col items-center pr-[5.5px] fill-gray-500'
             )}>
             <SvgIcon
-              name={'CaretUp'}
+              name='CaretUp'
               className="fill-inherit h-4 mt-1 mr-2 spin-button-up"
-            ></SvgIcon>
+            />
             <SvgIcon
-              name={'CaretDown'}
+              name='CaretDown'
               className="fill-inherit h-4 mb-1 mr-2 spin-button-down"
-            ></SvgIcon>
+            />
           </div>
         </div>
       </div>
