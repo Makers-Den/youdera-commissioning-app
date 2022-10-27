@@ -11,7 +11,12 @@ module.exports = {
     'plugin:import/typescript',
     'prettier',
   ],
-  plugins: ['@typescript-eslint', 'import'],
+  plugins: [
+    '@typescript-eslint',
+    'import',
+    'simple-import-sort',
+    'unused-imports',
+  ],
   settings: {
     next: {
       rootDir: ['apps/*/', 'packages/*/'],
@@ -27,6 +32,29 @@ module.exports = {
     },
   },
   rules: {
+    'no-unused-vars': 'off',
+    'no-console': 'warn',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'react/display-name': 'off',
+    'react/jsx-curly-brace-presence': [
+      'warn',
+      {
+        props: 'never',
+        children: 'never',
+      },
+    ],
+    //#region  //*=========== Unused Import ===========
+    '@typescript-eslint/no-unused-vars': 'off',
+    'unused-imports/no-unused-imports': 'warn',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        varsIgnorePattern: '^_',
+        args: 'after-used',
+        argsIgnorePattern: '^_',
+      },
+    ],
     // react
     'react/function-component-definition': [
       2,
@@ -65,4 +93,4 @@ module.exports = {
     'dist',
     '.turbo',
   ],
-}
+};
