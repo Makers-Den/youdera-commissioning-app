@@ -63,9 +63,9 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               {...rest}
             />
 
-            <Combobox.Button className={`absolute top-1/2 -translate-y-1/2 right-0 flex flex-col items-center pr-2 text-sm fill-gray-500`}>
-              <SvgIcon name={'CaretUp'} className='fill-inherit h-4 mt-1 mr-2' ></SvgIcon>
-              <SvgIcon name={'CaretDown'} className='fill-inherit h-4 mb-1 mr-2' ></SvgIcon>
+            <Combobox.Button className={`absolute top-1/2 -translate-y-1/2 right-0 flex flex-col items-center pr-[5.5px] text-sm fill-gray-500`}>
+              <SvgIcon name={'CaretUp'} className='fill-inherit h-4 mt-1 mr-2 spin-button-up' ></SvgIcon>
+              <SvgIcon name={'CaretDown'} className='fill-inherit h-4 mb-1 mr-2 spin-button-down' ></SvgIcon>
             </Combobox.Button>
           </Combobox>
         </div>
