@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fa';
 import { ChevronDown } from './icons/ChevronDown';
 import { ChevronRight } from './icons/ChevronRight';
+import { Close } from './icons/Cross';
 import { LogOut } from './icons/LogOut';
 import { SafetyHelmet } from './icons/SafetyHelmet';
 import { Settings } from './icons/Settings';
@@ -28,7 +29,8 @@ const iconMap = {
   ChevronRight: ChevronRight,
   SafetyHelmet: SafetyHelmet,
   CaretUp: FaCaretUp,
-  CaretDown: FaCaretDown
+  CaretDown: FaCaretDown,
+  Close: Close,
 };
 
 export type IconName = keyof typeof iconMap;
