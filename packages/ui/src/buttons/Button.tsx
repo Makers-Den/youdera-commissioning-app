@@ -48,7 +48,7 @@ export const buttonVariantStyles: {
     'hover:bg-gray-600 hover:text-white hover:border-gray-600',
     'active:bg-gray-700 active:text-white active:border-gray-700',
   ],
-  'danger': [
+  danger: [
     'bg-red-400 text-white',
     'border border-red-400',
     'filter drop-shadow-medium',
@@ -76,7 +76,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
-    const disabled = buttonDisabled && !isLoading
+    const disabled = buttonDisabled && !isLoading;
     const disablePseudoClasses = () =>
       buttonVariantStyles[variant]
         .filter(s => !s.includes('hover'))
@@ -96,7 +96,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           isLoading ? disablePseudoClasses() : buttonVariantStyles[variant],
           'disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:border-0 disabled:drop-shadow-none',
           isLoading &&
-          `relative text-transparent text  transition-none hover:text-transparent cursor-wait`,
+            `relative text-transparent text  transition-none hover:text-transparent cursor-wait`,
           className,
         )}
         {...rest}
@@ -114,7 +114,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
           <div className="flex items-center">
             {icon && <SvgIcon name={icon} className={'h-6'} />}
-            {icon && children && <div className='pr-2' />}
+            {icon && children && <div className="pr-2" />}
             {children}
           </div>
         </>

@@ -1,5 +1,5 @@
-import React from "react";
-import { Meta, Story } from "@storybook/react";
+import React from 'react';
+import { Meta, Story } from '@storybook/react';
 import { Typography } from 'ui/typography/Typography';
 
 export default {
@@ -14,7 +14,9 @@ export default {
   },
 } as Meta;
 
-const Template: Story = (args) => <Typography {...args}>This is some cool text</Typography>;
+const Template: Story = args => (
+  <Typography {...args}>This is some cool text</Typography>
+);
 
 export const H1 = Template.bind({});
 H1.args = { variant: 'h1' };
@@ -26,4 +28,3 @@ export const Body = Template.bind({});
 Body.args = { variant: 'body' };
 export const Label = Template.bind({});
 Label.args = { variant: 'label' };
-

@@ -1,11 +1,12 @@
-import { SVGProps } from 'react';
-
 type CompassBackgroundProps = {
   children: React.ReactNode;
   className?: string;
-}
+};
 
-export const CompassBackground: React.FC<CompassBackgroundProps> = ({ children, className }) => {
+export const CompassBackground: React.FC<CompassBackgroundProps> = ({
+  children,
+  className,
+}) => {
   return (
     <svg
       width={163}
@@ -129,4 +130,4 @@ export const CompassBackground: React.FC<CompassBackgroundProps> = ({ children, 
       </defs>
     </svg>
   );
-}
+};
