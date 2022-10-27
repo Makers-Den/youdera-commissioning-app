@@ -70,6 +70,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               'disabled:placeholder:text-gray-800 disabled:placeholder:font-medium',
               `w-${width}`,
             )}
+            // eslint-disable-next-line react/jsx-props-no-spreading
             {...rest}
           />
 
@@ -80,16 +81,16 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
 
           <div
             className={clsxm(
-              'absolute top-1/2 -translate-y-1/2 right-0 pointer-events-none',
-              'flex flex-col items-center pr-[5.5px] fill-gray-500'
+              'absolute top-1/2 -translate-y-1/2 right-0 pointer-events-none mr-2',
+              'flex flex-col items-center justify-center pr-[5.5px] fill-gray-500'
             )}>
             <SvgIcon
               name='CaretUp'
-              className="fill-inherit h-4 mt-1 mr-2 spin-button-up"
+              className="fill-inherit h-4 -mb-[5px]"
             />
             <SvgIcon
               name='CaretDown'
-              className="fill-inherit h-4 mb-1 mr-2 spin-button-down"
+              className="fill-inherit h-4"
             />
           </div>
         </div>
