@@ -32,6 +32,10 @@ module.exports = {
     },
   },
   rules: {
+    'import/prefer-default-export': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'react/function-component-definition': 'off',
+    'react/jsx-props-no-spreading': 'off',
     'no-unused-vars': 'off',
     'no-console': 'warn',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -85,13 +89,6 @@ module.exports = {
         ],
       },
     ], //#endregion  //*======== Import Sort ===========
-    // react
-    'react/function-component-definition': [
-      2,
-      {
-        namedComponents: 'arrow-function',
-      },
-    ],
     // next
     '@next/next/no-html-link-for-pages': 'off',
   },

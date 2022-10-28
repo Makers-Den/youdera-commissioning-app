@@ -2,13 +2,13 @@
 /* eslint-disable import/prefer-default-export */
 
 import React from 'react'
+import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { CardLink } from 'ui/card-link/CardLink';
 import { Layout } from 'ui/layout/Layout'
 import { NavHeaderProps } from 'ui/nav-header/NavHeader';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
-import { useIntl } from 'react-intl';
 
 const SelectTask: React.FC = () => {
   const intl = useIntl()
