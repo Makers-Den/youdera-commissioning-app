@@ -28,7 +28,7 @@ export const NavHeader: React.FC<NavHeaderProps> = ({
   onClick,
 }) => {
   return (
-    <div className="flex w-screen justify-between items-center mb-auto p-7">
+    <div className="flex w-screen justify-between items-center p-7 z-10">
       {variant === 'logo' ? (
         <Image
           alt="logo"

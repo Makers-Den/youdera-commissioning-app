@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button } from '../buttons/Button';
-import { ButtonProps } from '../buttons/Button';
+
+import { Button, ButtonProps } from '../buttons/Button';
+
 
 export type ButtonsFooterProps = {
   buttons?: Array<ButtonProps & { content: string }>;
