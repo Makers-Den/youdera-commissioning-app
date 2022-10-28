@@ -1,8 +1,9 @@
-import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
 import { H2 } from 'ui/typography/Typography';
+
 import { CenterWrapper } from './utils/CenterWrapper';
 
 export default {
