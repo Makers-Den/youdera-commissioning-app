@@ -30,7 +30,7 @@ const Login = () => {
     },
   ];
   return (
-    <Layout links={links}>
+    <Layout footer={{ links }}>
       <div className="flex flex-col space-y-7 max-w-fit h-full mt-auto">
         <Image src={Logo} alt="logo" objectFit="contain" height={60} />
         <div className="space-y-4">
@@ -66,7 +66,7 @@ const Login = () => {
         </div>
         <Button variant="main-green">LOGIN</Button>
       </div>
-    </Layout>
+    </Layout >
   );
 };
 

@@ -1,13 +1,15 @@
-import React, { ReactNode } from 'react';
+/* eslint-disable arrow-body-style */
+import React from 'react';
+
+import { Button } from '../buttons/Button';
+import { Image } from '../image/Image';
+// import Image from 'next/image';
+import Logo from '../logo.png';
 import {
   ProfileDropdown,
   ProfileDropdownProps,
 } from '../profile-dropdown/ProfileDropdown';
-import { Image } from '../image/Image';
-// import Image from 'next/image';
-import Logo from '../logo.png';
 import { H2 } from '../typography/Typography';
-import { Button } from '../buttons/Button';
 
 export type NavHeaderProps = {
   variant?: 'primary' | 'logo';
