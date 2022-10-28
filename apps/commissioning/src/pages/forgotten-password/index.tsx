@@ -42,7 +42,7 @@ const ForgottenPassword = () => {
   ];
 
   return (
-    <Layout links={links}>
+    <Layout links={links} className='bg-gray-50'>
       {!nextStep ? (
         <div className="flex flex-col max-w-fit items-center mt-auto">
           <SvgIcon name="Unlock" className="mb-10 fill-gray-400 w-16 h-16" />

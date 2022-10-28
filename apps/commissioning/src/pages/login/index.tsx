@@ -12,18 +12,20 @@ import { Label } from 'ui/typography/Typography';
 import clsxm from '../../../../../packages/ui/lib/clsxm';
 
 const Login = () => {
+  const [areCredentialsValid, setAreCredentialsValid] = useState<'valid' | 'invalid' | undefined>();
+
   const [email, setEmail] = useState<string>('');
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEmail(e.target.value);
 
   const [password, setPassword] = useState<string>('');
-  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+    setAreCredentialsValid(undefined);
+  }
 
   const [rememberUser, setRememberUser] = useState<boolean>(false);
   const handleChangeRememberUser = (): void => setRememberUser(!rememberUser);
-
-  const [areCredentialsValid, setAreCredentialsValid] = useState<'valid' | 'invalid' | undefined>();
 
   const handleOnLogin = () => {
     // TODO: Login logic, for now its hardcoded values for front
@@ -46,9 +48,9 @@ const Login = () => {
     },
   ];
   return (
-    <Layout links={links}>
+    <Layout links={links} className='bg-gray-50'>
       <div className="flex flex-col space-y-7 max-w-fit h-full mt-auto">
-        <Image src={Logo} alt="logo" objectFit="contain" height={60} />
+        <Image src={Logo} alt="logo" objectFit="contain" height={60} className='pointer-events-none' />
         <div className="space-y-4">
           <Input
             label="Email"
@@ -61,7 +63,7 @@ const Login = () => {
           <Input
             label="Password"
             placeholder="Type here"
-            icon="Unlock"
+            icon={areCredentialsValid ? undefined : "Unlock"}
             onChange={handleChangePassword}
             value={password}
             type="password"
@@ -74,6 +76,7 @@ const Login = () => {
             label="Remember me"
             onClick={handleChangeRememberUser}
             isChecked={rememberUser}
+            disabled={!!areCredentialsValid}
           />
           <Link href="/forgotten-password" passHref>
             <Label className={clsxm("font-medium underline hover:cursor-pointer", areCredentialsValid && "text-red-400")}>
@@ -81,7 +84,7 @@ const Login = () => {
             </Label>
           </Link>
         </div>
-        <Button variant="main-green" onClick={handleOnLogin}>LOGIN</Button>
+        <Button variant="main-green" onClick={handleOnLogin} disabled={!!areCredentialsValid}>LOGIN</Button>
       </div>
     </Layout>
   );

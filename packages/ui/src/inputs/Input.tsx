@@ -44,8 +44,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ? validity === 'valid'
           ? 'Check'
           : validity === 'invalid'
-          ? 'Cross'
-          : undefined
+            ? 'Cross'
+            : undefined
         : undefined,
       placeholder,
       mandatory,
@@ -87,8 +87,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 'inline-flex items-center justify-center rounded px-3 py-2',
                 'font-medium text-gray-800 bg-gray-100',
                 'placeholder:font-normal',
-                'border-[1px] border-gray-400',
-                'focus:outline-none focus-visible:ring-1 focus-visible:ring-orange-400',
+                'border-[1px] border-gray-500',
+                'focus:outline-none focus-visible:border-orange-400',
                 'transition-colors duration-75',
                 validity && validityStyle[validity].input,
                 'disabled:cursor-not-allowed disabled:bg-gray-400 disabled:border-gray-500 disabled:placeholder:text-gray-800 disabled:placeholder:font-medium',
@@ -97,9 +97,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               {...rest}
             />
             <Combobox.Button
-              className={`absolute inset-y-0 right-0 flex items-center pr-2 text-sm ${rightElementColor} ${
-                !onClickRightElement ? 'hover:cursor-default' : ''
-              }`}
+              className={`absolute inset-y-0 right-0 flex items-center pr-2 text-sm ${rightElementColor} ${!onClickRightElement ? 'hover:cursor-default' : ''}`}
               onClick={onClickRightElement}
             >
               {icon && (
