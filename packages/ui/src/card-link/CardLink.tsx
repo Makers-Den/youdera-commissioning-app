@@ -23,7 +23,7 @@ export function CardLink({ href, title, icon, disabled }: CardLinkProps) {
         variant="body"
         as="h3"
         className={clsxm(
-          'flex justify-between items-center',
+          'flex justify-between items-center font-medium',
           disabled && 'text-gray-500',
         )}
       >

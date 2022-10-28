@@ -1,12 +1,13 @@
-import React, { FunctionComponent, useMemo } from 'react';
 import { AppProps } from 'next/app';
-import '../styles/globals.css';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import React, { FunctionComponent, useMemo } from 'react';
 import { IntlProvider } from 'react-intl';
 
-import English from '../../content/compiled-locales/en.json';
+import '../styles/globals.css';
+
 import German from '../../content/compiled-locales/de.json';
+import English from '../../content/compiled-locales/en.json';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   // There's some weird type error with @react/types 18+ and NextJs

@@ -50,7 +50,7 @@ const Login = () => {
     },
   ];
   return (
-    <Layout links={links} className='bg-gray-50'>
+    <Layout footer={{ links }}>
       <div className="flex flex-col space-y-7 max-w-fit h-full mt-auto">
         <Image src={Logo} alt="logo" objectFit="contain" height={60} className='pointer-events-none' />
         <div className="space-y-4">
@@ -88,7 +88,7 @@ const Login = () => {
         </div>
         <Button variant="main-green" onClick={handleOnLogin} disabled={!!areCredentialsValid}>{intl.formatMessage({ defaultMessage: 'Login' })}</Button>
       </div>
-    </Layout>
+    </Layout >
   );
 };
 
