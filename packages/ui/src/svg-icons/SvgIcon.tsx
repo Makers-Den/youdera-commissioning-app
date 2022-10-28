@@ -1,4 +1,4 @@
-import { SVGProps } from 'react';
+import React, { SVGProps } from 'react';
 import {
   FaCalendarAlt,
   FaCheck,
@@ -18,6 +18,7 @@ import { Extention } from './icons/Extension';
 import { LogOut } from './icons/LogOut';
 import { SafetyHelmet } from './icons/SafetyHelmet';
 import { Settings } from './icons/Settings';
+import { Trashbin } from './icons/Trashbin';
 
 export type SvgIconComponent = (props: SVGProps<SVGSVGElement>) => JSX.Element;
 
@@ -38,6 +39,7 @@ const iconMap = {
   Commissioning,
   DeviceSwap,
   Extention,
+  Trashbin,
 };
 
 export type IconName = keyof typeof iconMap;
