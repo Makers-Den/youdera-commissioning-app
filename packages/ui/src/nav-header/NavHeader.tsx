@@ -1,13 +1,15 @@
-import React, { ReactNode } from 'react';
+/* eslint-disable arrow-body-style */
+import React from 'react';
+
+import { Button } from '../buttons/Button';
+import { Image } from '../image/Image';
+// import Image from 'next/image';
+import Logo from '../logo.png';
 import {
   ProfileDropdown,
   ProfileDropdownProps,
 } from '../profile-dropdown/ProfileDropdown';
-import { Image } from '../image/Image';
-// import Image from 'next/image';
-import Logo from '../logo.png';
 import { H2 } from '../typography/Typography';
-import { Button } from '../buttons/Button';
 
 export type NavHeaderProps = {
   variant?: 'primary' | 'logo';
@@ -26,7 +28,7 @@ export const NavHeader: React.FC<NavHeaderProps> = ({
   onClick,
 }) => {
   return (
-    <div className="flex w-screen justify-between items-center mb-auto p-7">
+    <div className="flex w-screen justify-between items-center p-7 z-10">
       {variant === 'logo' ? (
         <Image
           alt="logo"

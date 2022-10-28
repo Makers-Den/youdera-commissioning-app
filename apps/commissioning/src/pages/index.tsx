@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from 'ui/buttons/Button';
-import { Input } from 'ui/inputs/Input';
-import { NumberInput } from 'ui/inputs/NumberInput'
 import { Checkbox } from 'ui/checkboxes/Checkbox';
 import { Compass } from 'ui/compass/Compass';
+import { Input } from 'ui/inputs/Input';
+import { NumberInput } from 'ui/inputs/NumberInput'
 import { NavHeader } from 'ui/nav-header/NavHeader';
 import { ProfileDropdown } from 'ui/profile-dropdown/ProfileDropdown';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
