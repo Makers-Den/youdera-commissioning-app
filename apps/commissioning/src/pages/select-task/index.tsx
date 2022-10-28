@@ -8,16 +8,17 @@ import { Layout } from 'ui/layout/Layout'
 import { NavHeaderProps } from 'ui/nav-header/NavHeader';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
-import { ButtonsFooterProps } from 'ui/footer/FooterButtons';
+import { useIntl } from 'react-intl';
 
 const SelectTask: React.FC = () => {
+  const intl = useIntl()
   const linksProps = [
     {
-      name: 'Legal Notice',
+      name: intl.formatMessage({ defaultMessage: 'Legal Notice' }),
       href: 'google.com',
     },
     {
-      name: 'Privacy Policy',
+      name: intl.formatMessage({ defaultMessage: 'Privacy Policy' }),
       href: 'google.com',
     },
   ];
@@ -31,7 +32,7 @@ const SelectTask: React.FC = () => {
           children: (
             <Typography className="flex text-sm py-1 font-medium">
               <SvgIcon name="Settings" className="text-orange-400 w-5 mr-3" />
-              Setting
+              {intl.formatMessage({ defaultMessage: 'Settings' })}
             </Typography>
           ),
         },
@@ -44,7 +45,7 @@ const SelectTask: React.FC = () => {
                 className="text-orange-400 w-5 mr-3"
                 color="rgb(245 126 2 / 1)"
               />
-              Logout
+              {intl.formatMessage({ defaultMessage: 'Logout' })}
             </Typography>
           ),
         }
@@ -59,12 +60,12 @@ const SelectTask: React.FC = () => {
     <Layout footer={{ links: linksProps }} nav={navProps}>
       <Box className='justify-self-start'>
         <BoxHeader>
-          <BoxTitle title='Select task' />
+          <BoxTitle title={intl.formatMessage({ defaultMessage: 'Select task' })} />
         </BoxHeader>
         <BoxContent className='flex space-x-4'>
-          <CardLink title='Commissioning' href='http://google.com' icon={<SvgIcon name='Commissioning' />} />
-          <CardLink title='Device swap' href='http://google.com' icon={<SvgIcon name='DeviceSwap' />} disabled />
-          <CardLink title='Extenstion' href='http://google.com' icon={<SvgIcon name='Extention' />} disabled />
+          <CardLink title={intl.formatMessage({ defaultMessage: 'Commissioning' })} href='http://google.com' icon={<SvgIcon name='Commissioning' />} />
+          <CardLink title={intl.formatMessage({ defaultMessage: 'Device swap' })} href='http://google.com' icon={<SvgIcon name='DeviceSwap' />} disabled />
+          <CardLink title={intl.formatMessage({ defaultMessage: 'Extenstion' })} href='http://google.com' icon={<SvgIcon name='Extention' />} disabled />
         </BoxContent>
       </Box>
     </Layout >
