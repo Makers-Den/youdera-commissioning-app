@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import { Checkbox } from 'ui/checkboxes/Checkbox';
 import { Input } from 'ui/inputs/Input';
@@ -12,6 +13,7 @@ import { Label } from 'ui/typography/Typography';
 import clsxm from '../../../../../packages/ui/lib/clsxm';
 
 const Login = () => {
+  const intl = useIntl();
   const [areCredentialsValid, setAreCredentialsValid] = useState<'valid' | 'invalid' | undefined>();
 
   const [email, setEmail] = useState<string>('');
@@ -53,16 +55,16 @@ const Login = () => {
         <Image src={Logo} alt="logo" objectFit="contain" height={60} className='pointer-events-none' />
         <div className="space-y-4">
           <Input
-            label="Email"
-            placeholder="Type here"
+            label={intl.formatMessage({ defaultMessage: 'Email' })}
+            placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
             onChange={handleChangeEmail}
             value={email}
             icon="Envelope"
             width="64"
           />
           <Input
-            label="Password"
-            placeholder="Type here"
+            label={intl.formatMessage({ defaultMessage: 'Password' })}
+            placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
             icon={areCredentialsValid ? undefined : "Unlock"}
             onChange={handleChangePassword}
             value={password}
@@ -73,18 +75,18 @@ const Login = () => {
         </div>
         <div className="flex items-center justify-between gap">
           <Checkbox
-            label="Remember me"
+            label={intl.formatMessage({ defaultMessage: 'Remember me' })}
             onClick={handleChangeRememberUser}
             isChecked={rememberUser}
             disabled={!!areCredentialsValid}
           />
           <Link href="/forgotten-password" passHref>
             <Label className={clsxm("font-medium underline hover:cursor-pointer", areCredentialsValid && "text-red-400")}>
-              Forgot password?
+              {intl.formatMessage({ defaultMessage: 'Forgot password?' })}
             </Label>
           </Link>
         </div>
-        <Button variant="main-green" onClick={handleOnLogin} disabled={!!areCredentialsValid}>LOGIN</Button>
+        <Button variant="main-green" onClick={handleOnLogin} disabled={!!areCredentialsValid}>{intl.formatMessage({ defaultMessage: 'Login' })}</Button>
       </div>
     </Layout>
   );
