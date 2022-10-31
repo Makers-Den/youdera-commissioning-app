@@ -21,6 +21,7 @@ import { Plus } from './icons/Plus';
 import { Problem } from './icons/Problem';
 import { SafetyHelmet } from './icons/SafetyHelmet';
 import { Settings } from './icons/Settings';
+import { ThumbsUp } from './icons/ThumbsUp';
 import { Trashbin } from './icons/Trashbin';
 
 export type SvgIconComponent = (props: SVGProps<SVGSVGElement>) => JSX.Element;
@@ -39,6 +40,7 @@ const iconMap = {
   CaretUp,
   CaretDown,
   Close,
+  ThumbsUp,
   Problem,
   Camera,
   Commissioning,
