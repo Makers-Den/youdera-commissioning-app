@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -8,6 +9,8 @@ import '../styles/globals.css';
 
 import German from '../../content/compiled-locales/de.json';
 import English from '../../content/compiled-locales/en.json';
+
+const queryClient = new QueryClient();
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   // There's some weird type error with @react/types 18+ and NextJs
@@ -35,14 +38,16 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <Head>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <IntlProvider
-        locale={shortLocale}
-        messages={messages}
-        onError={() => null}
-      >
-        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-        <FixedComponent {...pageProps} />
-      </IntlProvider>
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider
+          locale={shortLocale}
+          messages={messages}
+          onError={() => null}
+        >
+          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+          <FixedComponent {...pageProps} />
+        </IntlProvider>
+      </QueryClientProvider>
     </>
   );
 };
