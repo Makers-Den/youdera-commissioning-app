@@ -127,8 +127,8 @@ export const Overview = () => {
   );
 };
 
-export const InputPlayground: StoryType = Template.bind({});
-InputPlayground.args = {
+export const Playground: StoryType = Template.bind({});
+Playground.args = {
   label: "Label",
   placeholder: "Placeholder",
   validity: undefined,
