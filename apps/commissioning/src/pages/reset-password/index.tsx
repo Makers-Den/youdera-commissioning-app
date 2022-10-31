@@ -60,7 +60,7 @@ const ForgottenPassword = () => {
             value={password}
             icon={isPasswordValid ? undefined : "Unlock"}
             className="mb-4"
-            width="64"
+            sizeClass="w-64"
             validity={isPasswordValid}
           />
           <Input
@@ -71,7 +71,7 @@ const ForgottenPassword = () => {
             value={confirmPassword}
             icon={isPasswordValid ? undefined : "Unlock"}
             className="mb-8"
-            width="64"
+            sizeClass="w-64"
             validity={isPasswordValid}
           />
           <Button

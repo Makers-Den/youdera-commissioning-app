@@ -12,7 +12,7 @@ export type InputProps = {
   units?: string;
   validity?: 'valid' | 'invalid';
   mandatory?: boolean;
-  width?: string;
+  sizeClass?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClickRightElement?: () => void;
 } & React.ComponentPropsWithRef<'input'>;
@@ -49,7 +49,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         : undefined,
       placeholder,
       mandatory,
-      width,
+      sizeClass,
       onChange,
       onClickRightElement,
       ...rest
@@ -70,7 +70,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {label}
           {mandatory && '*'}
         </BodyText>
-        <div className="relative max-w-fit">
+        <div className={clsxm("relative w-fit", sizeClass)}>
           <Combobox value={value} disabled={disabled}>
             <Combobox.Input
               onChange={onChange}
@@ -92,7 +92,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 'transition-colors duration-75',
                 validity && validityStyle[validity].input,
                 'disabled:cursor-not-allowed disabled:bg-gray-400 disabled:border-gray-500 disabled:placeholder:text-gray-800 disabled:placeholder:font-medium',
-                `w-${width}`,
+                sizeClass,
               )}
               {...rest}
             />
