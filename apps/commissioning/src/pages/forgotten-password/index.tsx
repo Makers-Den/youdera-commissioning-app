@@ -34,11 +34,11 @@ const ForgottenPassword = () => {
 
   const links = [
     {
-      name: 'Legal Notice',
+      name: intl.formatMessage({ defaultMessage: 'Legal notice' }),
       href: 'google.com',
     },
     {
-      name: 'Privacy Policy',
+      name: intl.formatMessage({ defaultMessage: 'Privacy Policy' }),
       href: 'google.com',
     },
   ];
@@ -46,15 +46,19 @@ const ForgottenPassword = () => {
   return (
     <Layout footer={{ links }}>
       {!nextStep ? (
-        <div className="flex flex-col max-w-fit items-center mt-auto">
-          <SvgIcon name="Unlock" className="mb-10 fill-gray-400 w-16 h-16" />
-          <H2 className="font-medium mb-2">{intl.formatMessage({ defaultMessage: 'Forgot password?' })}</H2>
+        <div className="mt-auto flex max-w-fit flex-col items-center">
+          <SvgIcon name="Unlock" className="mb-10 h-16 w-16 fill-gray-400" />
+          <H2 className="mb-2 font-medium">
+            {intl.formatMessage({ defaultMessage: 'Forgot password?' })}
+          </H2>
           <BodyText className="mb-8">
-            {intl.formatMessage({ defaultMessage: "No worries, we'll send you reset instructions." })}
+            {intl.formatMessage({
+              defaultMessage: "No worries, we'll send you reset instructions.",
+            })}
           </BodyText>
           <Input
-            label={intl.formatMessage({ defaultMessage: "Email" })}
-            placeholder={intl.formatMessage({ defaultMessage: "Type here" })}
+            label={intl.formatMessage({ defaultMessage: 'Email' })}
+            placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
             onChange={handleChangeEmail}
             value={email}
             icon="Envelope"
@@ -64,31 +68,41 @@ const ForgottenPassword = () => {
           />
           <Button
             variant="main-green"
-            className="w-64 mb-3"
+            className="mb-3 w-64"
             onClick={confirmReset}
           >
-            {intl.formatMessage({ defaultMessage: "Reset password" })}
+            {intl.formatMessage({ defaultMessage: 'Reset password' })}
           </Button>
           <Link href="/login" passHref>
             <Button variant="additional-gray" className="w-64">
-              {intl.formatMessage({ defaultMessage: "Back to login" })}
+              {intl.formatMessage({ defaultMessage: 'Back to login' })}
             </Button>
           </Link>
         </div>
       ) : (
-        <div className="flex flex-col max-w-fit items-center mt-auto">
-          <SvgIcon name="Unlock" className="mb-10 fill-gray-400 w-16 h-16" />
-          <H2 className="font-medium mb-2">{intl.formatMessage({ defaultMessage: "Check Your Email" })}</H2>
-          <BodyText className="mb-1">{intl.formatMessage({ defaultMessage: "We sent a password reset link to" })}</BodyText>
+        <div className="mt-auto flex max-w-fit flex-col items-center">
+          <SvgIcon name="Unlock" className="mb-10 h-16 w-16 fill-gray-400" />
+          <H2 className="mb-2 font-medium">
+            {intl.formatMessage({ defaultMessage: 'Check Your Email' })}
+          </H2>
+          <BodyText className="mb-1">
+            {intl.formatMessage({
+              defaultMessage: 'We sent a password reset link to',
+            })}
+          </BodyText>
           <BodyText className="font-medium">{email}</BodyText>
-          <div className="w-24 border-b-2 border-gray-400 rounded my-8" />
-          <BodyText className="mb-3">{intl.formatMessage({ defaultMessage: "Didn't receive the email?" })}</BodyText>
+          <div className="my-8 w-24 rounded border-b-2 border-gray-400" />
+          <BodyText className="mb-3">
+            {intl.formatMessage({
+              defaultMessage: "Didn't receive the email?",
+            })}
+          </BodyText>
           <Button
             variant="additional-gray"
             className="w-64"
             onClick={handleResendEmail}
           >
-            {intl.formatMessage({ defaultMessage: "Click to resend" })}
+            {intl.formatMessage({ defaultMessage: 'Click to resend' })}
           </Button>
         </div>
       )}

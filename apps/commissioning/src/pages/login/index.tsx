@@ -41,11 +41,11 @@ const Login = () => {
   }
   const links = [
     {
-      name: 'Legal Notice',
+      name: intl.formatMessage({ defaultMessage: 'Legal notice' }),
       href: 'google.com',
     },
     {
-      name: 'Privacy Policy',
+      name: intl.formatMessage({ defaultMessage: 'Privacy Policy' }),
       href: 'google.com',
     },
   ];
