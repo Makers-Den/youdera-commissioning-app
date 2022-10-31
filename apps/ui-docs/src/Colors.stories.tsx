@@ -4,7 +4,7 @@ import { H3 } from 'ui/typography/Typography';
 import { CenterWrapper } from './utils/CenterWrapper';
 
 export default {
-  title: 'Components/Colors',
+  title: 'Theme/Colors',
 } as Meta;
 
 export const Overview = () => (
