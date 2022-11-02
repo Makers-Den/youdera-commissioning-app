@@ -6,9 +6,9 @@
 import { Dialog as HeadlessDialog, Transition } from '@headlessui/react'
 import React, { Fragment, useEffect, useState } from 'react';
 
-import { H2 } from '../typography/Typography';
-import clsxm from '../../lib/clsxm';
 import { SvgIcon } from '../svg-icons/SvgIcon';
+import { H2 } from '../typography/Typography';
+import clsxm from '../utils/clsxm';
 
 export type GalleryImage = {
   /** some sort of id we can give to parent in callback in case they delete the image */
@@ -21,7 +21,7 @@ export type GalleryProps = {
   open: boolean;
   onClose: () => void;
   onDelete?: (id: string) => void;
-  
+
   title: string;
   images: GalleryImage[];
 };
@@ -29,7 +29,7 @@ export type GalleryProps = {
 export const Gallery = ({ className, open, onClose, onDelete, title, images }: GalleryProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const currentImage = images[currentImageIndex];
-  
+
   // Ensure currentImageIndex is never out of bounds
   useEffect(() => {
     if (images.length === -1) {
@@ -100,9 +100,9 @@ export const Gallery = ({ className, open, onClose, onDelete, title, images }: G
                 )}
               >
                 <img className={clsxm('object-contain max-h-full')} src={currentImage.url} />
-                {onDelete && 
+                {onDelete &&
                   <SvgIcon
-                    name='Trashbin' 
+                    name='Trashbin'
                     onClick={() => onDelete(currentImage.id)}
                     className="cursor-pointer absolute top-5 right-5 text-gray-600"
                   />
@@ -110,9 +110,9 @@ export const Gallery = ({ className, open, onClose, onDelete, title, images }: G
               </div>
 
               <div className='flex items-end justify-start gap-5 overflow-x-auto w-max-full'>
-                {images.map((img, index) => 
-                  <img 
-                    key={img.id} 
+                {images.map((img, index) =>
+                  <img
+                    key={img.id}
                     onClick={(e) => {
                       e.preventDefault();
                       setCurrentImageIndex(index)
@@ -125,7 +125,7 @@ export const Gallery = ({ className, open, onClose, onDelete, title, images }: G
                         ? 'border-orange-400 border-2'
                         : 'opacity-50'
                     )}
-                    src={img.url} 
+                    src={img.url}
                   />
                 )}
               </div>

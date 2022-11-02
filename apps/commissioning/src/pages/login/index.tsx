@@ -8,9 +8,7 @@ import { Input } from 'ui/inputs/Input';
 import { Layout } from 'ui/layout/Layout';
 import Logo from 'ui/logo.png';
 import { Label } from 'ui/typography/Typography';
-
-// eslint-disable-next-line import/no-relative-packages
-import clsxm from '../../../../../packages/ui/lib/clsxm';
+import clsxm from 'ui/utils/clsxm';
 
 const Login = () => {
   const intl = useIntl();

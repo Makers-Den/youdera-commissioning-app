@@ -4,7 +4,7 @@ import { FileInputWrapper } from './FileInputWrapper';
 import { UploadStatus } from './types';
 import { SvgIcon } from '../svg-icons/SvgIcon';
 import { Typography } from '../typography/Typography';
-import clsxm from '../../lib/clsxm';
+import clsxm from '../utils/clsxm';
 
 export type FileUploaderProps = {
   status: UploadStatus;
@@ -66,11 +66,11 @@ export function FileUploader({
           'relative flex items-center justify-center p-4',
           'rounded-md bg-gray-100',
           status === UploadStatus.success &&
-            'border border-dashed border-green-400',
+          'border border-dashed border-green-400',
           status === UploadStatus.idle &&
-            'border border-dashed border-green-400',
+          'border border-dashed border-green-400',
           status === UploadStatus.error &&
-            'border border-dashed border-red-500 bg-red-100',
+          'border border-dashed border-red-500 bg-red-100',
           className,
         )}
       >

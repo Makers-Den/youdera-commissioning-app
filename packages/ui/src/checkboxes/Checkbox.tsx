@@ -1,8 +1,8 @@
 import * as React from 'react';
-import clsxm from '../../lib/clsxm';
 
 import { SvgIcon } from '../svg-icons/SvgIcon';
 import { Label } from '../typography/Typography';
+import clsxm from '../utils/clsxm';
 
 type CheckboxProps = {
   isChecked: boolean;
