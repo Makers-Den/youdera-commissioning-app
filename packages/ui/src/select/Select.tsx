@@ -60,22 +60,20 @@ export function Select({
                   : 'bg-gray-100 border-gray-500',
               )}
             >
-              {({ value }) => {
-                return (
-                  <>
-                    <Typography variant="body">
-                      {value?.label || placeholder}
-                    </Typography>
-                    <SvgIcon
-                      name="ChevronDown"
-                      className={clsxm(
-                        'w-3 ml-4 transition-all',
-                        open && 'rotate-180',
-                      )}
-                    />
-                  </>
-                );
-              }}
+              {({ value }) => (
+                <>
+                  <Typography variant="body">
+                    {value?.label || placeholder}
+                  </Typography>
+                  <SvgIcon
+                    name="ChevronDown"
+                    className={clsxm(
+                      'w-3 ml-4 transition-all',
+                      open && 'rotate-180',
+                    )}
+                  />
+                </>
+              )}
             </Listbox.Button>
             <Transition
               show={open}
