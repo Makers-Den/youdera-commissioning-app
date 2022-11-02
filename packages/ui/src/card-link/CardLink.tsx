@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
-import clsxm from '../../lib/clsxm';
+
 import { SvgIcon } from '../svg-icons/SvgIcon';
 import { Typography } from '../typography/Typography';
+import clsxm from '../utils/clsxm';
 
 export type CardLinkProps = {
   href: string;

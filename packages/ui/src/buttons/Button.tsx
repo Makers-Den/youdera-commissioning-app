@@ -1,7 +1,8 @@
 import * as React from 'react';
+
 import LoadingIcon from '../loading-icon/LoadingIcon';
-import clsxm from '../../lib/clsxm';
 import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
+import clsxm from '../utils/clsxm';
 
 export enum ButtonVariant {
   'main-orange',
@@ -96,28 +97,26 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           isLoading ? disablePseudoClasses() : buttonVariantStyles[variant],
           'disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:border-0 disabled:drop-shadow-none',
           isLoading &&
-            `relative text-transparent text  transition-none hover:text-transparent cursor-wait`,
+          `relative text-transparent text  transition-none hover:text-transparent cursor-wait`,
           className,
         )}
         {...rest}
       >
-        <>
-          {isLoading && (
-            <LoadingIcon
-              color={
-                ['additional-white', 'additional-gray'].includes(variant)
-                  ? 'darkGray'
-                  : 'white'
-              }
-            />
-          )}
+        {isLoading && (
+          <LoadingIcon
+            color={
+              ['additional-white', 'additional-gray'].includes(variant)
+                ? 'darkGray'
+                : 'white'
+            }
+          />
+        )}
 
-          <div className="flex items-center">
-            {icon && <SvgIcon name={icon} className={'h-6'} />}
-            {icon && children && <div className="pr-2" />}
-            {children}
-          </div>
-        </>
+        <div className="flex items-center">
+          {icon && <SvgIcon name={icon} className='h-6' />}
+          {icon && children && <div className="pr-2" />}
+          <div className='uppercase'>{children}</div>
+        </div>
       </button>
     );
   },

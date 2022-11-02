@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import clsxm from '../../lib/clsxm';
-import { BodyText } from '../typography/Typography';
 import { SvgIcon } from '../svg-icons/SvgIcon';
+import { BodyText } from '../typography/Typography';
+import clsxm from '../utils/clsxm';
 
 export type NumberInputProps = {
   label: string;
@@ -64,7 +64,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               'font-medium text-gray-800 bg-gray-100',
               'placeholder:font-normal',
               'border-[1px] border-gray-400',
-              'focus:outline-none focus-visible:ring-1 focus-visible:ring-orange-400',
+              'focus:outline-none focus-visible:border-orange-400',
               'transition-colors duration-75',
               'disabled:cursor-not-allowed disabled:bg-gray-400 disabled:border-gray-500',
               'disabled:placeholder:text-gray-800 disabled:placeholder:font-medium',

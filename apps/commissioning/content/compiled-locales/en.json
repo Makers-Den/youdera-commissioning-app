@@ -1,2 +1,170 @@
 {
+  "'+/goVX'": [
+    {
+      "type": 0,
+      "value": "Type here"
+    }
+  ],
+  "'+7Sv+W'": [
+    {
+      "type": 0,
+      "value": "Your password must be different to previously used passwords."
+    }
+  ],
+  "'+DcCHT'": [
+    {
+      "type": 0,
+      "value": "Didn't receive the email?"
+    }
+  ],
+  "'+eN+I1'": [
+    {
+      "type": 0,
+      "value": "Legal Notice"
+    }
+  ],
+  "'0fhwgp'": [
+    {
+      "type": 0,
+      "value": "Select task"
+    }
+  ],
+  "'4XCigB'": [
+    {
+      "type": 0,
+      "value": "Legal notice"
+    }
+  ],
+  "'5LP274'": [
+    {
+      "type": 0,
+      "value": "Set New Password"
+    }
+  ],
+  "'5sg7KC'": [
+    {
+      "type": 0,
+      "value": "Password"
+    }
+  ],
+  "'7tSUe8'": [
+    {
+      "type": 0,
+      "value": "Back to login"
+    }
+  ],
+  "'8HimVK'": [
+    {
+      "type": 0,
+      "value": "Confirm password"
+    }
+  ],
+  "'A6sL8J'": [
+    {
+      "type": 0,
+      "value": "Remember me"
+    }
+  ],
+  "'AyGauy'": [
+    {
+      "type": 0,
+      "value": "Login"
+    }
+  ],
+  "'C81/uG'": [
+    {
+      "type": 0,
+      "value": "Logout"
+    }
+  ],
+  "'D3idYv'": [
+    {
+      "type": 0,
+      "value": "Settings"
+    }
+  ],
+  "'GtVtRN'": [
+    {
+      "type": 0,
+      "value": "We sent a password reset link to"
+    }
+  ],
+  "'IW4KeL'": [
+    {
+      "type": 0,
+      "value": "Your password has been successfully reset. Click below to log in magically."
+    }
+  ],
+  "'UoPZk+'": [
+    {
+      "type": 0,
+      "value": "No worries, we'll send you reset instructions."
+    }
+  ],
+  "'V/JHlm'": [
+    {
+      "type": 0,
+      "value": "Forgot password?"
+    }
+  ],
+  "'X/BpuN'": [
+    {
+      "type": 0,
+      "value": "Extenstion"
+    }
+  ],
+  "'XM4l7n'": [
+    {
+      "type": 0,
+      "value": "Click to resend"
+    }
+  ],
+  "'Yy/yDL'": [
+    {
+      "type": 0,
+      "value": "Reset password"
+    }
+  ],
+  "'acrOoz'": [
+    {
+      "type": 0,
+      "value": "Continue"
+    }
+  ],
+  "'nwjxtz'": [
+    {
+      "type": 0,
+      "value": "Device swap"
+    }
+  ],
+  "'rwbpnL'": [
+    {
+      "type": 0,
+      "value": "Commissioning"
+    }
+  ],
+  "'sy+pv5'": [
+    {
+      "type": 0,
+      "value": "Email"
+    }
+  ],
+  "'vx0nkZ'": [
+    {
+      "type": 0,
+      "value": "Privacy Policy"
+    }
+  ],
+  "'xl27nc'": [
+    {
+      "type": 0,
+      "value": "Reset Password"
+    }
+  ],
+  "'zj2AzZ'": [
+    {
+      "type": 0,
+      "value": "Check Your Email"
+    }
+  ]
 }

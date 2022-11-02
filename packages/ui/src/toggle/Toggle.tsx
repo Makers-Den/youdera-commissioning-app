@@ -1,5 +1,6 @@
 import { Switch } from '@headlessui/react';
-import clsxm from '../../lib/clsxm';
+
+import clsxm from '../utils/clsxm';
 
 export type ToggleProps = {
   checked?: boolean | undefined;

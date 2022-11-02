@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react';
 
-import clsxm from '../../lib/clsxm';
+import clsxm from '../utils/clsxm';
 
 export type TypographyVariant = 'body' | 'h1' | 'h2' | 'h3' | 'label';
 
@@ -10,20 +10,20 @@ export interface TypographyProps {
   variant?: TypographyVariant;
   // You can make this more extensible if needed
   as?:
-    | 'p'
-    | 'h1'
-    | 'h2'
-    | 'h3'
-    | 'h4'
-    | 'h5'
-    | 'span'
-    | 'div'
-    | 'section'
-    | 'strong'
-    | 'ul'
-    | 'ol'
-    | 'li'
-    | 'label';
+  | 'p'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'span'
+  | 'div'
+  | 'section'
+  | 'strong'
+  | 'ul'
+  | 'ol'
+  | 'li'
+  | 'label';
   className?: string;
   children?: React.ReactNode;
   id?: string;
