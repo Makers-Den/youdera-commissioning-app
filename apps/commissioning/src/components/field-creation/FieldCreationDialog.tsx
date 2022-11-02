@@ -12,6 +12,9 @@ import {
 import { Input } from 'ui/inputs/Input';
 import { NumberInput } from 'ui/inputs/NumberInput';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
+import clsxm from 'ui/utils/clsxm';
+
+// TODO: Handlers for Cancel and Save buttons
 
 export const FieldCreationDialog = ({
   open,
@@ -30,7 +33,7 @@ export const FieldCreationDialog = ({
     setSpecificYield(e.target.value);
 
   return (
-    <Dialog open={open} onClose={onClose} className={className}>
+    <Dialog open={open} onClose={onClose} className={clsxm('w-[400px]', className)}>
       <DialogHeader>
         <DialogTitle
           title={intl.formatMessage({
@@ -43,7 +46,7 @@ export const FieldCreationDialog = ({
           onClick={onClose}
         />
       </DialogHeader>
-      <DialogContent className="flex flex-col space-y-5">
+      <DialogContent className="flex flex-col gap-5">
         <Input
           label={intl.formatMessage({ defaultMessage: 'Name' })}
           placeholder="Type here"
@@ -59,29 +62,33 @@ export const FieldCreationDialog = ({
           sizeClass="w-full"
         />
 
-        <div className="flex items-center justify-center">
-          <div className='space-y-5'>
+        <div className="flex items-center justify-center gap-5">
+          <div className='flex flex-col gap-5 flex-1'>
             <NumberInput
               label="Slant angle"
               value={slantAngle}
               setValue={setSlantAngle}
               unit="&deg;"
+              sizeClass='w-full'
+              max='359'
             />
             <NumberInput
               label="Azimut"
               value={azimut}
               setValue={setAzimut}
               unit="&deg;"
+              sizeClass='w-full'
+              max='359'
             />
           </div>
-          <Compass rotationAngle={parseInt(azimut, 10)} />
+          <Compass rotationAngle={parseInt(azimut, 10)} className='flex-1' />
         </div>
 
-        <div className="flex gap-5">
-          <Button variant="additional-gray" className="w-full">
+        <div className="flex mt-3 gap-5">
+          <Button variant="additional-gray" className="w-full" onChange={() => undefined}>
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
-          <Button variant="main-green" className="w-full">
+          <Button variant="main-green" className="w-full" onChange={() => undefined}>
             {intl.formatMessage({ defaultMessage: 'Save' })}
           </Button>
         </div>
