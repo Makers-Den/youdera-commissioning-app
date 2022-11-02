@@ -60,6 +60,7 @@ export const FieldCreationDialog = ({
           value={specificYield}
           onChange={handleYieldChange}
           sizeClass="w-full"
+          units='kWh/kWp'
         />
 
         <div className="flex items-center justify-center gap-5">
