@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
-import clsxm from '../../lib/clsxm';
+
+import clsxm from '../utils/clsxm';
 
 export type TheadProps = {
   className?: string;

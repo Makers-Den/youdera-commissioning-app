@@ -3,7 +3,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { FilePreviewer, FilePreviewerProps } from './FilePreviewer';
 import { FileUploader, FileUploaderProps } from './FileUploader';
 import { UploadedFile } from './types';
-import clsxm from '../../lib/clsxm';
+import clsxm from '../utils/clsxm';
 
 export type FileUploaderWithPreviewProps = {
   fileUploaderProps: Omit<FileUploaderProps, 'children'>;
@@ -47,8 +47,8 @@ export function FileUploaderWithPreview({
 
   const onAddClick = allowMultipleFiles
     ? () => {
-        setDisplayFileInput(true);
-      }
+      setDisplayFileInput(true);
+    }
     : undefined;
 
   return (

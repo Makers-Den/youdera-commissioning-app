@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import clsxm from '../../lib/clsxm';
-import { BodyText } from '../typography/Typography';
 import { SvgIcon } from '../svg-icons/SvgIcon';
+import { BodyText } from '../typography/Typography';
+import clsxm from '../utils/clsxm';
 
 export type NumberInputProps = {
   label: string;

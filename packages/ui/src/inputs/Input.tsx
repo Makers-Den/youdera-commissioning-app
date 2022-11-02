@@ -1,8 +1,9 @@
-import * as React from 'react';
-import clsxm from '../../lib/clsxm';
-import { BodyText } from '../typography/Typography';
 import { Combobox } from '@headlessui/react';
-import { SvgIcon, IconName } from '../svg-icons/SvgIcon';
+import * as React from 'react';
+
+import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
+import { BodyText } from '../typography/Typography';
+import clsxm from '../utils/clsxm';
 
 export type InputProps = {
   label: string;
