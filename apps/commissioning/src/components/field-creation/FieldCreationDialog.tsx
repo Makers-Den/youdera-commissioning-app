@@ -49,14 +49,14 @@ export const FieldCreationDialog = ({
       <DialogContent className="flex flex-col gap-5">
         <Input
           label={intl.formatMessage({ defaultMessage: 'Name' })}
-          placeholder="Type here"
+          placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
           value={name}
           onChange={handleNameChange}
           sizeClass="w-full"
         />
         <Input
           label={intl.formatMessage({ defaultMessage: 'Specific Yield' })}
-          placeholder="Type here"
+          placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
           value={specificYield}
           onChange={handleYieldChange}
           sizeClass="w-full"
@@ -66,7 +66,7 @@ export const FieldCreationDialog = ({
         <div className="flex items-center justify-center gap-5">
           <div className='flex flex-col gap-5 flex-1'>
             <NumberInput
-              label="Slant angle"
+              label={intl.formatMessage({ defaultMessage: 'Slant angle' })}
               value={slantAngle}
               setValue={setSlantAngle}
               unit="&deg;"
@@ -74,7 +74,7 @@ export const FieldCreationDialog = ({
               max='359'
             />
             <NumberInput
-              label="Azimut"
+              label={intl.formatMessage({ defaultMessage: 'Azimut' })}
               value={azimut}
               setValue={setAzimut}
               unit="&deg;"
