@@ -2,7 +2,7 @@ import { Dialog as HeadlessDialog, Transition } from '@headlessui/react'
 import React, { Fragment, ReactNode } from 'react';
 
 import { Typography } from '../typography/Typography';
-import clsxm from '../../lib/clsxm';
+import clsxm from '../utils/clsxm';
 
 export type DialogTitleProps = {
   title: string;

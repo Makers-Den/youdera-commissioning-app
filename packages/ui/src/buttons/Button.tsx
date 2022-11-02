@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import LoadingIcon from '../loading-icon/LoadingIcon';
 import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
-import clsxm from '../../lib/clsxm';
+import clsxm from '../utils/clsxm';
 
 export enum ButtonVariant {
   'main-orange',

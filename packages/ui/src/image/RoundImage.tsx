@@ -1,5 +1,5 @@
-import clsxm from '../../lib/clsxm';
 import { Image, ImageProps } from './Image';
+import clsxm from '../utils/clsxm';
 
 export type RoundImageProps = Omit<ImageProps, 'className' | 'objectFit'> & {
   wrapperClassName: string;

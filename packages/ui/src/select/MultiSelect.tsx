@@ -1,8 +1,9 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { Fragment, ReactNode, SVGProps } from 'react';
-import clsxm from '../../lib/clsxm';
+
 import { SvgIcon } from '../svg-icons/SvgIcon';
 import { Typography } from '../typography/Typography';
+import clsxm from '../utils/clsxm';
 
 export type MultiSelectOption = {
   key: string;
@@ -106,21 +107,19 @@ export function MultiSelect({
                 className="flex gap-1 flex-wrap w-full"
               >
                 {value?.length > 0
-                  ? value.map(({ label, key }) => {
-                      return (
-                        <SelectedOptions
-                          key={key}
-                          label={label.selected}
-                          onDelete={event => {
-                            event.stopPropagation();
-                            const filteredOptions = value.filter(
-                              val => val.key !== key,
-                            );
-                            onChange(filteredOptions);
-                          }}
-                        />
-                      );
-                    })
+                  ? value.map(({ label, key }) => (
+                    <SelectedOptions
+                      key={key}
+                      label={label.selected}
+                      onDelete={event => {
+                        event.stopPropagation();
+                        const filteredOptions = value.filter(
+                          val => val.key !== key,
+                        );
+                        onChange(filteredOptions);
+                      }}
+                    />
+                  ))
                   : placeholder}
               </Typography>
               <div className="flex">
@@ -154,7 +153,7 @@ export function MultiSelect({
                   return (
                     <Listbox.Option
                       key={key}
-                      className={`cursor-pointer Multiselect-none py-2 pl-3 pr-4 flex justify-between items-center hover:bg-gray-100`}
+                      className="cursor-pointer Multiselect-none py-2 pl-3 pr-4 flex justify-between items-center hover:bg-gray-100"
                       value={option}
                     >
                       {({ selected }) => (
