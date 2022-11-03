@@ -65,10 +65,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div className={clsxm('w-64', className)}>
-        <BodyText className="mb-2 text-sm text-gray-700">
-          {label}
-          {mandatory && '*'}
-        </BodyText>
+        {label && (
+          <BodyText className="mb-2 text-sm text-gray-700">
+            {label}
+            {mandatory && '*'}
+          </BodyText>
+        )}
         <div className="relative w-full">
           <Combobox value={value} disabled={disabled}>
             <Combobox.Input
