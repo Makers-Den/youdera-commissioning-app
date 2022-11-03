@@ -39,6 +39,7 @@ type SelectedOptionsCountProps = {
 
 function SelectedOptionsCount({ count }: SelectedOptionsCountProps) {
   return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
       onClick={e => e.stopPropagation()}
       className={clsxm(
@@ -75,7 +76,7 @@ export function MultiSelect({
   wrapperClassName,
 }: MultiSelectProps) {
   return (
-    <label>
+    <div>
       <Typography variant="label">
         {label}
         <span className="text-green-400">{mandatory && '*'}</span>
@@ -175,6 +176,6 @@ export function MultiSelect({
           </div>
         )}
       </Listbox>
-    </label>
+    </div>
   );
 }
