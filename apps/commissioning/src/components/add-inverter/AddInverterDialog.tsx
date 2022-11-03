@@ -1,7 +1,6 @@
+import { useModels } from '@src/integrations/youdera/models/hooks/useModels';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Button } from 'ui/buttons/Button';
-import { Compass } from 'ui/compass/Compass';
 import {
   Dialog,
   DialogContent,
@@ -9,12 +8,9 @@ import {
   DialogProps,
   DialogTitle,
 } from 'ui/dialogs/Dialog';
-import { Input } from 'ui/inputs/Input';
-import { NumberInput } from 'ui/inputs/NumberInput';
+import { AutocompleteSelect, AutocompleteSelectOption } from 'ui/select/AutocompleteSelect';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import clsxm from 'ui/utils/clsxm';
-
-// TODO: Handlers for Cancel and Save buttons
 
 export const AddInverterDialog = ({
   open,
@@ -22,10 +18,9 @@ export const AddInverterDialog = ({
   className,
 }: Omit<DialogProps, 'children'>) => {
   const intl = useIntl();
-  const [name, setName] = useState<string>('');
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setName(e.target.value);
+  const { inverterModelsQuery } = useModels();
 
+  const [select, setSelect] = useState<AutocompleteSelectOption>();
   return (
     <Dialog open={open} onClose={onClose} className={clsxm('w-[400px]', className)}>
       <DialogHeader>
@@ -41,7 +36,14 @@ export const AddInverterDialog = ({
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
-        holder
+        <AutocompleteSelect
+          options={[{ label: '12', key: '12' }]}
+          select={select}
+          setSelect={setSelect}
+          label={intl.formatMessage({ defaultMessage: 'Manufacturer' })}
+          placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+          noOptionsString={intl.formatMessage({ defaultMessage: 'Nothing found.' })}
+        />
       </DialogContent>
     </Dialog>
   );
