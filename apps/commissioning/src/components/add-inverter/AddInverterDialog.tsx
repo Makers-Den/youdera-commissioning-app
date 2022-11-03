@@ -40,14 +40,43 @@ export const AddInverterDialog = ({
   }, [])
   //
 
-  const inverterModels: AutocompleteSelectOption[] | [] = useMemo(
-    () =>
-      (inverterModelsQuery.data || [])
-        .map((model) => ({ key: model.id.toString(), label: model.name, icon: "Table" })),
-    [inverterModelsQuery.data]
+  const [manufacturerValue, setManufacturerValue] = useState<AutocompleteSelectOption>();
+  const handleManufacturerValue = (value: AutocompleteSelectOption | undefined) => setManufacturerValue(value)
+
+  const inverterManufactures: AutocompleteSelectOption[] | [] = useMemo(
+    () => {
+      if (!inverterModelsQuery.data) return []
+
+      const result: AutocompleteSelectOption[] = [];
+      const map = new Map();
+      inverterModelsQuery.data.forEach((model) => {
+        if (!map.has(model.manufacturer_id)) {
+          map.set(model.manufacturer_id, true);
+          result.push({
+            key: model.manufacturer_id.toString(),
+            label: model.manufacturer_name
+          });
+        }
+      })
+      return result
+    }
+    , [inverterModelsQuery.data]
   );
 
-  const [select, setSelect] = useState<AutocompleteSelectOption>();
+  const [modelValue, setModelValue] = useState<AutocompleteSelectOption>();
+  const handleModelValue = (value: AutocompleteSelectOption | undefined) => setModelValue(value)
+
+  const inverterModels: AutocompleteSelectOption[] | [] = useMemo(
+    () => {
+      if (!manufacturerValue || !inverterModelsQuery.data) return []
+      return inverterModelsQuery.data
+        .filter(model => model.manufacturer_id.toString() === manufacturerValue.key)
+        .map((model) => ({ key: model.id.toString(), label: model.name, icon: "Table" }))
+    }
+    , [inverterModelsQuery.data, manufacturerValue]
+  );
+
+  console.log(inverterModelsQuery.data)
 
   return (
     <Dialog open={open} onClose={onClose} className={clsxm('w-[400px]', className)}>
@@ -65,17 +94,17 @@ export const AddInverterDialog = ({
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
         <AutocompleteSelect
-          options={[]}
-          select={select}
-          setSelect={setSelect}
-          label={intl.formatMessage({ defaultMessage: 'Model' })}
+          options={inverterManufactures}
+          value={manufacturerValue}
+          onChange={handleManufacturerValue}
+          label={intl.formatMessage({ defaultMessage: 'Manufacturer' })}
           placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
           noOptionsString={intl.formatMessage({ defaultMessage: 'Nothing found.' })}
         />
         <AutocompleteSelect
           options={inverterModels}
-          select={select}
-          setSelect={setSelect}
+          value={modelValue}
+          onChange={handleModelValue}
           label={intl.formatMessage({ defaultMessage: 'Model' })}
           placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
           noOptionsString={intl.formatMessage({ defaultMessage: 'Nothing found.' })}
