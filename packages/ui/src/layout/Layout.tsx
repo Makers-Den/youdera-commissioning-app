@@ -15,17 +15,7 @@ type LayoutProps = {
 
 export const Layout: React.FC<LayoutProps> = ({ children, footer, nav }) => (
   <div className="flex min-h-screen w-screen flex-col items-center justify-center bg-gray-50">
-    {nav && (
-      <NavHeader
-        variant={nav.variant}
-        header={nav.header}
-        items={nav.items}
-        imgSrc={nav.imgSrc}
-        imgAlt={nav.imgAlt}
-        title={nav.title}
-        subTitle={nav.subTitle}
-      />
-    )}
+    {nav && <NavHeader {...nav} />}
     {children}
     {footer && 'buttons' in footer && (
       <FooterButtons buttons={footer.buttons} />
