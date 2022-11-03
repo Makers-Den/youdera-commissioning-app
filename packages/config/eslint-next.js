@@ -97,6 +97,8 @@ module.exports = {
     '@typescript-eslint/no-shadow': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
+    'react/prop-types': 'off',
+    'react/require-default-props': 'off'
   },
   overrides: [
     {
