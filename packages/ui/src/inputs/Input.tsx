@@ -64,14 +64,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <div className={className}>
-        {label && (
-          <BodyText className="mb-2 text-sm text-gray-700">
-            {label}
-            {mandatory && '*'}
-          </BodyText>
-        )}
-        <div className="relative w-full min-w-fit">
+      <div className={clsxm('w-64', className)}>
+        <BodyText className="mb-2 text-sm text-gray-700">
+          {label}
+          {mandatory && '*'}
+        </BodyText>
+        <div className="relative w-full">
           <Combobox value={value} disabled={disabled}>
             <Combobox.Input
               onChange={onChange}
@@ -85,7 +83,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 handleRightColorChange('text-gray-600 fill-gray-500')
               }
               className={clsxm(
-                'inline-flex items-center justify-center rounded px-3 py-2',
+                'inline-flex w-full items-center justify-center rounded px-3 py-2',
                 'bg-gray-100 font-medium text-gray-800',
                 'placeholder:font-normal',
                 'border-[1px] border-gray-500',
@@ -93,7 +91,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 'transition-colors duration-75',
                 validity && validityStyle[validity].input,
                 'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
-                'w-full',
               )}
               {...rest}
             />
