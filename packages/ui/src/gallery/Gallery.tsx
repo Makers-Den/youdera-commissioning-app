@@ -109,7 +109,7 @@ export const Gallery = ({ className, open, onClose, onDelete, title, images }: G
                 }
               </div>
 
-              <div className='flex items-end justify-start gap-5 overflow-x-auto w-max-full'>
+              <div className='flex items-end gap-5 overflow-x-auto w-max-full m-auto'>
                 {images.map((img, index) =>
                   <img
                     key={img.id}
