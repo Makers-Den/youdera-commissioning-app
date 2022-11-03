@@ -46,7 +46,7 @@ const ForgottenPassword = () => {
   return (
     <Layout footer={{ links }}>
       {!nextStep ? (
-        <div className="mt-auto flex max-w-fit flex-col items-center">
+        <div className="my-auto flex max-w-fit flex-col items-center">
           <SvgIcon name="Unlock" className="mb-10 h-16 w-16 fill-gray-400" />
           <H2 className="mb-2 font-medium">
             {intl.formatMessage({ defaultMessage: 'Forgot password?' })}
