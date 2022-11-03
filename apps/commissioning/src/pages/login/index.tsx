@@ -1,5 +1,7 @@
+import { useAuth } from '@src/integrations/youdera/auth/hooks/useAuth';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -12,7 +14,12 @@ import clsxm from 'ui/utils/clsxm';
 
 const Login = () => {
   const intl = useIntl();
-  const [areCredentialsValid, setAreCredentialsValid] = useState<'valid' | 'invalid' | undefined>();
+  const router = useRouter();
+  const [areCredentialsValid, setAreCredentialsValid] = useState<
+    'valid' | 'invalid' | undefined
+  >();
+
+  const { loginMutation } = useAuth();
 
   const [email, setEmail] = useState<string>('');
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -22,21 +29,24 @@ const Login = () => {
   const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
     setAreCredentialsValid(undefined);
-  }
+  };
 
   const [rememberUser, setRememberUser] = useState<boolean>(false);
   const handleChangeRememberUser = (): void => setRememberUser(!rememberUser);
 
-  const handleOnLogin = () => {
-    // TODO: Login logic, for now its hardcoded values for front
-    // eslint-disable-next-line no-empty
-    if (password === '12345678') {
-
+  const handleOnLogin = async () => {
+    try {
+      await loginMutation.mutateAsync({
+        email,
+        password,
+        remember: rememberUser,
+      });
+      // TODO redirect to dashboard ?
+      router.push('/select-task');
+    } catch (err) {
+      setAreCredentialsValid('invalid');
     }
-    else {
-      setAreCredentialsValid('invalid')
-    }
-  }
+  };
   const links = [
     {
       name: intl.formatMessage({ defaultMessage: 'Legal notice' }),
@@ -49,8 +59,14 @@ const Login = () => {
   ];
   return (
     <Layout footer={{ links }}>
-      <div className="flex flex-col space-y-7 max-w-fit h-full mt-auto">
-        <Image src={Logo} alt="logo" objectFit="contain" height={60} className='pointer-events-none' />
+      <div className="mt-auto flex h-full max-w-fit flex-col space-y-7">
+        <Image
+          src={Logo}
+          alt="logo"
+          objectFit="contain"
+          height={60}
+          className="pointer-events-none"
+        />
         <div className="space-y-4">
           <Input
             label={intl.formatMessage({ defaultMessage: 'Email' })}
@@ -58,20 +74,20 @@ const Login = () => {
             onChange={handleChangeEmail}
             value={email}
             icon="Envelope"
-            width="64"
+            className="w-64"
           />
           <Input
             label={intl.formatMessage({ defaultMessage: 'Password' })}
             placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
-            icon={areCredentialsValid ? undefined : "Unlock"}
+            icon={areCredentialsValid ? undefined : 'Unlock'}
             onChange={handleChangePassword}
             value={password}
             type="password"
-            width="64"
+            className="w-64"
             validity={areCredentialsValid}
           />
         </div>
-        <div className="flex items-center justify-between gap">
+        <div className="gap flex items-center justify-between">
           <Checkbox
             label={intl.formatMessage({ defaultMessage: 'Remember me' })}
             onClick={handleChangeRememberUser}
@@ -79,14 +95,25 @@ const Login = () => {
             disabled={!!areCredentialsValid}
           />
           <Link href="/forgotten-password" passHref>
-            <Label className={clsxm("font-medium underline hover:cursor-pointer", areCredentialsValid && "text-red-400")}>
+            <Label
+              className={clsxm(
+                'font-medium underline hover:cursor-pointer',
+                areCredentialsValid && 'text-red-400',
+              )}
+            >
               {intl.formatMessage({ defaultMessage: 'Forgot password?' })}
             </Label>
           </Link>
         </div>
-        <Button variant="main-green" onClick={handleOnLogin} disabled={!!areCredentialsValid}>{intl.formatMessage({ defaultMessage: 'Login' })}</Button>
+        <Button
+          variant="main-green"
+          onClick={handleOnLogin}
+          disabled={!!areCredentialsValid}
+        >
+          {intl.formatMessage({ defaultMessage: 'Login' })}
+        </Button>
       </div>
-    </Layout >
+    </Layout>
   );
 };
 

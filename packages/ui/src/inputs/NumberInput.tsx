@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 
 import { SvgIcon } from '../svg-icons/SvgIcon';
 import { BodyText } from '../typography/Typography';
@@ -9,7 +9,6 @@ export type NumberInputProps = {
   value: string;
   placeholder?: string;
   mandatory?: boolean;
-  width?: string;
   unit?: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
 } & React.ComponentPropsWithRef<'input'>;
@@ -24,33 +23,25 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       disabled,
       placeholder,
       mandatory,
-      width,
       unit,
       setValue,
       ...rest
     },
     ref,
   ) => {
-    const handleInputChange = (e: React.ChangeEvent<any>) => {
-      setValue(e.target.value);
-      if (e.target.value.length === 0) {
-        e.target.parentElement.querySelector('.suffix .unit').innerHTML = '';
-        return;
-      }
 
-      // Using a filler char will prevent the suffix to be overwritten with the input
-      e.target.parentElement.querySelector('.suffix .unit').innerHTML = unit ?? '';
-      e.target.parentElement.querySelector('.suffix .filler').innerHTML = e.target.value;
-    };
+    const handleInputChange = (e: React.ChangeEvent<any>) => (
+      setValue(e.target.value)
+    )
 
     return (
-      <div className={clsxm('max-w-fit', className)}>
-        <BodyText className="mb-2 text-gray-700 text-sm">
+      <div className={clsxm('w-64', className)}>
+        <BodyText className="mb-2 text-sm text-gray-700">
           {label}
           {mandatory && '*'}
         </BodyText>
 
-        <div className="relative max-w-fit">
+        <div className='relative w-full'>
           <input
             value={value}
             disabled={disabled}
@@ -60,37 +51,38 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             type="number"
             placeholder={placeholder}
             className={clsxm(
-              'inline-flex items-center justify-center rounded px-3 py-2',
-              'font-medium text-gray-800 bg-gray-100',
+              'inline-flex items-center justify-center rounded px-3 py-2 w-full',
+              'bg-gray-100 font-medium text-gray-800',
               'placeholder:font-normal',
               'border-[1px] border-gray-400',
               'focus:outline-none focus-visible:border-orange-400',
               'transition-colors duration-75',
-              'disabled:cursor-not-allowed disabled:bg-gray-400 disabled:border-gray-500',
-              'disabled:placeholder:text-gray-800 disabled:placeholder:font-medium',
-              `w-${width}`,
+              'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400',
+              'disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
             )}
             {...rest}
           />
 
-          <div className="suffix absolute top-[9px] pointer-events-none w-full pl-3">
-            <span className="filler pointer-events-none select-none opacity-0" />
-            <span className="unit pointer-events-none select-none inline-block whitespace-pre max-w[100% - 16px] ml-1" />
+          <div className="suffix pointer-events-none absolute top-[9px] w-full pl-3">
+            <span className="filler pointer-events-none select-none opacity-0">
+              {value}
+            </span>
+            <span className="unit max-w[100% - 16px] pointer-events-none ml-1 inline-block select-none whitespace-pre">
+              {value && unit}
+            </span>
           </div>
 
           <div
             className={clsxm(
-              'absolute top-1/2 -translate-y-1/2 right-0 pointer-events-none mr-2',
-              'flex flex-col items-center justify-center pr-[5.5px] fill-gray-500'
-            )}>
+              'pointer-events-none absolute top-1/2 right-0 mr-2 -translate-y-1/2',
+              'flex flex-col items-center justify-center fill-gray-500 pr-[5.5px]',
+            )}
+          >
             <SvgIcon
-              name='CaretUp'
-              className="fill-inherit h-[6px] mb-[4px] hover:fill-orange-400"
+              name="CaretUp"
+              className="mb-[4px] h-[6px] fill-inherit hover:fill-orange-400"
             />
-            <SvgIcon
-              name='CaretDown'
-              className="fill-inherit h-[6px]"
-            />
+            <SvgIcon name="CaretDown" className="h-[6px] fill-inherit" />
           </div>
         </div>
       </div>

@@ -29,6 +29,18 @@
       "value": "Select task"
     }
   ],
+  "'1d3TLi'": [
+    {
+      "type": 0,
+      "value": "Specific Yield"
+    }
+  ],
+  "'47FYwb'": [
+    {
+      "type": 0,
+      "value": "Cancel"
+    }
+  ],
   "'4XCigB'": [
     {
       "type": 0,
@@ -89,6 +101,18 @@
       "value": "We sent a password reset link to"
     }
   ],
+  "'HAlOn1'": [
+    {
+      "type": 0,
+      "value": "Name"
+    }
+  ],
+  "'HgyEar'": [
+    {
+      "type": 0,
+      "value": "Slant angle"
+    }
+  ],
   "'IW4KeL'": [
     {
       "type": 0,
@@ -105,6 +129,12 @@
     {
       "type": 0,
       "value": "Forgot password?"
+    }
+  ],
+  "'Wikrxi'": [
+    {
+      "type": 0,
+      "value": "Azimut"
     }
   ],
   "'X/BpuN'": [
@@ -125,10 +155,22 @@
       "value": "Reset password"
     }
   ],
+  "'Zn6vVy'": [
+    {
+      "type": 0,
+      "value": "Module field creation"
+    }
+  ],
   "'acrOoz'": [
     {
       "type": 0,
       "value": "Continue"
+    }
+  ],
+  "'jvo0vs'": [
+    {
+      "type": 0,
+      "value": "Save"
     }
   ],
   "'nwjxtz'": [
