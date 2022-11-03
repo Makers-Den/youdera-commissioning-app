@@ -42,7 +42,7 @@ export type BoxProps = {
 export const Box = ({ className, children }: BoxProps) => (
   <div
     className={clsxm(
-      'bg-white rounded-xl py-8 drop-shadow-large w-max',
+      'bg-white rounded-xl py-5 drop-shadow-large w-max',
       className,
     )}
   >

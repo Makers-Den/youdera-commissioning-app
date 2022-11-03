@@ -60,7 +60,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     );
 
     const handleRightColorChange = (color: string) => {
-      !validity && setRightElementColor(color);
+      if (!validity) {
+        setRightElementColor(color);
+      }
     };
 
     return (
@@ -97,7 +99,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               {...rest}
             />
             <Combobox.Button
-              className={`absolute inset-y-0 right-0 flex items-center pr-2 text-sm ${rightElementColor} ${
+              className={`absolute inset-y-0 right-0 flex items-center pr-3 text-sm ${rightElementColor} ${
                 !onClickRightElement ? 'hover:cursor-default' : ''
               }`}
               onClick={onClickRightElement}

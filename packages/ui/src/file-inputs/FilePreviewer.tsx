@@ -28,13 +28,13 @@ export function ImagePreviewer({
         <SvgIcon
           onClick={onDeleteClick}
           name="Trashbin"
-          className="h-5 cursor-pointer text-gray-600 hover:text-gray-300"
+          className="w-5 cursor-pointer text-gray-600 hover:text-gray-300"
         />
         {onAddClick && (
           <SvgIcon
             onClick={onAddClick}
             name="Plus"
-            className="h-5 cursor-pointer text-gray-600 hover:text-gray-300"
+            className="w-4 cursor-pointer text-gray-600 hover:text-gray-300"
           />
         )}
       </div>

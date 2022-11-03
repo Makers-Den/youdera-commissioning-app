@@ -18,7 +18,7 @@ const Template: ComponentStory<typeof AutocompleteSelect> = args => (
 function createOptions() {
   const options: AutocompleteSelectOption[] = [];
 
-  for (let i = 0; i < 10; i = +1) {
+  for (let i = 0; i < 10; i += 1) {
     options.push({
       key: `${i}`,
       label: `T-${i}00`,
