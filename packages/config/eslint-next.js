@@ -91,6 +91,11 @@ module.exports = {
     ], //#endregion  //*======== Import Sort ===========
     // next
     '@next/next/no-html-link-for-pages': 'off',
+    // Stuff we customized
+    'arrow-body-style': ['error', 'as-needed'],
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'off',
+    'jsx-a11y/label-has-associated-control': 'off',
   },
   overrides: [
     {
