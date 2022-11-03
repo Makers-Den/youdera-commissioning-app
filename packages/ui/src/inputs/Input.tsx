@@ -6,7 +6,7 @@ import { BodyText } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
 export type InputProps = {
-  label: string;
+  label?: string;
   value: string;
   placeholder?: string;
   icon?: IconName;
@@ -44,8 +44,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         ? validity === 'valid'
           ? 'Check'
           : validity === 'invalid'
-            ? 'Cross'
-            : undefined
+          ? 'Cross'
+          : undefined
         : undefined,
       placeholder,
       mandatory,
@@ -65,7 +65,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div className={clsxm('w-64', className)}>
-        <BodyText className="mb-2 text-gray-700 text-sm">
+        <BodyText className="mb-2 text-sm text-gray-700">
           {label}
           {mandatory && '*'}
         </BodyText>
@@ -83,19 +83,21 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 handleRightColorChange('text-gray-600 fill-gray-500')
               }
               className={clsxm(
-                'inline-flex items-center justify-center rounded px-3 py-2 w-full',
-                'font-medium text-gray-800 bg-gray-100',
+                'inline-flex w-full items-center justify-center rounded px-3 py-2',
+                'bg-gray-100 font-medium text-gray-800',
                 'placeholder:font-normal',
                 'border-[1px] border-gray-500',
                 'focus:outline-none focus-visible:border-orange-400',
                 'transition-colors duration-75',
                 validity && validityStyle[validity].input,
-                'disabled:cursor-not-allowed disabled:bg-gray-400 disabled:border-gray-500 disabled:placeholder:text-gray-800 disabled:placeholder:font-medium',
+                'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
               )}
               {...rest}
             />
             <Combobox.Button
-              className={`absolute inset-y-0 right-0 flex items-center pr-2 text-sm ${rightElementColor} ${!onClickRightElement ? 'hover:cursor-default' : ''}`}
+              className={`absolute inset-y-0 right-0 flex items-center pr-2 text-sm ${rightElementColor} ${
+                !onClickRightElement ? 'hover:cursor-default' : ''
+              }`}
               onClick={onClickRightElement}
             >
               {icon && (
@@ -104,7 +106,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
                   className={
                     validity
                       ? validityStyle[validity].icon
-                      : 'fill-inherit h-4 w-4'
+                      : 'h-4 w-4 fill-inherit'
                   }
                 />
               )}

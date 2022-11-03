@@ -1,7 +1,5 @@
-/* eslint-disable arrow-body-style */
-/* eslint-disable import/prefer-default-export */
-
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
+import Link from 'next/link';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
@@ -13,18 +11,19 @@ const SelectTask: React.FC = () => {
 
   return (
     <AuthenticatedLayout>
-      <Box className="justify-self-start">
+      <Box className="mb-auto justify-self-start">
         <BoxHeader>
           <BoxTitle
             title={intl.formatMessage({ defaultMessage: 'Select task' })}
           />
         </BoxHeader>
         <BoxContent className="flex space-x-4">
-          <CardLink
-            title={intl.formatMessage({ defaultMessage: 'Commissioning' })}
-            href="http://google.com"
-            icon={<SvgIcon name="Commissioning" />}
-          />
+          <Link passHref href="/roofer/select-project" legacyBehavior>
+            <CardLink
+              title={intl.formatMessage({ defaultMessage: 'Commissioning' })}
+              icon={<SvgIcon name="Commissioning" />}
+            />
+          </Link>
           <CardLink
             title={intl.formatMessage({ defaultMessage: 'Device swap' })}
             href="http://google.com"

@@ -2,6 +2,8 @@ import { useAuth } from '@src/integrations/youdera/auth/hooks/useAuth';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import { useIntl } from 'react-intl';
+import { PrimaryFooterProps } from 'ui/footer/Footer';
+import { ButtonsFooterProps } from 'ui/footer/FooterButtons';
 import { Layout } from 'ui/layout/Layout';
 import { NavHeaderProps } from 'ui/nav-header/NavHeader';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
@@ -9,9 +11,19 @@ import { Typography } from 'ui/typography/Typography';
 
 export type AuthenticatedLayoutProps = {
   children: ReactNode;
+  navVariant?: NavHeaderProps['variant'];
+  onNavCrossClick?: NavHeaderProps['onClick'];
+  navHeader?: NavHeaderProps['header'];
+  footerProps?: PrimaryFooterProps | ButtonsFooterProps;
 };
 
-export function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
+export function AuthenticatedLayout({
+  children,
+  navHeader,
+  navVariant,
+  onNavCrossClick,
+  footerProps,
+}: AuthenticatedLayoutProps) {
   const { userInfoQuery, logOutMutation } = useAuth();
   const intl = useIntl();
 
@@ -23,7 +35,9 @@ export function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
   };
 
   const navProps: NavHeaderProps = {
-    variant: 'logo',
+    variant: navVariant || 'logo',
+    onClick: onNavCrossClick,
+    header: navHeader,
     items: [
       {
         key: 'set',
@@ -57,19 +71,21 @@ export function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
     subTitle: userInfoQuery.data?.role || '',
   };
 
-  const linksProps = [
-    {
-      name: intl.formatMessage({ defaultMessage: 'Legal Notice' }),
-      href: 'google.com',
-    },
-    {
-      name: intl.formatMessage({ defaultMessage: 'Privacy Policy' }),
-      href: 'google.com',
-    },
-  ];
+  const computedFooterProps = footerProps || {
+    links: [
+      {
+        name: intl.formatMessage({ defaultMessage: 'Legal Notice' }),
+        href: 'google.com',
+      },
+      {
+        name: intl.formatMessage({ defaultMessage: 'Privacy Policy' }),
+        href: 'google.com',
+      },
+    ],
+  };
 
   return (
-    <Layout footer={{ links: linksProps }} nav={navProps}>
+    <Layout footer={computedFooterProps} nav={navProps}>
       {children}
     </Layout>
   );
