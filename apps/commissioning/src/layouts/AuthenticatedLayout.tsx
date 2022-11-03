@@ -9,9 +9,17 @@ import { Typography } from 'ui/typography/Typography';
 
 export type AuthenticatedLayoutProps = {
   children: ReactNode;
+  navVariant?: NavHeaderProps['variant'];
+  onNavCrossClick?: NavHeaderProps['onClick'];
+  navHeader?: NavHeaderProps['header'];
 };
 
-export function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
+export function AuthenticatedLayout({
+  children,
+  navHeader,
+  navVariant,
+  onNavCrossClick,
+}: AuthenticatedLayoutProps) {
   const { userInfoQuery, logOutMutation } = useAuth();
   const intl = useIntl();
 
@@ -23,7 +31,9 @@ export function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
   };
 
   const navProps: NavHeaderProps = {
-    variant: 'logo',
+    variant: navVariant || 'logo',
+    onClick: onNavCrossClick,
+    header: navHeader,
     items: [
       {
         key: 'set',
