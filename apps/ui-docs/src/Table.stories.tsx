@@ -1,6 +1,7 @@
-import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
+
 import { CenterWrapper } from './utils/CenterWrapper';
 
 export default {
@@ -38,25 +39,23 @@ function fakeValues() {
 
 Overview.args = {
   children: (
-    <Table>
+    <>
       <Thead>
         <Tr>
-          {columnNames.map(name => {
-            return <Th key={name}>{name}</Th>;
-          })}
+          {columnNames.map(name => (
+            <Th key={name}>{name}</Th>
+          ))}
         </Tr>
       </Thead>
       <Tbody>
-        {fakeValues().map(rowValues => {
-          return (
-            <Tr>
-              {rowValues.map(value => {
-                return <Td>{value}</Td>;
-              })}
-            </Tr>
-          );
-        })}
+        {fakeValues().map(rowValues => (
+          <Tr>
+            {rowValues.map(value => (
+              <Td>{value}</Td>
+            ))}
+          </Tr>
+        ))}
       </Tbody>
-    </Table>
+    </>
   ),
 };
