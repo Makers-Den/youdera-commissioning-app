@@ -20,6 +20,7 @@ for (let i = 0; i < 10; i += 1) {
 const Home = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false)
   const [value, setValue] = useState<AutocompleteSelectOption>();
+  const handleAutoSelect = (val: AutocompleteSelectOption | undefined) => setValue(val)
   return (
     <div className="flex flex-col items-center justify-center min-h-screen space-y-8">
       <Button onClick={() => setIsOpen(true)}>Click</Button>
@@ -30,8 +31,8 @@ const Home = () => {
         options={options}
         className="w-[250px]"
         action={{ label: 'Add', onClick: () => alert('aaa'), icon: 'Plus' }}
-        select={value}
-        setSelect={setValue}
+        value={value}
+        onChange={handleAutoSelect}
         noOptionsString='Nothing found.'
       />
       <Select label="Label" placeholder="sth" options={options} wrapperClassName='w-64' />
