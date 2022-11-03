@@ -1,5 +1,5 @@
 import { Combobox, Transition } from '@headlessui/react';
-import { Fragment, ReactNode, useState } from 'react';
+import { Fragment, useState } from 'react';
 
 import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
 import { Label } from '../typography/Typography';
@@ -69,7 +69,7 @@ export const AutocompleteSelect = ({
                   'w-full',
                   'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
                 )}
-                displayValue={option => option?.label ?? placeholder}
+                displayValue={(option: AutocompleteSelectOption) => option?.label ?? placeholder}
                 onChange={event => setQuery(event.target.value)}
                 {...rest}
               />
