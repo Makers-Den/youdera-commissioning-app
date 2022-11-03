@@ -1,5 +1,6 @@
+import { useAuth } from '@src/integrations/youdera/auth/hooks/useAuth';
 import { useModels } from '@src/integrations/youdera/models/hooks/useModels';
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
   Dialog,
@@ -19,8 +20,35 @@ export const AddInverterDialog = ({
 }: Omit<DialogProps, 'children'>) => {
   const intl = useIntl();
   const { inverterModelsQuery } = useModels();
+  const { loginMutation } = useAuth()
+
+  // TEMPORARY FUNC FOR AUTH
+  const handleOnLogin = async () => {
+    try {
+      await loginMutation.mutateAsync({
+        email: 'roo@fer.com',
+        password: 'roofer123',
+        remember: true
+      });
+    } catch (err) {
+      console.log(err)
+    }
+  };
+
+  useEffect(() => {
+    handleOnLogin()
+  }, [])
+  //
+
+  const inverterModels: AutocompleteSelectOption[] | [] = useMemo(
+    () =>
+      (inverterModelsQuery.data || [])
+        .map((model) => ({ key: model.id.toString(), label: model.name, icon: "Table" })),
+    [inverterModelsQuery.data]
+  );
 
   const [select, setSelect] = useState<AutocompleteSelectOption>();
+
   return (
     <Dialog open={open} onClose={onClose} className={clsxm('w-[400px]', className)}>
       <DialogHeader>
@@ -37,10 +65,18 @@ export const AddInverterDialog = ({
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
         <AutocompleteSelect
-          options={[{ label: '12', key: '12' }]}
+          options={[]}
           select={select}
           setSelect={setSelect}
-          label={intl.formatMessage({ defaultMessage: 'Manufacturer' })}
+          label={intl.formatMessage({ defaultMessage: 'Model' })}
+          placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+          noOptionsString={intl.formatMessage({ defaultMessage: 'Nothing found.' })}
+        />
+        <AutocompleteSelect
+          options={inverterModels}
+          select={select}
+          setSelect={setSelect}
+          label={intl.formatMessage({ defaultMessage: 'Model' })}
           placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
           noOptionsString={intl.formatMessage({ defaultMessage: 'Nothing found.' })}
         />

@@ -20,7 +20,7 @@ export type AutocompleteSelectAction = {
 export type AutocompleteSelectProps = {
   label: string;
   placeholder: string;
-  options: AutocompleteSelectOption[];
+  options: AutocompleteSelectOption[] | [];
   noOptionsString: string;
   className?: string;
   select?: AutocompleteSelectOption | undefined;
