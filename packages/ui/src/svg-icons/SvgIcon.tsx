@@ -3,8 +3,9 @@ import {
   FaCalendarAlt,
   FaCheck,
   FaEnvelope,
+  FaTable,
   FaTimes,
-  FaUnlockAlt,
+  FaUnlockAlt
 } from 'react-icons/fa';
 
 import { Camera } from './icons/Camera';
@@ -32,6 +33,7 @@ const iconMap = {
   Cross: FaTimes,
   Envelope: FaEnvelope,
   Unlock: FaUnlockAlt,
+  Table: FaTable,
   ChevronDown,
   Settings,
   LogOut,

@@ -1,61 +1,60 @@
 import { Combobox, Transition } from '@headlessui/react';
 import { Fragment, ReactNode, useState } from 'react';
 
-import { SvgIcon } from '../svg-icons/SvgIcon';
+import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
 import { Label } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
-const people = [
-  { id: 1, name: 'Wade Cooper' },
-  { id: 2, name: 'Arlene Mccoy' },
-  { id: 3, name: 'Devon Webb' },
-  { id: 4, name: 'Tom Cook' },
-  { id: 5, name: 'Tanya Fox' },
-  { id: 6, name: 'Hellen Schmidt' },
-];
-
 export type AutocompleteSelectOption = {
   key: string;
-  label: ReactNode;
+  label: string;
+  icon?: IconName;
+};
+
+export type AutocompleteSelectAction = {
+  label: string;
+  icon?: IconName;
+  onClick: () => void;
 };
 
 export type AutocompleteSelectProps = {
   label: string;
   placeholder: string;
   options: AutocompleteSelectOption[];
+  noOptionsString: string;
+  className?: string;
   value?: string;
-  defaultValue?: AutocompleteSelectOption;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  action?: AutocompleteSelectAction;
+  setValue?: React.Dispatch<React.SetStateAction<string | undefined>>
 } & React.ComponentPropsWithRef<'input'>;
 
 export const AutocompleteSelect = ({
   label,
   value,
+  setValue,
   placeholder,
-  defaultValue,
+  options,
+  className,
+  action,
+  noOptionsString = 'Nothing found.',
+  ...rest
 }: AutocompleteSelectProps) => {
-  const [selected, setSelected] = useState(people[0]);
   const [query, setQuery] = useState('');
 
-  const filteredPeople =
+  const filteredOptions =
     query === ''
-      ? people
-      : people.filter(person =>
-        person.name
+      ? options
+      : options.filter(option =>
+        option.label
           .toLowerCase()
           .replace(/\s+/g, '')
           .includes(query.toLowerCase().replace(/\s+/g, '')),
       );
 
   return (
-    <div>
-      <Label>
-        {label}
-      </Label>
-      <Combobox
-        value={selected}
-        onChange={setSelected}
-      >
+    <div className={className}>
+      <Label>{label}</Label>
+      <Combobox value={value} onChange={setValue}>
         {({ open }) => (
           <div className="relative mt-1">
             <div className="">
@@ -70,8 +69,9 @@ export const AutocompleteSelect = ({
                   'w-full',
                   'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
                 )}
-                displayValue={person => person?.name}
+                displayValue={option => option?.label ?? placeholder}
                 onChange={event => setQuery(event.target.value)}
+                {...rest}
               />
 
               <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-4">
@@ -96,26 +96,53 @@ export const AutocompleteSelect = ({
                 className={clsxm(
                   'absolute overflow-auto',
                   'mt-1 max-h-44 w-full py-2',
-                  'rounded-md bg-white drop-shadow-large',
-                )}>
-                {filteredPeople.length === 0 && query !== '' ? (
+                  'drop-shadow-large rounded-md bg-white',
+                )}
+              >
+                {action && (
+                  // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
+                  <div
+                    className="flex cursor-pointer select-none items-center py-2 pl-4 pr-4 font-medium hover:bg-gray-100"
+                    onClick={action.onClick}
+                  >
+                    {action.icon && (
+                      <SvgIcon name={action.icon} className="mr-3 h-[14px]" />
+                    )}
+                    {action.label}
+                  </div>
+                )}
+                {filteredOptions.length === 0 && query !== '' ? (
                   <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
-                    Nothing found.
+                    {noOptionsString}
                   </div>
                 ) : (
-                  filteredPeople.map(person => (
+                  filteredOptions.map(option => (
                     <Combobox.Option
-                      key={person.id}
-                      className='cursor-pointer select-none py-2 pl-4 pr-4 flex justify-between items-center hover:bg-gray-100'
-                      value={person}
+                      key={option.label}
+                      value={option}
+                      className={({ active }) =>
+                        clsxm(
+                          'flex items-center justify-between py-2 pl-4 pr-4',
+                          'cursor-pointer select-none hover:bg-gray-100',
+                          active && 'bg-gray-100',
+                        )
+                      }
                     >
                       {({ selected, active }) => (
                         <>
                           <span
-                            className={`block truncate ${selected ? 'font-medium' : 'font-normal'
+                            className={`flex items-center truncate ${selected ? 'font-medium' : 'font-normal'
                               }`}
                           >
-                            {person.name}
+                            {option.icon && (
+                              <span className="mr-3 flex w-4 items-center justify-center">
+                                <SvgIcon
+                                  name={option.icon}
+                                  className="h-[14px]"
+                                />
+                              </span>
+                            )}
+                            {option.label}
                           </span>
                           {selected ? (
                             <span
@@ -137,7 +164,7 @@ export const AutocompleteSelect = ({
             </Transition>
           </div>
         )}
-      </Combobox >
-    </div >
+      </Combobox>
+    </div>
   );
 };
