@@ -1,6 +1,3 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable import/prefer-default-export */
-
 import React, { ReactNode } from 'react';
 
 import { Footer, PrimaryFooterProps } from '../footer/Footer';
@@ -8,7 +5,9 @@ import { ButtonsFooterProps, FooterButtons } from '../footer/FooterButtons';
 import { NavHeader, NavHeaderProps } from '../nav-header/NavHeader';
 
 type LayoutProps = {
+  // eslint-disable-next-line react/require-default-props
   nav?: NavHeaderProps;
+  // eslint-disable-next-line react/require-default-props
   footer?: PrimaryFooterProps | ButtonsFooterProps;
   children: ReactNode;
 };
