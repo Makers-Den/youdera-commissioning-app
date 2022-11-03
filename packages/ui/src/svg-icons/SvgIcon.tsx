@@ -5,7 +5,7 @@ import {
   FaEnvelope,
   FaTable,
   FaTimes,
-  FaUnlockAlt
+  FaUnlockAlt,
 } from 'react-icons/fa';
 
 import { Camera } from './icons/Camera';
@@ -23,6 +23,7 @@ import { Plus } from './icons/Plus';
 import { Problem } from './icons/Problem';
 import { SafetyHelmet } from './icons/SafetyHelmet';
 import { Settings } from './icons/Settings';
+import { SolarPanel } from './icons/SolarPanel';
 import { Suitcase } from './icons/Suitcase';
 import { ThumbsUp } from './icons/ThumbsUp';
 import { Trashbin } from './icons/Trashbin';
@@ -54,6 +55,7 @@ const iconMap = {
   Plus,
   Suitcase,
   MagnifyingGlass,
+  SolarPanel,
 };
 
 export type IconName = keyof typeof iconMap;

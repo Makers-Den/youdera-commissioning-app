@@ -11,7 +11,7 @@ export type SelectOption = {
 };
 
 export type SelectProps = {
-  label: string;
+  label?: string;
   placeholder: string;
   name?: string;
   options: SelectOption[];
@@ -34,7 +34,7 @@ export function Select({
   wrapperClassName,
 }: SelectProps) {
   return (
-    <div>
+    <div className={wrapperClassName}>
       <Typography variant="label">
         {label}
         <span className="text-green-400">{mandatory && '*'}</span>
@@ -47,17 +47,17 @@ export function Select({
         by="key"
       >
         {({ open }) => (
-          <div className={clsxm('relative mt-1', wrapperClassName)}>
+          <div className={clsxm('relative')}>
             <Listbox.Button
               className={clsxm(
                 'w-full py-2 pl-3 pr-4',
-                'rounded-md text-left border',
+                'rounded-md border text-left',
                 'cursor-pointer',
-                'flex justify-between items-center',
+                'flex items-center justify-between',
                 'transition-all',
                 open
                   ? 'border-orange-400 bg-white'
-                  : 'bg-gray-100 border-gray-500',
+                  : 'border-gray-500 bg-gray-100',
               )}
             >
               {({ value }) => (
@@ -68,7 +68,7 @@ export function Select({
                   <SvgIcon
                     name="ChevronDown"
                     className={clsxm(
-                      'w-3 ml-4 transition-all',
+                      'ml-4 w-3 transition-all',
                       open && 'rotate-180',
                     )}
                   />
@@ -87,7 +87,7 @@ export function Select({
                 className={clsxm(
                   'absolute overflow-auto',
                   'mt-1 max-h-44 w-full py-3',
-                  'rounded-md bg-white drop-shadow-large',
+                  'drop-shadow-large rounded-md bg-white',
                 )}
               >
                 {options.map(option => {
@@ -95,7 +95,7 @@ export function Select({
                   return (
                     <Listbox.Option
                       key={key}
-                      className='cursor-pointer select-none py-2 pl-3 pr-4 flex justify-between items-center hover:bg-gray-100'
+                      className="flex cursor-pointer select-none items-center justify-between py-2 pl-3 pr-4 hover:bg-gray-100"
                       value={option}
                     >
                       {({ selected }) => (

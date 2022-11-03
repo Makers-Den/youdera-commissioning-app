@@ -52,7 +52,6 @@ const Login = () => {
         password,
         remember: rememberUser,
       });
-      // TODO redirect to dashboard ?
     } catch (err) {
       setAreCredentialsValid('invalid');
     }
