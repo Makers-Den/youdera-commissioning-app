@@ -1,9 +1,11 @@
+import { FieldCreationDialog } from '@src/components/field-creation/FieldCreationDialog';
 import React, { useState } from 'react';
+import { Button } from 'ui/buttons/Button';
 import {
   AutocompleteSelect,
   AutocompleteSelectOption,
 } from 'ui/select/AutocompleteSelect';
-import { Select } from 'ui/select/Select';
+import { Select } from 'ui/select/Select'
 
 const options: AutocompleteSelectOption[] = [];
 
@@ -15,12 +17,13 @@ for (let i = 0; i < 10; i += 1) {
   });
 }
 
-
 const Home = () => {
+  const [isOpen, setIsOpen] = React.useState<boolean>(false)
   const [value, setValue] = useState<AutocompleteSelectOption>();
-
   return (
-    <div className="flex min-h-screen flex-wrap items-center justify-center space-x-8">
+    <div className="flex flex-col items-center justify-center min-h-screen space-y-8">
+      <Button onClick={() => setIsOpen(true)}>Click</Button>
+      <FieldCreationDialog onClose={() => setIsOpen(false)} open={isOpen} />
       <AutocompleteSelect
         label="Label"
         placeholder="Placeholder"
@@ -31,7 +34,7 @@ const Home = () => {
         setSelect={setValue}
         noOptionsString='Nothing found.'
       />
-      <Select label="Label" placeholder="sth" options={options} />
+      <Select label="Label" placeholder="sth" options={options} wrapperClassName='w-64' />
     </div>
   );
 };

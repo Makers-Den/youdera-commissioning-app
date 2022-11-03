@@ -95,7 +95,7 @@ export const AutocompleteSelect = ({
                 static
                 className={clsxm(
                   'absolute overflow-auto',
-                  'mt-1 max-h-44 w-full py-2',
+                  'mt-1 max-h-44 w-full py-2 z-10',
                   'drop-shadow-large rounded-md bg-white',
                 )}
               >
