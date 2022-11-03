@@ -1,21 +1,23 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 import { SvgIcon } from '../svg-icons/SvgIcon';
 import { Typography } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
 export type CardLinkProps = {
-  href: string;
+  href?: string;
   title: string;
   icon: ReactNode;
   disabled?: boolean;
 };
 
-export function CardLink({ href, title, icon, disabled }: CardLinkProps) {
-  return (
+export const CardLink = React.forwardRef<HTMLAnchorElement, CardLinkProps>(
+  // eslint-disable-next-line react/prop-types
+  ({ href, title, icon, disabled }, ref) => (
     <a
+      ref={ref}
       className={clsxm(
-        'flex flex-col p-5 bg-gray-100 rounded-md aspect-square w-52',
+        'flex aspect-square w-52 flex-col rounded-md bg-gray-100 p-5',
         disabled ? 'pointer-events-none' : 'cursor-pointer',
       )}
       href={href}
@@ -24,7 +26,7 @@ export function CardLink({ href, title, icon, disabled }: CardLinkProps) {
         variant="body"
         as="h3"
         className={clsxm(
-          'flex justify-between items-center font-medium',
+          'flex items-center justify-between font-medium',
           disabled && 'text-gray-500',
         )}
       >
@@ -34,12 +36,12 @@ export function CardLink({ href, title, icon, disabled }: CardLinkProps) {
       </Typography>
       <div
         className={clsxm(
-          'flex-1 flex w-full justify-center items-center',
+          'flex w-full flex-1 items-center justify-center',
           disabled && 'grayscale',
         )}
       >
         {icon}
       </div>
     </a>
-  );
-}
+  ),
+);
