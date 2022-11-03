@@ -63,7 +63,6 @@ const ForgottenPassword = () => {
             value={email}
             icon="Envelope"
             className="mb-8"
-            sizeClass="w-64"
             validity={isEmailValid}
           />
           <Button

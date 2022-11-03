@@ -74,7 +74,7 @@ const Login = () => {
             onChange={handleChangeEmail}
             value={email}
             icon="Envelope"
-            sizeClass="w-64"
+            className="w-64"
           />
           <Input
             label={intl.formatMessage({ defaultMessage: 'Password' })}
@@ -83,7 +83,7 @@ const Login = () => {
             onChange={handleChangePassword}
             value={password}
             type="password"
-            sizeClass="w-64"
+            className="w-64"
             validity={areCredentialsValid}
           />
         </div>

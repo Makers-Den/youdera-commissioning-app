@@ -52,14 +52,14 @@ export const FieldCreationDialog = ({
           placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
           value={name}
           onChange={handleNameChange}
-          sizeClass="w-full"
+          className="w-full"
         />
         <Input
           label={intl.formatMessage({ defaultMessage: 'Specific Yield' })}
           placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
           value={specificYield}
           onChange={handleYieldChange}
-          sizeClass="w-full"
+          className="w-full"
           units='kWh/kWp'
         />
 
@@ -70,7 +70,7 @@ export const FieldCreationDialog = ({
               value={slantAngle}
               setValue={setSlantAngle}
               unit="&deg;"
-              sizeClass='w-full'
+              className='w-full'
               max='359'
             />
             <NumberInput
@@ -78,7 +78,7 @@ export const FieldCreationDialog = ({
               value={azimut}
               setValue={setAzimut}
               unit="&deg;"
-              sizeClass='w-full'
+              className='w-full'
               max='359'
             />
           </div>

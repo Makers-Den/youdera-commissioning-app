@@ -9,7 +9,6 @@ export type NumberInputProps = {
   value: string;
   placeholder?: string;
   mandatory?: boolean;
-  sizeClass?: string;
   unit?: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
 } & React.ComponentPropsWithRef<'input'>;
@@ -24,7 +23,6 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       disabled,
       placeholder,
       mandatory,
-      sizeClass,
       unit,
       setValue,
       ...rest
@@ -37,13 +35,13 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     )
 
     return (
-      <div className={className}>
+      <div className={clsxm('w-64', className)}>
         <BodyText className="mb-2 text-sm text-gray-700">
           {label}
           {mandatory && '*'}
         </BodyText>
 
-        <div className={clsxm('relative w-fit', sizeClass)}>
+        <div className='relative w-full'>
           <input
             value={value}
             disabled={disabled}
@@ -53,7 +51,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             type="number"
             placeholder={placeholder}
             className={clsxm(
-              'inline-flex items-center justify-center rounded px-3 py-2',
+              'inline-flex items-center justify-center rounded px-3 py-2 w-full',
               'bg-gray-100 font-medium text-gray-800',
               'placeholder:font-normal',
               'border-[1px] border-gray-400',
@@ -61,7 +59,6 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
               'transition-colors duration-75',
               'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400',
               'disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
-              sizeClass,
             )}
             {...rest}
           />
