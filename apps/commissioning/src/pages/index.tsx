@@ -3,7 +3,7 @@ import {
   AutocompleteSelect,
   AutocompleteSelectOption,
 } from 'ui/select/AutocompleteSelect';
-import { Select, SelectOption } from 'ui/select/Select';
+import { Select } from 'ui/select/Select';
 
 const Home = () => {
   function createOptions() {

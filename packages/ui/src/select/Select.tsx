@@ -51,7 +51,7 @@ export function Select({
             <Listbox.Button
               className={clsxm(
                 'w-full py-2 pl-3 pr-4',
-                'rounded-md text-left drop-shadow-large border',
+                'rounded-md text-left border',
                 'cursor-pointer',
                 'flex justify-between items-center',
                 'transition-all',
@@ -95,7 +95,7 @@ export function Select({
                   return (
                     <Listbox.Option
                       key={key}
-                      className={`cursor-pointer select-none py-2 pl-3 pr-4 flex justify-between items-center hover:bg-gray-100`}
+                      className='cursor-pointer select-none py-2 pl-3 pr-4 flex justify-between items-center hover:bg-gray-100'
                       value={option}
                     >
                       {({ selected }) => (
