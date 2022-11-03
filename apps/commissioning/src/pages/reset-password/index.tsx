@@ -1,3 +1,4 @@
+import { LEGAL_NOTICE_URL, PRIVACY_POLICY_URL } from '@src/lib/constants';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -35,11 +36,11 @@ const ForgottenPassword = () => {
   const links = [
     {
       name: intl.formatMessage({ defaultMessage: 'Legal notice' }),
-      href: 'google.com',
+      href: LEGAL_NOTICE_URL
     },
     {
       name: intl.formatMessage({ defaultMessage: 'Privacy Policy' }),
-      href: 'google.com',
+      href: PRIVACY_POLICY_URL
     },
   ];
 

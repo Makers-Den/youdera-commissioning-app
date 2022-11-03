@@ -60,7 +60,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     );
 
     const handleRightColorChange = (color: string) => {
-      !validity && setRightElementColor(color);
+      if (!validity) {
+        setRightElementColor(color);
+      }
     };
 
     return (

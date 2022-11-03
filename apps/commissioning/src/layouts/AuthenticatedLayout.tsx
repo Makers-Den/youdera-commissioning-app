@@ -1,4 +1,5 @@
 import { useAuth } from '@src/integrations/youdera/auth/hooks/useAuth';
+import { LEGAL_NOTICE_URL, PRIVACY_POLICY_URL } from '@src/lib/constants';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import { useIntl } from 'react-intl';
@@ -75,11 +76,11 @@ export function AuthenticatedLayout({
     links: [
       {
         name: intl.formatMessage({ defaultMessage: 'Legal Notice' }),
-        href: 'google.com',
+        href: LEGAL_NOTICE_URL,
       },
       {
         name: intl.formatMessage({ defaultMessage: 'Privacy Policy' }),
-        href: 'google.com',
+        href: PRIVACY_POLICY_URL,
       },
     ],
   };
