@@ -91,6 +91,14 @@ module.exports = {
     ], //#endregion  //*======== Import Sort ===========
     // next
     '@next/next/no-html-link-for-pages': 'off',
+    // Stuff we customized
+    'arrow-body-style': ['error', 'as-needed'],
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'off',
+    'jsx-a11y/label-has-associated-control': 'off',
+    'jsx-a11y/click-events-have-key-events': 'off',
+    'react/prop-types': 'off',
+    'react/require-default-props': 'off'
   },
   overrides: [
     {

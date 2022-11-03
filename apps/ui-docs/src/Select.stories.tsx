@@ -1,8 +1,9 @@
-import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import React from 'react';
 import { Select, SelectOption } from 'ui/select/Select';
 
 import { CenterWrapper } from './utils/CenterWrapper';
+
 
 export default {
   component: Select,
@@ -18,7 +19,7 @@ const Template: ComponentStory<typeof Select> = args => (
 function createOptions() {
   const options: SelectOption[] = [];
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 10; i += 1) {
     options.push({
       key: `${i}`,
       label: `T-${i}00`,

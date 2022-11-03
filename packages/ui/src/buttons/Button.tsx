@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import LoadingIcon from '../loading-icon/LoadingIcon';
 import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
 import clsxm from '../utils/clsxm';
 
@@ -58,6 +57,12 @@ export const buttonVariantStyles: {
   ],
 };
 
+
+const withoutHoverAndActiveStyles = (variantStyles: string[]) =>
+  variantStyles.filter(s => !s.includes('hover'))
+  .filter(s => !s.includes('active'));
+
+
 export type ButtonProps = {
   isLoading?: boolean;
   icon?: IconName;
@@ -78,10 +83,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) => {
     const disabled = buttonDisabled && !isLoading;
-    const disablePseudoClasses = () =>
-      buttonVariantStyles[variant]
-        .filter(s => !s.includes('hover'))
-        .filter(s => !s.includes('active'));
 
     return (
       <button
@@ -94,23 +95,17 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           'focus:outline-none focus-visible:ring focus-visible:ring-primary-500',
           'transition-colors duration-150',
           'transition-[filter] will-change-[filter]',
-          isLoading ? disablePseudoClasses() : buttonVariantStyles[variant],
+          isLoading
+            ? withoutHoverAndActiveStyles(buttonVariantStyles[variant]) 
+            : buttonVariantStyles[variant],
           'disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:border-0 disabled:drop-shadow-none',
           isLoading &&
-          `relative text-transparent text  transition-none hover:text-transparent cursor-wait`,
+          `relative text-transparent text  transition-none hover:text-transparent cursor-wait is-loading`,
           className,
         )}
         {...rest}
       >
-        {isLoading && (
-          <LoadingIcon
-            color={
-              ['additional-white', 'additional-gray'].includes(variant)
-                ? 'darkGray'
-                : 'white'
-            }
-          />
-        )}
+        
 
         <div className="flex items-center">
           {icon && <SvgIcon name={icon} className='h-6' />}

@@ -23,15 +23,15 @@ export type AutocompleteSelectProps = {
   options: AutocompleteSelectOption[] | [];
   noOptionsString: string;
   className?: string;
-  select?: AutocompleteSelectOption | undefined;
+  value?: AutocompleteSelectOption | undefined;
   action?: AutocompleteSelectAction;
-  setSelect?: React.Dispatch<React.SetStateAction<AutocompleteSelectOption | undefined>>
-} & React.ComponentPropsWithRef<'input'>;
+  onChange?: (value: AutocompleteSelectOption | undefined) => void
+} & Omit<React.ComponentPropsWithRef<'input'>, 'value' | 'onChange'>;
 
 export const AutocompleteSelect = ({
   label,
-  select,
-  setSelect,
+  value,
+  onChange,
   placeholder,
   options,
   className,
@@ -54,7 +54,7 @@ export const AutocompleteSelect = ({
   return (
     <div className={className}>
       <Label>{label}</Label>
-      <Combobox value={select} onChange={setSelect}>
+      <Combobox value={value} onChange={onChange}>
         {({ open }) => (
           <div className="relative mt-1">
             <div className="">

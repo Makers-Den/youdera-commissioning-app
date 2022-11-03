@@ -1,22 +1,33 @@
-# Turborepo starter
+# Youdera Commissioning App Frontend
 
-This is an official Yarn v1 starter turborepo.
+This is the mono repo for the Youndera Commissioning app frontend and the Youdera UI library.
 
-## What's inside?
+All styling is based on Tailwind.
 
-This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package manager. It includes the following packages/apps:
+Canonical repository is here:
+https://gitlab.com/younergy/youdera-commissioning-app
 
-### Apps and Packages
+## Requirements
 
-- `docs`: a [Next.js](https://nextjs.org) app
-- `web`: another [Next.js](https://nextjs.org) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
+- Node 16.14+
+- Yarn 1.22+
+
+This repo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package manager,
+and [Turborepo](https://turbo.build/repo) to manage the monorepo. 
+
+It includes the following packages/apps:
+
+## Apps and Packages
+
+- `commissioning`: The Commissioning Frontend based on [Next.js](https://nextjs.org)
+- `ui-docs`: a [Storybook](https://storybook.js.org/) app documenting ui components
+- `ui`: a component library of React components consumed by both `commissioning` and `ui-docs` applications, and possibly third parties not hosted in this repo.
 - `config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-### Utilities
+## Utilities
 
 This turborepo has some additional tools already setup for you:
 
@@ -24,61 +35,26 @@ This turborepo has some additional tools already setup for you:
 - [ESLint](https://eslint.org/) for code linting
 - [Jest](https://jestjs.io) test runner for all things JavaScript
 - [Prettier](https://prettier.io) for code formatting
-
-## Setup
-
-This repository is used in the `npx create-turbo` command, and selected when choosing which package manager you wish to use with your monorepo (Yarn).
-
-### Build
+## Build
 
 To build all apps and packages, run the following command:
 
 ```
-cd my-turborepo
+cd [workspace]
 yarn install
 yarn run build
 ```
 
-### Develop
+## Develop
 
 To develop all apps and packages, run the following command:
 
 ```
-cd my-turborepo
+cd [workspace]
 yarn install
 yarn run dev
 ```
 
-### Commit Message Convention
+## Commit Message Convention
 
 This starter is using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), it is mandatory to use it to commit changes.
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching (Beta)](https://turborepo.org/docs/features/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching (Beta) you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Pipelines](https://turborepo.org/docs/features/pipelines)
-- [Caching](https://turborepo.org/docs/features/caching)
-- [Remote Caching (Beta)](https://turborepo.org/docs/features/remote-caching)
-- [Scoped Tasks](https://turborepo.org/docs/features/scopes)
-- [Configuration Options](https://turborepo.org/docs/reference/configuration)
-- [CLI Usage](https://turborepo.org/docs/reference/command-line-reference)

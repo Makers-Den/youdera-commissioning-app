@@ -32,7 +32,7 @@ export const CardLink = React.forwardRef<HTMLAnchorElement, CardLinkProps>(
       >
         {title}
 
-        <SvgIcon name="ChevronRight" className="h-4 text-inherit" />
+        <SvgIcon name="ChevronRight" className="h-[0.9rem] text-inherit" />
       </Typography>
       <div
         className={clsxm(

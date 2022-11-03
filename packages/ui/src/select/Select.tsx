@@ -34,7 +34,7 @@ export function Select({
   wrapperClassName,
 }: SelectProps) {
   return (
-    <label>
+    <div>
       <Typography variant="label">
         {label}
         <span className="text-green-400">{mandatory && '*'}</span>
@@ -117,6 +117,6 @@ export function Select({
           </div>
         )}
       </Listbox>
-    </label>
+    </div>
   );
 }
