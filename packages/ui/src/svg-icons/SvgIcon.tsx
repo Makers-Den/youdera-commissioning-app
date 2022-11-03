@@ -18,10 +18,12 @@ import { Close } from './icons/Cross';
 import { DeviceSwap } from './icons/DeviceSwap';
 import { Extention } from './icons/Extension';
 import { LogOut } from './icons/LogOut';
+import { MagnifyingGlass } from './icons/MagnifyingGlass';
 import { Plus } from './icons/Plus';
 import { Problem } from './icons/Problem';
 import { SafetyHelmet } from './icons/SafetyHelmet';
 import { Settings } from './icons/Settings';
+import { Suitcase } from './icons/Suitcase';
 import { ThumbsUp } from './icons/ThumbsUp';
 import { Trashbin } from './icons/Trashbin';
 
@@ -50,6 +52,8 @@ const iconMap = {
   Extention,
   Trashbin,
   Plus,
+  Suitcase,
+  MagnifyingGlass,
 };
 
 export type IconName = keyof typeof iconMap;

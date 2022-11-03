@@ -2,7 +2,7 @@ import { useAuth } from '@src/integrations/youdera/auth/hooks/useAuth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import { Checkbox } from 'ui/checkboxes/Checkbox';
@@ -19,7 +19,7 @@ const Login = () => {
     'valid' | 'invalid' | undefined
   >();
 
-  const { loginMutation } = useAuth();
+  const { loginMutation, isAuthenticated, userInfoQuery } = useAuth();
 
   const [email, setEmail] = useState<string>('');
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -32,6 +32,13 @@ const Login = () => {
   };
 
   const [rememberUser, setRememberUser] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isAuthenticated && userInfoQuery.data) {
+      router.push(`/${userInfoQuery.data.role}/select-task`);
+    }
+  }, [isAuthenticated, userInfoQuery.data, router]);
+
   const handleChangeRememberUser = (): void => setRememberUser(!rememberUser);
 
   const handleOnLogin = async () => {
@@ -42,7 +49,6 @@ const Login = () => {
         remember: rememberUser,
       });
       // TODO redirect to dashboard ?
-      router.push('/select-task');
     } catch (err) {
       setAreCredentialsValid('invalid');
     }
@@ -59,7 +65,7 @@ const Login = () => {
   ];
   return (
     <Layout footer={{ links }}>
-      <div className="mt-auto flex h-full max-w-fit flex-col space-y-7">
+      <div className="my-auto flex h-full max-w-fit flex-col space-y-7">
         <Image
           src={Logo}
           alt="logo"
@@ -97,7 +103,7 @@ const Login = () => {
           <Link href="/forgotten-password" passHref>
             <Label
               className={clsxm(
-                'font-medium underline hover:cursor-pointer',
+                'ml-8 font-medium underline hover:cursor-pointer',
                 areCredentialsValid && 'text-red-400',
               )}
             >
@@ -109,6 +115,7 @@ const Login = () => {
           variant="main-green"
           onClick={handleOnLogin}
           disabled={!!areCredentialsValid}
+          isLoading={loginMutation.isLoading}
         >
           {intl.formatMessage({ defaultMessage: 'Login' })}
         </Button>

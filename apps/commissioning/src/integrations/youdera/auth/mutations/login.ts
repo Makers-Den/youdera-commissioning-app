@@ -1,5 +1,8 @@
+import { getCookie, setCookie } from 'cookies-next';
+
 import { LoginJWTResponse } from '../types';
 import { youderaApiInstance } from '../../api-instances/youdera';
+import { CookiesKeys } from '../../enums/cookiesKeys';
 
 const loginJWT = async ({
   email,
@@ -18,13 +21,20 @@ const loginJWT = async ({
 
   const { data } = response;
 
-  youderaApiInstance.interceptors.request.use(config => ({
-    ...config,
-    headers: {
-      ...config.headers,
-      authorization: `Bearer ${data.access_token}`,
-    },
-  }));
+  setCookie(CookiesKeys.accessToken, data.access_token);
+
+  youderaApiInstance.interceptors.request.clear();
+  youderaApiInstance.interceptors.request.use(config => {
+    const accessToken = getCookie(CookiesKeys.accessToken);
+
+    return {
+      ...config,
+      headers: {
+        ...config.headers,
+        authorization: `Bearer ${accessToken}`,
+      },
+    };
+  });
 
   return data;
 };
