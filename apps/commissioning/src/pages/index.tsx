@@ -1,11 +1,11 @@
-import { FieldCreationDialog } from '@src/components/field-creation/FieldCreationDialog';
+import { FieldCreationDialog } from '@src/components/field-creation/ModuleFieldFormDialog';
 import React, { useState } from 'react';
 import { Button } from 'ui/buttons/Button';
 import {
   AutocompleteSelect,
   AutocompleteSelectOption,
 } from 'ui/select/AutocompleteSelect';
-import { Select } from 'ui/select/Select'
+import { Select } from 'ui/select/Select';
 
 const options: AutocompleteSelectOption[] = [];
 
@@ -18,11 +18,12 @@ for (let i = 0; i < 10; i += 1) {
 }
 
 const Home = () => {
-  const [isOpen, setIsOpen] = React.useState<boolean>(false)
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const [value, setValue] = useState<AutocompleteSelectOption>();
-  const handleAutoSelect = (val: AutocompleteSelectOption | undefined) => setValue(val)
+  const handleAutoSelect = (val: AutocompleteSelectOption | undefined) =>
+    setValue(val);
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen space-y-8">
+    <div className="flex min-h-screen flex-col items-center justify-center space-y-8">
       <Button onClick={() => setIsOpen(true)}>Click</Button>
       <FieldCreationDialog onClose={() => setIsOpen(false)} open={isOpen} />
       <AutocompleteSelect
@@ -33,9 +34,14 @@ const Home = () => {
         action={{ label: 'Add', onClick: () => alert('aaa'), icon: 'Plus' }}
         value={value}
         onChange={handleAutoSelect}
-        noOptionsString='Nothing found.'
+        noOptionsString="Nothing found."
       />
-      <Select label="Label" placeholder="sth" options={options} wrapperClassName='w-64' />
+      <Select
+        label="Label"
+        placeholder="sth"
+        options={options}
+        wrapperClassName="w-64"
+      />
     </div>
   );
 };

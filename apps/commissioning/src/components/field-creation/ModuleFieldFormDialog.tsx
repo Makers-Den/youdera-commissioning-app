@@ -14,13 +14,32 @@ import { NumberInput } from 'ui/inputs/NumberInput';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import clsxm from 'ui/utils/clsxm';
 
-// TODO: Handlers for Cancel and Save buttons
+type FormValues = {
+  name: string;
+  specificYield: string;
+  slantAngle: string;
+  azimut: string;
+};
 
-export const FieldCreationDialog = ({
+export type ModuleFieldFormDialogProps = {
+  open: DialogProps['open'];
+  onClose: DialogProps['onClose'];
+  className?: string;
+  dialogTitle: string;
+  submitButtonTitle: string;
+  onSubmit: (values: FormValues) => void;
+  isLoading: boolean;
+};
+
+export const ModuleFieldFormDialog = ({
   open,
   onClose,
   className,
-}: Omit<DialogProps, 'children'>) => {
+  dialogTitle,
+  submitButtonTitle,
+  onSubmit,
+  isLoading,
+}: ModuleFieldFormDialogProps) => {
   const intl = useIntl();
   const [name, setName] = useState<string>('');
   const [specificYield, setSpecificYield] = useState<string>('');
@@ -33,13 +52,13 @@ export const FieldCreationDialog = ({
     setSpecificYield(e.target.value);
 
   return (
-    <Dialog open={open} onClose={onClose} className={clsxm('w-[400px]', className)}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      className={clsxm('w-[400px]', className)}
+    >
       <DialogHeader>
-        <DialogTitle
-          title={intl.formatMessage({
-            defaultMessage: 'Module field creation',
-          })}
-        />
+        <DialogTitle title={dialogTitle} />
         <SvgIcon
           name="Close"
           className="ml-auto h-4 hover:cursor-pointer"
@@ -60,37 +79,49 @@ export const FieldCreationDialog = ({
           value={specificYield}
           onChange={handleYieldChange}
           className="w-full"
-          units='kWh/kWp'
+          units="kWh/kWp"
         />
 
         <div className="flex items-center justify-center gap-5">
-          <div className='flex flex-col gap-5 flex-1'>
+          <div className="flex flex-1 flex-col gap-5">
             <NumberInput
               label={intl.formatMessage({ defaultMessage: 'Slant angle' })}
               value={slantAngle}
               setValue={setSlantAngle}
               unit="&deg;"
-              className='w-full'
-              max='359'
+              className="w-full"
+              max="359"
             />
             <NumberInput
               label={intl.formatMessage({ defaultMessage: 'Azimut' })}
               value={azimut}
               setValue={setAzimut}
               unit="&deg;"
-              className='w-full'
-              max='359'
+              className="w-full"
+              max="359"
             />
           </div>
-          <Compass rotationAngle={parseInt(azimut, 10)} className='flex-1' />
+          <Compass rotationAngle={parseInt(azimut, 10)} className="flex-1" />
         </div>
 
-        <div className="flex mt-3 gap-5">
-          <Button variant="additional-gray" className="w-full" onChange={() => undefined}>
+        <div className="mt-3 flex gap-5">
+          <Button
+            variant="additional-gray"
+            className="w-full"
+            onChange={onClose}
+          >
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
-          <Button variant="main-green" className="w-full" onChange={() => undefined}>
-            {intl.formatMessage({ defaultMessage: 'Save' })}
+          <Button
+            isLoading={isLoading}
+            type="submit"
+            onClick={() => {
+              onSubmit({ azimut, name, slantAngle, specificYield });
+            }}
+            variant="main-green"
+            className="w-full"
+          >
+            {submitButtonTitle}
           </Button>
         </div>
       </DialogContent>
