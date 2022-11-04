@@ -14,29 +14,28 @@ export type ProfileDropdownItemProps = {
 
 export type ProfileDropdownProps = {
   items: ProfileDropdownItemProps[];
-  imgSrc: string;
-  imgAlt: string;
-  title: string;
-  subTitle: string;
+  user: {
+    firstName: string;
+    lastName: string;
+    role: string;
+    imgSrc?: string;
+  },
 };
 
 export function ProfileDropdown({
   items,
-  imgSrc,
-  imgAlt,
-  title,
-  subTitle,
+  user: { imgSrc, firstName, lastName, role },
 }: ProfileDropdownProps) {
   return (
     <Menu as="div" className="relative w-max">
       {({ open }) => (
         <>
           <Menu.Button className="flex items-center space-x-3 pr-7 pl-1">
-            {imgSrc && <RoundImage src={imgSrc} alt={imgAlt} wrapperClassName="w-9" />}
+            {imgSrc && <RoundImage src={imgSrc} alt="avatar" wrapperClassName="w-9" />}
             {!imgSrc && <Profile className='w-9' />}
             <div className="flex flex-col items-start">
               <Typography weight="bold" className="text-gray-600 flex text-sm">
-                {title}
+                {firstName} {lastName}
                 <SvgIcon
                   name="ChevronDown"
                   className={clsxm(
@@ -46,7 +45,7 @@ export function ProfileDropdown({
                 />
               </Typography>
               <Typography className="text-gray-500 text-sm">
-                {subTitle}
+                {role}
               </Typography>
             </div>
           </Menu.Button>
