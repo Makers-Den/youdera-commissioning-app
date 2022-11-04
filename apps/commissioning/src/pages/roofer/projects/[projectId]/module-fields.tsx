@@ -1,8 +1,9 @@
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import { ModuleFieldsContent } from '@src/components/page-content/ModuleFieldsContent';
-import { getSite } from '@src/integrations/youdera/sites/queries/getSite';
+import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
-import { addYouderaAuthInterceptors } from '@src/utils/addYouderaAuthInterceptors';
+import { protectRoute } from '@src/middlewares/protectRoute';
+import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import React, { Suspense } from 'react';
@@ -57,32 +58,8 @@ const ModuleFieldsPage = ({
   );
 };
 
-//
-
-export const getServerSideProps: GetServerSideProps = async context => {
-  const { params } = context;
-  const { projectId } = params || {};
-
-  if (!projectId) {
-    return {
-      notFound: true,
-    };
-  }
-
-  addYouderaAuthInterceptors(context);
-
-  try {
-    const project = await getSite(String(projectId));
-    return {
-      props: {
-        project,
-      },
-    };
-  } catch {
-    return {
-      notFound: true,
-    };
-  }
-};
+export const getServerSideProps: GetServerSideProps = protectRoute([
+  Role.roofer,
+]).then(fetchProjectFromParams);
 
 export default ModuleFieldsPage;

@@ -37,7 +37,7 @@ export const CardLink = React.forwardRef<HTMLAnchorElement, CardLinkProps>(
       <div
         className={clsxm(
           'flex w-full flex-1 items-center justify-center',
-          disabled && 'grayscale',
+          disabled && 'grayscale opacity-30',
         )}
       >
         {icon}

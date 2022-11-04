@@ -98,7 +98,9 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
     'react/prop-types': 'off',
-    'react/require-default-props': 'off'
+    'react/require-default-props': 'off',
+    'react/no-array-index-key': 'off',
+    'spaced-comment': 'off'
   },
   overrides: [
     {
