@@ -1,10 +1,11 @@
+import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import { ModuleFieldsContent } from '@src/components/page-content/ModuleFieldsContent';
 import { getSite } from '@src/integrations/youdera/sites/queries/getSite';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { addYouderaAuthInterceptors } from '@src/utils/addYouderaAuthInterceptors';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useIntl } from 'react-intl';
 
 const ModuleFieldsPage = ({
@@ -49,7 +50,9 @@ const ModuleFieldsPage = ({
         ],
       }}
     >
-      <ModuleFieldsContent projectId={project.id} />
+      <Suspense fallback={<LargeBoxSkeleton />}>
+        <ModuleFieldsContent projectId={project.id} />
+      </Suspense>
     </AuthenticatedLayout>
   );
 };
