@@ -5,13 +5,11 @@ import { SvgIcon } from '../svg-icons/SvgIcon';
 
 type ImagePreviewerProps = {
   // eslint-disable-next-line react/require-default-props
-  onAddClick?: SVGProps<SVGSVGElement>['onClick'];
   onDeleteClick: SVGProps<SVGSVGElement>['onClick'];
 } & ImageProps;
 
 export function ImagePreviewer({
   onDeleteClick,
-  onAddClick,
   ...imageProps
 }: ImagePreviewerProps) {
   return (
@@ -30,13 +28,6 @@ export function ImagePreviewer({
           name="Trashbin"
           className="w-5 cursor-pointer text-gray-600 hover:text-gray-300"
         />
-        {onAddClick && (
-          <SvgIcon
-            onClick={onAddClick}
-            name="Plus"
-            className="w-4 cursor-pointer text-gray-600 hover:text-gray-300"
-          />
-        )}
       </div>
     </div>
   );
@@ -50,7 +41,6 @@ export type FilePreviewerProps = {
   url: string;
   name: string;
   type: string;
-  onAddClick?: SVGProps<SVGSVGElement>['onClick'];
   onDeleteClick: SVGProps<SVGSVGElement>['onClick'];
   imageProps?: ImageProps;
   wrapperClassName?: string;
@@ -61,7 +51,6 @@ export function FilePreviewer({
   name,
   type,
   onDeleteClick,
-  onAddClick,
   imageProps,
   wrapperClassName,
 }: FilePreviewerProps) {
@@ -70,7 +59,6 @@ export function FilePreviewer({
       <div className={wrapperClassName}>
         <ImagePreviewer
           onDeleteClick={onDeleteClick}
-          onAddClick={onAddClick}
           src={url}
           alt={name}
           {...imageProps}
