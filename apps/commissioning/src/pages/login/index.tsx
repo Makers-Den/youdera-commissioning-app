@@ -42,9 +42,7 @@ const Login = () => {
 
   const handleChangeRememberUser = (): void => setRememberUser(!rememberUser);
 
-  const handleOnLogin = async (e: FormEvent) => {
-    console.log("Form submitted");
-    
+  const handleOnLogin = async (e: FormEvent) => {    
     e.preventDefault();
     try {
       await loginMutation.mutateAsync({

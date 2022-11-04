@@ -4,25 +4,26 @@ import React from 'react';
 import { Button } from '../buttons/Button';
 import { Image } from '../image/Image';
 // import Image from 'next/image';
-import Logo from '../logo.png';
 import {
-  ProfileDropdown,
-  ProfileDropdownProps,
+  ProfileDropdown, ProfileDropdownProps,
 } from '../profile-dropdown/ProfileDropdown';
 import { H2 } from '../typography/Typography';
+
+
 
 export type NavHeaderProps = {
   variant?: 'primary' | 'logo';
   header?: string;
+  logoSrc?: string;
   onClick?: () => void;
-} & ProfileDropdownProps;
+  user?: ProfileDropdownProps["user"],
+  profileItems: ProfileDropdownProps["items"],
+} 
 
 export const NavHeader: React.FC<NavHeaderProps> = ({
-  items,
-  imgSrc,
-  imgAlt,
-  title,
-  subTitle,
+  logoSrc,
+  profileItems,
+  user,
   variant,
   header,
   onClick,
@@ -32,7 +33,7 @@ export const NavHeader: React.FC<NavHeaderProps> = ({
       {variant === 'logo' ? (
         <Image
           alt="logo"
-          src={Logo.src}
+          src={logoSrc}
           className="h-[38px] w-[110px]"
           objectFit="contain"
         />
@@ -48,13 +49,12 @@ export const NavHeader: React.FC<NavHeaderProps> = ({
         </div>
       )}
 
-      <ProfileDropdown
-        items={items}
-        imgSrc={imgSrc}
-        imgAlt={imgAlt}
-        title={title}
-        subTitle={subTitle}
-      />
+      {user && 
+        <ProfileDropdown
+          items={profileItems}
+          user={user}
+        />
+      }
     </div>
   );
 };

@@ -27,29 +27,7 @@ export function FileUploaderWithPreview({
   children,
   allowMultipleFiles,
 }: FileUploaderWithPreviewProps) {
-  const uploadedFilesLength = uploadedFiles.length;
-
-  const prevUploadedFilesLength = useRef(uploadedFilesLength);
-
-  const [displayFileInput, setDisplayFileInput] = useState(
-    uploadedFilesLength <= 0,
-  );
-
-  useEffect(() => {
-    if (uploadedFilesLength <= 0) {
-      setDisplayFileInput(true);
-    } else if (uploadedFilesLength > prevUploadedFilesLength.current) {
-      setDisplayFileInput(false);
-    }
-
-    prevUploadedFilesLength.current = uploadedFilesLength;
-  }, [uploadedFilesLength]);
-
-  const onAddClick = allowMultipleFiles
-    ? () => {
-      setDisplayFileInput(true);
-    }
-    : undefined;
+  const displayFileInput =  uploadedFiles.length <= 0 || allowMultipleFiles;
 
   return (
     <div className={clsxm(className, 'flex flex-col gap-4')}>
@@ -58,7 +36,6 @@ export function FileUploaderWithPreview({
           onDeleteClick={() => {
             onDeleteFile(uploadedFile);
           }}
-          onAddClick={onAddClick}
           {...uploadedFile}
           {...filePreviewerProps}
         />

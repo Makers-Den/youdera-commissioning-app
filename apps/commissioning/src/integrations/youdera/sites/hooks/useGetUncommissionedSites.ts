@@ -9,7 +9,6 @@ export const useGetUncommissionedSites = () => {
     getUncommissionedSites,
     {
       suspense: true,
-      useErrorBoundary: false,
     },
   );
 
