@@ -18,7 +18,7 @@ export type ProfileDropdownProps = {
     firstName: string;
     lastName: string;
     role: string;
-    imgSrc?: string;
+    imgSrc: string | null;
   },
 };
 

@@ -100,6 +100,7 @@ module.exports = {
     'react/prop-types': 'off',
     'react/require-default-props': 'off',
     'react/no-array-index-key': 'off',
+    'spaced-comment': 'off'
   },
   overrides: [
     {

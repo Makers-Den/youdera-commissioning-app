@@ -4,7 +4,6 @@ import React from 'react';
 import { Button } from '../buttons/Button';
 import { Image } from '../image/Image';
 // import Image from 'next/image';
-import Logo from '../logo.png';
 import {
   ProfileDropdown, ProfileDropdownProps,
 } from '../profile-dropdown/ProfileDropdown';
@@ -15,12 +14,14 @@ import { H2 } from '../typography/Typography';
 export type NavHeaderProps = {
   variant?: 'primary' | 'logo';
   header?: string;
+  logoSrc?: string;
   onClick?: () => void;
   user?: ProfileDropdownProps["user"],
   profileItems: ProfileDropdownProps["items"],
 } 
 
 export const NavHeader: React.FC<NavHeaderProps> = ({
+  logoSrc,
   profileItems,
   user,
   variant,
@@ -32,7 +33,7 @@ export const NavHeader: React.FC<NavHeaderProps> = ({
       {variant === 'logo' ? (
         <Image
           alt="logo"
-          src={Logo.src}
+          src={logoSrc}
           className="h-[38px] w-[110px]"
           objectFit="contain"
         />

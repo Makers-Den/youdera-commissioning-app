@@ -7,8 +7,11 @@ import { PrimaryFooterProps } from 'ui/footer/Footer';
 import { ButtonsFooterProps } from 'ui/footer/FooterButtons';
 import { Layout } from 'ui/layout/Layout';
 import { NavHeaderProps } from 'ui/nav-header/NavHeader';
+import { ProfileDropdownProps } from 'ui/profile-dropdown/ProfileDropdown';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
+
+import Logo from '../assets/logo.png';
 
 export type AuthenticatedLayoutProps = {
   children: ReactNode;
@@ -35,7 +38,7 @@ export function AuthenticatedLayout({
     router.push('/login');
   };
 
-  const user = useMemo(() => (
+  const user: ProfileDropdownProps["user"] | undefined = useMemo(() => (
     userInfoQuery.data 
     ? {
       imgSrc: userInfoQuery.data?.avatar,
@@ -73,6 +76,7 @@ export function AuthenticatedLayout({
 
   const navProps: NavHeaderProps = {
     variant: navVariant || 'logo',
+    logoSrc: Logo.src,
     onClick: onNavCrossClick,
     header: navHeader,
     profileItems,
