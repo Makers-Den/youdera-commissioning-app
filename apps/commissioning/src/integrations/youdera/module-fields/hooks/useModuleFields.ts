@@ -7,6 +7,9 @@ export const useModuleFields = (projectId: number) => {
   const moduleFieldsQuery = useQuery(
     [QueryKeys.moduleFields, projectId],
     async ({ queryKey }) => getModuleFieldsForProject(queryKey[1] as number),
+    {
+      suspense: true,
+    },
   );
 
   return { moduleFieldsQuery };

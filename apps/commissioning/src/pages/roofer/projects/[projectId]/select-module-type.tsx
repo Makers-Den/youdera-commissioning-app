@@ -1,3 +1,4 @@
+import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import {
   SelectMainModuleContent,
   SelectMainModuleContentProps,
@@ -8,7 +9,7 @@ import { useMainModuleStore } from '@src/stores/useMainModuleStore';
 import { addYouderaAuthInterceptors } from '@src/utils/addYouderaAuthInterceptors';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useIntl } from 'react-intl';
 
 const SelectMainModuleTypePage = ({
@@ -51,7 +52,9 @@ const SelectMainModuleTypePage = ({
         ],
       }}
     >
-      <SelectMainModuleContent onModuleClick={moduleClickHandler} />
+      <Suspense fallback={<LargeBoxSkeleton />}>
+        <SelectMainModuleContent onModuleClick={moduleClickHandler} />
+      </Suspense>
     </AuthenticatedLayout>
   );
 };

@@ -1,9 +1,11 @@
 import { useModuleFields } from '@src/integrations/youdera/module-fields/hooks/useModuleFields';
 import { ModuleField } from '@src/integrations/youdera/module-fields/types';
 import { useIntl } from 'react-intl';
-import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
+import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
+
+import { LargeBox } from '../LargeBox';
 
 const rowKeys: (keyof ModuleField)[] = [
   'name',
@@ -36,7 +38,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   ];
 
   return (
-    <Box className="mx-3 mb-auto w-full md:mx-auto md:w-0 md:min-w-[700px]">
+    <LargeBox>
       <BoxHeader>
         <BoxTitle
           title={intl.formatMessage({ defaultMessage: 'Module Fields' })}
@@ -68,6 +70,6 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
           </Tbody>
         </Table>
       </BoxContent>
-    </Box>
+    </LargeBox>
   );
 }

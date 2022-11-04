@@ -1,7 +1,8 @@
+import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import { SelectProjectContent } from '@src/components/page-content/SelectProjectContent';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useIntl } from 'react-intl';
 
 const projectPathCreator = (id: number) =>
@@ -32,7 +33,9 @@ const SelectProjectPage = () => {
         ],
       }}
     >
-      <SelectProjectContent projectPathCreator={projectPathCreator} />
+      <Suspense fallback={<LargeBoxSkeleton />}>
+        <SelectProjectContent projectPathCreator={projectPathCreator} />
+      </Suspense>
     </AuthenticatedLayout>
   );
 };

@@ -2,11 +2,12 @@ import { useGetModules } from '@src/integrations/youdera/modules/hooks/useGetMod
 import { Module } from '@src/integrations/youdera/modules/types';
 import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
+import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Divider } from 'ui/divider/Divider';
 import { Input, InputProps } from 'ui/inputs/Input';
 import { Select, SelectOption } from 'ui/select/Select';
 
+import { LargeBox } from '../LargeBox';
 import { MainModule, MainModuleTypeList } from '../MainModuleTypeList';
 
 export type SelectMainModuleContentProps = {
@@ -75,7 +76,7 @@ export function SelectMainModuleContent({
   };
 
   return (
-    <Box className="mx-3 mb-auto w-full md:mx-auto md:w-0 md:min-w-[700px]">
+    <LargeBox>
       <BoxHeader>
         <BoxTitle
           title={intl.formatMessage({
@@ -103,6 +104,6 @@ export function SelectMainModuleContent({
       <BoxContent className="max-h-[500px] overflow-y-scroll">
         <MainModuleTypeList modules={modules} />
       </BoxContent>
-    </Box>
+    </LargeBox>
   );
 }

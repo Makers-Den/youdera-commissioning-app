@@ -23,7 +23,7 @@ export function MainModuleTypeList({ modules }: MainModuleTypeListProps) {
       {modules.map(({ id, name, manufacturerName, wattpeak, onClick }) => (
         <ListItem key={id}>
           <button
-            className="flex cursor-pointer gap-5"
+            className="flex w-full cursor-pointer gap-5"
             onClick={() => onClick(id)}
             type="button"
           >
