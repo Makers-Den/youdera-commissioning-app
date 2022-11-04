@@ -1,16 +1,17 @@
-import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
+import { StringsOnRoof } from '@src/integrations/youdera/strings/types';
 import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 
+
 export type StringListProps = {
-  roofId: number;
+  stringsOnRoof: StringsOnRoof;
+  onOpen: (id: number) => void;
 };
 
-export function StringsList({ roofId }: StringListProps) {
+export function StringsList({ stringsOnRoof, onOpen }: StringListProps) {
   const intl = useIntl();
-  const { stringsOnRoofQuery } = useStrings(roofId);
 
   const columnNames = [
     intl.formatMessage({ defaultMessage: 'String name' }),
@@ -39,13 +40,17 @@ export function StringsList({ roofId }: StringListProps) {
             </Tr>
           </Thead>
           <Tbody>
-            {stringsOnRoofQuery.data?.strings.map(string => (
-              <Tr key={string.id}>
+            {stringsOnRoof?.strings.map(string => (
+              <Tr
+                key={string.id}
+                className="cursor-pointer"
+                onClick={() => onOpen(string.id)}
+              >
                 <Td key={`${string.id}-name`}>
                   {string.name ?? ' - '}
                 </Td>
                 <Td key={`${string.id}-moduleType`}>
-                  {stringsOnRoofQuery.data?.name ?? ' - '}
+                  {stringsOnRoof?.name ?? ' - '}
                 </Td>
                 <Td key={`${string.id}-count`}>
                   {string.count ?? ' - '}

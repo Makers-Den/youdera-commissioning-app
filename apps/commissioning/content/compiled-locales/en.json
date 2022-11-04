@@ -23,6 +23,12 @@
       "value": "Select task"
     }
   ],
+  "'1Whlh9'": [
+    {
+      "type": 0,
+      "value": "Cable cross section"
+    }
+  ],
   "'1d3TLi'": [
     {
       "type": 0,
@@ -107,6 +113,18 @@
       "value": "Login"
     }
   ],
+  "'Bi8cJz'": [
+    {
+      "type": 0,
+      "value": "Number of modules"
+    }
+  ],
+  "'EZfuT3'": [
+    {
+      "type": 0,
+      "value": "Add string"
+    }
+  ],
   "'GtVtRN'": [
     {
       "type": 0,
@@ -131,16 +149,34 @@
       "value": "Your password has been successfully reset. Click below to log in magically."
     }
   ],
+  "'K3r6DQ'": [
+    {
+      "type": 0,
+      "value": "Delete"
+    }
+  ],
   "'KUewuO'": [
     {
       "type": 0,
       "value": "Azimut angle"
     }
   ],
+  "'L6MHcS'": [
+    {
+      "type": 0,
+      "value": "String name"
+    }
+  ],
   "'QChvcf'": [
     {
       "type": 0,
       "value": "Select main module type"
+    }
+  ],
+  "'SzqYd0'": [
+    {
+      "type": 0,
+      "value": "What you want to do with list element?"
     }
   ],
   "'UoPZk+'": [
@@ -179,6 +215,12 @@
       "value": "Click to resend"
     }
   ],
+  "'Y18Iuk'": [
+    {
+      "type": 0,
+      "value": "Module type"
+    }
+  ],
   "'Yy/yDL'": [
     {
       "type": 0,
@@ -203,16 +245,40 @@
       "value": "Continue"
     }
   ],
+  "'b0C4ME'": [
+    {
+      "type": 0,
+      "value": "Modify properties"
+    }
+  ],
   "'cyR7Kh'": [
     {
       "type": 0,
       "value": "Back"
     }
   ],
+  "'e19+it'": [
+    {
+      "type": 0,
+      "value": "Change inverter/mpp"
+    }
+  ],
+  "'eyDsDC'": [
+    {
+      "type": 0,
+      "value": "Strings"
+    }
+  ],
   "'jvo0vs'": [
     {
       "type": 0,
       "value": "Save"
+    }
+  ],
+  "'jwimQJ'": [
+    {
+      "type": 0,
+      "value": "Ok"
     }
   ],
   "'nwjxtz'": [
@@ -249,6 +315,12 @@
     {
       "type": 0,
       "value": "Privacy Policy"
+    }
+  ],
+  "'wL7VAE'": [
+    {
+      "type": 0,
+      "value": "Actions"
     }
   ],
   "'x2uLD6'": [

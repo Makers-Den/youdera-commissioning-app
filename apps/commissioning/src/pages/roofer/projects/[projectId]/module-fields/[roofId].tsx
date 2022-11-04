@@ -1,18 +1,21 @@
+import { ActionsDialog } from '@src/components/ActionsDialog';
 import { StringsList } from '@src/components/page-content/StringsList';
 import { getSite } from '@src/integrations/youdera/sites/queries/getSite';
+import { getStringsOnRoof } from '@src/integrations/youdera/strings/queries/getStringsOnRoof';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { addYouderaAuthInterceptors } from '@src/utils/addYouderaAuthInterceptors';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
+import { Button } from 'ui/buttons/Button';
 
-const Strings = ({
-  project
+export const Strings = ({
+  project,
+  stringsOnRoof
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const intl = useIntl();
   const router = useRouter();
-  const { roofId } = router.query
 
   const navCrossClickHandler = () => {
     router.push('/roofer/select-task');
@@ -23,6 +26,15 @@ const Strings = ({
   };
 
   const nextClickHandler = () => { };
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedId, setSelectedId] = useState<number>()
+
+  const onOpen = (id: number) => {
+    setSelectedId(id)
+    setIsOpen(true);
+  };
+  const onClose = () => setIsOpen(false);
 
   return (
     <AuthenticatedLayout
@@ -50,8 +62,14 @@ const Strings = ({
         ],
       }}
     >
-      <StringsList roofId={Number(roofId)} />
-    </AuthenticatedLayout>
+      <StringsList stringsOnRoof={stringsOnRoof} onOpen={onOpen} />
+      <ActionsDialog isOpen={isOpen} onClose={onClose} description={intl.formatMessage({ defaultMessage: 'What you want to do with list element?' })}>
+        <Button>{intl.formatMessage({ defaultMessage: 'Modify properties' })}</Button>
+        <Button>{intl.formatMessage({ defaultMessage: 'Change inverter/mpp' })}</Button>
+        <Button>{intl.formatMessage({ defaultMessage: 'Delete' })}</Button>
+        <Button>{intl.formatMessage({ defaultMessage: 'Cancel' })}</Button>
+      </ActionsDialog>
+    </AuthenticatedLayout >
   );
 };
 
@@ -59,7 +77,7 @@ const Strings = ({
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const { params } = context;
-  const { projectId } = params || {};
+  const { projectId, roofId } = params || {};
 
   if (!projectId) {
     return {
@@ -71,9 +89,11 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   try {
     const project = await getSite(String(projectId));
+    const stringsOnRoof = await getStringsOnRoof(Number(roofId))
     return {
       props: {
-        project
+        project,
+        stringsOnRoof
       },
     };
   } catch {
@@ -82,5 +102,3 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
   }
 };
-
-export default Strings;

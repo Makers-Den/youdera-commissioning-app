@@ -22,11 +22,12 @@ export function Tbody({ className, children }: TbodyProps) {
 
 export type TrProps = {
   className?: string;
+  onClick?: (value?: any) => void
   children: ReactNode;
 };
 
-export function Tr({ className, children }: TrProps) {
-  return <tr className={clsxm(className)}>{children}</tr>;
+export function Tr({ className, children, onClick }: TrProps) {
+  return <tr className={clsxm(className)} onClick={onClick}>{children}</tr>;
 }
 
 export type ThProps = {
