@@ -38,7 +38,7 @@ export function ActionsDialog({
       </DialogHeader>
       <DialogContent>
         <Typography className="mb-6">{description}</Typography>
-        <div className="flex flex-col">{children}</div>
+        <div className="flex flex-col gap-3">{children}</div>
       </DialogContent>
     </Dialog>
   );
