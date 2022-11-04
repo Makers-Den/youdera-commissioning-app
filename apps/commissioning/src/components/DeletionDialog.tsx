@@ -12,8 +12,8 @@ import { Typography } from 'ui/typography/Typography';
 export type DeletionDialogProps = {
   isOpen: boolean;
   onClose: () => void;
-  cancelOnClick?: () => void;
-  deleteOnClick?: () => void;
+  onCancel?: () => void;
+  onDelete?: () => void;
   description: string;
 };
 
@@ -21,8 +21,8 @@ export function DeletionDialog({
   isOpen,
   onClose,
   description,
-  cancelOnClick,
-  deleteOnClick
+  onCancel,
+  onDelete
 }: DeletionDialogProps) {
   const intl = useIntl();
 
@@ -43,14 +43,14 @@ export function DeletionDialog({
         <div className="flex gap-4 self-center">
           <Button
             variant="additional-gray"
-            onClick={cancelOnClick}
+            onClick={onCancel}
             className="w-[160px]"
           >
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
           <Button
             variant="danger"
-            onClick={deleteOnClick}
+            onClick={onDelete}
             className="w-[160px]"
           >
             {intl.formatMessage({ defaultMessage: 'Delete' })}
