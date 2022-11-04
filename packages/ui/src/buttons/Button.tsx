@@ -60,7 +60,7 @@ export const buttonVariantStyles: {
 
 const withoutHoverAndActiveStyles = (variantStyles: string[]) =>
   variantStyles.filter(s => !s.includes('hover'))
-  .filter(s => !s.includes('active'));
+    .filter(s => !s.includes('active'));
 
 
 export type ButtonProps = {
@@ -96,7 +96,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           'transition-colors duration-150',
           'transition-[filter] will-change-[filter]',
           isLoading
-            ? withoutHoverAndActiveStyles(buttonVariantStyles[variant]) 
+            ? withoutHoverAndActiveStyles(buttonVariantStyles[variant])
             : buttonVariantStyles[variant],
           'disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:border-0 disabled:drop-shadow-none',
           isLoading &&
@@ -105,7 +105,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {...rest}
       >
-        
+
 
         <div className="flex items-center">
           {icon && <SvgIcon name={icon} className='h-6' />}
