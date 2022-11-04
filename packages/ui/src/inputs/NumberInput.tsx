@@ -6,11 +6,11 @@ import clsxm from '../utils/clsxm';
 
 export type NumberInputProps = {
   label: string;
-  value: string;
+  value?: string;
   placeholder?: string;
   mandatory?: boolean;
   unit?: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  setValue?: React.Dispatch<React.SetStateAction<string>>;
 } & React.ComponentPropsWithRef<'input'>;
 
 export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
