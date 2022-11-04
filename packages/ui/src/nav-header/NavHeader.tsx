@@ -16,12 +16,7 @@ export type NavHeaderProps = {
   variant?: 'primary' | 'logo';
   header?: string;
   onClick?: () => void;
-  user?: {
-    firstName: string;
-    lastName: string;
-    role: string;
-    imgSrc: string | null;
-  },
+  user?: ProfileDropdownProps["user"],
   profileItems: ProfileDropdownProps["items"],
 } 
 
