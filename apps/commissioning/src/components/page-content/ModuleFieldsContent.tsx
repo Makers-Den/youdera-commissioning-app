@@ -9,12 +9,12 @@ import { useDisclosure } from 'ui/dialogs/useDisclosure';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 import { z } from 'zod';
 
-import { ActionsDialog } from '../ActionsDialog';
-import { DeletionDialog } from '../DeletionDialog';
+import { ActionsDialog } from '../dialogs/ActionsDialog';
+import { DeletionDialog } from '../dialogs/DeletionDialog';
 import {
   ModuleFieldFormDialog,
   ModuleFieldFormDialogProps,
-} from '../field-creation/ModuleFieldFormDialog';
+} from '../forms/ModuleFieldFormDialog';
 import { LargeBox } from '../LargeBox';
 
 const createModuleValidation = z.object({
