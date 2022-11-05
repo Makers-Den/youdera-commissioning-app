@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -32,7 +32,7 @@ export type ModuleFieldFormDialogProps<
   className?: string;
   dialogTitle: string;
   submitButtonTitle: string;
-  onSubmit: (values: z.infer<ResolverType>) => void;
+  onSubmit: (values: z.infer<ResolverType>, resetForm: () => void) => void;
   resolver: ResolverType;
 };
 
@@ -53,12 +53,6 @@ export const ModuleFieldFormDialog = <
     resolver: zodResolver(resolver),
   });
 
-  useEffect(() => {
-    if (formState.isSubmitted) {
-      reset();
-    }
-  }, [formState.isSubmitted, reset]);
-
   return (
     <Dialog
       open={open}
@@ -74,7 +68,10 @@ export const ModuleFieldFormDialog = <
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <form
+          onSubmit={handleSubmit(values => onSubmit(values, reset))}
+          className="flex flex-col gap-5"
+        >
           <Input
             label={intl.formatMessage({ defaultMessage: 'Name' })}
             placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
@@ -88,7 +85,7 @@ export const ModuleFieldFormDialog = <
             units="kWh/kWp"
             type="number"
             {...register('specificYield', {
-              valueAsNumber: true,
+              setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
             })}
           />
 
@@ -100,7 +97,7 @@ export const ModuleFieldFormDialog = <
                 className="w-full"
                 max="359"
                 {...register('slantAngle', {
-                  valueAsNumber: true,
+                  setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
                 })}
               />
               <NumberInput
@@ -109,7 +106,7 @@ export const ModuleFieldFormDialog = <
                 className="w-full"
                 max="359"
                 {...register('azimut', {
-                  valueAsNumber: true,
+                  setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
                 })}
               />
             </div>
