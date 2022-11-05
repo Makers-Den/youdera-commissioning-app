@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { createModuleField } from '../mutations/createModuleField';
+import { deleteModuleField } from '../mutations/deleteModuleField';
 import { getModuleFieldsForProject } from '../queries/getModuleFieldsForProject';
 import { QueryKeys } from '../../enums/queryKeys';
 
@@ -21,5 +22,15 @@ export const useModuleFields = (projectId: number) => {
     },
   });
 
-  return { moduleFieldsQuery, createModuleFieldsMutation };
+  const deleteModuleFieldsMutation = useMutation(deleteModuleField, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.moduleFields, projectId]);
+    },
+  });
+
+  return {
+    moduleFieldsQuery,
+    createModuleFieldsMutation,
+    deleteModuleFieldsMutation,
+  };
 };

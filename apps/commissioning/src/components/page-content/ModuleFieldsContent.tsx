@@ -1,5 +1,6 @@
 import { useModuleFields } from '@src/integrations/youdera/module-fields/hooks/useModuleFields';
 import { ModuleField } from '@src/integrations/youdera/module-fields/types';
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
@@ -7,6 +8,8 @@ import { useDisclosure } from 'ui/dialogs/useDisclosure';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 import { z } from 'zod';
 
+import { ActionsDialog } from '../ActionsDialog';
+import { DeletionDialog } from '../DeletionDialog';
 import {
   ModuleFieldFormDialog,
   ModuleFieldFormDialogProps,
@@ -40,10 +43,18 @@ export type ModuleFieldsContentProps = {
 
 export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   const intl = useIntl();
-  const { moduleFieldsQuery, createModuleFieldsMutation } =
-    useModuleFields(projectId);
+
+  const [currentModuleId, setCurrentModuleId] = useState<number | null>(null);
+
+  const {
+    moduleFieldsQuery,
+    createModuleFieldsMutation,
+    deleteModuleFieldsMutation,
+  } = useModuleFields(projectId);
 
   const createDialog = useDisclosure();
+  const actionsDialog = useDisclosure();
+  const deletionDialog = useDisclosure();
 
   const columnNames = [
     intl.formatMessage({ defaultMessage: 'Name' }),
@@ -71,6 +82,39 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     }
   };
 
+  const confirmDeleteHandler = async () => {
+    if (currentModuleId) {
+      try {
+        await deleteModuleFieldsMutation.mutateAsync(currentModuleId);
+        deletionDialog.onClose();
+        setCurrentModuleId(null);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+    }
+  };
+
+  const rowClickHandler = (moduleId: number) => () => {
+    setCurrentModuleId(moduleId);
+    actionsDialog.onOpen();
+  };
+
+  const handleActionCancel = () => {
+    setCurrentModuleId(null);
+    actionsDialog.onClose();
+  };
+
+  const handleDeleteCancel = () => {
+    setCurrentModuleId(null);
+    deletionDialog.onClose();
+  };
+
+  const handleActionDelete = () => {
+    actionsDialog.onClose();
+    deletionDialog.onOpen();
+  };
+
   return (
     <>
       <LargeBox>
@@ -93,7 +137,11 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
             </Thead>
             <Tbody>
               {moduleFieldsQuery.data?.map(module => (
-                <Tr key={module.id}>
+                <Tr
+                  className="cursor-pointer"
+                  key={module.id}
+                  onClick={rowClickHandler(module.id)}
+                >
                   {rowKeys.map(key => (
                     <Td key={`${module.id}-${key}`}>
                       {module[key]}
@@ -117,6 +165,38 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
           defaultMessage: 'Create',
         })}
         onSubmit={createSubmitHandler}
+      />
+      <ActionsDialog
+        isOpen={actionsDialog.isOpen}
+        onClose={actionsDialog.onClose}
+        description={intl.formatMessage({
+          defaultMessage: 'What you want to do with list element?',
+        })}
+      >
+        <>
+          <Button variant="main-green">
+            {intl.formatMessage({ defaultMessage: 'Modify properties' })}
+          </Button>
+          <Button variant="main-green">
+            {intl.formatMessage({ defaultMessage: 'Modify strings' })}
+          </Button>
+          <Button variant="danger" onClick={handleActionDelete}>
+            {intl.formatMessage({ defaultMessage: 'Delete' })}
+          </Button>
+          <Button variant="main-gray" onClick={handleActionCancel}>
+            {intl.formatMessage({ defaultMessage: 'Cancel' })}
+          </Button>
+        </>
+      </ActionsDialog>
+      <DeletionDialog
+        isOpen={deletionDialog.isOpen}
+        onClose={deletionDialog.onClose}
+        description={intl.formatMessage({
+          defaultMessage: 'Are you sure to delete module field?',
+        })}
+        onCancel={handleDeleteCancel}
+        onDelete={confirmDeleteHandler}
+        isDeleting={deleteModuleFieldsMutation.isLoading}
       />
     </>
   );
