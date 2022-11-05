@@ -12,3 +12,11 @@ export interface ModuleField {
 export interface SiteWithModuleFields extends Site {
   roofs: ModuleField[];
 }
+
+export interface CreateModuleRequestBody {
+  name: string;
+  orientation: number;
+  inclination: number;
+  specific_yield: number;
+  site: number;
+}

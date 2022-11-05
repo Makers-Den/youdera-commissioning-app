@@ -1,4 +1,3 @@
-import { Combobox } from '@headlessui/react';
 import * as React from 'react';
 
 import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
@@ -7,13 +6,13 @@ import clsxm from '../utils/clsxm';
 
 export type InputProps = {
   label?: string;
-  value: string;
+  value?: string;
   placeholder?: string;
   icon?: IconName;
   units?: string;
   validity?: 'valid' | 'invalid';
   mandatory?: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClickRightElement?: () => void;
 } & React.ComponentPropsWithRef<'input'>;
 
@@ -33,20 +32,13 @@ const validityStyle = {
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      children,
       className,
       value,
       label,
       disabled,
       validity,
       units,
-      icon = !units
-        ? validity === 'valid'
-          ? 'Check'
-          : validity === 'invalid'
-          ? 'Cross'
-          : undefined
-        : undefined,
+      icon,
       placeholder,
       mandatory,
       onChange,
@@ -59,6 +51,16 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       'text-gray-600 fill-gray-500',
     );
 
+    let computedIcon: IconName | undefined = icon;
+
+    if (!units && validity === 'valid') {
+      computedIcon = 'Check';
+    }
+
+    if (!units && validity === 'invalid') {
+      computedIcon = 'Cross';
+    }
+
     const handleRightColorChange = (color: string) => {
       if (!validity) {
         setRightElementColor(color);
@@ -66,7 +68,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <div className={clsxm('w-64', className)}>
+      <label className={clsxm(className)}>
         {label && (
           <BodyText className="mb-2 text-sm text-gray-700">
             {label}
@@ -74,59 +76,58 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           </BodyText>
         )}
         <div className="relative w-full">
-          <Combobox value={value} disabled={disabled}>
-            <Combobox.Input
-              onChange={onChange}
-              ref={ref}
-              type="input"
-              placeholder={placeholder}
-              onFocus={() =>
-                handleRightColorChange('text-orange-400 fill-orange-400')
-              }
-              onBlur={() =>
-                handleRightColorChange('text-gray-600 fill-gray-500')
-              }
-              className={clsxm(
-                'inline-flex w-full items-center justify-center rounded px-3 py-2',
-                'bg-gray-100 font-medium text-gray-800',
-                'placeholder:font-normal',
-                'border-[1px] border-gray-500',
-                'focus:outline-none focus-visible:border-orange-400',
-                'transition-colors duration-75',
-                validity && validityStyle[validity].input,
-                'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
-              )}
-              {...rest}
-            />
-            <Combobox.Button
-              className={`absolute inset-y-0 right-0 flex items-center pr-3 text-sm ${rightElementColor} ${
-                !onClickRightElement ? 'hover:cursor-default' : ''
-              }`}
-              onClick={onClickRightElement}
-            >
-              {icon && (
-                <SvgIcon
-                  name={icon}
-                  className={
-                    validity
-                      ? validityStyle[validity].icon
-                      : 'h-4 w-4 fill-inherit'
-                  }
-                />
-              )}
-              {units && (
-                <span
-                  className={
-                    validity ? validityStyle[validity].units : 'text-inherit'
-                  }
-                >
-                  {units}
-                </span>
-              )}
-            </Combobox.Button>
-          </Combobox>
+          <input
+            disabled={disabled}
+            value={value}
+            onChange={onChange}
+            ref={ref}
+            type="input"
+            placeholder={placeholder}
+            onFocus={() =>
+              handleRightColorChange('text-orange-400 fill-orange-400')
+            }
+            onBlur={() => handleRightColorChange('text-gray-600 fill-gray-500')}
+            className={clsxm(
+              'inline-flex w-full items-center justify-center rounded px-3 py-2',
+              'bg-gray-100 font-medium text-gray-800',
+              'placeholder:font-normal',
+              'border-[1px] border-gray-500',
+              'focus:outline-none focus-visible:border-orange-400',
+              'transition-colors duration-75',
+              validity && validityStyle[validity].input,
+              'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
+            )}
+            {...rest}
+          />
+          <button
+            type="button"
+            className={`absolute inset-y-0 right-0 flex items-center pr-3 text-sm ${rightElementColor} ${
+              !onClickRightElement ? 'hover:cursor-default' : ''
+            }`}
+            onClick={onClickRightElement}
+          >
+            {computedIcon && (
+              <SvgIcon
+                name={computedIcon}
+                className={
+                  validity
+                    ? validityStyle[validity].icon
+                    : 'h-4 w-4 fill-inherit'
+                }
+              />
+            )}
+            {units && (
+              <span
+                className={
+                  validity ? validityStyle[validity].units : 'text-inherit'
+                }
+              >
+                {units}
+              </span>
+            )}
+          </button>
         </div>
-      </div>
+      </label>
     );
   },
 );
