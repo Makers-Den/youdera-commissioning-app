@@ -1,6 +1,7 @@
 import { useModuleFields } from '@src/integrations/youdera/module-fields/hooks/useModuleFields';
 import { ModuleField } from '@src/integrations/youdera/module-fields/types';
-import { useState } from 'react';
+import { removeNullAndUndefinedFromObject } from '@src/utils/removeNullAndUndefinedFromObject';
+import { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
@@ -16,11 +17,18 @@ import {
 } from '../field-creation/ModuleFieldFormDialog';
 import { LargeBox } from '../LargeBox';
 
-const validation = z.object({
+const createModuleValidation = z.object({
   name: z.string().min(2),
   specificYield: z.number().gt(0),
   azimut: z.number().gt(0).lte(360),
   slantAngle: z.number().gt(0).lte(90),
+});
+
+const updateModuleValidation = z.object({
+  name: z.string().min(2).optional().or(z.literal('')),
+  specificYield: z.number().gt(0).or(z.literal(undefined)),
+  azimut: z.number().gt(0).lte(360).or(z.literal(undefined)),
+  slantAngle: z.number().gt(0).lte(90).or(z.literal(undefined)),
 });
 
 const rowKeys: (keyof ModuleField)[] = [
@@ -44,16 +52,18 @@ export type ModuleFieldsContentProps = {
 export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   const intl = useIntl();
 
-  const [currentModuleId, setCurrentModuleId] = useState<number | null>(null);
+  const currentModuleId = useRef<number | null>(null);
 
   const {
     moduleFieldsQuery,
     createModuleFieldsMutation,
     deleteModuleFieldsMutation,
+    updateModuleFieldsMutation,
   } = useModuleFields(projectId);
 
-  const createDialog = useDisclosure();
   const actionsDialog = useDisclosure();
+  const createDialog = useDisclosure();
+  const updateDialog = useDisclosure();
   const deletionDialog = useDisclosure();
 
   const columnNames = [
@@ -64,28 +74,65 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     intl.formatMessage({ defaultMessage: 'Specific Yield' }),
   ];
 
+  const setCurrentModuleId = (id: number | null) => {
+    currentModuleId.current = id;
+  };
+
   const createSubmitHandler: ModuleFieldFormDialogProps<
-    typeof validation
-  >['onSubmit'] = async ({ specificYield, name, azimut, slantAngle }) => {
+    typeof createModuleValidation
+  >['onSubmit'] = async (
+    { specificYield, name, azimut, slantAngle },
+    resetForm,
+  ) => {
     try {
       await createModuleFieldsMutation.mutateAsync({
         site: projectId,
-        specific_yield: Number(specificYield),
+        specific_yield: specificYield,
         name,
-        orientation: Number(azimut),
-        inclination: Number(slantAngle),
+        orientation: azimut,
+        inclination: slantAngle,
       });
       createDialog.onClose();
+      resetForm();
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);
     }
   };
 
-  const confirmDeleteHandler = async () => {
-    if (currentModuleId) {
+  const updateSubmitHandler: ModuleFieldFormDialogProps<
+    typeof updateModuleValidation
+  >['onSubmit'] = async (
+    { specificYield, name, azimut, slantAngle },
+    resetForm,
+  ) => {
+    if (currentModuleId.current) {
+      const values = removeNullAndUndefinedFromObject({
+        specific_yield: specificYield,
+        name: name || undefined,
+        orientation: azimut,
+        inclination: slantAngle,
+      });
+
       try {
-        await deleteModuleFieldsMutation.mutateAsync(currentModuleId);
+        await updateModuleFieldsMutation.mutateAsync({
+          id: currentModuleId.current,
+          ...values,
+        });
+        updateDialog.onClose();
+        setCurrentModuleId(null);
+        resetForm();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+    }
+  };
+
+  const confirmDeleteHandler = async () => {
+    if (currentModuleId.current) {
+      try {
+        await deleteModuleFieldsMutation.mutateAsync(currentModuleId.current);
         deletionDialog.onClose();
         setCurrentModuleId(null);
       } catch (err) {
@@ -113,6 +160,11 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   const handleActionDelete = () => {
     actionsDialog.onClose();
     deletionDialog.onOpen();
+  };
+
+  const handleActionUpdate = () => {
+    actionsDialog.onClose();
+    updateDialog.onOpen();
   };
 
   return (
@@ -155,7 +207,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
         </BoxContent>
       </LargeBox>
       <ModuleFieldFormDialog
-        resolver={validation}
+        resolver={createModuleValidation}
         open={createDialog.isOpen}
         onClose={createDialog.onClose}
         dialogTitle={intl.formatMessage({
@@ -166,6 +218,18 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
         })}
         onSubmit={createSubmitHandler}
       />
+      <ModuleFieldFormDialog
+        resolver={updateModuleValidation}
+        open={updateDialog.isOpen}
+        onClose={updateDialog.onClose}
+        dialogTitle={intl.formatMessage({
+          defaultMessage: 'Module field modify',
+        })}
+        submitButtonTitle={intl.formatMessage({
+          defaultMessage: 'Save',
+        })}
+        onSubmit={updateSubmitHandler}
+      />
       <ActionsDialog
         isOpen={actionsDialog.isOpen}
         onClose={actionsDialog.onClose}
@@ -174,7 +238,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
         })}
       >
         <>
-          <Button variant="main-green">
+          <Button variant="main-green" onClick={handleActionUpdate}>
             {intl.formatMessage({ defaultMessage: 'Modify properties' })}
           </Button>
           <Button variant="main-green">

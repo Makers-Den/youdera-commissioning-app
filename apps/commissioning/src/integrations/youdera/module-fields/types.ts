@@ -27,5 +27,4 @@ export interface UpdateModuleRequestBody {
   orientation?: number;
   inclination?: number;
   specific_yield?: number;
-  site?: number;
 }
