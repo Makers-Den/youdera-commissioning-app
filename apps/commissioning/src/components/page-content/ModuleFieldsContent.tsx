@@ -5,12 +5,20 @@ import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
 import { useDisclosure } from 'ui/dialogs/useDisclosure';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
+import { z } from 'zod';
 
 import {
   ModuleFieldFormDialog,
   ModuleFieldFormDialogProps,
 } from '../field-creation/ModuleFieldFormDialog';
 import { LargeBox } from '../LargeBox';
+
+const validation = z.object({
+  name: z.string().min(2),
+  specificYield: z.number().gt(0),
+  azimut: z.number().gt(0).lte(360),
+  slantAngle: z.number().gt(0).lte(90),
+});
 
 const rowKeys: (keyof ModuleField)[] = [
   'name',
@@ -45,12 +53,9 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     intl.formatMessage({ defaultMessage: 'Specific Yield' }),
   ];
 
-  const createSubmitHandler: ModuleFieldFormDialogProps['onSubmit'] = async ({
-    specificYield,
-    name,
-    azimut,
-    slantAngle,
-  }) => {
+  const createSubmitHandler: ModuleFieldFormDialogProps<
+    typeof validation
+  >['onSubmit'] = async ({ specificYield, name, azimut, slantAngle }) => {
     try {
       await createModuleFieldsMutation.mutateAsync({
         site: projectId,
@@ -102,6 +107,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
         </BoxContent>
       </LargeBox>
       <ModuleFieldFormDialog
+        resolver={validation}
         open={createDialog.isOpen}
         onClose={createDialog.onClose}
         dialogTitle={intl.formatMessage({
@@ -111,7 +117,6 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
           defaultMessage: 'Create',
         })}
         onSubmit={createSubmitHandler}
-        isLoading={createModuleFieldsMutation.isLoading}
       />
     </>
   );
