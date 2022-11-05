@@ -20,3 +20,12 @@ export interface CreateModuleRequestBody {
   specific_yield: number;
   site: number;
 }
+
+export interface UpdateModuleRequestBody {
+  id: number;
+  name?: string;
+  orientation?: number;
+  inclination?: number;
+  specific_yield?: number;
+  site?: number;
+}
