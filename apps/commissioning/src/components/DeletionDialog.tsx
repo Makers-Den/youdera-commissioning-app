@@ -15,6 +15,7 @@ export type DeletionDialogProps = {
   onCancel?: () => void;
   onDelete?: () => void;
   description: string;
+  isDeleting?: boolean;
 };
 
 export function DeletionDialog({
@@ -22,7 +23,8 @@ export function DeletionDialog({
   onClose,
   description,
   onCancel,
-  onDelete
+  onDelete,
+  isDeleting,
 }: DeletionDialogProps) {
   const intl = useIntl();
 
@@ -38,7 +40,7 @@ export function DeletionDialog({
           onClick={onClose}
         />
       </DialogHeader>
-      <DialogContent className='flex flex-col'>
+      <DialogContent className="flex flex-col">
         <Typography className="mb-6">{description}</Typography>
         <div className="flex gap-4 self-center">
           <Button
@@ -52,6 +54,7 @@ export function DeletionDialog({
             variant="danger"
             onClick={onDelete}
             className="w-[160px]"
+            isLoading={isDeleting}
           >
             {intl.formatMessage({ defaultMessage: 'Delete' })}
           </Button>
