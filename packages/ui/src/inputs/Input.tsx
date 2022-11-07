@@ -68,7 +68,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     };
 
     return (
-      <label className={clsxm(className)}>
+      <div className={clsxm(className)}>
         {label && (
           <BodyText className="mb-2 text-sm text-gray-700">
             {label}
@@ -101,9 +101,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
           <button
             type="button"
-            className={`absolute inset-y-0 right-0 flex items-center pr-3 text-sm ${rightElementColor} ${
-              !onClickRightElement ? 'hover:cursor-default' : ''
-            }`}
+            className={`absolute inset-y-0 right-0 flex items-center pr-3 text-sm ${rightElementColor} ${!onClickRightElement ? 'hover:cursor-default' : ''
+              }`}
             onClick={onClickRightElement}
           >
             {computedIcon && (
@@ -127,7 +126,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             )}
           </button>
         </div>
-      </label>
+      </div>
     );
   },
 );
