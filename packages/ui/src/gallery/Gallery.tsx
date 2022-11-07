@@ -10,25 +10,25 @@ import { SvgIcon } from '../svg-icons/SvgIcon';
 import { H2 } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
-export type GalleryImage = {
+export type GalleryImage<Id extends string | number> = {
   /** some sort of id we can give to parent in callback in case they delete the image */
-  id: string;
+  id: Id;
   url: string;
 };
 
-export type GalleryProps = {
+export type GalleryProps<Id extends string | number> = {
   className?: string;
   open: boolean;
   onClose: () => void;
-  onDelete?: (id: string) => void;
+  onDelete?: (id: Id) => void;
 
   openImageIndex?: number;
 
   title: string;
-  images: GalleryImage[];
+  images: GalleryImage<Id>[];
 };
 
-export const Gallery = ({
+export const Gallery = <Id extends string | number>({
   className,
   open,
   onClose,
@@ -36,7 +36,7 @@ export const Gallery = ({
   title,
   images,
   openImageIndex,
-}: GalleryProps) => {
+}: GalleryProps<Id>) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(
     openImageIndex || 0,
   );
