@@ -1,4 +1,5 @@
 import { ActionsDialog } from '@src/components/dialogs/ActionsDialog';
+import { AddStringDialog } from '@src/components/dialogs/AddStringDialog';
 import { DeletionDialog } from '@src/components/dialogs/DeletionDialog';
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import { ModifyStringDialog } from '@src/components/modify-string/ModifyStringDialog';
@@ -34,8 +35,13 @@ const StringsPage = ({
   const [selectedId, setSelectedId] = useState<number>()
   const actionsDialog = useDisclosure();
   const modifyDialog = useDisclosure();
-  const deletionDialog = useDisclosure()
+  const deletionDialog = useDisclosure();
+  const addStringDialog = useDisclosure();
 
+  const handleAddStringOpen = () => {
+    actionsDialog.onClose()
+    addStringDialog.onOpen()
+  }
   const handleActionsOpen = (id: number) => {
     setSelectedId(id)
     actionsDialog.onOpen()
@@ -81,7 +87,7 @@ const StringsPage = ({
       }}
     >
       <Suspense fallback={<LargeBoxSkeleton />}>
-        <StringsList stringsOnRoof={stringsOnRoof} onOpen={handleActionsOpen} onAddString={() => undefined} />
+        <StringsList stringsOnRoof={stringsOnRoof} onOpen={handleActionsOpen} onAddString={handleAddStringOpen} />
       </Suspense>
 
       <ActionsDialog
@@ -117,6 +123,7 @@ const StringsPage = ({
           defaultMessage: 'Are you sure to delete module field?',
         })}
       />
+      <AddStringDialog open={addStringDialog.isOpen} onClose={addStringDialog.onClose} />
     </AuthenticatedLayout>
   );
 };

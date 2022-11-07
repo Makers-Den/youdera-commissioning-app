@@ -3,9 +3,10 @@ import {
   FaCalendarAlt,
   FaCheck,
   FaEnvelope,
+  FaMicrochip,
   FaTable,
   FaTimes,
-  FaUnlockAlt,
+  FaUnlockAlt
 } from 'react-icons/fa';
 
 import { Camera } from './icons/Camera';
@@ -37,6 +38,7 @@ const iconMap = {
   Envelope: FaEnvelope,
   Unlock: FaUnlockAlt,
   Table: FaTable,
+  Chip: FaMicrochip,
   ChevronDown,
   Settings,
   LogOut,
