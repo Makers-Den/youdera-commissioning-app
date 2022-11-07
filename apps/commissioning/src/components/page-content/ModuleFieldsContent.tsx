@@ -169,8 +169,8 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     updateDialog.onOpen();
   };
 
-  const handleActionUpdateStrings = (roofId: number) => {
-    router.push(`/roofer/projects/${projectId}/module-fields/${roofId}`);
+  const handleActionUpdateStrings = () => {
+    router.push(`/roofer/projects/${projectId}/module-fields/${currentModuleId.current}`);
   }
 
   return (
@@ -247,7 +247,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
           <Button variant="main-green" onClick={handleActionUpdate}>
             {intl.formatMessage({ defaultMessage: 'Modify properties' })}
           </Button>
-          <Button variant="main-green" onClick={() => handleActionUpdateStrings(1)}>
+          <Button variant="main-green" onClick={handleActionUpdateStrings}>
             {intl.formatMessage({ defaultMessage: 'Modify strings' })}
           </Button>
           <Button variant="danger" onClick={handleActionDelete}>
