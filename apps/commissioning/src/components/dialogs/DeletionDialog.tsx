@@ -5,8 +5,8 @@ import { ConfimationDialog } from './ConfimationDialog';
 export type DeletionDialogProps = {
   isOpen: boolean;
   onClose: () => void;
+  onDelete: () => void;
   onCancel?: () => void;
-  onDelete?: () => void;
   description: string;
   isDeleting?: boolean;
 };
@@ -15,8 +15,8 @@ export function DeletionDialog({
   isOpen,
   onClose,
   description,
-  onCancel,
   onDelete,
+  onCancel,
   isDeleting,
 }: DeletionDialogProps) {
   const intl = useIntl();
@@ -28,7 +28,7 @@ export function DeletionDialog({
       title={intl.formatMessage({ defaultMessage: 'Are you sure?' })}
       onConfirm={onDelete}
       isConfirming={isDeleting}
-      onCancel={onCancel}
+      onCancel={onCancel ?? onClose}
       confirmButtonVariant="danger"
       description={description}
       confirmButtonTitle={intl.formatMessage({ defaultMessage: 'Delete' })}

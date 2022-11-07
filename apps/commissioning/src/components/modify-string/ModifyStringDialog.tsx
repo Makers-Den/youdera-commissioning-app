@@ -28,7 +28,7 @@ export const ModifyStringDialog = ({
       <DialogHeader>
         <DialogTitle
           title={intl.formatMessage({
-            defaultMessage: 'Module field creation',
+            defaultMessage: 'Modify String',
           })}
         />
         <SvgIcon
@@ -65,10 +65,10 @@ export const ModifyStringDialog = ({
         </div>
 
         <div className="flex mt-3 gap-5">
-          <Button variant="additional-gray" className="w-full" onChange={onClose}>
+          <Button variant="additional-gray" className="w-full" onClick={onClose}>
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
-          <Button variant="main-green" className="w-full" onChange={() => undefined}>
+          <Button variant="main-green" className="w-full" onClick={() => undefined}>
             {intl.formatMessage({ defaultMessage: 'Ok' })}
           </Button>
         </div>

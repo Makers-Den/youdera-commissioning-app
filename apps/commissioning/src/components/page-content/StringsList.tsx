@@ -8,9 +8,10 @@ import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 export type StringListProps = {
   stringsOnRoof: StringsOnRoof;
   onOpen: (id: number) => void;
+  onAddString: () => void;
 };
 
-export function StringsList({ stringsOnRoof, onOpen }: StringListProps) {
+export function StringsList({ stringsOnRoof, onOpen, onAddString }: StringListProps) {
   const intl = useIntl();
 
   const columnNames = [
@@ -26,7 +27,7 @@ export function StringsList({ stringsOnRoof, onOpen }: StringListProps) {
         <BoxTitle
           title={intl.formatMessage({ defaultMessage: 'Strings' })}
         />
-        <Button className="ml-auto w-[200px]">
+        <Button className="ml-auto w-[200px]" onClick={onAddString}>
           + {intl.formatMessage({ defaultMessage: 'Add string' })}
         </Button>
       </BoxHeader>

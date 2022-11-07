@@ -1,17 +1,20 @@
-import { ActionsDialog } from '@src/components/ActionsDialog';
+import { ActionsDialog } from '@src/components/dialogs/ActionsDialog';
+import { DeletionDialog } from '@src/components/dialogs/DeletionDialog';
+import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import { ModifyStringDialog } from '@src/components/modify-string/ModifyStringDialog';
 import { StringsList } from '@src/components/page-content/StringsList';
-import { getSite } from '@src/integrations/youdera/sites/queries/getSite';
-import { getStringsOnRoof } from '@src/integrations/youdera/strings/queries/getStringsOnRoof';
+import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
-import { addYouderaAuthInterceptors } from '@src/utils/addYouderaAuthInterceptors';
+import { protectRoute } from '@src/middlewares/protectRoute';
+import { fetchStringsFromParams } from '@src/utils/server/fetchStringsFromParams'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
+import { useDisclosure } from 'ui/dialogs/useDisclosure';
 
-const Strings = ({
+const StringsPage = ({
   project,
   stringsOnRoof
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -29,21 +32,24 @@ const Strings = ({
   const nextClickHandler = () => { };
 
   const [selectedId, setSelectedId] = useState<number>()
-  const [isModifyOpen, setIsModifyOpen] = useState<boolean>(false);
-  const [isActionsOpen, setIsActionsOpen] = useState<boolean>(false);
+  const actionsDialog = useDisclosure();
+  const modifyDialog = useDisclosure();
+  const deletionDialog = useDisclosure()
 
-  const onOpenActions = (id: number) => {
+  const handleActionsOpen = (id: number) => {
     setSelectedId(id)
-    setIsActionsOpen(true);
+    actionsDialog.onOpen()
   };
-  const onOpenModify = () => {
-    setIsActionsOpen(false);
-    setIsModifyOpen(true);
+  const handleModifyOpen = () => {
+    actionsDialog.onClose()
+    modifyDialog.onOpen()
   };
-  const onCloseActions = () => setIsActionsOpen(false);
-  const onCloseModify = () => setIsModifyOpen(false);
 
-  const onChangeInverter = () => undefined;
+  const handleInverterOpen = () => undefined;
+  const handleDeleteOpen = () => {
+    actionsDialog.onClose()
+    deletionDialog.onOpen()
+  }
   const onDelete = (id: number) => {
 
   }
@@ -74,46 +80,49 @@ const Strings = ({
         ],
       }}
     >
-      <StringsList stringsOnRoof={stringsOnRoof} onOpen={onOpenActions} />
-      <ActionsDialog isOpen={isActionsOpen} onClose={onCloseActions} description={intl.formatMessage({ defaultMessage: 'What you want to do with list element?' })}>
-        <Button variant='main-green' onClick={onOpenModify}>{intl.formatMessage({ defaultMessage: 'Modify properties' })}</Button>
-        <Button variant='main-green' onClick={onChangeInverter}>{intl.formatMessage({ defaultMessage: 'Change inverter/mpp' })}</Button>
-        <Button variant='danger' onClick={() => onDelete(1)}>{intl.formatMessage({ defaultMessage: 'Delete' })}</Button>
-        <Button variant='additional-gray' onClick={onCloseActions}>{intl.formatMessage({ defaultMessage: 'Cancel' })}</Button>
+      <Suspense fallback={<LargeBoxSkeleton />}>
+        <StringsList stringsOnRoof={stringsOnRoof} onOpen={handleActionsOpen} onAddString={() => undefined} />
+      </Suspense>
+
+      <ActionsDialog
+        isOpen={actionsDialog.isOpen}
+        onClose={actionsDialog.onClose}
+        description={intl.formatMessage({
+          defaultMessage: 'What you want to do with list element?',
+        })}
+      >
+        <Button variant="main-green" onClick={handleModifyOpen}>
+          {intl.formatMessage({ defaultMessage: 'Modify properties' })}
+        </Button>
+        <Button variant="main-green" onClick={handleInverterOpen}>
+          {intl.formatMessage({ defaultMessage: 'Change inverter/mpp' })}
+        </Button>
+        <Button variant="danger" onClick={handleDeleteOpen}>
+          {intl.formatMessage({ defaultMessage: 'Delete' })}
+        </Button>
+        <Button variant="additional-gray" onClick={actionsDialog.onClose}>
+          {intl.formatMessage({ defaultMessage: 'Cancel' })}
+        </Button>
       </ActionsDialog>
-      <ModifyStringDialog open={isModifyOpen} onClose={onCloseModify} />
-    </AuthenticatedLayout >
+
+      <ModifyStringDialog
+        open={modifyDialog.isOpen}
+        onClose={modifyDialog.onClose}
+      />
+      <DeletionDialog
+        onDelete={() => onDelete(selectedId!)}
+        isOpen={deletionDialog.isOpen}
+        onClose={deletionDialog.onClose}
+        description={intl.formatMessage({
+          defaultMessage: 'Are you sure to delete module field?',
+        })}
+      />
+    </AuthenticatedLayout>
   );
 };
 
-//
+export const getServerSideProps: GetServerSideProps = protectRoute([
+  Role.roofer,
+]).then(fetchStringsFromParams);
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const { params } = context;
-  const { projectId, roofId } = params || {};
-
-  if (!projectId) {
-    return {
-      notFound: true,
-    };
-  }
-
-  addYouderaAuthInterceptors(context);
-
-  try {
-    const project = await getSite(String(projectId));
-    const stringsOnRoof = await getStringsOnRoof(Number(roofId))
-    return {
-      props: {
-        project,
-        stringsOnRoof
-      },
-    };
-  } catch {
-    return {
-      notFound: true,
-    };
-  }
-};
-
-export default Strings;
+export default StringsPage;

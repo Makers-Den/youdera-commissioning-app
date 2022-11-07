@@ -1,6 +1,7 @@
 import { useModuleFields } from '@src/integrations/youdera/module-fields/hooks/useModuleFields';
 import { ModuleField } from '@src/integrations/youdera/module-fields/types';
 import { removeNullAndUndefinedFromObject } from '@src/utils/removeNullAndUndefinedFromObject';
+import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
@@ -51,6 +52,7 @@ export type ModuleFieldsContentProps = {
 
 export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   const intl = useIntl();
+  const router = useRouter();
 
   const currentModuleId = useRef<number | null>(null);
 
@@ -167,6 +169,10 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     updateDialog.onOpen();
   };
 
+  const handleActionUpdateStrings = (roofId: number) => {
+    router.push(`/roofer/projects/${projectId}/module-fields/${roofId}`);
+  }
+
   return (
     <>
       <LargeBox>
@@ -241,7 +247,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
           <Button variant="main-green" onClick={handleActionUpdate}>
             {intl.formatMessage({ defaultMessage: 'Modify properties' })}
           </Button>
-          <Button variant="main-green">
+          <Button variant="main-green" onClick={() => handleActionUpdateStrings(1)}>
             {intl.formatMessage({ defaultMessage: 'Modify strings' })}
           </Button>
           <Button variant="danger" onClick={handleActionDelete}>
