@@ -108,7 +108,6 @@ export const AddStringDialog = ({
           label={intl.formatMessage({ defaultMessage: 'Input' })}
           placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
           noOptionsString={intl.formatMessage({ defaultMessage: 'Nothing found.' })}
-          action={{ label: 'Add new inverter', onClick: () => alert('Here will be AddInverterDialog'), icon: 'Plus' }}
           options={
             [
               {

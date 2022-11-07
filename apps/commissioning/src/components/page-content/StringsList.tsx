@@ -1,4 +1,5 @@
 import { StringsOnRoof } from '@src/integrations/youdera/strings/types';
+import { useMainModuleStore } from '@src/stores/useMainModuleStore';
 import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
@@ -13,7 +14,7 @@ export type StringListProps = {
 
 export function StringsList({ stringsOnRoof, onOpen, onAddString }: StringListProps) {
   const intl = useIntl();
-
+  const mainModule = useMainModuleStore(state => state.mainModule)
   const columnNames = [
     intl.formatMessage({ defaultMessage: 'String name' }),
     intl.formatMessage({ defaultMessage: 'Module type' }),
@@ -51,7 +52,7 @@ export function StringsList({ stringsOnRoof, onOpen, onAddString }: StringListPr
                   {string.name ?? ' - '}
                 </Td>
                 <Td key={`${string.id}-moduleType`}>
-                  {stringsOnRoof?.name ?? ' - '}
+                  {mainModule && mainModule.name}
                 </Td>
                 <Td key={`${string.id}-count`}>
                   {string.count ?? ' - '}
