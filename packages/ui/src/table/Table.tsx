@@ -24,10 +24,14 @@ export type TrProps = {
   className?: string;
   onClick?: (value?: any) => void
   children: ReactNode;
-};
+} & React.ComponentPropsWithRef<'tr'>;
 
-export function Tr({ className, children, onClick }: TrProps) {
-  return <tr className={clsxm(className)} onClick={onClick}>{children}</tr>;
+export function Tr({ className, children, ...props }: TrProps) {
+  return (
+    <tr {...props} className={clsxm(className)}>
+      {children}
+    </tr>
+  );
 }
 
 export type ThProps = {
@@ -37,7 +41,7 @@ export type ThProps = {
 
 export function Th({ className, children }: ThProps) {
   return (
-    <th className={clsxm(className, 'text-sm text-gray-700 font-normal pr-4')}>
+    <th className={clsxm(className, 'pr-4 text-sm font-normal text-gray-700')}>
       {children}
     </th>
   );
@@ -53,7 +57,7 @@ export function Td({ className, children }: TdProps) {
     <td
       className={clsxm(
         className,
-        'text-sm text-gray-700 text-left font-medium  bg-gray-100 py-4 pr-4',
+        'bg-gray-100 py-4 pr-4 text-left  text-sm font-medium text-gray-700',
         'border-y border-gray-400',
         'first:rounded-l-md first:border-l first:pl-3',
         'last:rounded-r-md last:border-r',
@@ -71,7 +75,7 @@ export type TableProps = {
 
 export function Table({ className, children }: TableProps) {
   return (
-    <table className={clsxm(className, 'table-auto text-left table-spacing')}>
+    <table className={clsxm(className, 'table-spacing table-auto text-left')}>
       {children}
     </table>
   );

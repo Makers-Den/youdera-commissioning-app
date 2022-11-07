@@ -1,5 +1,5 @@
 import { useIntl } from 'react-intl';
-import { Button } from 'ui/buttons/Button';
+import { Button, ButtonProps } from 'ui/buttons/Button';
 import {
   Dialog,
   DialogContent,
@@ -9,36 +9,42 @@ import {
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
 
-export type DeletionDialogProps = {
+export type ConfimationDialogProps = {
   isOpen: boolean;
   onClose: () => void;
   onCancel?: () => void;
-  onDelete?: () => void;
+  onConfirm?: () => void;
   description: string;
+  title: string;
+  isConfirming?: boolean;
+  confirmButtonVariant: ButtonProps['variant'];
+  confirmButtonTitle: string;
 };
 
-export function DeletionDialog({
+export function ConfimationDialog({
   isOpen,
   onClose,
+  title,
   description,
   onCancel,
-  onDelete
-}: DeletionDialogProps) {
+  onConfirm,
+  isConfirming,
+  confirmButtonVariant,
+  confirmButtonTitle,
+}: ConfimationDialogProps) {
   const intl = useIntl();
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="min-w-[570px]">
       <DialogHeader>
-        <DialogTitle
-          title={intl.formatMessage({ defaultMessage: 'Are you sure?' })}
-        />
+        <DialogTitle title={title} />
         <SvgIcon
           name="Close"
           className="ml-auto h-4 hover:cursor-pointer"
           onClick={onClose}
         />
       </DialogHeader>
-      <DialogContent className='flex flex-col'>
+      <DialogContent className="flex flex-col">
         <Typography className="mb-6">{description}</Typography>
         <div className="flex gap-4 self-center">
           <Button
@@ -49,11 +55,12 @@ export function DeletionDialog({
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
           <Button
-            variant="danger"
-            onClick={onDelete}
+            variant={confirmButtonVariant}
+            onClick={onConfirm}
             className="w-[160px]"
+            isLoading={isConfirming}
           >
-            {intl.formatMessage({ defaultMessage: 'Delete' })}
+            {confirmButtonTitle}
           </Button>
         </div>
       </DialogContent>
