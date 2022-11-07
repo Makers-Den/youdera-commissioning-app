@@ -3,4 +3,5 @@ export enum QueryKeys {
   uncommissionedSites = 'uncommissionedSites',
   modules = 'modules',
   moduleFields = 'moduleFields',
+  files = 'files',
 }

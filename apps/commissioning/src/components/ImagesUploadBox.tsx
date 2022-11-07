@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
-import { useDisclosure } from 'ui/dialogs/useDisclosure';
+import { useIntl } from 'react-intl';
+import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { FileUploader } from 'ui/file-inputs/FileUploader';
+import { UploadedFile } from 'ui/file-inputs/types';
 import {
   useFileUploader,
   UseFileUploaderArgs,
@@ -12,81 +13,99 @@ import { List, ListItem } from 'ui/list/List';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
 
+import { LargeBox } from './LargeBox';
+
 export type ImagesUploadBoxProps = {
   title: string;
   uploadFile: UseFileUploaderArgs['uploadFile'];
-  initialState: UseFileUploaderArgs['initialState'];
+  uploadedFiles: (UploadedFile & { id: string })[];
+  onDelete: (id: string) => void;
+  isGalleryOpen: boolean;
+  onGalleryClose: () => void;
+  onGalleryOpen: () => void;
 };
 
 export function ImagesUploadBox({
   title,
   uploadFile,
-  initialState,
+  uploadedFiles,
+  onDelete,
+  isGalleryOpen,
+  onGalleryClose,
+  onGalleryOpen,
 }: ImagesUploadBoxProps) {
-  const { fileUploaderProps, uploadedFilesUrls, removeFile } = useFileUploader({
+  const intl = useIntl();
+
+  const { fileUploaderProps } = useFileUploader({
     uploadFile,
-    initialState,
   });
 
   const [currentImageIndex, setCurrentImageIndex] = useState<
     number | undefined
   >();
 
-  const gallery = useDisclosure();
-
   const listClickHandler = (index: number) => () => {
     setCurrentImageIndex(index);
-    gallery.onOpen();
-  };
-
-  const onDeleteHandler = (url: string) => {
-    const findFile = uploadedFilesUrls.find(file => file.url === url);
-
-    if (findFile) {
-      removeFile(findFile);
-    }
+    onGalleryOpen();
   };
 
   return (
     <>
-      <Box>
+      <LargeBox>
         <BoxHeader>
           <BoxTitle title={title} />
         </BoxHeader>
         <BoxContent>
-          <List>
-            {uploadedFilesUrls.map(({ url, name }, index) => (
-              <ListItem key={name} onClick={listClickHandler(index)}>
-                <SquareImage wrapperClassName="w-28" src={url} alt={name} />
+          <List direction="horizontal" className="mb-5 flex-wrap">
+            {uploadedFiles.map(({ url, name }, index) => (
+              <ListItem
+                variant="withoutPadding"
+                key={name}
+                className="w-28 cursor-pointer overflow-hidden"
+                onClick={listClickHandler(index)}
+              >
+                <SquareImage src={url} alt={name} />
               </ListItem>
             ))}
           </List>
-          <FileUploader accept="image/*" {...fileUploaderProps}>
-            <div className="flex items-center gap-4">
+          <FileUploader
+            accept="image/*"
+            className="w-full"
+            {...fileUploaderProps}
+          >
+            <div className="flex w-full items-center justify-center gap-4">
               <SvgIcon name="Camera" className="w-8 text-green-400" />
               <div>
-                <Typography>Take photo by camera</Typography>
                 <Typography>
-                  or{' '}
+                  {intl.formatMessage({
+                    defaultMessage: 'Take photo by camera',
+                  })}
+                </Typography>
+                <Typography>
+                  {intl.formatMessage({
+                    defaultMessage: 'or',
+                  })}{' '}
                   <span className="text-green-400 underline">
-                    click here to upload
+                    {intl.formatMessage({
+                      defaultMessage: 'click here to upload',
+                    })}
                   </span>
                 </Typography>
               </div>
             </div>
           </FileUploader>
         </BoxContent>
-      </Box>
+      </LargeBox>
       <Gallery
-        open={gallery.isOpen}
-        onClose={gallery.onClose}
+        open={isGalleryOpen}
+        onClose={onGalleryClose}
         title={title}
         openImageIndex={currentImageIndex}
-        onDelete={onDeleteHandler}
-        images={uploadedFilesUrls.map(({ url }) => ({
+        images={uploadedFiles.map(({ url, id }) => ({
           url,
-          id: url,
+          id,
         }))}
+        onDelete={onDelete}
       />
     </>
   );
