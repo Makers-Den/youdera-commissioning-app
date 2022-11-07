@@ -15,7 +15,7 @@ import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import { useDisclosure } from 'ui/dialogs/useDisclosure';
 
-const StringsPage = ({
+const StringsListPage = ({
   project,
   stringsOnRoof
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -30,7 +30,9 @@ const StringsPage = ({
     router.push(`/roofer/projects/${project.id}/module-fields`);
   };
 
-  const nextClickHandler = () => { };
+  const okClickHandler = () => {
+    router.push(`/roofer/projects/${project.id}/module-fields`);
+  };
 
   const [selectedId, setSelectedId] = useState<number>()
   const actionsDialog = useDisclosure();
@@ -81,7 +83,7 @@ const StringsPage = ({
             }),
             variant: 'main-green',
             type: 'button',
-            onClick: nextClickHandler,
+            onClick: okClickHandler,
           },
         ],
       }}
@@ -132,4 +134,4 @@ export const getServerSideProps: GetServerSideProps = protectRoute([
   Role.roofer,
 ]).then(fetchStringsFromParams);
 
-export default StringsPage;
+export default StringsListPage;
