@@ -46,13 +46,13 @@ const rowPrefix: Partial<Record<keyof ModuleField, string>> = {
 };
 
 export type ModuleFieldsContentProps = {
-  projectId: number;
+  projectId: string;
 };
 
 export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   const intl = useIntl();
 
-  const currentModuleId = useRef<number | null>(null);
+  const currentModuleId = useRef<string | null>(null);
 
   const {
     moduleFieldsQuery,
@@ -74,7 +74,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     intl.formatMessage({ defaultMessage: 'Specific Yield' }),
   ];
 
-  const setCurrentModuleId = (id: number | null) => {
+  const setCurrentModuleId = (id: string | null) => {
     currentModuleId.current = id;
   };
 
@@ -86,7 +86,6 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   ) => {
     try {
       await createModuleFieldsMutation.mutateAsync({
-        site: projectId,
         specific_yield: specificYield,
         name,
         orientation: azimut,
@@ -142,7 +141,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     }
   };
 
-  const rowClickHandler = (moduleId: number) => () => {
+  const rowClickHandler = (moduleId: string) => () => {
     setCurrentModuleId(moduleId);
     actionsDialog.onOpen();
   };

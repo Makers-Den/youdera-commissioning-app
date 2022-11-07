@@ -24,7 +24,7 @@ export interface Address {
 export interface File {}
 
 export interface Site {
-  id: number;
+  id: string;
   name: string;
   wattpeak: number;
   prediction: MonthMap<number>;
