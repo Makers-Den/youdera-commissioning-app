@@ -22,7 +22,7 @@ import clsxm from 'ui/utils/clsxm';
 
 // TODO: Handlers for Cancel and Save buttons
 
-export const AddStringDialog = ({
+export const StringCreationFormDialogB = ({
   open,
   onClose,
   className,

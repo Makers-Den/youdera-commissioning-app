@@ -1,8 +1,8 @@
 import { ActionsDialog } from '@src/components/dialogs/ActionsDialog';
-import { AddStringDialog } from '@src/components/dialogs/AddStringDialog';
 import { DeletionDialog } from '@src/components/dialogs/DeletionDialog';
+import { StringCreationFormDialogA } from '@src/components/forms/StringCreationFormDialogA';
+import { StringCreationFormDialogB } from '@src/components/forms/StringCreationFormDialogB';
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
-import { ModifyStringDialog } from '@src/components/modify-string/ModifyStringDialog';
 import { StringsList } from '@src/components/page-content/StringsList';
 import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
@@ -24,10 +24,6 @@ const StringsListPage = ({
 
   const navCrossClickHandler = () => {
     router.push('/roofer/select-task');
-  };
-
-  const backClickHandler = () => {
-    router.push(`/roofer/projects/${project.id}/module-fields`);
   };
 
   const okClickHandler = () => {
@@ -71,14 +67,6 @@ const StringsListPage = ({
         buttons: [
           {
             content: intl.formatMessage({
-              defaultMessage: 'Back',
-            }),
-            variant: 'additional-gray',
-            type: 'button',
-            onClick: backClickHandler,
-          },
-          {
-            content: intl.formatMessage({
               defaultMessage: 'Ok',
             }),
             variant: 'main-green',
@@ -113,7 +101,7 @@ const StringsListPage = ({
         </Button>
       </ActionsDialog>
 
-      <ModifyStringDialog
+      <StringCreationFormDialogA
         open={modifyDialog.isOpen}
         onClose={modifyDialog.onClose}
       />
@@ -125,7 +113,7 @@ const StringsListPage = ({
           defaultMessage: 'Are you sure to delete module field?',
         })}
       />
-      <AddStringDialog open={addStringDialog.isOpen} onClose={addStringDialog.onClose} />
+      <StringCreationFormDialogB open={addStringDialog.isOpen} onClose={addStringDialog.onClose} />
     </AuthenticatedLayout>
   );
 };
