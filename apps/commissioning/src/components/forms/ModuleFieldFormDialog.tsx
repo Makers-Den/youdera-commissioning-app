@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
-import { ControllerFieldState, FieldValues, useForm, UseFormRegister } from 'react-hook-form';
+import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import { Compass } from 'ui/compass/Compass';
@@ -18,7 +18,7 @@ import clsxm from 'ui/utils/clsxm';
 import { z, ZodObject, ZodTypeAny } from 'zod';
 
 import { Field } from './Field'
-import { FormWrapper } from './FormWrapper';
+import { Form } from './Form';
 
 type RawFormShape = {
   name: ZodTypeAny;
@@ -57,7 +57,7 @@ export const ModuleFieldFormDialog = <
     resolver: zodResolver(resolver),
   });
 
-  const { handleSubmit, watch, reset, formState, control, getValues } = method;
+  const { handleSubmit, watch, reset, formState, control } = method;
 
   return (
     <Dialog
@@ -74,92 +74,87 @@ export const ModuleFieldFormDialog = <
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
-        <FormWrapper {...method}>
-          <form
-            onSubmit={handleSubmit(values => onSubmit(values, reset))}
-            className="flex flex-col gap-5"
-          >
-            <Field name='name' control={control}>
-              {(register: UseFormRegister<FieldValues>) =>
-                <Input
-                  label={intl.formatMessage({ defaultMessage: 'Name' })}
-                  placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
-                  className="w-full"
-                  {...register('name')}
-                />
-              }
-            </Field>
-            <Field name='specificYield' control={control}>
-              {(register: UseFormRegister<FieldValues>) =>
-                <Input
-                  label={intl.formatMessage({ defaultMessage: 'Specific Yield' })}
-                  placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
-                  className="w-full"
-                  units="kWh/kWp"
-                  type="number"
-                  {...register('specificYield', {
-                    setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
-                  })}
-                />
-              }
-            </Field>
-
-            <div className="flex items-center justify-center gap-5">
-              <div className="flex flex-1 flex-col gap-5">
-                <Field name='slantAngle' control={control}>
-                  {(register: UseFormRegister<FieldValues>) =>
-                    <NumberInput
-                      label={intl.formatMessage({ defaultMessage: 'Slant angle' })}
-                      unit="&deg;"
-                      className="w-full"
-                      max="359"
-                      {...register('slantAngle', {
-                        setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
-                      })}
-
-                    />
-                  }
-                </Field>
-                <Field name='azimut' control={control}>
-                  {(register: UseFormRegister<FieldValues>) =>
-                    <NumberInput
-                      label={intl.formatMessage({ defaultMessage: 'Azimut' })}
-                      unit="&deg;"
-                      className="w-full"
-                      max="359"
-                      {...register('azimut', {
-                        setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
-                      })}
-                    />
-                  }
-                </Field>
-
-              </div>
-              <Compass
-                rotationAngle={parseInt(watch('azimut'), 10)}
-                className="flex-1"
+        <Form onSubmit={handleSubmit(values => onSubmit(values, reset))} className="flex flex-col gap-5" {...method}>
+          <Field name='name' control={control}>
+            {(register: UseFormRegister<FieldValues>) =>
+              <Input
+                label={intl.formatMessage({ defaultMessage: 'Name' })}
+                placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
+                className="w-full"
+                {...register('name')}
               />
-            </div>
+            }
+          </Field>
+          <Field name='specificYield' control={control}>
+            {(register: UseFormRegister<FieldValues>) =>
+              <Input
+                label={intl.formatMessage({ defaultMessage: 'Specific Yield' })}
+                placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
+                className="w-full"
+                units="kWh/kWp"
+                type="number"
+                {...register('specificYield', {
+                  setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
+                })}
+              />
+            }
+          </Field>
 
-            <div className="mt-3 flex gap-5">
-              <Button
-                variant="additional-gray"
-                className="w-full"
-                onChange={onClose}
-              >
-                {intl.formatMessage({ defaultMessage: 'Cancel' })}
-              </Button>
-              <Button
-                isLoading={formState.isSubmitting}
-                type="submit"
-                variant="main-green"
-                className="w-full"
-              >
-                {submitButtonTitle}
-              </Button>
+          <div className="flex items-center justify-center gap-5">
+            <div className="flex flex-1 flex-col gap-5">
+              <Field name='slantAngle' control={control}>
+                {(register: UseFormRegister<FieldValues>) =>
+                  <NumberInput
+                    label={intl.formatMessage({ defaultMessage: 'Slant angle' })}
+                    unit="&deg;"
+                    className="w-full"
+                    max="359"
+                    {...register('slantAngle', {
+                      setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
+                    })}
+
+                  />
+                }
+              </Field>
+              <Field name='azimut' control={control}>
+                {(register: UseFormRegister<FieldValues>) =>
+                  <NumberInput
+                    label={intl.formatMessage({ defaultMessage: 'Azimut' })}
+                    unit="&deg;"
+                    className="w-full"
+                    max="359"
+                    {...register('azimut', {
+                      setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
+                    })}
+                  />
+                }
+              </Field>
+
             </div>
-          </form>
-        </FormWrapper>
+            <Compass
+              rotationAngle={parseInt(watch('azimut'), 10)}
+              className="flex-1"
+            />
+          </div>
+
+          <div className="mt-3 flex gap-5">
+            <Button
+              variant="additional-gray"
+              className="w-full"
+              onChange={onClose}
+            >
+              {intl.formatMessage({ defaultMessage: 'Cancel' })}
+            </Button>
+            <Button
+              isLoading={formState.isSubmitting}
+              type="submit"
+              variant="main-green"
+              className="w-full"
+            >
+              {submitButtonTitle}
+            </Button>
+          </div>
+        </Form>
       </DialogContent>
     </Dialog>
   );
