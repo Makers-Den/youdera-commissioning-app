@@ -18,7 +18,7 @@ export type SelectProps = {
   defaultValue?: SelectOption;
   value?: SelectOption;
   onChange?: (value: SelectOption) => void;
-  mandatory?: boolean;
+  isRequired?: boolean;
   wrapperClassName?: string;
 };
 
@@ -30,14 +30,14 @@ export function Select({
   onChange,
   options,
   defaultValue,
-  mandatory,
+  isRequired,
   wrapperClassName,
 }: SelectProps) {
   return (
     <div className={wrapperClassName}>
       <Typography variant="label">
         {label}
-        <span className="text-green-400">{mandatory && '*'}</span>
+        <span className="text-green-400">{isRequired && '*'}</span>
       </Typography>
       <Listbox
         value={value}

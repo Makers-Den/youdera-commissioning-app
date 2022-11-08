@@ -8,9 +8,23 @@ export type NumberInputProps = {
   label: string;
   value?: string;
   placeholder?: string;
-  mandatory?: boolean;
+  isRequired?: boolean;
   unit?: string;
+  validity?: 'valid' | 'invalid';
 } & React.ComponentPropsWithRef<'input'>;
+
+const validityStyle = {
+  valid: {
+    icon: 'fill-green-400 h-4 w-4',
+    units: 'text-green-400',
+    input: 'focus-visible:ring-0 border-green-400',
+  },
+  invalid: {
+    icon: 'fill-red-400 h-4 w-4',
+    units: 'text-red-400',
+    input: 'focus-visible:ring-0 border-red-400',
+  },
+};
 
 export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
   (
@@ -20,8 +34,9 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       label,
       disabled,
       placeholder,
-      mandatory,
+      isRequired,
       unit,
+      validity,
       ...rest
     },
     ref,
@@ -29,7 +44,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     <div className={clsxm('w-64', className)}>
       <BodyText className="mb-2 text-sm text-gray-700">
         {label}
-        {mandatory && '*'}
+        {isRequired && '*'}
       </BodyText>
 
       <div className="relative w-full">
@@ -49,6 +64,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             'transition-colors duration-75',
             'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400',
             'disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
+            validity && validityStyle[validity].input,
           )}
           {...rest}
         />
@@ -66,6 +82,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           className={clsxm(
             'pointer-events-none absolute top-1/2 right-0 mr-2 -translate-y-1/2',
             'flex flex-col items-center justify-center fill-gray-500 pr-[5.5px]',
+            validity && validityStyle[validity].icon,
           )}
         >
           <SvgIcon

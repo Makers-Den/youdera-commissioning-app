@@ -11,7 +11,7 @@ export type InputProps = {
   icon?: IconName;
   units?: string;
   validity?: 'valid' | 'invalid';
-  mandatory?: boolean;
+  isRequired?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClickRightElement?: () => void;
 } & React.ComponentPropsWithRef<'input'>;
@@ -40,7 +40,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       units,
       icon,
       placeholder,
-      mandatory,
+      isRequired,
       onChange,
       onClickRightElement,
       ...rest
@@ -72,7 +72,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <BodyText className="mb-2 text-sm text-gray-700">
             {label}
-            {mandatory && '*'}
+            {isRequired && '*'}
           </BodyText>
         )}
         <div className="relative w-full">

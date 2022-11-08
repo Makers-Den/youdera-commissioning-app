@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { NumberInput } from 'ui/inputs/NumberInput';
 import {
   AutocompleteSelect,
   AutocompleteSelectOption,
@@ -37,6 +38,7 @@ const Home = () => {
         options={options}
         wrapperClassName="w-64"
       />
+      <NumberInput label='input' validity='invalid' />
     </div>
   );
 };

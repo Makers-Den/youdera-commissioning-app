@@ -1,12 +1,19 @@
 import { ErrorMessage } from '@hookform/error-message';
 import React, { FC, ReactNode } from "react"
-import { Control, FieldValues, useFormContext, UseFormRegister } from "react-hook-form";
+import { Control, FieldError, FieldValues, useFormContext, UseFormRegister } from "react-hook-form";
 import { Label } from 'ui/typography/Typography';
 
+
+export interface FieldState {
+  invalid: boolean;
+  isDirty: boolean;
+  isTouched: boolean;
+  error?: FieldError | undefined;
+}
 export interface FieldProps {
   name: string
   control: Control
-  children: (register: UseFormRegister<FieldValues>) => ReactNode
+  children: (register: UseFormRegister<FieldValues>, fieldState: FieldState) => ReactNode
 }
 
 export const Field: FC<FieldProps> = ({
@@ -18,7 +25,7 @@ export const Field: FC<FieldProps> = ({
 
   return (
     <div>
-      {children(register)}
+      {children(register, getFieldState(name))}
       <ErrorMessage
         errors={formState.errors}
         name={name}

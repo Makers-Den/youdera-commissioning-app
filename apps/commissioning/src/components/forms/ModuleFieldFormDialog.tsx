@@ -17,7 +17,7 @@ import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import clsxm from 'ui/utils/clsxm';
 import { z, ZodObject, ZodTypeAny } from 'zod';
 
-import { Field } from './Field'
+import { Field, FieldState } from './Field'
 import { Form } from './Form';
 
 type RawFormShape = {
@@ -76,17 +76,18 @@ export const ModuleFieldFormDialog = <
       <DialogContent className="flex flex-col gap-5">
         <Form onSubmit={handleSubmit(values => onSubmit(values, reset))} className="flex flex-col gap-5" {...method}>
           <Field name='name' control={control}>
-            {(register: UseFormRegister<FieldValues>) =>
+            {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
               <Input
                 label={intl.formatMessage({ defaultMessage: 'Name' })}
                 placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
                 className="w-full"
                 {...register('name')}
+                validity={fieldState.invalid ? 'invalid' : undefined}
               />
             }
           </Field>
           <Field name='specificYield' control={control}>
-            {(register: UseFormRegister<FieldValues>) =>
+            {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
               <Input
                 label={intl.formatMessage({ defaultMessage: 'Specific Yield' })}
                 placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
@@ -96,6 +97,7 @@ export const ModuleFieldFormDialog = <
                 {...register('specificYield', {
                   setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
                 })}
+                validity={fieldState.invalid ? 'invalid' : undefined}
               />
             }
           </Field>
@@ -103,7 +105,7 @@ export const ModuleFieldFormDialog = <
           <div className="flex items-center justify-center gap-5">
             <div className="flex flex-1 flex-col gap-5">
               <Field name='slantAngle' control={control}>
-                {(register: UseFormRegister<FieldValues>) =>
+                {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
                   <NumberInput
                     label={intl.formatMessage({ defaultMessage: 'Slant angle' })}
                     unit="&deg;"
@@ -112,12 +114,12 @@ export const ModuleFieldFormDialog = <
                     {...register('slantAngle', {
                       setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
                     })}
-
+                    validity={fieldState.invalid ? 'invalid' : undefined}
                   />
                 }
               </Field>
               <Field name='azimut' control={control}>
-                {(register: UseFormRegister<FieldValues>) =>
+                {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
                   <NumberInput
                     label={intl.formatMessage({ defaultMessage: 'Azimut' })}
                     unit="&deg;"
@@ -126,6 +128,7 @@ export const ModuleFieldFormDialog = <
                     {...register('azimut', {
                       setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
                     })}
+                    validity={fieldState.invalid ? 'invalid' : undefined}
                   />
                 }
               </Field>
