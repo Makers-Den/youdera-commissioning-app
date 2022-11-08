@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { ControllerFieldState, FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import { Compass } from 'ui/compass/Compass';
@@ -57,7 +57,7 @@ export const ModuleFieldFormDialog = <
     resolver: zodResolver(resolver),
   });
 
-  const { register, handleSubmit, watch, reset, formState, control } = method;
+  const { handleSubmit, watch, reset, formState, control, getValues } = method;
 
   return (
     <Dialog
@@ -79,50 +79,59 @@ export const ModuleFieldFormDialog = <
             onSubmit={handleSubmit(values => onSubmit(values, reset))}
             className="flex flex-col gap-5"
           >
-            <Field name='nameInput' control={control}>
-              <Input
-                label={intl.formatMessage({ defaultMessage: 'Name' })}
-                placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
-                className="w-full"
-              />
+            <Field name='name' control={control}>
+              {(register: UseFormRegister<FieldValues>) =>
+                <Input
+                  label={intl.formatMessage({ defaultMessage: 'Name' })}
+                  placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
+                  className="w-full"
+                  {...register('name')}
+                />
+              }
             </Field>
-
             <Field name='specificYield' control={control}>
-              <Input
-                label={intl.formatMessage({ defaultMessage: 'Specific Yield' })}
-                placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
-                className="w-full"
-                units="kWh/kWp"
-                type="number"
-                {...register('specificYield', {
-                  setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
-                })}
-              />
+              {(register: UseFormRegister<FieldValues>) =>
+                <Input
+                  label={intl.formatMessage({ defaultMessage: 'Specific Yield' })}
+                  placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
+                  className="w-full"
+                  units="kWh/kWp"
+                  type="number"
+                  {...register('specificYield', {
+                    setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
+                  })}
+                />
+              }
             </Field>
 
             <div className="flex items-center justify-center gap-5">
               <div className="flex flex-1 flex-col gap-5">
-                <Field name='specificYield' control={control}>
-                  <NumberInput
-                    label={intl.formatMessage({ defaultMessage: 'Slant angle' })}
-                    unit="&deg;"
-                    className="w-full"
-                    max="359"
-                    {...register('slantAngle', {
-                      setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
-                    })}
-                  />
+                <Field name='slantAngle' control={control}>
+                  {(register: UseFormRegister<FieldValues>) =>
+                    <NumberInput
+                      label={intl.formatMessage({ defaultMessage: 'Slant angle' })}
+                      unit="&deg;"
+                      className="w-full"
+                      max="359"
+                      {...register('slantAngle', {
+                        setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
+                      })}
+
+                    />
+                  }
                 </Field>
                 <Field name='azimut' control={control}>
-                  <NumberInput
-                    label={intl.formatMessage({ defaultMessage: 'Azimut' })}
-                    unit="&deg;"
-                    className="w-full"
-                    max="359"
-                    {...register('azimut', {
-                      setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
-                    })}
-                  />
+                  {(register: UseFormRegister<FieldValues>) =>
+                    <NumberInput
+                      label={intl.formatMessage({ defaultMessage: 'Azimut' })}
+                      unit="&deg;"
+                      className="w-full"
+                      max="359"
+                      {...register('azimut', {
+                        setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
+                      })}
+                    />
+                  }
                 </Field>
 
               </div>

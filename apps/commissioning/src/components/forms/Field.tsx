@@ -1,44 +1,29 @@
 import { ErrorMessage } from '@hookform/error-message';
-import React, { FC } from "react"
-import { Control, Controller, useController } from "react-hook-form";
+import React, { FC, ReactNode } from "react"
+import { Control, FieldValues, useFormContext, UseFormRegister } from "react-hook-form";
 import { Label } from 'ui/typography/Typography';
 
 export interface FieldProps {
   name: string
   control: Control
+  children: (register: UseFormRegister<FieldValues>) => ReactNode
 }
 
-export const Field: FC<React.PropsWithChildren<FieldProps>> = ({
+export const Field: FC<FieldProps> = ({
   children,
   name,
-  control
 }) => {
 
-  const { field } = useController({
-    name,
-    control,
-    rules: { required: true },
-    defaultValue: "",
-  });
+  const { register, formState, getFieldState } = useFormContext();
 
   return (
-    <Controller
-      {...field}
-      render={({ formState: { errors } }) => (
-        <>
-          {children}
-          <ErrorMessage
-            errors={errors}
-            name="multipleErrorInput"
-            render={({ messages }) =>
-              messages &&
-              Object.entries(messages).map(([type, message]) => (
-                <Label key={type}>{message}</Label>
-              ))
-            }
-          />
-        </>
-      )}
-    />
+    <div>
+      {children(register)}
+      <ErrorMessage
+        errors={formState.errors}
+        name={name}
+        render={({ message }) => <Label className='text-red-400'>{message}</Label>}
+      />
+    </div>
   )
 }
