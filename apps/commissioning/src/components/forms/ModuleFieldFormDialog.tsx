@@ -57,7 +57,7 @@ export const ModuleFieldFormDialog = <
     resolver: zodResolver(resolver),
   });
 
-  const { handleSubmit, watch, reset, formState, control } = method;
+  const { handleSubmit, watch, reset, formState } = method;
 
   return (
     <Dialog
@@ -75,7 +75,7 @@ export const ModuleFieldFormDialog = <
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
         <Form onSubmit={handleSubmit(values => onSubmit(values, reset))} className="flex flex-col gap-5" {...method}>
-          <Field name='name' control={control}>
+          <Field name='name'>
             {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
               <Input
                 label={intl.formatMessage({ defaultMessage: 'Name' })}
@@ -86,7 +86,7 @@ export const ModuleFieldFormDialog = <
               />
             }
           </Field>
-          <Field name='specificYield' control={control}>
+          <Field name='specificYield'>
             {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
               <Input
                 label={intl.formatMessage({ defaultMessage: 'Specific Yield' })}
@@ -104,7 +104,7 @@ export const ModuleFieldFormDialog = <
 
           <div className="flex items-center justify-center gap-5">
             <div className="flex flex-1 flex-col gap-5">
-              <Field name='slantAngle' control={control}>
+              <Field name='slantAngle'>
                 {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
                   <NumberInput
                     label={intl.formatMessage({ defaultMessage: 'Slant angle' })}
@@ -118,7 +118,7 @@ export const ModuleFieldFormDialog = <
                   />
                 }
               </Field>
-              <Field name='azimut' control={control}>
+              <Field name='azimut'>
                 {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
                   <NumberInput
                     label={intl.formatMessage({ defaultMessage: 'Azimut' })}
