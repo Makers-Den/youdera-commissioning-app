@@ -1,5 +1,5 @@
 import { Combobox, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { FocusEvent, Fragment, useState } from 'react';
 
 import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
 import { Label } from '../typography/Typography';
@@ -70,7 +70,10 @@ export const AutocompleteSelect = ({
       <Combobox value={value} onChange={onChange}>
         {({ open }) => (
           <div className="relative mt-1">
-            <div className="">
+            <div>
+              {/* Hack to improve bad UX of Headless UI, 
+                * https://github.com/tailwindlabs/headlessui/discussions/1236#discussioncomment-2970969 */}
+            <Combobox.Button as='div'>
               <Combobox.Input
                 className={clsxm(
                   'inline-flex items-center justify-center rounded-md px-3 py-2',
@@ -83,10 +86,15 @@ export const AutocompleteSelect = ({
                   'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
                   validity && validityStyle[validity].input,
                 )}
-                displayValue={(option: AutocompleteSelectOption) => option?.label ?? placeholder}
+                displayValue={(option: AutocompleteSelectOption) => option?.label}
+                placeholder={placeholder}
                 onChange={event => setQuery(event.target.value)}
                 {...rest}
+                onFocus={(e: FocusEvent<HTMLInputElement>) => {
+                  e.target.select();
+                }}
               />
+              </Combobox.Button>
 
               <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-4">
                 <SvgIcon
