@@ -4,6 +4,7 @@ import { Fragment, ReactNode } from 'react';
 import { SvgIcon } from '../svg-icons/SvgIcon';
 import { Label, Typography } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
+import { validityStyle } from '../utils/constants';
 
 export type SelectOption = {
   key: string;
@@ -21,19 +22,6 @@ export type SelectProps = {
   onChange?: (value: SelectOption) => void;
   isRequired?: boolean;
   wrapperClassName?: string;
-};
-
-const validityStyle = {
-  valid: {
-    icon: 'fill-green-400',
-    input: 'focus-visible:ring-0 border-green-400',
-    label: 'text-green-400'
-  },
-  invalid: {
-    icon: 'fill-red-400',
-    input: 'focus-visible:ring-0 border-red-400',
-    label: 'text-red-400'
-  },
 };
 
 export function Select({

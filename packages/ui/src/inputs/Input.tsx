@@ -3,6 +3,7 @@ import * as React from 'react';
 import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
 import { Label } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
+import { validityStyle } from '../utils/constants';
 
 export type InputProps = {
   label?: string;
@@ -15,21 +16,6 @@ export type InputProps = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClickRightElement?: () => void;
 } & React.ComponentPropsWithRef<'input'>;
-
-const validityStyle = {
-  valid: {
-    label: 'text-green-400',
-    icon: 'fill-green-400 h-4 w-4',
-    units: 'text-green-400',
-    input: 'focus-visible:ring-0 border-green-400',
-  },
-  invalid: {
-    label: 'text-red-400',
-    icon: 'fill-red-400 h-4 w-4',
-    units: 'text-red-400',
-    input: 'focus-visible:ring-0 border-red-400',
-  },
-};
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
@@ -110,11 +96,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {computedIcon && (
               <SvgIcon
                 name={computedIcon}
-                className={
-                  validity
-                    ? validityStyle[validity].icon
-                    : 'h-4 w-4 fill-inherit'
-                }
+                className={clsxm(
+                  'h-4 w-4 fill-inherit',
+                  validity && validityStyle[validity].icon
+                )}
               />
             )}
             {units && (

@@ -4,6 +4,7 @@ import { FocusEvent, Fragment, useState } from 'react';
 import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
 import { Label } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
+import { validityStyle } from '../utils/constants';
 
 export type AutocompleteSelectOption = {
   key: string;
@@ -29,19 +30,6 @@ export type AutocompleteSelectProps = {
   isRequired?: boolean;
   onChange?: (value: AutocompleteSelectOption | undefined) => void
 } & Omit<React.ComponentPropsWithRef<'input'>, 'value' | 'onChange'>;
-
-const validityStyle = {
-  valid: {
-    label: 'text-green-400',
-    icon: 'fill-green-400',
-    input: 'focus-visible:ring-0 border-green-400',
-  },
-  invalid: {
-    label: 'text-red-400',
-    icon: 'fill-red-400',
-    input: 'focus-visible:ring-0 border-red-400',
-  },
-};
 
 export const AutocompleteSelect = ({
   label,

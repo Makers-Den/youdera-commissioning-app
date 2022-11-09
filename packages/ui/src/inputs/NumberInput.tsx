@@ -3,6 +3,7 @@ import React from 'react';
 import { SvgIcon } from '../svg-icons/SvgIcon';
 import { Label } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
+import { validityStyle } from '../utils/constants';
 
 export type NumberInputProps = {
   label: string;
@@ -12,21 +13,6 @@ export type NumberInputProps = {
   unit?: string;
   validity?: 'valid' | 'invalid';
 } & React.ComponentPropsWithRef<'input'>;
-
-const validityStyle = {
-  valid: {
-    label: 'text-green-400',
-    icon: 'fill-green-400',
-    units: 'text-green-400',
-    input: 'focus-visible:ring-0 border-green-400',
-  },
-  invalid: {
-    label: 'text-red-400',
-    icon: 'fill-red-400',
-    units: 'text-red-400',
-    input: 'focus-visible:ring-0 border-red-400',
-  },
-};
 
 export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
   (
