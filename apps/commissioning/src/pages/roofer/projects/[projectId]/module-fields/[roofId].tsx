@@ -1,21 +1,15 @@
-import { ActionsDialog } from '@src/components/dialogs/ActionsDialog';
-import { DeletionDialog } from '@src/components/dialogs/DeletionDialog';
-import { StringCreationFormDialogA } from '@src/components/forms/StringCreationFormDialogA';
-import { StringCreationFormDialogB } from '@src/components/forms/StringCreationFormDialogB';
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
-import { StringsList } from '@src/components/page-content/StringsList';
+import { StringsContent } from '@src/components/page-content/StringsContent'
 import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { fetchStringsFromParams } from '@src/utils/server/fetchStringsFromParams'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import React, { Suspense, useState } from 'react';
+import React, { Suspense } from 'react';
 import { useIntl } from 'react-intl';
-import { Button } from 'ui/buttons/Button';
-import { useDisclosure } from 'ui/dialogs/useDisclosure';
 
-const StringsListPage = ({
+const StringsPage = ({
   project,
   stringsOnRoof
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -29,34 +23,6 @@ const StringsListPage = ({
   const okClickHandler = () => {
     router.push(`/roofer/projects/${project.id}/module-fields`);
   };
-
-  const [selectedId, setSelectedId] = useState<number>()
-  const actionsDialog = useDisclosure();
-  const modifyDialog = useDisclosure();
-  const deletionDialog = useDisclosure();
-  const addStringDialog = useDisclosure();
-
-  const handleAddStringOpen = () => {
-    actionsDialog.onClose()
-    addStringDialog.onOpen()
-  }
-  const handleActionsOpen = (id: number) => {
-    setSelectedId(id)
-    actionsDialog.onOpen()
-  };
-  const handleModifyOpen = () => {
-    actionsDialog.onClose()
-    modifyDialog.onOpen()
-  };
-
-  const handleInverterOpen = () => undefined;
-  const handleDeleteOpen = () => {
-    actionsDialog.onClose()
-    deletionDialog.onOpen()
-  }
-  const onDelete = (id: number) => {
-
-  }
 
   return (
     <AuthenticatedLayout
@@ -77,43 +43,8 @@ const StringsListPage = ({
       }}
     >
       <Suspense fallback={<LargeBoxSkeleton />}>
-        <StringsList stringsOnRoof={stringsOnRoof} onOpen={handleActionsOpen} onAddString={handleAddStringOpen} />
+        <StringsContent stringsOnRoof={stringsOnRoof} />
       </Suspense>
-
-      <ActionsDialog
-        isOpen={actionsDialog.isOpen}
-        onClose={actionsDialog.onClose}
-        description={intl.formatMessage({
-          defaultMessage: 'What you want to do with list element?',
-        })}
-      >
-        <Button variant="main-green" onClick={handleModifyOpen}>
-          {intl.formatMessage({ defaultMessage: 'Modify properties' })}
-        </Button>
-        <Button variant="main-green" onClick={handleInverterOpen}>
-          {intl.formatMessage({ defaultMessage: 'Change inverter/mpp' })}
-        </Button>
-        <Button variant="danger" onClick={handleDeleteOpen}>
-          {intl.formatMessage({ defaultMessage: 'Delete' })}
-        </Button>
-        <Button variant="additional-gray" onClick={actionsDialog.onClose}>
-          {intl.formatMessage({ defaultMessage: 'Cancel' })}
-        </Button>
-      </ActionsDialog>
-
-      <StringCreationFormDialogA
-        open={modifyDialog.isOpen}
-        onClose={modifyDialog.onClose}
-      />
-      <DeletionDialog
-        onDelete={() => onDelete(selectedId!)}
-        isOpen={deletionDialog.isOpen}
-        onClose={deletionDialog.onClose}
-        description={intl.formatMessage({
-          defaultMessage: 'Are you sure to delete module field?',
-        })}
-      />
-      <StringCreationFormDialogB open={addStringDialog.isOpen} onClose={addStringDialog.onClose} />
     </AuthenticatedLayout>
   );
 };
@@ -122,4 +53,4 @@ export const getServerSideProps: GetServerSideProps = protectRoute([
   Role.roofer,
 ]).then(fetchStringsFromParams);
 
-export default StringsListPage;
+export default StringsPage;
