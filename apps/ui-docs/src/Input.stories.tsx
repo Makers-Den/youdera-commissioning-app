@@ -90,7 +90,7 @@ export const Overview = () => {
           label="Mandatory"
           placeholder="Mandatory"
           icon="Calendar"
-          mandatory
+          isRequired
           onChange={handleValueChange}
           value={value}
         />

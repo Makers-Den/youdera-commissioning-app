@@ -60,7 +60,7 @@ export type MultiSelectProps = {
   defaultValue?: MultiSelectOption[];
   value: MultiSelectOption[];
   onChange: (value: MultiSelectOption[]) => void;
-  mandatory?: boolean;
+  isRequired?: boolean;
   wrapperClassName?: string;
 };
 
@@ -72,14 +72,14 @@ export function MultiSelect({
   onChange,
   options,
   defaultValue,
-  mandatory,
+  isRequired,
   wrapperClassName,
 }: MultiSelectProps) {
   return (
     <div>
       <Typography variant="label">
         {label}
-        <span className="text-green-400">{mandatory && '*'}</span>
+        <span className="text-green-400">{isRequired && '*'}</span>
       </Typography>
       <Listbox
         value={value}

@@ -1,8 +1,9 @@
 import * as React from 'react';
 
 import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
-import { BodyText } from '../typography/Typography';
+import { Label } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
+import { validityStyle } from '../utils/constants';
 
 export type InputProps = {
   label?: string;
@@ -11,23 +12,10 @@ export type InputProps = {
   icon?: IconName;
   units?: string;
   validity?: 'valid' | 'invalid';
-  mandatory?: boolean;
+  isRequired?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClickRightElement?: () => void;
 } & React.ComponentPropsWithRef<'input'>;
-
-const validityStyle = {
-  valid: {
-    icon: 'fill-green-400 h-4 w-4',
-    units: 'text-green-400',
-    input: 'focus-visible:ring-0 border-green-400',
-  },
-  invalid: {
-    icon: 'fill-red-400 h-4 w-4',
-    units: 'text-red-400',
-    input: 'focus-visible:ring-0 border-red-400',
-  },
-};
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
@@ -40,7 +28,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       units,
       icon,
       placeholder,
-      mandatory,
+      isRequired,
       onChange,
       onClickRightElement,
       ...rest
@@ -70,12 +58,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={clsxm(className)}>
         {label && (
-          <BodyText className="mb-2 text-sm text-gray-700">
+          <Label className={validity && validityStyle[validity].label}>
             {label}
-            {mandatory && '*'}
-          </BodyText>
+            {isRequired && '*'}
+          </Label>
         )}
-        <div className="relative w-full">
+        <div className="relative w-full mt-1">
           <input
             disabled={disabled}
             value={value}
@@ -108,11 +96,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {computedIcon && (
               <SvgIcon
                 name={computedIcon}
-                className={
-                  validity
-                    ? validityStyle[validity].icon
-                    : 'h-4 w-4 fill-inherit'
-                }
+                className={clsxm(
+                  'h-4 w-4 fill-inherit',
+                  validity && validityStyle[validity].icon
+                )}
               />
             )}
             {units && (

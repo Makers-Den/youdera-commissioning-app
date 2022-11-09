@@ -31,12 +31,13 @@ export const NavHeader: React.FC<NavHeaderProps> = ({
   return (
     <div className="flex w-screen justify-between items-center p-7 z-10">
       {variant === 'logo' ? (
-        <Image
-          alt="logo"
-          src={logoSrc}
-          className="h-[38px] w-[110px]"
-          objectFit="contain"
-        />
+        logoSrc && 
+          <Image
+            alt="logo"
+            src={logoSrc}
+            className="h-[38px] w-[110px]"
+            objectFit="contain"
+          />
       ) : (
         <div className="flex items-center gap-6">
           <Button

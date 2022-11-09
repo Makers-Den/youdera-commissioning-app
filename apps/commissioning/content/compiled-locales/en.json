@@ -17,6 +17,24 @@
       "value": "Didn't receive the email?"
     }
   ],
+  "'+sQrJP'": [
+    {
+      "type": 0,
+      "value": "Modify String"
+    }
+  ],
+  "'/vMjUJ'": [
+    {
+      "type": 0,
+      "value": "Nothing found."
+    }
+  ],
+  "'0OFW6D'": [
+    {
+      "type": 0,
+      "value": "Select inverter"
+    }
+  ],
   "'0fhwgp'": [
     {
       "type": 0,
@@ -33,6 +51,18 @@
     {
       "type": 0,
       "value": "Specific Yield"
+    }
+  ],
+  "'1vQIng'": [
+    {
+      "type": 0,
+      "value": "Are you sure that all module fields were added?"
+    }
+  ],
+  "'2oCaym'": [
+    {
+      "type": 0,
+      "value": "Are you sure?"
     }
   ],
   "'47FYwb'": [
@@ -119,6 +149,26 @@
       "value": "Number of modules"
     }
   ],
+  "'BlHr2w'": [
+    {
+      "type": 0,
+      "value": "Are you sure to delete module field?"
+    }
+  ],
+  "'D7h26G'": [
+    {
+      "type": 0,
+      "value": "Field must contain at least "
+    },
+    {
+      "type": 1,
+      "value": "minimum"
+    },
+    {
+      "type": 0,
+      "value": " character(s)"
+    }
+  ],
   "'EZfuT3'": [
     {
       "type": 0,
@@ -161,6 +211,12 @@
       "value": "Azimut angle"
     }
   ],
+  "'KZFZ3V'": [
+    {
+      "type": 0,
+      "value": "Add String"
+    }
+  ],
   "'L6MHcS'": [
     {
       "type": 0,
@@ -171,6 +227,18 @@
     {
       "type": 0,
       "value": "Select main module type"
+    }
+  ],
+  "'SO2mnn'": [
+    {
+      "type": 0,
+      "value": "Module field modify"
+    }
+  ],
+  "'Seanpx'": [
+    {
+      "type": 0,
+      "value": "Required"
     }
   ],
   "'SzqYd0'": [
@@ -195,6 +263,12 @@
     {
       "type": 0,
       "value": "Manufacturer"
+    }
+  ],
+  "'VzzYJk'": [
+    {
+      "type": 0,
+      "value": "Create"
     }
   ],
   "'Wikrxi'": [
@@ -239,6 +313,12 @@
       "value": "Module field creation"
     }
   ],
+  "'a5msuh'": [
+    {
+      "type": 0,
+      "value": "Yes"
+    }
+  ],
   "'acrOoz'": [
     {
       "type": 0,
@@ -249,6 +329,12 @@
     {
       "type": 0,
       "value": "Modify properties"
+    }
+  ],
+  "'boIQMO'": [
+    {
+      "type": 0,
+      "value": "Modify strings"
     }
   ],
   "'cyR7Kh'": [
@@ -269,6 +355,12 @@
       "value": "Strings"
     }
   ],
+  "'it6Lig'": [
+    {
+      "type": 0,
+      "value": "Input"
+    }
+  ],
   "'jvo0vs'": [
     {
       "type": 0,
@@ -279,6 +371,12 @@
     {
       "type": 0,
       "value": "Ok"
+    }
+  ],
+  "'kQAf2d'": [
+    {
+      "type": 0,
+      "value": "Select"
     }
   ],
   "'nwjxtz'": [
@@ -339,6 +437,12 @@
     {
       "type": 0,
       "value": "Search"
+    }
+  ],
+  "'zYpFao'": [
+    {
+      "type": 0,
+      "value": "Check it"
     }
   ],
   "'zj2AzZ'": [

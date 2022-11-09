@@ -2,8 +2,9 @@ import { Listbox, Transition } from '@headlessui/react';
 import { Fragment, ReactNode } from 'react';
 
 import { SvgIcon } from '../svg-icons/SvgIcon';
-import { Typography } from '../typography/Typography';
+import { Label, Typography } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
+import { validityStyle } from '../utils/constants';
 
 export type SelectOption = {
   key: string;
@@ -17,8 +18,9 @@ export type SelectProps = {
   options: SelectOption[];
   defaultValue?: SelectOption;
   value?: SelectOption;
+  validity?: 'valid' | 'invalid';
   onChange?: (value: SelectOption) => void;
-  mandatory?: boolean;
+  isRequired?: boolean;
   wrapperClassName?: string;
 };
 
@@ -30,15 +32,16 @@ export function Select({
   onChange,
   options,
   defaultValue,
-  mandatory,
+  isRequired,
   wrapperClassName,
+  validity
 }: SelectProps) {
   return (
     <div className={wrapperClassName}>
-      <Typography variant="label">
+      <Label className={validity && validityStyle[validity].label}>
         {label}
-        <span className="text-green-400">{mandatory && '*'}</span>
-      </Typography>
+        <span>{isRequired && '*'}</span>
+      </Label>
       <Listbox
         value={value}
         onChange={onChange}
@@ -47,7 +50,7 @@ export function Select({
         by="key"
       >
         {({ open }) => (
-          <div className={clsxm('relative')}>
+          <div className={clsxm('relative z-10 mt-1')}>
             <Listbox.Button
               className={clsxm(
                 'w-full py-2 pl-3 pr-4',
@@ -58,17 +61,19 @@ export function Select({
                 open
                   ? 'border-orange-400 bg-white'
                   : 'border-gray-500 bg-gray-100',
+                validity && validityStyle[validity].input
               )}
             >
               {({ value }) => (
                 <>
-                  <Typography variant="body">
+                  <Typography variant="body" weight='medium'>
                     {value?.label || placeholder}
                   </Typography>
                   <SvgIcon
                     name="ChevronDown"
                     className={clsxm(
                       'ml-4 w-3 transition-all',
+                      validity && validityStyle[validity].icon,
                       open && 'rotate-180',
                     )}
                   />
