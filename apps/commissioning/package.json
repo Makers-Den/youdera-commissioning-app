@@ -40,7 +40,7 @@
     "eslint-plugin-formatjs": "^4.3.4",
     "next-transpile-modules": "^9.0.0",
     "postcss": "^8.4.5",
-    "tailwindcss": "^3.0.7",
+    "tailwindcss": "^3.2.2",
     "tsconfig": "*",
     "typescript": "^4.5.4"
   }
