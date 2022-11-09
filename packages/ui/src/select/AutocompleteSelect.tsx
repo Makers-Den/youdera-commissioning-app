@@ -24,9 +24,21 @@ export type AutocompleteSelectProps = {
   noOptionsString: string;
   className?: string;
   value?: AutocompleteSelectOption | undefined;
+  validity?: 'invalid' | 'valid';
   action?: AutocompleteSelectAction;
   onChange?: (value: AutocompleteSelectOption | undefined) => void
 } & Omit<React.ComponentPropsWithRef<'input'>, 'value' | 'onChange'>;
+
+const validityStyle = {
+  valid: {
+    icon: 'fill-green-400',
+    input: 'focus-visible:ring-0 border-green-400',
+  },
+  invalid: {
+    icon: 'fill-red-400',
+    input: 'focus-visible:ring-0 border-red-400',
+  },
+};
 
 export const AutocompleteSelect = ({
   label,
@@ -36,6 +48,7 @@ export const AutocompleteSelect = ({
   options,
   className,
   action,
+  validity,
   noOptionsString = 'Nothing found.',
   ...rest
 }: AutocompleteSelectProps) => {
@@ -68,6 +81,7 @@ export const AutocompleteSelect = ({
                   'transition-colors duration-75',
                   'w-full',
                   'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
+                  validity && validityStyle[validity].input,
                 )}
                 displayValue={(option: AutocompleteSelectOption) => option?.label ?? placeholder}
                 onChange={event => setQuery(event.target.value)}
@@ -80,6 +94,7 @@ export const AutocompleteSelect = ({
                   className={clsxm(
                     'ml-4 w-3 transition-all',
                     open && 'rotate-180',
+                    validity && validityStyle[validity].icon,
                   )}
                 />
               </Combobox.Button>

@@ -15,12 +15,12 @@ export type NumberInputProps = {
 
 const validityStyle = {
   valid: {
-    icon: 'fill-green-400 h-4 w-4',
+    icon: 'fill-green-400',
     units: 'text-green-400',
     input: 'focus-visible:ring-0 border-green-400',
   },
   invalid: {
-    icon: 'fill-red-400 h-4 w-4',
+    icon: 'fill-red-400',
     units: 'text-red-400',
     input: 'focus-visible:ring-0 border-red-400',
   },
@@ -73,7 +73,12 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           <span className="filler pointer-events-none select-none opacity-0">
             {value}
           </span>
-          <span className="unit max-w[100% - 16px] pointer-events-none ml-1 inline-block select-none whitespace-pre">
+          <span
+            className={clsxm(
+              'unit max-w[100% - 16px] pointer-events-none ml-1 inline-block select-none whitespace-pre',
+              validity && validityStyle[validity].units,
+            )}
+          >
             {value && unit}
           </span>
         </div>

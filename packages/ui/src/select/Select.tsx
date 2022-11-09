@@ -17,9 +17,21 @@ export type SelectProps = {
   options: SelectOption[];
   defaultValue?: SelectOption;
   value?: SelectOption;
+  validity?: 'valid' | 'invalid';
   onChange?: (value: SelectOption) => void;
   isRequired?: boolean;
   wrapperClassName?: string;
+};
+
+const validityStyle = {
+  valid: {
+    icon: 'fill-green-400',
+    input: 'focus-visible:ring-0 border-green-400',
+  },
+  invalid: {
+    icon: 'fill-red-400',
+    input: 'focus-visible:ring-0 border-red-400',
+  },
 };
 
 export function Select({
@@ -32,6 +44,7 @@ export function Select({
   defaultValue,
   isRequired,
   wrapperClassName,
+  validity
 }: SelectProps) {
   return (
     <div className={wrapperClassName}>
@@ -47,7 +60,7 @@ export function Select({
         by="key"
       >
         {({ open }) => (
-          <div className={clsxm('relative')}>
+          <div className={clsxm('relative z-10')}>
             <Listbox.Button
               className={clsxm(
                 'w-full py-2 pl-3 pr-4',
@@ -58,17 +71,19 @@ export function Select({
                 open
                   ? 'border-orange-400 bg-white'
                   : 'border-gray-500 bg-gray-100',
+                validity && validityStyle[validity].input
               )}
             >
               {({ value }) => (
                 <>
-                  <Typography variant="body">
+                  <Typography variant="body" weight='medium'>
                     {value?.label || placeholder}
                   </Typography>
                   <SvgIcon
                     name="ChevronDown"
                     className={clsxm(
                       'ml-4 w-3 transition-all',
+                      validity && validityStyle[validity].icon,
                       open && 'rotate-180',
                     )}
                   />

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Input } from 'ui/inputs/Input';
 import { NumberInput } from 'ui/inputs/NumberInput';
 import {
   AutocompleteSelect,
@@ -26,19 +27,22 @@ const Home = () => {
         label="Label"
         placeholder="Placeholder"
         options={options}
-        className="w-[250px]"
+        className="z-20"
         action={{ label: 'Add', onClick: () => alert('aaa'), icon: 'Plus' }}
         value={value}
         onChange={handleAutoSelect}
         noOptionsString="Nothing found."
+        validity='invalid'
       />
       <Select
         label="Label"
         placeholder="sth"
         options={options}
         wrapperClassName="w-64"
+        validity='invalid'
       />
-      <NumberInput label='input' validity='invalid' />
+      <Input label='Input' validity='invalid' />
+      <NumberInput label='NumberInput' validity='invalid' />
     </div>
   );
 };
