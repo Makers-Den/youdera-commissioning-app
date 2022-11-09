@@ -17,12 +17,6 @@
       "value": "Didn't receive the email?"
     }
   ],
-  "'+eN+I1'": [
-    {
-      "type": 0,
-      "value": "Legal Notice"
-    }
-  ],
   "'0fhwgp'": [
     {
       "type": 0,
@@ -35,10 +29,28 @@
       "value": "Specific Yield"
     }
   ],
+  "'1vQIng'": [
+    {
+      "type": 0,
+      "value": "Are you sure that all module fields were added?"
+    }
+  ],
+  "'2oCaym'": [
+    {
+      "type": 0,
+      "value": "Are you sure?"
+    }
+  ],
   "'47FYwb'": [
     {
       "type": 0,
       "value": "Cancel"
+    }
+  ],
+  "'4HmxyS'": [
+    {
+      "type": 0,
+      "value": "Module Fields"
     }
   ],
   "'4XCigB'": [
@@ -71,10 +83,34 @@
       "value": "Confirm password"
     }
   ],
+  "'8Jljt+'": [
+    {
+      "type": 0,
+      "value": "MAIN MENU"
+    }
+  ],
+  "'9+Ddtu'": [
+    {
+      "type": 0,
+      "value": "Next"
+    }
+  ],
+  "'98CJFc'": [
+    {
+      "type": 0,
+      "value": "Inclination"
+    }
+  ],
   "'A6sL8J'": [
     {
       "type": 0,
       "value": "Remember me"
+    }
+  ],
+  "'AaPpPg'": [
+    {
+      "type": 0,
+      "value": "Wattpeak"
     }
   ],
   "'AyGauy'": [
@@ -83,16 +119,24 @@
       "value": "Login"
     }
   ],
-  "'C81/uG'": [
+  "'BlHr2w'": [
     {
       "type": 0,
-      "value": "Logout"
+      "value": "Are you sure to delete module field?"
     }
   ],
-  "'D3idYv'": [
+  "'D7h26G'": [
     {
       "type": 0,
-      "value": "Settings"
+      "value": "Field must contain at least "
+    },
+    {
+      "type": 1,
+      "value": "minimum"
+    },
+    {
+      "type": 0,
+      "value": " character(s)"
     }
   ],
   "'GtVtRN'": [
@@ -119,6 +163,42 @@
       "value": "Your password has been successfully reset. Click below to log in magically."
     }
   ],
+  "'K3r6DQ'": [
+    {
+      "type": 0,
+      "value": "Delete"
+    }
+  ],
+  "'KUewuO'": [
+    {
+      "type": 0,
+      "value": "Azimut angle"
+    }
+  ],
+  "'QChvcf'": [
+    {
+      "type": 0,
+      "value": "Select main module type"
+    }
+  ],
+  "'SO2mnn'": [
+    {
+      "type": 0,
+      "value": "Module field modify"
+    }
+  ],
+  "'Seanpx'": [
+    {
+      "type": 0,
+      "value": "Required"
+    }
+  ],
+  "'SzqYd0'": [
+    {
+      "type": 0,
+      "value": "What you want to do with list element?"
+    }
+  ],
   "'UoPZk+'": [
     {
       "type": 0,
@@ -129,6 +209,18 @@
     {
       "type": 0,
       "value": "Forgot password?"
+    }
+  ],
+  "'VI/+Qx'": [
+    {
+      "type": 0,
+      "value": "Manufacturer"
+    }
+  ],
+  "'VzzYJk'": [
+    {
+      "type": 0,
+      "value": "Create"
     }
   ],
   "'Wikrxi'": [
@@ -155,16 +247,46 @@
       "value": "Reset password"
     }
   ],
+  "'ZZH0Bm'": [
+    {
+      "type": 0,
+      "value": "Add module field"
+    }
+  ],
   "'Zn6vVy'": [
     {
       "type": 0,
       "value": "Module field creation"
     }
   ],
+  "'a5msuh'": [
+    {
+      "type": 0,
+      "value": "Yes"
+    }
+  ],
   "'acrOoz'": [
     {
       "type": 0,
       "value": "Continue"
+    }
+  ],
+  "'b0C4ME'": [
+    {
+      "type": 0,
+      "value": "Modify properties"
+    }
+  ],
+  "'boIQMO'": [
+    {
+      "type": 0,
+      "value": "Modify strings"
+    }
+  ],
+  "'cyR7Kh'": [
+    {
+      "type": 0,
+      "value": "Back"
     }
   ],
   "'jvo0vs'": [
@@ -179,10 +301,22 @@
       "value": "Device swap"
     }
   ],
+  "'rKbQkm'": [
+    {
+      "type": 0,
+      "value": "Modules#"
+    }
+  ],
   "'rwbpnL'": [
     {
       "type": 0,
       "value": "Commissioning"
+    }
+  ],
+  "'sFENBY'": [
+    {
+      "type": 0,
+      "value": "Select project"
     }
   ],
   "'sy+pv5'": [
@@ -197,10 +331,34 @@
       "value": "Privacy Policy"
     }
   ],
+  "'wL7VAE'": [
+    {
+      "type": 0,
+      "value": "Actions"
+    }
+  ],
+  "'x2uLD6'": [
+    {
+      "type": 0,
+      "value": "Wp"
+    }
+  ],
   "'xl27nc'": [
     {
       "type": 0,
       "value": "Reset Password"
+    }
+  ],
+  "'xmcVZ0'": [
+    {
+      "type": 0,
+      "value": "Search"
+    }
+  ],
+  "'zYpFao'": [
+    {
+      "type": 0,
+      "value": "Check it"
     }
   ],
   "'zj2AzZ'": [

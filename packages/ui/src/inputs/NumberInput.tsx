@@ -1,15 +1,17 @@
 import React from 'react';
 
 import { SvgIcon } from '../svg-icons/SvgIcon';
-import { BodyText } from '../typography/Typography';
+import { Label } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
+import { validityStyle } from '../utils/constants';
 
 export type NumberInputProps = {
   label: string;
   value?: string;
   placeholder?: string;
-  mandatory?: boolean;
+  isRequired?: boolean;
   unit?: string;
+  validity?: 'valid' | 'invalid';
 } & React.ComponentPropsWithRef<'input'>;
 
 export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
@@ -20,19 +22,20 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
       label,
       disabled,
       placeholder,
-      mandatory,
+      isRequired,
       unit,
+      validity,
       ...rest
     },
     ref,
   ) => (
     <div className={clsxm('w-64', className)}>
-      <BodyText className="mb-2 text-sm text-gray-700">
+      <Label className={validity && validityStyle[validity].label}>
         {label}
-        {mandatory && '*'}
-      </BodyText>
+        <span>{isRequired && '*'}</span>
+      </Label>
 
-      <div className="relative w-full">
+      <div className="relative w-full mt-1">
         <input
           value={value}
           disabled={disabled}
@@ -49,6 +52,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             'transition-colors duration-75',
             'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400',
             'disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
+            validity && validityStyle[validity].input,
           )}
           {...rest}
         />
@@ -57,7 +61,12 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           <span className="filler pointer-events-none select-none opacity-0">
             {value}
           </span>
-          <span className="unit max-w[100% - 16px] pointer-events-none ml-1 inline-block select-none whitespace-pre">
+          <span
+            className={clsxm(
+              'unit max-w[100% - 16px] pointer-events-none ml-1 inline-block select-none whitespace-pre',
+              validity && validityStyle[validity].units,
+            )}
+          >
             {value && unit}
           </span>
         </div>
@@ -66,6 +75,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
           className={clsxm(
             'pointer-events-none absolute top-1/2 right-0 mr-2 -translate-y-1/2',
             'flex flex-col items-center justify-center fill-gray-500 pr-[5.5px]',
+            validity && validityStyle[validity].icon,
           )}
         >
           <SvgIcon

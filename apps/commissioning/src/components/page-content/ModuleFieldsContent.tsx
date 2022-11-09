@@ -1,3 +1,4 @@
+import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
 import { useModuleFields } from '@src/integrations/youdera/module-fields/hooks/useModuleFields';
 import { ModuleField } from '@src/integrations/youdera/module-fields/types';
 import { removeNullAndUndefinedFromObject } from '@src/utils/removeNullAndUndefinedFromObject';
@@ -51,6 +52,7 @@ export type ModuleFieldsContentProps = {
 
 export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   const intl = useIntl();
+  useZodErrorMap();
 
   const currentModuleId = useRef<number | null>(null);
 
@@ -84,21 +86,21 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     { specificYield, name, azimut, slantAngle },
     resetForm,
   ) => {
-    try {
-      await createModuleFieldsMutation.mutateAsync({
-        site: projectId,
-        specific_yield: specificYield,
-        name,
-        orientation: azimut,
-        inclination: slantAngle,
-      });
-      createDialog.onClose();
-      resetForm();
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
-    }
-  };
+      try {
+        await createModuleFieldsMutation.mutateAsync({
+          site: projectId,
+          specific_yield: specificYield,
+          name,
+          orientation: azimut,
+          inclination: slantAngle,
+        });
+        createDialog.onClose();
+        resetForm();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+    };
 
   const updateSubmitHandler: ModuleFieldFormDialogProps<
     typeof updateModuleValidation
@@ -106,28 +108,28 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     { specificYield, name, azimut, slantAngle },
     resetForm,
   ) => {
-    if (currentModuleId.current) {
-      const values = removeNullAndUndefinedFromObject({
-        specific_yield: specificYield,
-        name: name || undefined,
-        orientation: azimut,
-        inclination: slantAngle,
-      });
-
-      try {
-        await updateModuleFieldsMutation.mutateAsync({
-          id: currentModuleId.current,
-          ...values,
+      if (currentModuleId.current) {
+        const values = removeNullAndUndefinedFromObject({
+          specific_yield: specificYield,
+          name: name || undefined,
+          orientation: azimut,
+          inclination: slantAngle,
         });
-        updateDialog.onClose();
-        setCurrentModuleId(null);
-        resetForm();
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.log(err);
+
+        try {
+          await updateModuleFieldsMutation.mutateAsync({
+            id: currentModuleId.current,
+            ...values,
+          });
+          updateDialog.onClose();
+          setCurrentModuleId(null);
+          resetForm();
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.log(err);
+        }
       }
-    }
-  };
+    };
 
   const confirmDeleteHandler = async () => {
     if (currentModuleId.current) {
