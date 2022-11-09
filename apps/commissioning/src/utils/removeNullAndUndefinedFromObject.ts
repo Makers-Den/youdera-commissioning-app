@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import cloneDeep from 'lodash/cloneDeep';
 
 export function removeNullAndUndefinedFromObject<Obj extends {}>(obj: Obj) {
