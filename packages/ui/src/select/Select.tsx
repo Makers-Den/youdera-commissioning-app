@@ -2,7 +2,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import { Fragment, ReactNode } from 'react';
 
 import { SvgIcon } from '../svg-icons/SvgIcon';
-import { Typography } from '../typography/Typography';
+import { Label, Typography } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
 export type SelectOption = {
@@ -27,10 +27,12 @@ const validityStyle = {
   valid: {
     icon: 'fill-green-400',
     input: 'focus-visible:ring-0 border-green-400',
+    label: 'text-green-400'
   },
   invalid: {
     icon: 'fill-red-400',
     input: 'focus-visible:ring-0 border-red-400',
+    label: 'text-red-400'
   },
 };
 
@@ -48,10 +50,10 @@ export function Select({
 }: SelectProps) {
   return (
     <div className={wrapperClassName}>
-      <Typography variant="label">
+      <Label className={validity && validityStyle[validity].label}>
         {label}
-        <span className="text-green-400">{isRequired && '*'}</span>
-      </Typography>
+        <span>{isRequired && '*'}</span>
+      </Label>
       <Listbox
         value={value}
         onChange={onChange}
@@ -60,7 +62,7 @@ export function Select({
         by="key"
       >
         {({ open }) => (
-          <div className={clsxm('relative z-10')}>
+          <div className={clsxm('relative z-10 mt-1')}>
             <Listbox.Button
               className={clsxm(
                 'w-full py-2 pl-3 pr-4',

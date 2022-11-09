@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
-import { BodyText } from '../typography/Typography';
+import { Label } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
 export type InputProps = {
@@ -18,11 +18,13 @@ export type InputProps = {
 
 const validityStyle = {
   valid: {
+    label: 'text-green-400',
     icon: 'fill-green-400 h-4 w-4',
     units: 'text-green-400',
     input: 'focus-visible:ring-0 border-green-400',
   },
   invalid: {
+    label: 'text-red-400',
     icon: 'fill-red-400 h-4 w-4',
     units: 'text-red-400',
     input: 'focus-visible:ring-0 border-red-400',
@@ -70,12 +72,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={clsxm(className)}>
         {label && (
-          <BodyText className="mb-2 text-sm text-gray-700">
+          <Label className={validity && validityStyle[validity].label}>
             {label}
             {isRequired && '*'}
-          </BodyText>
+          </Label>
         )}
-        <div className="relative w-full">
+        <div className="relative w-full mt-1">
           <input
             disabled={disabled}
             value={value}

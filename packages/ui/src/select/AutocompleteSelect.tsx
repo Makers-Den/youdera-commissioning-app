@@ -26,15 +26,18 @@ export type AutocompleteSelectProps = {
   value?: AutocompleteSelectOption | undefined;
   validity?: 'invalid' | 'valid';
   action?: AutocompleteSelectAction;
+  isRequired?: boolean;
   onChange?: (value: AutocompleteSelectOption | undefined) => void
 } & Omit<React.ComponentPropsWithRef<'input'>, 'value' | 'onChange'>;
 
 const validityStyle = {
   valid: {
+    label: 'text-green-400',
     icon: 'fill-green-400',
     input: 'focus-visible:ring-0 border-green-400',
   },
   invalid: {
+    label: 'text-red-400',
     icon: 'fill-red-400',
     input: 'focus-visible:ring-0 border-red-400',
   },
@@ -49,6 +52,7 @@ export const AutocompleteSelect = ({
   className,
   action,
   validity,
+  isRequired,
   noOptionsString = 'Nothing found.',
   ...rest
 }: AutocompleteSelectProps) => {
@@ -66,34 +70,37 @@ export const AutocompleteSelect = ({
 
   return (
     <div className={className}>
-      <Label>{label}</Label>
+      <Label className={validity && validityStyle[validity].label}>
+        {label}
+        <span>{isRequired && '*'}</span>
+      </Label>
       <Combobox value={value} onChange={onChange}>
         {({ open }) => (
           <div className="relative mt-1">
             <div>
               {/* Hack to improve bad UX of Headless UI, 
                 * https://github.com/tailwindlabs/headlessui/discussions/1236#discussioncomment-2970969 */}
-            <Combobox.Button as='div'>
-              <Combobox.Input
-                className={clsxm(
-                  'inline-flex items-center justify-center rounded-md px-3 py-2',
-                  'bg-gray-100 font-medium text-gray-800',
-                  'placeholder:font-normal',
-                  'border-[1px] border-gray-500',
-                  'focus:outline-none focus-visible:border-orange-400 focus-visible:bg-white',
-                  'transition-colors duration-75',
-                  'w-full',
-                  'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
-                  validity && validityStyle[validity].input,
-                )}
-                displayValue={(option: AutocompleteSelectOption) => option?.label}
-                placeholder={placeholder}
-                onChange={event => setQuery(event.target.value)}
-                {...rest}
-                onFocus={(e: FocusEvent<HTMLInputElement>) => {
-                  e.target.select();
-                }}
-              />
+              <Combobox.Button as='div'>
+                <Combobox.Input
+                  className={clsxm(
+                    'inline-flex items-center justify-center rounded-md px-3 py-2',
+                    'bg-gray-100 font-medium text-gray-800',
+                    'placeholder:font-normal',
+                    'border-[1px] border-gray-500',
+                    'focus:outline-none focus-visible:border-orange-400 focus-visible:bg-white',
+                    'transition-colors duration-75',
+                    'w-full',
+                    'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
+                    validity && validityStyle[validity].input,
+                  )}
+                  displayValue={(option: AutocompleteSelectOption) => option?.label}
+                  placeholder={placeholder}
+                  onChange={event => setQuery(event.target.value)}
+                  {...rest}
+                  onFocus={(e: FocusEvent<HTMLInputElement>) => {
+                    e.target.select();
+                  }}
+                />
               </Combobox.Button>
 
               <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-4">

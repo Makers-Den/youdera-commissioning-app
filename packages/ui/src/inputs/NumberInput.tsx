@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { SvgIcon } from '../svg-icons/SvgIcon';
-import { BodyText } from '../typography/Typography';
+import { Label } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
 export type NumberInputProps = {
@@ -15,11 +15,13 @@ export type NumberInputProps = {
 
 const validityStyle = {
   valid: {
+    label: 'text-green-400',
     icon: 'fill-green-400',
     units: 'text-green-400',
     input: 'focus-visible:ring-0 border-green-400',
   },
   invalid: {
+    label: 'text-red-400',
     icon: 'fill-red-400',
     units: 'text-red-400',
     input: 'focus-visible:ring-0 border-red-400',
@@ -42,12 +44,12 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
     ref,
   ) => (
     <div className={clsxm('w-64', className)}>
-      <BodyText className="mb-2 text-sm text-gray-700">
+      <Label className={validity && validityStyle[validity].label}>
         {label}
-        {isRequired && '*'}
-      </BodyText>
+        <span>{isRequired && '*'}</span>
+      </Label>
 
-      <div className="relative w-full">
+      <div className="relative w-full mt-1">
         <input
           value={value}
           disabled={disabled}
