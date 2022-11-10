@@ -2,8 +2,6 @@
 export type Inverter = {
   id: number;
   name: string;
-  number: string;
-  factor: number;
   manufacturer: string;
   model: string;
 
