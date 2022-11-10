@@ -2,6 +2,8 @@
 export type Inverter = {
   id: number;
   name: string;
+  serial_number: string;
+  
   manufacturer: string;
   model: string;
 
