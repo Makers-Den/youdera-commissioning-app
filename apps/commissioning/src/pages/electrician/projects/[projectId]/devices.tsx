@@ -1,5 +1,4 @@
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
-import { SelectGatewayContent } from '@src/components/page-content/SelectGatewayContent';
 import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
@@ -9,7 +8,7 @@ import { useRouter } from 'next/router';
 import { Suspense } from 'react';
 import { useIntl } from 'react-intl';
 
-const SelectGatewayPage = ({
+const DevicesPage = ({
   project,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 const intl = useIntl();
@@ -20,11 +19,7 @@ const navCrossClickHandler = () => {
 };
 
 const backClickHandler = () => {
-  router.push('/roofer/select-project');
-};
-
-const onGatewaySelected = () => {
-  router.push(`/electrician/projects/${project.id}/devices`);
+  router.push(`/electrician/projects/${project.id}/select-gateway`);
 };
 
 return (
@@ -46,7 +41,7 @@ return (
     }}
   >
     <Suspense fallback={<LargeBoxSkeleton />}>
-      <SelectGatewayContent onGatewaySelected={onGatewaySelected} siteId={project.id}/>
+        <div className="min-h-[70vh]">TODO: devices</div>
     </Suspense>
   </AuthenticatedLayout>
 );
@@ -56,4 +51,4 @@ export const getServerSideProps: GetServerSideProps = protectRoute([
   Role.electrician,
 ]).then(fetchProjectFromParams);
 
-export default SelectGatewayPage;
+export default DevicesPage;
