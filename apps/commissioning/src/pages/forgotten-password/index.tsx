@@ -1,3 +1,4 @@
+import { LEGAL_NOTICE_URL, PRIVACY_POLICY_URL } from '@src/lib/constants';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -35,11 +36,11 @@ const ForgottenPassword = () => {
   const links = [
     {
       name: intl.formatMessage({ defaultMessage: 'Legal notice' }),
-      href: 'google.com',
+      href: LEGAL_NOTICE_URL,
     },
     {
       name: intl.formatMessage({ defaultMessage: 'Privacy Policy' }),
-      href: 'google.com',
+      href: PRIVACY_POLICY_URL,
     },
   ];
 
@@ -62,7 +63,7 @@ const ForgottenPassword = () => {
             onChange={handleChangeEmail}
             value={email}
             icon="Envelope"
-            className="mb-8"
+            className="mb-8 w-64"
             validity={isEmailValid}
           />
           <Button
@@ -79,7 +80,7 @@ const ForgottenPassword = () => {
           </Link>
         </div>
       ) : (
-        <div className="mt-auto flex max-w-fit flex-col items-center">
+        <div className="my-auto flex max-w-fit flex-col items-center">
           <SvgIcon name="Unlock" className="mb-10 h-16 w-16 fill-gray-400" />
           <H2 className="mb-2 font-medium">
             {intl.formatMessage({ defaultMessage: 'Check Your Email' })}

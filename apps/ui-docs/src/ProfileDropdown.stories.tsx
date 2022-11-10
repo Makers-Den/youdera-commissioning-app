@@ -18,12 +18,20 @@ const Template: ComponentStory<typeof ProfileDropdown> = args => (
 
 export const Overview = Template.bind({});
 
+const user = {
+  imgSrc: 'https://v.wpimg.pl/MTkyNjg0YjUKGzhZSEtvIElDbAMOEmF2Hlt0SEgIfWQTVigDC1U_MRsWYA0VRT01HAlgGgsfLCQCVjhbSFQkJxsVLxNIVSA2Dh1hCFNSdGxbSXtHBgB6MkZNelwDHXUwD0BjWF4FdWcPSyoOAVEudhY',
+  firstName: 'John',
+  lastName: 'Rambo',
+  role: 'Roofer',
+};
+
 Overview.args = {
+  user,
   items: [
     {
       key: 'set',
       children: (
-        <button>
+        <button type="button">
           <Typography className="flex text-sm py-1">
             <SvgIcon name="Settings" className="text-orange-400 w-5 mr-3" />
             Setting
@@ -34,7 +42,7 @@ Overview.args = {
     {
       key: 'log',
       children: (
-        <button>
+        <button type="button">
           <Typography className="flex text-sm py-1">
             <SvgIcon
               name="LogOut"
@@ -47,9 +55,5 @@ Overview.args = {
       ),
     },
   ],
-  imgSrc:
-    'https://v.wpimg.pl/MTkyNjg0YjUKGzhZSEtvIElDbAMOEmF2Hlt0SEgIfWQTVigDC1U_MRsWYA0VRT01HAlgGgsfLCQCVjhbSFQkJxsVLxNIVSA2Dh1hCFNSdGxbSXtHBgB6MkZNelwDHXUwD0BjWF4FdWcPSyoOAVEudhY',
-  imgAlt: 'avatar',
-  title: 'Johny Joe',
-  subTitle: 'Roofer',
+  
 };

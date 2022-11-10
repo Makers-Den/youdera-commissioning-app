@@ -3,6 +3,7 @@
 import { ReactNode, useId, useRef } from 'react';
 
 export type FileInputWrapperProps = {
+  className?: string;
   onChange: React.FormEventHandler<HTMLInputElement>;
   children: ReactNode;
   name?: string;
@@ -14,6 +15,7 @@ export type FileInputWrapperProps = {
 
 export function FileInputWrapper({
   children,
+  className,
   ...inputProps
 }: FileInputWrapperProps) {
   const hiddenFileInput = useRef<HTMLInputElement>(null);
@@ -24,7 +26,7 @@ export function FileInputWrapper({
   };
 
   return (
-    <label htmlFor={id} onClick={handleClick}>
+    <label htmlFor={id} onClick={handleClick} className={className}>
       <input ref={hiddenFileInput} type="file" id={id} hidden {...inputProps} />
       {children}
     </label>

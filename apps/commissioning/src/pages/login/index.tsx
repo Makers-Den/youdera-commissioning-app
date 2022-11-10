@@ -1,8 +1,9 @@
 import { useAuth } from '@src/integrations/youdera/auth/hooks/useAuth';
+import { LEGAL_NOTICE_URL, PRIVACY_POLICY_URL } from '@src/lib/constants';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import { Checkbox } from 'ui/checkboxes/Checkbox';
@@ -41,14 +42,14 @@ const Login = () => {
 
   const handleChangeRememberUser = (): void => setRememberUser(!rememberUser);
 
-  const handleOnLogin = async () => {
+  const handleOnLogin = async (e: FormEvent) => {    
+    e.preventDefault();
     try {
       await loginMutation.mutateAsync({
         email,
         password,
         remember: rememberUser,
       });
-      // TODO redirect to dashboard ?
     } catch (err) {
       setAreCredentialsValid('invalid');
     }
@@ -56,16 +57,17 @@ const Login = () => {
   const links = [
     {
       name: intl.formatMessage({ defaultMessage: 'Legal notice' }),
-      href: 'google.com',
+      href: LEGAL_NOTICE_URL,
     },
     {
       name: intl.formatMessage({ defaultMessage: 'Privacy Policy' }),
-      href: 'google.com',
+      href: PRIVACY_POLICY_URL,
     },
   ];
   return (
     <Layout footer={{ links }}>
-      <div className="my-auto flex h-full max-w-fit flex-col space-y-7">
+      <form className="my-auto flex h-full max-w-fit flex-col space-y-7"
+        onSubmit={handleOnLogin}>
         <Image
           src={Logo}
           alt="logo"
@@ -113,13 +115,13 @@ const Login = () => {
         </div>
         <Button
           variant="main-green"
-          onClick={handleOnLogin}
           disabled={!!areCredentialsValid}
           isLoading={loginMutation.isLoading}
+          type="submit"
         >
           {intl.formatMessage({ defaultMessage: 'Login' })}
         </Button>
-      </div>
+      </form>
     </Layout>
   );
 };

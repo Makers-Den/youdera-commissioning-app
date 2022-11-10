@@ -2,8 +2,9 @@ import { Listbox, Transition } from '@headlessui/react';
 import { Fragment, ReactNode } from 'react';
 
 import { SvgIcon } from '../svg-icons/SvgIcon';
-import { Typography } from '../typography/Typography';
+import { Label, Typography } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
+import { validityStyle } from '../utils/constants';
 
 export type SelectOption = {
   key: string;
@@ -11,14 +12,15 @@ export type SelectOption = {
 };
 
 export type SelectProps = {
-  label: string;
+  label?: string;
   placeholder: string;
   name?: string;
   options: SelectOption[];
   defaultValue?: SelectOption;
   value?: SelectOption;
+  validity?: 'valid' | 'invalid';
   onChange?: (value: SelectOption) => void;
-  mandatory?: boolean;
+  isRequired?: boolean;
   wrapperClassName?: string;
 };
 
@@ -30,15 +32,16 @@ export function Select({
   onChange,
   options,
   defaultValue,
-  mandatory,
+  isRequired,
   wrapperClassName,
+  validity
 }: SelectProps) {
   return (
-    <div>
-      <Typography variant="label">
+    <div className={wrapperClassName}>
+      <Label className={validity && validityStyle[validity].label}>
         {label}
-        <span className="text-green-400">{mandatory && '*'}</span>
-      </Typography>
+        <span>{isRequired && '*'}</span>
+      </Label>
       <Listbox
         value={value}
         onChange={onChange}
@@ -47,28 +50,30 @@ export function Select({
         by="key"
       >
         {({ open }) => (
-          <div className={clsxm('relative mt-1', wrapperClassName)}>
+          <div className={clsxm('relative z-10 mt-1')}>
             <Listbox.Button
               className={clsxm(
                 'w-full py-2 pl-3 pr-4',
-                'rounded-md text-left border',
+                'rounded-md border text-left',
                 'cursor-pointer',
-                'flex justify-between items-center',
+                'flex items-center justify-between',
                 'transition-all',
                 open
                   ? 'border-orange-400 bg-white'
-                  : 'bg-gray-100 border-gray-500',
+                  : 'border-gray-500 bg-gray-100',
+                validity && validityStyle[validity].input
               )}
             >
               {({ value }) => (
                 <>
-                  <Typography variant="body">
+                  <Typography variant="body" weight='medium'>
                     {value?.label || placeholder}
                   </Typography>
                   <SvgIcon
                     name="ChevronDown"
                     className={clsxm(
-                      'w-3 ml-4 transition-all',
+                      'ml-4 w-3 transition-all',
+                      validity && validityStyle[validity].icon,
                       open && 'rotate-180',
                     )}
                   />
@@ -87,7 +92,7 @@ export function Select({
                 className={clsxm(
                   'absolute overflow-auto',
                   'mt-1 max-h-44 w-full py-3',
-                  'rounded-md bg-white drop-shadow-large',
+                  'drop-shadow-large rounded-md bg-white',
                 )}
               >
                 {options.map(option => {
@@ -95,7 +100,7 @@ export function Select({
                   return (
                     <Listbox.Option
                       key={key}
-                      className='cursor-pointer select-none py-2 pl-3 pr-4 flex justify-between items-center hover:bg-gray-100'
+                      className="flex cursor-pointer select-none items-center justify-between py-2 pl-3 pr-4 hover:bg-gray-100"
                       value={option}
                     >
                       {({ selected }) => (

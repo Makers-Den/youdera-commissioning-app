@@ -19,6 +19,8 @@ export type FileUploaderProps = {
   accept?: string;
   capture?: boolean | 'user' | 'environment';
   disabled?: boolean;
+  wrapperClassname?: string;
+
 };
 
 export function FileUploader({
@@ -27,6 +29,7 @@ export function FileUploader({
   uploadProgressPercentage,
   children,
   className,
+  wrapperClassname,
   ...fileInputProps
 }: FileUploaderProps) {
   let computedChildren: ReactNode = children;
@@ -59,7 +62,7 @@ export function FileUploader({
   }
 
   return (
-    <FileInputWrapper {...fileInputProps}>
+    <FileInputWrapper {...fileInputProps} className={wrapperClassname}>
       <button
         type="button"
         className={clsxm(

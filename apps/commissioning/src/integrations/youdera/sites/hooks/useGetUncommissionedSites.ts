@@ -7,6 +7,9 @@ export const useGetUncommissionedSites = () => {
   const uncommissionedSitesQuery = useQuery(
     [QueryKeys.uncommissionedSites],
     getUncommissionedSites,
+    {
+      suspense: true,
+    },
   );
 
   return { uncommissionedSitesQuery };

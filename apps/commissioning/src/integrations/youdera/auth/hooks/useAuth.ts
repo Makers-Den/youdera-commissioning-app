@@ -24,16 +24,15 @@ export const useAuth = () => {
 
   const logOutMutation = useMutation(logOut, {
     onSuccess: () => {
-      queryClient.setQueryData([QueryKeys.userInfo], () => null);
-    },
-    onMutate: () => {
       deleteCookie(CookiesKeys.accessToken);
+      queryClient.setQueryData([QueryKeys.userInfo], () => null);
     },
   });
 
   useEffect(() => {
     const checkToken = getCookie(CookiesKeys.accessToken);
     if (checkToken) {
+      youderaApiInstance.interceptors.request.clear();
       youderaApiInstance.interceptors.request.use(config => {
         const accessToken = getCookie(CookiesKeys.accessToken);
 
@@ -48,9 +47,6 @@ export const useAuth = () => {
     }
     userInfoQuery.refetch();
 
-    return () => {
-      youderaApiInstance.interceptors.request.clear();
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

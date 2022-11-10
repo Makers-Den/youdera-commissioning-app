@@ -1,6 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-
 import { NavHeader } from 'ui/nav-header/NavHeader';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { H3, Typography } from 'ui/typography/Typography';
@@ -21,6 +20,38 @@ export default {
 
 type StoryType = ComponentStory<typeof NavHeader>;
 
+const user = {
+  imgSrc: 'https://v.wpimg.pl/MTkyNjg0YjUKGzhZSEtvIElDbAMOEmF2Hlt0SEgIfWQTVigDC1U_MRsWYA0VRT01HAlgGgsfLCQCVjhbSFQkJxsVLxNIVSA2Dh1hCFNSdGxbSXtHBgB6MkZNelwDHXUwD0BjWF4FdWcPSyoOAVEudhY',
+  firstName: 'John',
+  lastName: 'Rambo',
+  role: 'Roofer',
+};
+
+const profileItems = [
+  {
+    key: 'set',
+    children: (
+      <Typography className="flex text-sm py-1">
+        <SvgIcon name="Settings" className="text-orange-400 w-5 mr-3" />
+        Setting
+      </Typography>
+    ),
+  },
+  {
+    key: 'log',
+    children: (
+      <Typography className="flex text-sm py-1">
+        <SvgIcon
+          name="LogOut"
+          className="text-orange-400 w-5 mr-3"
+          color="rgb(245 126 2 / 1)"
+        />
+        Logout
+      </Typography>
+    ),
+  },
+];
+
 //👇 We create a “template” of how args map to rendering
 const Template: ComponentStory<typeof NavHeader> = args => (
   <NavHeader {...args} />
@@ -31,68 +62,17 @@ export const Overview = () => (
   <div className="flex flex-col items-start gap-2">
     <H3>Logo Variant</H3>
     <NavHeader
+      logoSrc='/logo.png'
       variant="logo"
-      items={[
-        {
-          key: 'set',
-          children: (
-            <Typography className="flex text-sm py-1">
-              <SvgIcon name="Settings" className="text-orange-400 w-5 mr-3" />
-              Setting
-            </Typography>
-          ),
-        },
-        {
-          key: 'log',
-          children: (
-            <Typography className="flex text-sm py-1">
-              <SvgIcon
-                name="LogOut"
-                className="text-orange-400 w-5 mr-3"
-                color="rgb(245 126 2 / 1)"
-              />
-              Logout
-            </Typography>
-          ),
-        },
-      ]}
-      imgSrc="https://v.wpimg.pl/MTkyNjg0YjUKGzhZSEtvIElDbAMOEmF2Hlt0SEgIfWQTVigDC1U_MRsWYA0VRT01HAlgGgsfLCQCVjhbSFQkJxsVLxNIVSA2Dh1hCFNSdGxbSXtHBgB6MkZNelwDHXUwD0BjWF4FdWcPSyoOAVEudhY"
-      imgAlt="avatar"
-      title="Johny Joe"
-      subTitle="Roofer"
+      profileItems={profileItems}
+      user={user}
     />
     <div className="w-screen border-t-[1px] mb-2" />
     <H3>Primary Variant</H3>
     <NavHeader
       header="Project 1"
-      items={[
-        {
-          key: 'set',
-          children: (
-            <Typography className="flex text-sm py-1">
-              <SvgIcon name="Settings" className="text-orange-400 w-5 mr-3" />
-              Setting
-            </Typography>
-          ),
-        },
-        {
-          key: 'log',
-          children: (
-            <Typography className="flex text-sm py-1">
-              <SvgIcon
-                name="LogOut"
-                className="text-orange-400 w-5 mr-3"
-                color="rgb(245 126 2 / 1)"
-              />
-              Logout
-            </Typography>
-          ),
-        },
-      ]}
-      imgSrc="https://v.wpimg.pl/MTkyNjg0YjUKGzhZSEtvIElDbAMOEmF2Hlt0SEgIfWQTVigDC1U_MRsWYA0VRT01HAlgGgsfLCQCVjhbSFQkJxsVLxNIVSA2Dh1hCFNSdGxbSXtHBgB6MkZNelwDHXUwD0BjWF4FdWcPSyoOAVEudhY"
-      imgAlt="avatar"
-      title="Johny Joe"
-      subTitle="Roofer"
+      profileItems={profileItems}
+      user={user}
     />
   </div>
 );
@@ -101,37 +81,6 @@ export const Playground: StoryType = Template.bind({});
 Playground.args = {
   variant: 'primary',
   header: 'Header',
-  items: [
-    {
-      key: 'set',
-      children: (
-        <button>
-          <Typography className="flex text-sm py-1">
-            <SvgIcon name="Settings" className="text-orange-400 w-5 mr-3" />
-            Setting
-          </Typography>
-        </button>
-      ),
-    },
-    {
-      key: 'log',
-      children: (
-        <button>
-          <Typography className="flex text-sm py-1">
-            <SvgIcon
-              name="LogOut"
-              className="text-orange-400 w-5 mr-3"
-              color="rgb(245 126 2 / 1)"
-            />
-            Logout
-          </Typography>
-        </button>
-      ),
-    },
-  ],
-  imgSrc:
-    'https://v.wpimg.pl/MTkyNjg0YjUKGzhZSEtvIElDbAMOEmF2Hlt0SEgIfWQTVigDC1U_MRsWYA0VRT01HAlgGgsfLCQCVjhbSFQkJxsVLxNIVSA2Dh1hCFNSdGxbSXtHBgB6MkZNelwDHXUwD0BjWF4FdWcPSyoOAVEudhY',
-  imgAlt: 'avatar',
-  title: 'Johny Joe',
-  subTitle: 'Roofer',
+  profileItems,
+  user,
 };

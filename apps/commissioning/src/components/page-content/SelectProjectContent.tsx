@@ -1,10 +1,11 @@
 import { useGetUncommissionedSites } from '@src/integrations/youdera/sites/hooks/useGetUncommissionedSites';
 import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
+import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Divider } from 'ui/divider/Divider';
 import { Input, InputProps } from 'ui/inputs/Input';
 
+import { LargeBox } from '../LargeBox';
 import { ProjectList } from '../ProjectList';
 
 export type SelectProjectContentProps = {
@@ -41,7 +42,7 @@ export function SelectProjectContent({
   };
 
   return (
-    <Box className="mx-3 mb-auto w-full md:mx-auto md:w-0 md:min-w-[700px]">
+    <LargeBox>
       <BoxHeader>
         <BoxTitle
           title={intl.formatMessage({ defaultMessage: 'Select project' })}
@@ -60,6 +61,6 @@ export function SelectProjectContent({
       <BoxContent className="max-h-[500px] overflow-y-scroll">
         <ProjectList projects={projects} />
       </BoxContent>
-    </Box>
+    </LargeBox>
   );
 }

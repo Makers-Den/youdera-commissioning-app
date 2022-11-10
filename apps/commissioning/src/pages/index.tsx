@@ -1,12 +1,11 @@
-import { AddInverterDialog } from '@src/components/add-inverter/AddInverterDialog';
-import { FieldCreationDialog } from '@src/components/field-creation/FieldCreationDialog';
 import React, { useState } from 'react';
-import { Button } from 'ui/buttons/Button';
+import { Input } from 'ui/inputs/Input';
+import { NumberInput } from 'ui/inputs/NumberInput';
 import {
   AutocompleteSelect,
   AutocompleteSelectOption,
 } from 'ui/select/AutocompleteSelect';
-import { Select } from 'ui/select/Select'
+import { Select } from 'ui/select/Select';
 
 const options: AutocompleteSelectOption[] = [];
 
@@ -19,27 +18,31 @@ for (let i = 0; i < 10; i += 1) {
 }
 
 const Home = () => {
-  const [isOpen1, setIsOpen1] = React.useState<boolean>(false)
-  const [isOpen, setIsOpen] = React.useState<boolean>(false)
   const [value, setValue] = useState<AutocompleteSelectOption>();
-  const handleAutoSelect = (val: AutocompleteSelectOption | undefined) => setValue(val)
+  const handleAutoSelect = (val: AutocompleteSelectOption | undefined) =>
+    setValue(val);
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen space-y-8">
-      <Button onClick={() => setIsOpen1(true)}>Create Field</Button>
-      <Button onClick={() => setIsOpen(true)}>Add Inverter</Button>
-      <FieldCreationDialog onClose={() => setIsOpen1(false)} open={isOpen1} />
-      <AddInverterDialog onClose={() => setIsOpen(false)} open={isOpen} />
+    <div className="flex min-h-screen flex-col items-center justify-center space-y-8">
       <AutocompleteSelect
         label="Label"
         placeholder="Placeholder"
         options={options}
-        className="w-[250px]"
+        className="z-20"
         action={{ label: 'Add', onClick: () => alert('aaa'), icon: 'Plus' }}
         value={value}
         onChange={handleAutoSelect}
-        noOptionsString='Nothing found.'
+        noOptionsString="Nothing found."
+        validity='invalid'
       />
-      <Select label="Label" placeholder="sth" options={options} wrapperClassName='w-64' />
+      <Select
+        label="Label"
+        placeholder="sth"
+        options={options}
+        wrapperClassName="w-64"
+        validity='invalid'
+      />
+      <Input label='Input' validity='invalid' />
+      <NumberInput label='NumberInput' validity='invalid' />
     </div>
   );
 };

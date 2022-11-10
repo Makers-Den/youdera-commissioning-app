@@ -1,3 +1,8 @@
+export enum Role {
+  roofer = 'roofer',
+  electrician = 'electrician',
+}
+
 export interface LoginJWTResponse {
   access_token: string;
 }
@@ -20,7 +25,7 @@ export interface UserInfo {
   group: string | null;
   group_id: string | null;
   iban: string;
-  id: number;
+  id: string;
   image: string;
   is_archived: boolean;
   language: string;
@@ -34,7 +39,7 @@ export interface UserInfo {
   opportunity_id: string | null;
   phone: string | null;
   referral: string | null;
-  role: string;
+  role: Role;
   salutation: string | null;
   solar_partner: string | null;
   tax_id: string | null;
