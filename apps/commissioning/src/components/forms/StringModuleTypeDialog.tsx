@@ -29,7 +29,7 @@ export type StringModuleTypeDialogProps<
   ResolverType extends ZodObject<RawFormShape>,
 > = {
   open: DialogProps['open'];
-  onClose: DialogProps['onClose'];
+  onClose: (resetForm: () => void) => void;
   className?: string;
   onSubmit: (values: z.infer<ResolverType>, resetForm: () => void) => void;
   resolver: ResolverType;
@@ -56,7 +56,7 @@ export const StringModuleTypeDialog = <
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={() => onClose(reset)}
       className={clsxm('w-[400px]', className)}
     >
       <DialogHeader>
@@ -68,7 +68,7 @@ export const StringModuleTypeDialog = <
         <SvgIcon
           name="Close"
           className="ml-auto h-4 hover:cursor-pointer"
-          onClick={onClose}
+          onClick={() => onClose(reset)}
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
@@ -133,7 +133,7 @@ export const StringModuleTypeDialog = <
             <Button
               variant="additional-gray"
               className="w-full"
-              onClick={onClose}
+              onClick={() => onClose(reset)}
             >
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>

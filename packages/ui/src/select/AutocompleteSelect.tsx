@@ -1,6 +1,5 @@
 import { Combobox, Transition } from '@headlessui/react';
-import React from 'react';
-import { FocusEvent, Fragment, useState } from 'react';
+import React, { FocusEvent, Fragment, useState } from 'react';
 
 import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
 import { Label } from '../typography/Typography';
@@ -141,7 +140,7 @@ export const AutocompleteSelect = React.forwardRef<HTMLInputElement, Autocomplet
                 ) : (
                   filteredOptions.map(option => (
                     <Combobox.Option
-                      key={option.label}
+                      key={option.key}
                       value={option}
                       className={({ active }) =>
                         clsxm(

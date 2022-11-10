@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Inverter } from '@src/integrations/youdera/inverters/types';
 import React from 'react';
 import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';
@@ -38,8 +39,9 @@ type RawFormShape = {
 export type StringInverterDialogProps<
   ResolverType extends ZodObject<RawFormShape>,
 > = {
+  inverters: Inverter[]
   open: DialogProps['open'];
-  onClose: DialogProps['onClose'];
+  onClose: (reset: () => void) => void;
   className?: string;
   onSubmit: (values: z.infer<ResolverType>, resetForm: () => void) => void;
   resolver: ResolverType;
@@ -53,15 +55,20 @@ export const StringInverterDialog = <
   className,
   onSubmit,
   resolver,
+  inverters
 }: StringInverterDialogProps<ResolverType>) => {
 
   const intl = useIntl();
-
   const method = useForm({
     resolver: zodResolver(resolver),
   });
 
-  const { handleSubmit, reset, formState } = method;
+  const { handleSubmit, reset, formState, watch } = method;
+
+  const watchInverter = watch('inverter')
+  const watchInput = watch('input')
+  //TODO: Waiting for mpp_trackers on backend side
+  // const inverterInputs = watchInverter?.key && inverters.filter((inverter) => inverter.id === watchInverter.key)[0] 
 
   function asyncTimeout(ms: number) {
     return new Promise(resolve => {
@@ -110,7 +117,7 @@ export const StringInverterDialog = <
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={() => onClose(reset)}
       className={clsxm('w-[400px]', className)}
     >
       <DialogHeader>
@@ -122,7 +129,7 @@ export const StringInverterDialog = <
         <SvgIcon
           name="Close"
           className="ml-auto h-4 hover:cursor-pointer"
-          onClick={onClose}
+          onClick={() => onClose(reset)}
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
@@ -134,7 +141,7 @@ export const StringInverterDialog = <
           <Field name='inverter'>
             {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
               const { onChange, ...rest } = register('inverter', {
-                setValueAs: v => (v || ''),
+                setValueAs: v => (v || undefined),
               })
               return <AutocompleteSelect
                 label={intl.formatMessage({ defaultMessage: 'Select inverter' })}
@@ -147,71 +154,78 @@ export const StringInverterDialog = <
                   onClick: () => alert('Here will be AddInverterDialog'),
                   icon: 'Plus',
                 }}
-                options={[
-                  {
-                    key: '1',
-                    label: 'SuperSun INV A-1231',
-                    icon: 'Table',
-                  },
-                ]}
-                onChange={(value) => onChange({ target: { value, name: 'inverter' } })}
+                options={inverters.map((inverter) => ({
+                  key: String(inverter.id),
+                  label: inverter.name,
+                  icon: 'Table'
+                }))}
+                onChange={(value) => onChange({ target: { value, name: 'inverter', key: value?.key } })}
                 {...rest}
                 validity={fieldState.invalid ? 'invalid' : undefined}
               />
             }}
           </Field>
-          <Field name='input'>
-            {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
-              const { onChange, ...rest } = register('input', {
-                setValueAs: v => (v || ''),
-              })
-              return <AutocompleteSelect
-                label={intl.formatMessage({ defaultMessage: 'Select input' })}
-                placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                noOptionsString={intl.formatMessage({
-                  defaultMessage: 'Nothing found.',
-                })}
-                options={[
-                  {
-                    key: '1',
-                    label: 'MPP',
-                    icon: 'Chip',
-                  },
-                ]}
-                onChange={(value) => onChange({ target: { value, name: 'input' } })}
-                {...rest}
-                validity={fieldState.invalid ? 'invalid' : undefined}
-              />
-            }}
-          </Field>
-
-          <FileUploaderWithPreview
-            fileUploaderProps={{ ...fileUploaderProps, className: 'w-full' }}
-            onDeleteFile={removeFile}
-            uploadedFiles={uploadedFilesUrls}
-            className="w-full"
-            allowMultipleFiles
-            label="String test result"
-          >
-            <div className="flex items-center gap-4">
-              <SvgIcon name="Camera" className="w-8 text-green-400" />
-              <div>
-                <Typography>Take photo by camera</Typography>
-                <Typography>
-                  or{' '}
-                  <span className="text-green-400 underline">
-                    click here to upload
-                  </span>
-                </Typography>
+          {watchInverter &&
+            <Field name='input'>
+              {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
+                const { onChange, ...rest } = register('input', {
+                  setValueAs: v => (v || undefined),
+                })
+                return <AutocompleteSelect
+                  label={intl.formatMessage({ defaultMessage: 'Select input' })}
+                  placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+                  noOptionsString={intl.formatMessage({
+                    defaultMessage: 'Nothing found.',
+                  })}
+                  options={
+                    // TODO: Waiting for mpp_trackers on backend side
+                    // inverterInputs.mpp_trackers.map(() => ({
+                    //   key: '1', // unknown values
+                    //   label: 'TODO' // unknown values
+                    // }))
+                    [
+                      {
+                        key: '1',
+                        label: 'TODO'
+                      }
+                    ]
+                  }
+                  onChange={(value) => onChange({ target: { value, name: 'input' } })}
+                  {...rest}
+                  validity={fieldState.invalid ? 'invalid' : undefined}
+                />
+              }}
+            </Field>
+          }
+          { }
+          {watchInput &&
+            <FileUploaderWithPreview
+              fileUploaderProps={{ ...fileUploaderProps, className: 'w-full' }}
+              onDeleteFile={removeFile}
+              uploadedFiles={uploadedFilesUrls}
+              className="w-full"
+              label={intl.formatMessage({ defaultMessage: "String test result" })}
+            >
+              <div className="flex items-center gap-4">
+                <SvgIcon name="Camera" className="w-8 text-green-400" />
+                <div>
+                  <Typography>{intl.formatMessage({ defaultMessage: 'Take photo by camera', description: 'Context: Take photo by camera or click here to upload' })}</Typography>
+                  <Typography>
+                    {intl.formatMessage({ defaultMessage: 'or', description: 'Context: Take photo by camera or click here to upload' })}{' '}
+                    <span className="text-green-400 underline">
+                      {intl.formatMessage({ defaultMessage: 'click here to upload', description: 'Context: Take photo by camera or click here to upload' })}
+                    </span>
+                  </Typography>
+                </div>
               </div>
-            </div>
-          </FileUploaderWithPreview>
+            </FileUploaderWithPreview>
+          }
 
           <div className="mt-3 flex gap-5">
             <Button
               variant="additional-gray"
               className="w-full"
-              onClick={onClose}
+              onClick={() => onClose(reset)}
             >
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>

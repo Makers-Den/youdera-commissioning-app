@@ -1,4 +1,5 @@
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
+import { Inverter } from '@src/integrations/youdera/inverters/types';
 import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
 import { StringsOnRoof } from '@src/integrations/youdera/strings/types';
 import { useRef, useState } from 'react';
@@ -44,9 +45,10 @@ const stringInverterValidation = z.object({
 
 export interface StringContentProps {
   stringsOnRoof: StringsOnRoof
+  inverters: Inverter[]
 }
 
-export function StringsContent({ stringsOnRoof }: StringContentProps) {
+export function StringsContent({ stringsOnRoof, inverters }: StringContentProps) {
   const intl = useIntl();
   useZodErrorMap();
   const { createStringMutation, deleteStringMutation } = useStrings(stringsOnRoof.id);
@@ -70,9 +72,17 @@ export function StringsContent({ stringsOnRoof }: StringContentProps) {
     actionsDialog.onClose()
     moduleTypeSelectionDialog.onOpen()
   };
+  const handleModuleTypeClose = (resetForm: () => void) => {
+    moduleTypeSelectionDialog.onClose()
+    resetForm()
+  }
   const handleInverterOpen = () => {
     actionsDialog.onClose()
     inverterSelectionDialog.onOpen()
+  }
+  const handleInverterClose = (resetForm: () => void) => {
+    inverterSelectionDialog.onClose()
+    resetForm()
   }
 
   const stringModuleTypeSubmitHandler: StringModuleTypeDialogProps<
@@ -163,15 +173,16 @@ export function StringsContent({ stringsOnRoof }: StringContentProps) {
 
       <StringModuleTypeDialog
         open={moduleTypeSelectionDialog.isOpen}
-        onClose={moduleTypeSelectionDialog.onClose}
+        onClose={handleModuleTypeClose}
         onSubmit={stringModuleTypeSubmitHandler}
         resolver={stringModuleTypeValidation}
       />
       <StringInverterDialog
         open={inverterSelectionDialog.isOpen}
-        onClose={inverterSelectionDialog.onClose}
+        onClose={handleInverterClose}
         resolver={stringInverterValidation}
         onSubmit={stringInverterSubmitHandler}
+        inverters={inverters}
       />
       <DeletionDialog
         onDelete={confirmDeleteHandler}
