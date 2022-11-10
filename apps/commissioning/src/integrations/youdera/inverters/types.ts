@@ -8,7 +8,7 @@ export interface Inverter {
 	serial_number: string,
 	manufacturer: string,
 	model: string,
-	mpp_trackers: Input[] | [],
-	created_at: Date,
-	updated_at: Date
+	mpp_trackers: Input[],
+	created_at: string,
+	updated_at: string
 }

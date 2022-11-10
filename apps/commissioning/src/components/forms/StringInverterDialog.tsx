@@ -33,7 +33,7 @@ type RawFormShape = {
   cabelCrossSection?: ZodTypeAny;
   inverter?: ZodTypeAny;
   input?: ZodTypeAny;
-  photo?: ZodTypeAny;
+  file?: ZodTypeAny;
 };
 
 export type StringInverterDialogProps<
@@ -197,8 +197,8 @@ export const StringInverterDialog = <
               }}
             </Field>
           }
-          { }
           {watchInput &&
+
             <FileUploaderWithPreview
               fileUploaderProps={{ ...fileUploaderProps, className: 'w-full' }}
               onDeleteFile={removeFile}
@@ -220,24 +220,25 @@ export const StringInverterDialog = <
               </div>
             </FileUploaderWithPreview>
           }
-
-          <div className="mt-3 flex gap-5">
-            <Button
-              variant="additional-gray"
-              className="w-full"
-              onClick={() => onClose(reset)}
-            >
-              {intl.formatMessage({ defaultMessage: 'Cancel' })}
-            </Button>
-            <Button
-              variant="main-green"
-              className="w-full"
-              type="submit"
-              isLoading={formState.isSubmitting}
-            >
-              {intl.formatMessage({ defaultMessage: 'Ok' })}
-            </Button>
-          </div>
+          {uploadedFilesUrls.length > 0 &&
+            <div className="mt-3 flex gap-5">
+              <Button
+                variant="additional-gray"
+                className="w-full"
+                onClick={() => onClose(reset)}
+              >
+                {intl.formatMessage({ defaultMessage: 'Cancel' })}
+              </Button>
+              <Button
+                variant="main-green"
+                className="w-full"
+                type="submit"
+                isLoading={formState.isSubmitting}
+              >
+                {intl.formatMessage({ defaultMessage: 'Ok' })}
+              </Button>
+            </div>
+          }
         </Form>
       </DialogContent>
     </Dialog>
