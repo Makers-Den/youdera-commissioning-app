@@ -18,6 +18,7 @@ import { Commissioning } from './icons/Commissioning';
 import { Close } from './icons/Cross';
 import { DeviceSwap } from './icons/DeviceSwap';
 import { Extention } from './icons/Extension';
+import { Gateway } from './icons/Gateway';
 import { LogOut } from './icons/LogOut';
 import { MagnifyingGlass } from './icons/MagnifyingGlass';
 import { Plus } from './icons/Plus';
@@ -58,6 +59,7 @@ const iconMap = {
   Suitcase,
   MagnifyingGlass,
   SolarPanel,
+  Gateway
 };
 
 export type IconName = keyof typeof iconMap;

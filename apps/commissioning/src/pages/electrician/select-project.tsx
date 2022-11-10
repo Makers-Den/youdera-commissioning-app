@@ -9,14 +9,14 @@ import React, { Suspense } from 'react';
 import { useIntl } from 'react-intl';
 
 const projectPathCreator = (id: number) =>
-  `/roofer/projects/${id}/select-module-type`;
+  `/electrician/projects/${id}/select-gateway`;
 
 const SelectProjectPage = () => {
   const intl = useIntl();
   const router = useRouter();
 
   const navCrossClickHandler = () => {
-    router.push('/roofer/select-task');
+    router.push('/electrician/select-task');
   };
 
   return (
@@ -43,7 +43,7 @@ const SelectProjectPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.roofer,
+  Role.electrician,
 ]).then(async _context => ({
   props: {},
 }));

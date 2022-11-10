@@ -48,7 +48,7 @@ const rowPrefix: Partial<Record<keyof ModuleField, string>> = {
 };
 
 export type ModuleFieldsContentProps = {
-  projectId: number;
+  projectId: string;
 };
 
 export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
@@ -56,7 +56,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   const router = useRouter();
   useZodErrorMap();
 
-  const currentModuleId = useRef<number | null>(null);
+  const currentModuleId = useRef<string | null>(null);
 
   const {
     moduleFieldsQuery,
@@ -78,7 +78,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     intl.formatMessage({ defaultMessage: 'Specific Yield' }),
   ];
 
-  const setCurrentModuleId = (id: number | null) => {
+  const setCurrentModuleId = (id: string | null) => {
     currentModuleId.current = id;
   };
 
@@ -88,21 +88,20 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     { specificYield, name, azimut, slantAngle },
     resetForm,
   ) => {
-      try {
-        await createModuleFieldsMutation.mutateAsync({
-          site: projectId,
-          specific_yield: specificYield,
-          name,
-          orientation: azimut,
-          inclination: slantAngle,
-        });
-        createDialog.onClose();
-        resetForm();
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.log(err);
-      }
-    };
+    try {
+      await createModuleFieldsMutation.mutateAsync({
+        specific_yield: specificYield,
+        name,
+        orientation: azimut,
+        inclination: slantAngle,
+      });
+      createDialog.onClose();
+      resetForm();
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  };
 
   const updateSubmitHandler: ModuleFieldFormDialogProps<
     typeof updateModuleValidation
@@ -110,28 +109,28 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     { specificYield, name, azimut, slantAngle },
     resetForm,
   ) => {
-      if (currentModuleId.current) {
-        const values = removeNullAndUndefinedFromObject({
-          specific_yield: specificYield,
-          name: name || undefined,
-          orientation: azimut,
-          inclination: slantAngle,
-        });
+    if (currentModuleId.current) {
+      const values = removeNullAndUndefinedFromObject({
+        specific_yield: specificYield,
+        name: name || undefined,
+        orientation: azimut,
+        inclination: slantAngle,
+      });
 
-        try {
-          await updateModuleFieldsMutation.mutateAsync({
-            id: currentModuleId.current,
-            ...values,
-          });
-          updateDialog.onClose();
-          setCurrentModuleId(null);
-          resetForm();
-        } catch (err) {
-          // eslint-disable-next-line no-console
-          console.log(err);
-        }
+      try {
+        await updateModuleFieldsMutation.mutateAsync({
+          id: currentModuleId.current,
+          ...values,
+        });
+        updateDialog.onClose();
+        setCurrentModuleId(null);
+        resetForm();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
       }
-    };
+    }
+  };
 
   const confirmDeleteHandler = async () => {
     if (currentModuleId.current) {
@@ -146,7 +145,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     }
   };
 
-  const rowClickHandler = (moduleId: number) => () => {
+  const rowClickHandler = (moduleId: string) => () => {
     setCurrentModuleId(moduleId);
     actionsDialog.onOpen();
   };

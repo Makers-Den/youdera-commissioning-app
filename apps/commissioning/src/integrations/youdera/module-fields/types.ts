@@ -1,7 +1,7 @@
 import { Site } from '../sites/types';
 
 export interface ModuleField {
-  id: number;
+  id: string;
   name: string;
   orientation: number;
   inclination: number;
@@ -18,11 +18,11 @@ export interface CreateModuleRequestBody {
   orientation: number;
   inclination: number;
   specific_yield: number;
-  site: number;
+  site: string;
 }
 
 export interface UpdateModuleRequestBody {
-  id: number;
+  id: string;
   name?: string;
   orientation?: number;
   inclination?: number;
