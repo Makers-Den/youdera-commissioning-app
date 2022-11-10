@@ -1,4 +1,4 @@
-import { useGetUnattachedGateways } from '@src/integrations/youdera/gateways/hooks/useGetUnattachedGateways';
+import { useGetGateways } from '@src/integrations/youdera/gateways/hooks/useGetGateways';
 import { updateGateway } from '@src/integrations/youdera/gateways/mutations/updateGateway';
 import { Gateway } from '@src/integrations/youdera/gateways/types';
 import { useCallback, useMemo, useState } from 'react';
@@ -19,18 +19,16 @@ export function SelectGatewayContent({ siteId, onGatewaySelected }: SelectGatewa
   const intl = useIntl();
   const [searchInput, setSearchInput] = useState('');
 
-  const { unattachedGatewaysQuery } = useGetUnattachedGateways();
+  const { gatewaysQuery } = useGetGateways();
 
-  const gateways = useMemo(
+  const filteredGateways = useMemo(
     () =>
-      (unattachedGatewaysQuery.data || [])
-        ?.filter(({ name }) => {
-          const lowerCaseSearch = searchInput.toLowerCase();
-          return (
-            name.toLowerCase().includes(lowerCaseSearch)
-          );
-        }),
-    [unattachedGatewaysQuery.data, searchInput],
+      (gatewaysQuery.data || [])
+        // Filter away attached gateways, except if its attached to this project
+        .filter(({ site_id }) => !site_id || site_id === siteId)
+        .filter(({ name }) => name.toLowerCase().includes(searchInput.toLowerCase()))
+      ,
+    [gatewaysQuery.data, siteId, searchInput],
   );
 
   const searchInputChangeHandler: InputProps['onChange'] = e => {
@@ -68,7 +66,7 @@ export function SelectGatewayContent({ siteId, onGatewaySelected }: SelectGatewa
       </BoxContent>
       <Divider className="my-5" />
       <BoxContent className="max-h-[500px] overflow-y-scroll">
-        <GatewayList gateways={gateways} onSelectGateway={onSelectGateway} />
+        <GatewayList gateways={filteredGateways} siteId={siteId} onSelectGateway={onSelectGateway} />
       </BoxContent>
     </LargeBox>
   );
