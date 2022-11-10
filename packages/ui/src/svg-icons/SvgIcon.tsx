@@ -1,12 +1,13 @@
 import React, { SVGProps } from 'react';
 import {
+  FaBatteryFull,
   FaCalendarAlt,
   FaCheck,
   FaEnvelope,
+  FaMeter,
   FaTable,
   FaTimes,
-  FaUnlockAlt,
-} from 'react-icons/fa';
+  FaUnlockAlt} from 'react-icons/fa';
 
 import { Camera } from './icons/Camera';
 import { CaretDown } from './icons/CaretDown';
@@ -38,6 +39,9 @@ const iconMap = {
   Envelope: FaEnvelope,
   Unlock: FaUnlockAlt,
   Table: FaTable,
+  Meter: FaMeter,
+  Battery: FaBatteryFull,
+  Inverter: FaTable,
   ChevronDown,
   Settings,
   LogOut,
@@ -57,7 +61,7 @@ const iconMap = {
   Suitcase,
   MagnifyingGlass,
   SolarPanel,
-  Gateway
+  Gateway,
 };
 
 export type IconName = keyof typeof iconMap;
