@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { Suspense } from 'react';
 import { useIntl } from 'react-intl';
 
-const DevicesPage = ({
+const VerificationPage = ({
   project,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 const intl = useIntl();
@@ -19,15 +19,8 @@ const navCrossClickHandler = () => {
 };
 
 const backClickHandler = () => {
-  router.push(`/electrician/projects/${project.id}/select-gateway`);
+  router.push(`/electrician/projects/${project.id}/devices`);
 };
-
-const nextClickHandler = () => {
-  // TODO: prevent next if no inverters
-  // TODO: ask if all inverters have been added before proceeding
-  router.push(`/electrician/projects/${project.id}/verification`);
-};
-
 
 return (
   <AuthenticatedLayout
@@ -44,19 +37,11 @@ return (
           type: 'button',
           onClick: backClickHandler,
         },
-        {
-          content: intl.formatMessage({
-            defaultMessage: 'Next',
-          }),
-          variant: 'main-green',
-          type: 'button',
-          onClick: nextClickHandler,
-        },
       ],
     }}
   >
     <Suspense fallback={<LargeBoxSkeleton />}>
-        <div className="min-h-[70vh]">TODO: devices</div>
+        <div className="min-h-[70vh]">TODO: verification</div>
     </Suspense>
   </AuthenticatedLayout>
 );
@@ -66,4 +51,4 @@ export const getServerSideProps: GetServerSideProps = protectRoute([
   Role.electrician,
 ]).then(fetchProjectFromParams);
 
-export default DevicesPage;
+export default VerificationPage;
