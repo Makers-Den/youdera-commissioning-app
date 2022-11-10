@@ -3,5 +3,6 @@ export enum QueryKeys {
   uncommissionedSites = 'uncommissionedSites',
   modules = 'modules',
   moduleFields = 'moduleFields',
-  unattachedGateways = 'unattachedGateways'
+  files = 'files',
+  unattachedGateways = 'unattachedGateways',
 }

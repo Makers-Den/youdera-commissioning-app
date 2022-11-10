@@ -25,7 +25,7 @@ export interface UserInfo {
   group: string | null;
   group_id: string | null;
   iban: string;
-  id: number;
+  id: string;
   image: string;
   is_archived: boolean;
   language: string;
