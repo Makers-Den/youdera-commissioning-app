@@ -1,31 +1,45 @@
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
+import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
 import { StringsOnRoof } from '@src/integrations/youdera/strings/types';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
 import { useDisclosure } from 'ui/dialogs/useDisclosure';
+import { z } from 'zod';
 
-// import { z } from 'zod';
 import { ActionsDialog } from '../dialogs/ActionsDialog';
 import { DeletionDialog } from '../dialogs/DeletionDialog';
-import { StringCreationFormDialogA } from '../forms/StringCreationFormDialogA';
-import { StringCreationFormDialogB } from '../forms/StringCreationFormDialogB';
+import { StringInverterDialog, StringInverterDialogProps } from '../forms/StringInverterDialog';
+import { StringModuleTypeDialog, StringModuleTypeDialogProps } from '../forms/StringModuleTypeDialog';
 import { StringsList } from '../StringsList';
 
-// const createModuleValidation = z.object({
-//   name: z.string().min(2),
-//   specificYield: z.number().gt(0),
-//   azimut: z.number().gt(0).lte(360),
-//   slantAngle: z.number().gt(0).lte(90),
-// });
+const stringModuleTypeValidation = z.object({
+  moduleType: z.object({
+    key: z.string(),
+    label: z.string()
+  }),
+  numberOfModules: z.number().gte(0),
+  cableCrossSection: z.number().gte(0),
+});
 
-// const updateModuleValidation = z.object({
-//   name: z.string().min(2).optional().or(z.literal('')),
-//   specificYield: z.number().gt(0).or(z.literal(undefined)),
-//   azimut: z.number().gt(0).lte(360).or(z.literal(undefined)),
-//   slantAngle: z.number().gt(0).lte(90).or(z.literal(undefined)),
+type ModuleTypeData = z.infer<typeof stringModuleTypeValidation>
+
+const stringInverterValidation = z.object({
+  inverter: z.object({
+    key: z.string(),
+    label: z.string()
+  }),
+  input: z.object({
+    key: z.string(),
+    label: z.string()
+  }),
+});
+
+// const updateModuleTypeValidation = z.object({
+//   moduleType: z.string().or(z.literal('')),
+//   numberOfModules: z.number().gt(0).or(z.literal(undefined)),
+//   cableCrossSection: z.number().gt(0).or(z.literal(undefined))
 // });
 
 export interface StringContentProps {
@@ -35,34 +49,70 @@ export interface StringContentProps {
 export function StringsContent({ stringsOnRoof }: StringContentProps) {
   const intl = useIntl();
   useZodErrorMap();
+  const { createStringMutation } = useStrings(stringsOnRoof.id);
+  const moduleTypeFormData = useRef<ModuleTypeData | null>(null);
 
   const [selectedId, setSelectedId] = useState<number>()
   const actionsDialog = useDisclosure();
-  const modifyDialog = useDisclosure();
   const deletionDialog = useDisclosure();
-  const addStringDialog = useDisclosure();
+  const moduleTypeSelectionDialog = useDisclosure();
+  const inverterSelectionDialog = useDisclosure();
 
-  const handleAddStringOpen = () => {
-    actionsDialog.onClose()
-    addStringDialog.onOpen()
-  }
   const handleRowClick = (id: number) => {
     setSelectedId(id)
     actionsDialog.onOpen()
   };
-  const handleModifyOpen = () => {
-    actionsDialog.onClose()
-    modifyDialog.onOpen()
-  };
-  const handleInverterOpen = () => undefined;
   const handleDeleteOpen = () => {
     actionsDialog.onClose()
     deletionDialog.onOpen()
   }
+  const handleModuleTypeOpen = () => {
+    actionsDialog.onClose()
+    moduleTypeSelectionDialog.onOpen()
+  };
+  const handleInverterOpen = () => {
+    actionsDialog.onClose()
+    inverterSelectionDialog.onOpen()
+  }
   const onDelete = (id: number) => {
-
+    //TODO
   }
 
+  const stringModuleTypeSubmitHandler: StringModuleTypeDialogProps<
+    typeof stringModuleTypeValidation
+  >['onSubmit'] = (
+    { moduleType, numberOfModules, cableCrossSection },
+    resetForm,
+  ) => {
+      moduleTypeFormData.current = {
+        moduleType,
+        numberOfModules,
+        cableCrossSection
+      }
+      moduleTypeSelectionDialog.onClose();
+      resetForm();
+      inverterSelectionDialog.onOpen()
+    };
+
+  const stringInverterSubmitHandler: StringInverterDialogProps<
+    typeof stringInverterValidation
+  >['onSubmit'] = async (
+      // { inverter, input },
+      // resetForm,
+    ) => {
+      try {
+        await createStringMutation.mutateAsync({
+          count: moduleTypeFormData.current!.numberOfModules,
+          wattpeak_per_module: 1,
+          roof: stringsOnRoof.id
+        });
+        // resetForm();
+        inverterSelectionDialog.onClose()
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+    };
   return (
     <>
       <Box className="mx-3 mb-auto w-full md:mx-auto md:w-0 md:min-w-[700px]">
@@ -70,7 +120,7 @@ export function StringsContent({ stringsOnRoof }: StringContentProps) {
           <BoxTitle
             title={intl.formatMessage({ defaultMessage: 'Strings' })}
           />
-          <Button className="ml-auto w-[200px]" onClick={handleAddStringOpen}>
+          <Button className="ml-auto w-[200px]" onClick={handleModuleTypeOpen}>
             + {intl.formatMessage({ defaultMessage: 'Add string' })}
           </Button>
         </BoxHeader>
@@ -86,7 +136,7 @@ export function StringsContent({ stringsOnRoof }: StringContentProps) {
           defaultMessage: 'What you want to do with list element?',
         })}
       >
-        <Button variant="main-green" onClick={handleModifyOpen}>
+        <Button variant="main-green" onClick={handleModuleTypeOpen}>
           {intl.formatMessage({ defaultMessage: 'Modify properties' })}
         </Button>
         <Button variant="main-green" onClick={handleInverterOpen}>
@@ -100,9 +150,17 @@ export function StringsContent({ stringsOnRoof }: StringContentProps) {
         </Button>
       </ActionsDialog>
 
-      <StringCreationFormDialogA
-        open={modifyDialog.isOpen}
-        onClose={modifyDialog.onClose}
+      <StringModuleTypeDialog
+        open={moduleTypeSelectionDialog.isOpen}
+        onClose={moduleTypeSelectionDialog.onClose}
+        onSubmit={stringModuleTypeSubmitHandler}
+        resolver={stringModuleTypeValidation}
+      />
+      <StringInverterDialog
+        open={inverterSelectionDialog.isOpen}
+        onClose={inverterSelectionDialog.onClose}
+        resolver={stringInverterValidation}
+        onSubmit={stringInverterSubmitHandler}
       />
       <DeletionDialog
         onDelete={() => onDelete(selectedId!)}
@@ -112,7 +170,6 @@ export function StringsContent({ stringsOnRoof }: StringContentProps) {
           defaultMessage: 'Are you sure to delete module field?',
         })}
       />
-      <StringCreationFormDialogB open={addStringDialog.isOpen} onClose={addStringDialog.onClose} />
     </>
   );
 }

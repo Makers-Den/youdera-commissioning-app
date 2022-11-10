@@ -25,7 +25,7 @@ type RawFormShape = {
   cableCrossSection: ZodTypeAny;
 };
 
-export type StringCreationFormDialogAProps<
+export type StringModuleTypeDialogProps<
   ResolverType extends ZodObject<RawFormShape>,
 > = {
   open: DialogProps['open'];
@@ -35,7 +35,7 @@ export type StringCreationFormDialogAProps<
   resolver: ResolverType;
 };
 
-export const StringCreationFormDialogA = <
+export const StringModuleTypeDialog = <
   ResolverType extends ZodObject<RawFormShape>,
 >({
   open,
@@ -43,7 +43,7 @@ export const StringCreationFormDialogA = <
   className,
   onSubmit,
   resolver,
-}: StringCreationFormDialogAProps<ResolverType>) => {
+}: StringModuleTypeDialogProps<ResolverType>) => {
 
   const intl = useIntl();
 
@@ -62,7 +62,7 @@ export const StringCreationFormDialogA = <
       <DialogHeader>
         <DialogTitle
           title={intl.formatMessage({
-            defaultMessage: 'Modify String',
+            defaultMessage: 'Add String',
           })}
         />
         <SvgIcon

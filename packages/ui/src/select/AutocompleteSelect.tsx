@@ -1,4 +1,5 @@
 import { Combobox, Transition } from '@headlessui/react';
+import React from 'react';
 import { FocusEvent, Fragment, useState } from 'react';
 
 import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
@@ -31,19 +32,22 @@ export type AutocompleteSelectProps = {
   onChange?: (value: AutocompleteSelectOption | undefined) => void
 } & Omit<React.ComponentPropsWithRef<'input'>, 'value' | 'onChange'>;
 
-export const AutocompleteSelect = ({
-  label,
-  value,
-  onChange,
-  placeholder,
-  options,
-  className,
-  action,
-  validity,
-  isRequired,
-  noOptionsString = 'Nothing found.',
-  ...rest
-}: AutocompleteSelectProps) => {
+export const AutocompleteSelect = React.forwardRef<HTMLInputElement, AutocompleteSelectProps>((
+  {
+    label,
+    value,
+    onChange,
+    placeholder,
+    options,
+    className,
+    action,
+    validity,
+    isRequired,
+    noOptionsString = 'Nothing found.',
+    ...rest
+  },
+  ref
+) => {
   const [query, setQuery] = useState('');
 
   const filteredOptions =
@@ -84,10 +88,11 @@ export const AutocompleteSelect = ({
                   displayValue={(option: AutocompleteSelectOption) => option?.label}
                   placeholder={placeholder}
                   onChange={event => setQuery(event.target.value)}
-                  {...rest}
                   onFocus={(e: FocusEvent<HTMLInputElement>) => {
                     e.target.select();
                   }}
+                  ref={ref}
+                  {...rest}
                 />
               </Combobox.Button>
 
@@ -185,4 +190,4 @@ export const AutocompleteSelect = ({
       </Combobox>
     </div>
   );
-};
+});

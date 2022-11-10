@@ -16,3 +16,9 @@ export interface StringsOnRoof {
 	created_at: Date,
 	updated_at: Date
 }
+
+export interface CreateStringRequestBody {
+	count: number,
+	wattpeak_per_module: number,
+	roof: number
+}
