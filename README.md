@@ -58,3 +58,31 @@ yarn run dev
 ## Commit Message Convention
 
 This starter is using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), it is mandatory to use it to commit changes.
+
+## Commisioning
+
+### Docker build
+
+Install Docker on your machine.
+
+From the monorepo root.
+
+Build your container: 
+```
+docker build -t commissioning-docker -f apps/commissioning/Dockerfile .
+```
+
+To see docker build output (useful when developing Dockerfile, buildkit supresses output by default):
+```
+docker build --progress=plain --no-cache -t commissioning-docker -f apps/commissioning/Dockerfile .
+```
+
+Run your container: 
+```
+docker run -it -p 3000:3000 commissioning-docker
+```
+
+You can view your images created with 
+```
+docker images
+```

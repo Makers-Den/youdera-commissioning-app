@@ -1,3 +1,4 @@
+import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
 import { useModuleFields } from '@src/integrations/youdera/module-fields/hooks/useModuleFields';
 import { ModuleField } from '@src/integrations/youdera/module-fields/types';
 import { removeNullAndUndefinedFromObject } from '@src/utils/removeNullAndUndefinedFromObject';
@@ -51,6 +52,7 @@ export type ModuleFieldsContentProps = {
 
 export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   const intl = useIntl();
+  useZodErrorMap();
 
   const currentModuleId = useRef<string | null>(null);
 

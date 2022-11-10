@@ -4,4 +4,5 @@ export enum QueryKeys {
   modules = 'modules',
   moduleFields = 'moduleFields',
   files = 'files',
+  unattachedGateways = 'unattachedGateways',
 }
