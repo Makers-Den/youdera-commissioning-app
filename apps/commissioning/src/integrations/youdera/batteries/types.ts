@@ -1,3 +1,5 @@
+import { ApiFile } from "../files/types";
+
 export type Battery = {
   id: number;
   name: string;
@@ -6,5 +8,5 @@ export type Battery = {
   model: string;
   created_at: string;
   updated_at: string;
-  files?: File[];
+  files?: ApiFile[];
 }

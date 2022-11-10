@@ -1,3 +1,4 @@
+import { ApiFile } from "../files/types";
 
 export type Meter = {
   id: number;
@@ -21,5 +22,5 @@ export type Meter = {
   created_at: string;
   updated_at: string;
   
-  files?: File[];
+  files?: ApiFile[];
 }

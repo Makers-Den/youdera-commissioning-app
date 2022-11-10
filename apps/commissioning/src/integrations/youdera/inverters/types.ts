@@ -1,14 +1,15 @@
+import { ApiFile } from "../files/types";
 
 export type Inverter = {
   id: number;
   name: string;
   serial_number: string;
-  
+
   manufacturer: string;
   model: string;
 
   mpp_trackers?: MppTracker[];
-  files?: File[];
+  files?: ApiFile[];
 }
 
 
