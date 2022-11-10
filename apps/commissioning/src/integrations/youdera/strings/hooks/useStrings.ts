@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { createString } from '../mutations/createString'
+import { deleteString } from '../mutations/deleteString';
 import { getStringsOnRoof } from '../queries/getStringsOnRoof';
 import { QueryKeys } from '../../enums/queryKeys';
 
@@ -18,8 +19,15 @@ export const useStrings = (roofId: number) => {
     },
   });
 
+  const deleteStringMutation = useMutation(deleteString, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.strings, roofId]);
+    },
+  })
+
   return {
     stringsOnRoofQuery,
-    createStringMutation
+    createStringMutation,
+    deleteStringMutation
   };
 };

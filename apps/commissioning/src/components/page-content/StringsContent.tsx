@@ -49,7 +49,7 @@ export interface StringContentProps {
 export function StringsContent({ stringsOnRoof }: StringContentProps) {
   const intl = useIntl();
   useZodErrorMap();
-  const { createStringMutation } = useStrings(stringsOnRoof.id);
+  const { createStringMutation, deleteStringMutation } = useStrings(stringsOnRoof.id);
   const moduleTypeFormData = useRef<ModuleTypeData | null>(null);
 
   const [selectedId, setSelectedId] = useState<number>()
@@ -73,9 +73,6 @@ export function StringsContent({ stringsOnRoof }: StringContentProps) {
   const handleInverterOpen = () => {
     actionsDialog.onClose()
     inverterSelectionDialog.onOpen()
-  }
-  const onDelete = (id: number) => {
-    //TODO
   }
 
   const stringModuleTypeSubmitHandler: StringModuleTypeDialogProps<
@@ -113,6 +110,20 @@ export function StringsContent({ stringsOnRoof }: StringContentProps) {
         console.log(err);
       }
     };
+
+  const confirmDeleteHandler = async () => {
+    if (selectedId) {
+      try {
+        await deleteStringMutation.mutateAsync(selectedId);
+        setSelectedId(undefined)
+        deletionDialog.onClose();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+    }
+  };
+
   return (
     <>
       <Box className="mx-3 mb-auto w-full md:mx-auto md:w-0 md:min-w-[700px]">
@@ -163,7 +174,7 @@ export function StringsContent({ stringsOnRoof }: StringContentProps) {
         onSubmit={stringInverterSubmitHandler}
       />
       <DeletionDialog
-        onDelete={() => onDelete(selectedId!)}
+        onDelete={confirmDeleteHandler}
         isOpen={deletionDialog.isOpen}
         onClose={deletionDialog.onClose}
         description={intl.formatMessage({
