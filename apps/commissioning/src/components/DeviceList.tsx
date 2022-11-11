@@ -6,10 +6,9 @@ import { Meter } from '@src/integrations/youdera/meters/types';
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { Image } from 'ui/image/Image';
-import { List, ListItem } from 'ui/list/List';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
+import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 import { Typography } from 'ui/typography/Typography';
-import clsxm from 'ui/utils/clsxm';
 
 export type DeviceListProps = {
   inverters?: Inverter[];
@@ -24,12 +23,13 @@ type Device = (
   | Inverter & { type: 'Inverter' }
   | Battery & { type: 'Battery' }
   | Meter & {
-    type: 'Meter', 
+    type: 'Meter',
     /** copy of `number` */
     serial_number: string
-    }
-  ) & { imageUrl: string };
+  }
+) & { imageUrl: string };
 
+// TODO: waiting for proper way to form url to image file
 function toImageUrl(_?: ApiFile) {
   return "https://picsum.photos/100";
 }
@@ -47,7 +47,7 @@ export function DeviceList({ inverters, batteries, meters }: DeviceListProps) {
   const intl = useIntl();
 
   const devices: Device[] = useMemo(() => [
-    ...(inverters || []).map(d => toDevice(d, 'Inverter')), 
+    ...(inverters || []).map(d => toDevice(d, 'Inverter')),
     ...(batteries || []).map(d => toDevice(d, 'Battery')),
     ...(meters || []).map(d => toDevice(d, 'Meter'))
   ], [inverters, batteries, meters]);
@@ -58,46 +58,42 @@ export function DeviceList({ inverters, batteries, meters }: DeviceListProps) {
   }
 
   return (
-    <>
-    <div className='flex mb-4'>
-      <div className='ml-6 w-[285px]'>{intl.formatMessage({ defaultMessage: "Name" })}</div>
-      <div className='w-[200px]'>{intl.formatMessage({ defaultMessage: "Manufacturer and model" })}</div>
-      <div className='w-[50px]'>{intl.formatMessage({ defaultMessage: "Type" })}</div>
-      <div>{intl.formatMessage({ defaultMessage: "Status" })}</div>
-    </div>
-    <List>
-      {devices.map(device => (
-        <ListItem variant='primary' key={device.id}>
-          <div
-            role="button"
-            className={clsxm(
-              'flex cursor-pointer gap-5'
-            )}
+    <Table className="w-full">
+      <Thead>
+        <Tr>
+          <Th colSpan={2} className='ml-6 w-[285px]'>{intl.formatMessage({ defaultMessage: "Name" })}</Th>
+          <Th className='w-[200px]'>{intl.formatMessage({ defaultMessage: "Manufacturer and model" })}</Th>
+          <Th className='w-[50px]'>{intl.formatMessage({ defaultMessage: "Type" })}</Th>
+          <Th>{intl.formatMessage({ defaultMessage: "Status" })}</Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {devices.map(device => (
+          <Tr
+            className="cursor-pointer"
+            key={device.id}
             onClick={() => onSelectDevice(device)}
           >
-            <div className="flex aspect-square w-11 items-center justify-center overflow-hidden rounded">
-              <Image src={device.imageUrl} alt={`${device.type} image`} />
-            </div>
-            <div>
-              <Typography weight="medium" className='w-[200px] truncate'>{device.name}</Typography>
+            <Td>
+              <div className="ml-2 flex aspect-square w-11 items-center justify-center overflow-hidden rounded">
+                <Image src={device.imageUrl} alt={`${device.type} image`} />
+              </div>
+            </Td>
+            <Td>
+              <Typography weight="medium" className='w-[160px] truncate'>{device.name}</Typography>
               <Typography variant="label">{device.serial_number}</Typography>
-            </div>
-            <div className='flex flex-col justify-between w-[180px]'>
+            </Td>
+            <Td>
               <Typography variant="label" className='w-[160px] truncate'>{device.manufacturer}</Typography>
               <Typography variant="label" className='w-[160px] truncate'>{device.model}</Typography>
-            </div>
-            <div>
+            </Td>
+            <Td>
               <SvgIcon name={device.type} />
-            </div>
-          </div>
-        </ListItem>
-      ))}
-      {devices.length < 1 && 
-        <Typography className='text-center'>
-          {intl.formatMessage({ defaultMessage: "This project doesn't have devices yet" })}
-        </Typography>
-      }
-    </List>
-    </>
+            </Td>
+            <Td>TODO</Td>
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
   );
 }

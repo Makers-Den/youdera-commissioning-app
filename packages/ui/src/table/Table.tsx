@@ -36,11 +36,12 @@ export function Tr({ className, children, ...props }: TrProps) {
 export type ThProps = {
   className?: string;
   children: ReactNode;
+  colSpan?: number;
 };
 
-export function Th({ className, children }: ThProps) {
+export function Th({ className, children, colSpan }: ThProps) {
   return (
-    <th className={clsxm(className, 'pr-4 text-sm font-normal text-gray-700')}>
+    <th colSpan={colSpan} className={clsxm(className, 'pr-4 text-sm font-normal text-gray-700')}>
       {children}
     </th>
   );
@@ -49,11 +50,13 @@ export function Th({ className, children }: ThProps) {
 export type TdProps = {
   className?: string;
   children: ReactNode;
+  colSpan?: number;
 };
 
-export function Td({ className, children }: TdProps) {
+export function Td({ className, children, colSpan }: TdProps) {
   return (
     <td
+      colSpan={colSpan}
       className={clsxm(
         className,
         'bg-gray-100 py-4 pr-4 text-left  text-sm font-medium text-gray-700',
