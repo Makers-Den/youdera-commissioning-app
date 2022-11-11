@@ -2,7 +2,6 @@ import { getUserInfo } from '@src/integrations/youdera/auth/queries/getUserInfo'
 import { Role } from '@src/integrations/youdera/auth/types';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { GetServerSideProps } from 'next';
-import { redirect } from 'next/dist/server/api-utils';
 import React from 'react';
 
 const Home = () => <div />
