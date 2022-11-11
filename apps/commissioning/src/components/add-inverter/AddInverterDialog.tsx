@@ -1,6 +1,5 @@
-import { useAuth } from '@src/integrations/youdera/auth/hooks/useAuth';
 import { useInverterModels } from '@src/integrations/youdera/models/hooks/useInverterModels';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
   Dialog,
