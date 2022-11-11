@@ -12,7 +12,8 @@ import { useIntl } from 'react-intl';
 const StringsPage = ({
   project,
   stringsOnRoof,
-  inverters
+  inverters,
+  inverterModels
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const intl = useIntl();
   const router = useRouter();
@@ -44,7 +45,7 @@ const StringsPage = ({
       }}
     >
       <Suspense fallback={<LargeBoxSkeleton />}>
-        <StringsContent stringsOnRoof={stringsOnRoof} inverters={inverters} />
+        <StringsContent stringsOnRoof={stringsOnRoof} inverters={inverters} inverterModels={inverterModels} />
       </Suspense>
     </AuthenticatedLayout>
   );

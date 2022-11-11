@@ -3,8 +3,9 @@ export interface String {
 	name: string | null,
 	count: number,
 	wattpeak_per_module: number,
-	created_at: Date,
-	updated_at: Date
+	created_at: string,
+	updated_at: string,
+	module_type: string
 }
 export interface StringsOnRoof {
 	id: number,
@@ -13,8 +14,8 @@ export interface StringsOnRoof {
 	inclination: number,
 	specific_yield: number,
 	strings: String[],
-	created_at: Date,
-	updated_at: Date
+	created_at: string,
+	updated_at: string,
 }
 
 export interface CreateStringRequestBody {

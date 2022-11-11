@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Inverter } from '@src/integrations/youdera/inverters/types';
-import React from 'react';
+import { InverterModel } from '@src/integrations/youdera/models/types';
+import React, { useMemo } from 'react';
 import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -16,7 +17,7 @@ import {
   useFileUploader,
   UseFileUploaderArgs,
 } from 'ui/file-inputs/useFileUploader';
-import { AutocompleteSelect } from 'ui/select/AutocompleteSelect';
+import { AutocompleteSelect, AutocompleteSelectOption } from 'ui/select/AutocompleteSelect';
 import { Select } from 'ui/select/Select';
 import { IconName, SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
@@ -41,8 +42,9 @@ export type StringInverterDialogProps<
   ResolverType extends ZodObject<RawFormShape>,
 > = {
   inverters: Inverter[]
+  inverterModels: InverterModel[]
   open: DialogProps['open'];
-  onClose: (reset: () => void) => void;
+  onClose: (reset: () => void, removeUploadedFile: () => void) => void;
   className?: string;
   onSubmit: (values: z.infer<ResolverType>, resetForm: () => void) => void;
   resolver: ResolverType;
@@ -56,7 +58,8 @@ export const StringInverterDialog = <
   className,
   onSubmit,
   resolver,
-  inverters
+  inverters,
+  inverterModels
 }: StringInverterDialogProps<ResolverType>) => {
 
   const intl = useIntl();
@@ -68,6 +71,8 @@ export const StringInverterDialog = <
 
   const watchInverter = watch('inverter')
   const watchInput = watch('input')
+  const watchManufacturer = watch('manufacturer')
+  const watchModel = watch('model')
   //TODO: Waiting for mpp_trackers on backend side
   // const inverterInputs = watchInverter?.key && inverters.filter((inverter) => inverter.id === watchInverter.key)[0] 
 
@@ -114,11 +119,41 @@ export const StringInverterDialog = <
   const { fileUploaderProps, uploadedFilesUrls, removeFile } = useFileUploader({
     uploadFile: uploadFileMock,
   });
-  console.log(watchInverter?.key)
+
+  const inverterManufactures: AutocompleteSelectOption[] | [] = useMemo(
+    () => {
+      if (!inverterModels) return []
+
+      const result: AutocompleteSelectOption[] = [];
+      const map = new Map();
+      inverterModels.forEach((model) => {
+        if (!map.has(model.manufacturer_id)) {
+          map.set(model.manufacturer_id, true);
+          result.push({
+            key: model.manufacturer_id.toString(),
+            label: model.manufacturer_name
+          });
+        }
+      })
+      return result
+    }
+    , [inverterModels]
+  );
+
+  const inverterFilteredModels: AutocompleteSelectOption[] | [] = useMemo(
+    () => {
+      if (!watchManufacturer || watchManufacturer?.length < 1 || !inverterModels) return []
+      return inverterModels
+        .filter(model => model.manufacturer_id.toString() === watchManufacturer.key)
+        .map((model) => ({ key: model.id.toString(), label: model.name, icon: "Table" }))
+    }
+    , [inverterModels, watchManufacturer]
+  );
+
   return (
     <Dialog
       open={open}
-      onClose={() => onClose(reset)}
+      onClose={() => onClose(reset, () => removeFile(uploadedFilesUrls[0]))}
       className={clsxm('w-[400px]', className)}
     >
       <DialogHeader>
@@ -130,7 +165,7 @@ export const StringInverterDialog = <
         <SvgIcon
           name="Close"
           className="ml-auto h-4 hover:cursor-pointer"
-          onClick={() => onClose(reset)}
+          onClick={() => onClose(reset, () => removeFile(uploadedFilesUrls[0]))}
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
@@ -186,7 +221,7 @@ export const StringInverterDialog = <
                     [
                       {
                         key: '1',
-                        label: 'TODO'
+                        label: 'I11'
                       }
                     ]
                   }
@@ -207,60 +242,54 @@ export const StringInverterDialog = <
                     wrapperClassName='z-30'
                     label={intl.formatMessage({ defaultMessage: 'Manufacturer' })}
                     placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                    options={[
-                      {
-                        key: '1',
-                        label: 'Holder',
-                      },
-                    ]}
+                    options={inverterManufactures}
                     onChange={(value) => onChange({ target: { value, name: 'manufacturer' } })}
                     {...rest}
                     validity={fieldState.invalid ? 'invalid' : undefined}
                   />
                 }}
               </Field>
-              <Field name='inverterModel'>
-                {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
-                  const { onChange, ...rest } = register('inverterModel', {
-                    setValueAs: v => (v || ''),
-                  })
-                  return <Select
-                    wrapperClassName='z-20'
-                    label={intl.formatMessage({ defaultMessage: 'Inverter Model' })}
-                    placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                    options={[
-                      {
-                        key: '1',
-                        label: 'Holder',
-                      },
-                    ]}
-                    onChange={(value) => onChange({ target: { value, name: 'inverterModel' } })}
-                    {...rest}
-                    validity={fieldState.invalid ? 'invalid' : undefined}
-                  />
-                }}
-              </Field>
-              <Field name='input'>
-                {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
-                  const { onChange, ...rest } = register('input', {
-                    setValueAs: v => (v || ''),
-                  })
-                  return <Select
-                    wrapperClassName='z-10'
-                    label={intl.formatMessage({ defaultMessage: 'Input' })}
-                    placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                    options={[
-                      {
-                        key: '1',
-                        label: 'Holder',
-                      },
-                    ]}
-                    onChange={(value) => onChange({ target: { value, name: 'input' } })}
-                    {...rest}
-                    validity={fieldState.invalid ? 'invalid' : undefined}
-                  />
-                }}
-              </Field>
+              {watchManufacturer &&
+                <Field name='model'>
+                  {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
+                    const { onChange, ...rest } = register('model', {
+                      setValueAs: v => (v || ''),
+                    })
+                    return <Select
+                      wrapperClassName='z-20'
+                      label={intl.formatMessage({ defaultMessage: 'Inverter Model' })}
+                      placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+                      options={inverterFilteredModels}
+                      onChange={(value) => onChange({ target: { value, name: 'model' } })}
+                      {...rest}
+                      validity={fieldState.invalid ? 'invalid' : undefined}
+                    />
+                  }}
+                </Field>
+              }
+              {watchModel &&
+                <Field name='input'>
+                  {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
+                    const { onChange, ...rest } = register('input', {
+                      setValueAs: v => (v || ''),
+                    })
+                    return <Select
+                      wrapperClassName='z-10'
+                      label={intl.formatMessage({ defaultMessage: 'Input' })}
+                      placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+                      options={[
+                        {
+                          key: '1',
+                          label: 'I11',
+                        },
+                      ]}
+                      onChange={(value) => onChange({ target: { value, name: 'input' } })}
+                      {...rest}
+                      validity={fieldState.invalid ? 'invalid' : undefined}
+                    />
+                  }}
+                </Field>
+              }
             </>)
           }
           {watchInput &&
@@ -285,12 +314,12 @@ export const StringInverterDialog = <
               </div>
             </FileUploaderWithPreview>
           }
-          {uploadedFilesUrls.length > 0 &&
+          {watchInverter && watchInput && uploadedFilesUrls.length > 0 &&
             <div className="mt-3 flex gap-5">
               <Button
                 variant="additional-gray"
                 className="w-full"
-                onClick={() => onClose(reset)}
+                onClick={() => onClose(reset, () => removeFile(uploadedFilesUrls[0]))}
               >
                 {intl.formatMessage({ defaultMessage: 'Cancel' })}
               </Button>
@@ -306,6 +335,6 @@ export const StringInverterDialog = <
           }
         </Form>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   );
 };

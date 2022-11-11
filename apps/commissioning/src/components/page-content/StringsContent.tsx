@@ -1,5 +1,6 @@
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
 import { Inverter } from '@src/integrations/youdera/inverters/types';
+import { InverterModel } from '@src/integrations/youdera/models/types';
 import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
 import { StringsOnRoof } from '@src/integrations/youdera/strings/types';
 import { useRef, useState } from 'react';
@@ -46,9 +47,10 @@ const stringInverterValidation = z.object({
 export interface StringContentProps {
   stringsOnRoof: StringsOnRoof
   inverters: Inverter[]
+  inverterModels: InverterModel[]
 }
 
-export function StringsContent({ stringsOnRoof, inverters }: StringContentProps) {
+export function StringsContent({ stringsOnRoof, inverters, inverterModels }: StringContentProps) {
   const intl = useIntl();
   useZodErrorMap();
   const { createStringMutation, deleteStringMutation } = useStrings(stringsOnRoof.id);
@@ -80,8 +82,9 @@ export function StringsContent({ stringsOnRoof, inverters }: StringContentProps)
     actionsDialog.onClose()
     inverterSelectionDialog.onOpen()
   }
-  const handleInverterClose = (resetForm: () => void) => {
+  const handleInverterClose = (resetForm: () => void, removeUploadedFile: () => void) => {
     inverterSelectionDialog.onClose()
+    removeUploadedFile()
     resetForm()
   }
 
@@ -183,6 +186,7 @@ export function StringsContent({ stringsOnRoof, inverters }: StringContentProps)
         resolver={stringInverterValidation}
         onSubmit={stringInverterSubmitHandler}
         inverters={inverters}
+        inverterModels={inverterModels}
       />
       <DeletionDialog
         onDelete={confirmDeleteHandler}
