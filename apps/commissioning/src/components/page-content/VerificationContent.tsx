@@ -4,8 +4,8 @@ import { Site } from '@src/integrations/youdera/sites/types';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 
-import { VerificationList } from '../VerificationList';
 import { LargeBox } from '../LargeBox';
+import { VerificationList } from '../VerificationList';
 
 export type VerificationContentProps = {
   siteId: number;

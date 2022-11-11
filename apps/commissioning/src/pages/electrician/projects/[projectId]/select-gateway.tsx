@@ -21,7 +21,7 @@ const SelectGatewayPage = ({
   };
 
   const backClickHandler = () => {
-    router.push('/roofer/select-project');
+    router.push('/electrician/select-project');
   };
 
   const onGatewaySelected = () => {
