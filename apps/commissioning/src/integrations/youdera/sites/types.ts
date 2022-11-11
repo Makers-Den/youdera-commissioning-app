@@ -1,3 +1,8 @@
+import { Battery } from "../batteries/types";
+import { ApiFile } from "../files/types";
+import { Inverter } from "../inverters/types";
+import { Meter } from "../meters/types";
+
 export type MonthMap<T> = {
   apr: T;
   aug: T;
@@ -24,7 +29,7 @@ export interface Address {
 export interface File {}
 
 export interface Site {
-  id: string;
+  id: number;
   name: string;
   wattpeak: number;
   prediction: MonthMap<number>;
@@ -51,4 +56,12 @@ export interface Site {
   files: File[];
   created_at: Date;
   updated_at: Date;
+
+  inverters?: Inverter[];
+  batteries?: Battery[];
+  meters?: Meter[];
+}
+
+export interface SiteWithFiles extends Site {
+  files: ApiFile[];
 }

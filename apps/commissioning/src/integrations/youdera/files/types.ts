@@ -1,5 +1,3 @@
-import { Site } from '../sites/types';
-
 export enum ApiFileType {
   stringLayout = 'string layout',
   additionalPictures = 'additional pictures',
@@ -14,10 +12,6 @@ export interface ApiFile {
   created_at: Date;
   updated_at: Date;
   deleted_at: Date | null;
-}
-
-export interface SiteWithFiles extends Site {
-  files: ApiFile[];
 }
 
 export interface AddFileToSiteRequest {
