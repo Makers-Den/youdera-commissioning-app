@@ -37,10 +37,16 @@ type Device = (
   }
 ) & { imageUrl: string };
 
-// TODO: waiting for proper way to form url to image file
-function toImageUrl(_?: ApiFile) {
-  return "https://picsum.photos/100";
+function toImageUrl(file?: ApiFile) {
+  // TODO: get proper placeholder image
+  return file?.url_thumb || "https://picsum.photos/100";
 }
+
+const commStatusToIcon = {
+  success: 'StatusOk',
+  failed: 'StatusError',
+  pending: 'StatusPending'
+} as const;
 
 function toDevice(thing: Inverter | Battery | Meter, type: DeviceType) {
   return {
@@ -50,6 +56,9 @@ function toDevice(thing: Inverter | Battery | Meter, type: DeviceType) {
     imageUrl: toImageUrl(thing?.files?.[0]),
   } as Device;
 }
+
+
+
 
 export function DeviceList({ siteId, inverters, batteries, meters }: DeviceListProps) {
   const intl = useIntl();
@@ -143,7 +152,9 @@ export function DeviceList({ siteId, inverters, batteries, meters }: DeviceListP
               <Td>
                 <SvgIcon name={device.type} />
               </Td>
-              <Td>TODO</Td>
+              <Td>
+                <SvgIcon name={commStatusToIcon[device.communication_status]} />
+              </Td>
             </Tr>
           ))}
         </Tbody>

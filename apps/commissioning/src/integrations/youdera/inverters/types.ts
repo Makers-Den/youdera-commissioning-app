@@ -1,9 +1,11 @@
 import { ApiFile } from "../files/types";
+import { CommunicationStatus } from "../types";
 
 export type Inverter = {
   id: number;
   name: string;
   serial_number: string;
+  communication_status: CommunicationStatus;
 
   manufacturer: string;
   model: string;
