@@ -65,7 +65,7 @@ export function SelectGatewayContent({ siteId, onGatewaySelected }: SelectGatewa
         />
       </BoxContent>
       <Divider className="my-5" />
-      <BoxContent className="max-h-[500px] overflow-y-scroll">
+      <BoxContent>
         <GatewayList gateways={filteredGateways} siteId={siteId} onSelectGateway={onSelectGateway} />
       </BoxContent>
     </LargeBox>

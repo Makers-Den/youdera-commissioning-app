@@ -20,7 +20,7 @@ export function DevicesContent({ project }: DevicesContentProps) {
           title={intl.formatMessage({ defaultMessage: 'Devices' })}
         />
       </BoxHeader>
-      <BoxContent className="max-h-[500px] overflow-y-scroll">
+      <BoxContent>
         <DeviceList 
           siteId={project.id}
           inverters={project.inverters}

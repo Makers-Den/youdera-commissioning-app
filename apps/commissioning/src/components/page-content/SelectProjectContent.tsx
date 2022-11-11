@@ -58,7 +58,7 @@ export function SelectProjectContent({
         />
       </BoxContent>
       <Divider className="my-5" />
-      <BoxContent className="max-h-[500px] overflow-y-scroll">
+      <BoxContent>
         <ProjectList projects={projects} />
       </BoxContent>
     </LargeBox>

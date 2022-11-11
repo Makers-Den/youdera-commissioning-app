@@ -18,7 +18,7 @@ export type NavHeaderProps = {
   onClick?: () => void;
   user?: ProfileDropdownProps["user"],
   profileItems: ProfileDropdownProps["items"],
-} 
+}
 
 export const NavHeader: React.FC<NavHeaderProps> = ({
   logoSrc,
@@ -29,33 +29,40 @@ export const NavHeader: React.FC<NavHeaderProps> = ({
   onClick,
 }) => {
   return (
-    <div className="flex w-screen justify-between items-center p-7 z-10">
-      {variant === 'logo' ? (
-        logoSrc && 
+    <>  
+     {/** 
+      * This will occupy the same space as the nav header that is 
+      * fixed to the top, so it pushes content down from below the NavHeader.
+      */}
+      <div className='h-[98px] mt-10' />
+      <div className="fixed top-0 bg-gray-50 flex w-screen justify-between items-center p-7 z-10">
+        {variant === 'logo' ? (
+          logoSrc &&
           <Image
             alt="logo"
             src={logoSrc}
             className="h-[38px] w-[110px]"
             objectFit="contain"
           />
-      ) : (
-        <div className="flex items-center gap-6">
-          <Button
-            icon="Cross"
-            variant="additional-gray"
-            className="w-[42px] h-[42px] rounded-[10px]"
-            onClick={onClick}
-          />
-          <H2 className="font-medium">{header}</H2>
-        </div>
-      )}
+        ) : (
+          <div className="flex items-center gap-6">
+            <Button
+              icon="Cross"
+              variant="additional-gray"
+              className="w-[42px] h-[42px] rounded-[10px]"
+              onClick={onClick}
+            />
+            <H2 className="font-medium">{header}</H2>
+          </div>
+        )}
 
-      {user && 
-        <ProfileDropdown
-          items={profileItems}
-          user={user}
-        />
-      }
-    </div>
+        {user &&
+          <ProfileDropdown
+            items={profileItems}
+            user={user}
+          />
+        }
+      </div>
+    </>
   );
 };
