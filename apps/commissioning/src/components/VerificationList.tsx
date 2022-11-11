@@ -5,10 +5,13 @@ import { Meter } from '@src/integrations/youdera/meters/types';
 import { Device, toDevice } from '@src/utils/devices';
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
+import { Button } from 'ui/buttons/Button';
 import { Image } from 'ui/image/Image';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
-import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 import { Typography } from 'ui/typography/Typography';
+import clsxm from 'ui/utils/clsxm';
+
+const GRID_COLS = 'grid-cols-[100px_150px_minmax(100px,_1fr)_100px_50px]';
 
 export type VerificationListProps = {
   inverters?: Inverter[];
@@ -32,44 +35,50 @@ export function VerificationList({ siteId: _, inverters, batteries, meters }: Ve
 
 
   return (
-    <Table className="w-full">
-      <Thead>
-        <Tr>
-          <Th colSpan={2} className='ml-6 w-[285px]'>{intl.formatMessage({ defaultMessage: "Name" })}</Th>
-          <Th className='w-[200px]'>{intl.formatMessage({ defaultMessage: "Manufacturer and model" })}</Th>
-          <Th className='w-[50px]'>{intl.formatMessage({ defaultMessage: "Type" })}</Th>
-          <Th>{intl.formatMessage({ defaultMessage: "Status" })}</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {devices.map(device => (
-          <Tr
-            className="cursor-pointer"
+    <div className="w-full">
+      <div className={clsxm('grid', GRID_COLS)}>
+        <div className='ml-6 col-span-2'>{intl.formatMessage({ defaultMessage: "Name" })}</div>
+        <div className='w-[200px]'>{intl.formatMessage({ defaultMessage: "Manufacturer and model" })}</div>
+        <div className='w-[50px]'>{intl.formatMessage({ defaultMessage: "Type" })}</div>
+        <div />
+        <div />
+      </div>
+      {devices.map(device => (
+        <div className='bg-gray-400 rounded py-10 mb-2'>
+          {/* Header row */}
+          <div
+            className={clsxm('grid', GRID_COLS, 'pb-2 cursor-pointer')}
             key={device.id}
+            role="button"
             onClick={rowClickHandler(device)}
           >
-            <Td>
-              <div className="ml-2 flex aspect-square w-11 items-center justify-center overflow-hidden rounded">
-                <Image src={device.imageUrl} alt={`${device.type} image`} />
-              </div>
-            </Td>
-            <Td>
-              <Typography weight="medium" className='w-[160px] truncate'>{device.name}</Typography>
+            <div className="ml-2 flex aspect-square w-11 items-center justify-center overflow-hidden rounded">
+              <Image src={device.imageUrl} alt={`${device.type} image`} />
+            </div>
+            <div>
+              <Typography weight="medium" className='truncate'>{device.name}</Typography>
               <Typography variant="label">{device.serial_number}</Typography>
-            </Td>
-            <Td>
-              <Typography variant="label" className='w-[160px] truncate'>{device.manufacturer}</Typography>
-              <Typography variant="label" className='w-[160px] truncate'>{device.model}</Typography>
-            </Td>
-            <Td>
+            </div>
+            <div>
+              <Typography variant="label" className='truncate'>{device.manufacturer}</Typography>
+              <Typography variant="label" className='truncate'>{device.model}</Typography>
+            </div>
+            <div>
               <SvgIcon name={device.type} />
-            </Td>
-            <Td>
-              Ver. Status
-            </Td>
-          </Tr>
-        ))}
-      </Tbody>
-    </Table>
+            </div>
+            <div>
+              <SvgIcon name='ChevronDown' className='w-3' />
+            </div>
+          </div>
+          {/* Expanded test results */}
+          <div className={clsxm('grid', GRID_COLS, 'border-t border-gray-500 pt-2')}>
+            <div className="col-span-2">Test time</div>
+            <div>Test result</div>
+            <div className="col-span-2"><Button variant='main-green'>Run Test</Button></div>
+
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
