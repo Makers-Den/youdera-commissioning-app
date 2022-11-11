@@ -1,4 +1,5 @@
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
+import { VerificationContent } from '@src/components/page-content/VerificationContent';
 import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
@@ -37,11 +38,19 @@ return (
           type: 'button',
           onClick: backClickHandler,
         },
+        {
+          content: intl.formatMessage({
+            defaultMessage: 'Contact project manager',
+          }),
+          variant: 'main-green',
+          type: 'button',
+          onClick: () => {},
+        },
       ],
     }}
   >
     <Suspense fallback={<LargeBoxSkeleton />}>
-        <div className="min-h-[70vh]">TODO: verification</div>
+      <VerificationContent siteId={project.id} />
     </Suspense>
   </AuthenticatedLayout>
 );

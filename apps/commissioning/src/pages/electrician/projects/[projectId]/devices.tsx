@@ -39,7 +39,7 @@ return (
       buttons: [
         {
           content: intl.formatMessage({
-            defaultMessage: 'Back',
+            defaultMessage: 'Change gateway',
           }),
           variant: 'additional-gray',
           type: 'button',

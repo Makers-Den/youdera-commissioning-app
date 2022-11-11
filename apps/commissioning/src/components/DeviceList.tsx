@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 import { useBatteryApi } from '@src/integrations/youdera/batteries/hooks/useBatteryApi';
 import { Battery } from '@src/integrations/youdera/batteries/types';
-import { ApiFile } from '@src/integrations/youdera/files/types';
 import { useInverterApi } from '@src/integrations/youdera/inverters/hooks/useInverterApi';
 import { Inverter } from '@src/integrations/youdera/inverters/types';
 import { useMeterApi } from '@src/integrations/youdera/meters/hooks/useMeterApi';
 import { Meter } from '@src/integrations/youdera/meters/types';
+import { commStatusToIcon, Device, toDevice } from '@src/utils/devices';
 import { useMemo,useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -24,41 +24,6 @@ export type DeviceListProps = {
   meters?: Meter[];
   siteId: number;
 };
-
-type DeviceType = 'Inverter' | 'Battery' | 'Meter';
-
-type Device = (
-  | Inverter & { type: 'Inverter' }
-  | Battery & { type: 'Battery' }
-  | Meter & {
-    type: 'Meter',
-    /** copy of `number` */
-    serial_number: string
-  }
-) & { imageUrl: string };
-
-function toImageUrl(file?: ApiFile) {
-  // TODO: get proper placeholder image
-  return file?.url_thumb || "https://picsum.photos/100";
-}
-
-const commStatusToIcon = {
-  success: 'StatusOk',
-  failed: 'StatusError',
-  pending: 'StatusPending'
-} as const;
-
-function toDevice(thing: Inverter | Battery | Meter, type: DeviceType) {
-  return {
-    ...thing,
-    type,
-    ...(type === 'Meter' && { serial_number: (thing as Meter).number }),
-    imageUrl: toImageUrl(thing?.files?.[0]),
-  } as Device;
-}
-
-
-
 
 export function DeviceList({ siteId, inverters, batteries, meters }: DeviceListProps) {
   const intl = useIntl();
