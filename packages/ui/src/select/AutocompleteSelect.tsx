@@ -12,12 +12,6 @@ export type AutocompleteSelectOption = {
   icon?: IconName;
 };
 
-export type AutocompleteSelectAction = {
-  label: string;
-  icon?: IconName;
-  onClick: () => void;
-};
-
 export type AutocompleteSelectProps = {
   label: string;
   placeholder: string;
@@ -26,7 +20,6 @@ export type AutocompleteSelectProps = {
   className?: string;
   value?: AutocompleteSelectOption | undefined;
   validity?: 'invalid' | 'valid';
-  action?: AutocompleteSelectAction;
   isRequired?: boolean;
   onChange?: (value: AutocompleteSelectOption | undefined) => void
 } & Omit<React.ComponentPropsWithRef<'input'>, 'value' | 'onChange'>;
@@ -39,7 +32,6 @@ export const AutocompleteSelect = React.forwardRef<HTMLInputElement, Autocomplet
     placeholder,
     options,
     className,
-    action,
     validity,
     isRequired,
     noOptionsString = 'Nothing found.',
@@ -121,18 +113,6 @@ export const AutocompleteSelect = React.forwardRef<HTMLInputElement, Autocomplet
                   'drop-shadow-large rounded-md bg-white',
                 )}
               >
-                {action && (
-                  // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
-                  <div
-                    className="flex cursor-pointer select-none items-center py-2 pl-4 pr-4 font-medium hover:bg-gray-100"
-                    onClick={action.onClick}
-                  >
-                    {action.icon && (
-                      <SvgIcon name={action.icon} className="mr-3 h-[14px]" />
-                    )}
-                    {action.label}
-                  </div>
-                )}
                 {filteredOptions.length === 0 && query !== '' ? (
                   <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                     {noOptionsString}

@@ -17,7 +17,8 @@ import {
   UseFileUploaderArgs,
 } from 'ui/file-inputs/useFileUploader';
 import { AutocompleteSelect } from 'ui/select/AutocompleteSelect';
-import { SvgIcon } from 'ui/svg-icons/SvgIcon';
+import { Select } from 'ui/select/Select';
+import { IconName, SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z, ZodObject, ZodTypeAny } from 'zod';
@@ -113,7 +114,7 @@ export const StringInverterDialog = <
   const { fileUploaderProps, uploadedFilesUrls, removeFile } = useFileUploader({
     uploadFile: uploadFileMock,
   });
-
+  console.log(watchInverter?.key)
   return (
     <Dialog
       open={open}
@@ -149,23 +150,22 @@ export const StringInverterDialog = <
                 noOptionsString={intl.formatMessage({
                   defaultMessage: 'Nothing found.',
                 })}
-                action={{
-                  label: 'Add new inverter',
-                  onClick: () => alert('Here will be AddInverterDialog'),
-                  icon: 'Plus',
-                }}
-                options={inverters.map((inverter) => ({
+                options={[{
+                  key: '-1',
+                  label: intl.formatMessage({ defaultMessage: 'Add new inverter' }),
+                  icon: 'Plus' as IconName
+                }].concat(inverters.map((inverter) => ({
                   key: String(inverter.id),
                   label: inverter.name,
                   icon: 'Table'
-                }))}
+                })))}
                 onChange={(value) => onChange({ target: { value, name: 'inverter', key: value?.key } })}
                 {...rest}
                 validity={fieldState.invalid ? 'invalid' : undefined}
               />
             }}
           </Field>
-          {watchInverter &&
+          {watchInverter && (watchInverter.key !== '-1' ?
             <Field name='input'>
               {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
                 const { onChange, ...rest } = register('input', {
@@ -196,9 +196,74 @@ export const StringInverterDialog = <
                 />
               }}
             </Field>
+            :
+            <>
+              <Field name='manufacturer'>
+                {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
+                  const { onChange, ...rest } = register('manufacturer', {
+                    setValueAs: v => (v || ''),
+                  })
+                  return <Select
+                    wrapperClassName='z-30'
+                    label={intl.formatMessage({ defaultMessage: 'Manufacturer' })}
+                    placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+                    options={[
+                      {
+                        key: '1',
+                        label: 'Holder',
+                      },
+                    ]}
+                    onChange={(value) => onChange({ target: { value, name: 'manufacturer' } })}
+                    {...rest}
+                    validity={fieldState.invalid ? 'invalid' : undefined}
+                  />
+                }}
+              </Field>
+              <Field name='inverterModel'>
+                {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
+                  const { onChange, ...rest } = register('inverterModel', {
+                    setValueAs: v => (v || ''),
+                  })
+                  return <Select
+                    wrapperClassName='z-20'
+                    label={intl.formatMessage({ defaultMessage: 'Inverter Model' })}
+                    placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+                    options={[
+                      {
+                        key: '1',
+                        label: 'Holder',
+                      },
+                    ]}
+                    onChange={(value) => onChange({ target: { value, name: 'inverterModel' } })}
+                    {...rest}
+                    validity={fieldState.invalid ? 'invalid' : undefined}
+                  />
+                }}
+              </Field>
+              <Field name='input'>
+                {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
+                  const { onChange, ...rest } = register('input', {
+                    setValueAs: v => (v || ''),
+                  })
+                  return <Select
+                    wrapperClassName='z-10'
+                    label={intl.formatMessage({ defaultMessage: 'Input' })}
+                    placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+                    options={[
+                      {
+                        key: '1',
+                        label: 'Holder',
+                      },
+                    ]}
+                    onChange={(value) => onChange({ target: { value, name: 'input' } })}
+                    {...rest}
+                    validity={fieldState.invalid ? 'invalid' : undefined}
+                  />
+                }}
+              </Field>
+            </>)
           }
           {watchInput &&
-
             <FileUploaderWithPreview
               fileUploaderProps={{ ...fileUploaderProps, className: 'w-full' }}
               onDeleteFile={removeFile}

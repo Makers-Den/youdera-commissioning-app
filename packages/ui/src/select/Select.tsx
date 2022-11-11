@@ -55,7 +55,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>((
       {...rest}
     >
       {({ open }) => (
-        <div className={clsxm('relative z-10 mt-1')}>
+        <div className={clsxm('relative mt-1')}>
           <Listbox.Button
             className={clsxm(
               'w-full py-2 pl-3 pr-4',
