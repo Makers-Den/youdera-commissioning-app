@@ -49,23 +49,25 @@ type Action =
     };
 
 const reducer = (state: State, { type, payload }: Action): State => {
+  const uploadedFile = payload as UploadedFile;
+
   switch (type) {
     case ActionType.setUploadPercentage:
       return {
         ...state,
         status: UploadStatus.uploading,
-        uploadProgressPercentage: payload,
+        uploadProgressPercentage: payload as number,
       };
     case ActionType.addNewFileUrl:
       return {
-        uploadedFilesUrls: [...state.uploadedFilesUrls, payload],
+        uploadedFilesUrls: [...state.uploadedFilesUrls, uploadedFile],
         status: UploadStatus.success,
       };
     case ActionType.setErrorMessage:
       return {
         ...state,
         status: UploadStatus.error,
-        errorMessage: payload,
+        errorMessage: payload as string,
       };
     case ActionType.removeFile:
       return {
@@ -73,9 +75,9 @@ const reducer = (state: State, { type, payload }: Action): State => {
         uploadedFilesUrls: state.uploadedFilesUrls.filter(
           ({ url, name, type: fileType }) =>
             !(
-              url === payload.url &&
-              name === payload.name &&
-              fileType === payload.type
+              url === uploadedFile.url &&
+              name === uploadedFile.name &&
+              fileType === uploadedFile.type
             ),
         ),
       };
