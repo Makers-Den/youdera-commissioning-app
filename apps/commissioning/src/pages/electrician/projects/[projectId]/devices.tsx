@@ -57,7 +57,7 @@ return (
     }}
   >
     <Suspense fallback={<LargeBoxSkeleton />}>
-        <DevicesContent project={project} />
+      <DevicesContent siteId={project.id} />
     </Suspense>
   </AuthenticatedLayout>
 );
