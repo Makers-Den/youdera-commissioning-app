@@ -21,7 +21,7 @@ const SelectGatewayPage = ({
   };
 
   const backClickHandler = () => {
-    router.push('/roofer/select-project');
+    router.push('/electrician/select-project');
   };
 
   const onGatewaySelected = () => {
@@ -30,7 +30,7 @@ const SelectGatewayPage = ({
 
   const { gatewaysQuery } = useGetGateways({ suspense: false });
 
-  const nextIsEnabled: boolean = (gatewaysQuery.data || [])
+  const nextIsEnabled = (gatewaysQuery.data || [])
     .reduce((acc, gateway) => gateway.site_id === project.id || acc, false);
 
   return (

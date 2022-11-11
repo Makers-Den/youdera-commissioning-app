@@ -34,21 +34,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       ...rest
     },
     ref,
-  ) => {
-   
-
-    let computedIcon: IconName | undefined = icon;
-
-    if (!units && validity === 'valid') {
-      computedIcon = 'Check';
-    }
-
-    if (!units && validity === 'invalid') {
-      computedIcon = 'Cross';
-    }
-
-    return (
-      <div className={clsxm(className)}>
+  ) => (
+      <div className={clsxm('group', className)}
+        data-validity={validity}
+        >
         {label && (
           <Label className={validity && validityStyle[validity].label}>
             {label}
@@ -64,7 +53,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type="input"
             placeholder={placeholder}
             className={clsxm(
-              'peer/input',
               'inline-flex w-full items-center justify-center rounded px-3 py-2',
               'bg-gray-100 font-medium text-gray-800',
               'placeholder:font-normal',
@@ -79,34 +67,42 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <button
             type="button"
             className={clsxm(
-              'peer-focus/input:text-orange-400 peer-focus/input:fill-orange-400',
+              'text-gray-500 fill-gray-500',
+              'group-data-[validity=valid]:text-green-400 group-data-[validity=valid]:fill-green-400',
+              'group-data-[validity=invalid]:text-red-400 group-data-[validity=invalid]:fill-red-400',
+              'group-focus-within:!text-orange-400 group-focus-within:!fill-orange-400',
               `absolute inset-y-0 right-0 flex items-center pr-3 text-sm`,
-              !onClickRightElement && 'hover:cursor-default'
+              !onClickRightElement && 'hover:cursor-default',
             )}
             onClick={onClickRightElement}
           >
-            {computedIcon && (
+            {icon && !units && (
               <SvgIcon
-                name={computedIcon}
+                name={icon}
                 className={clsxm(
                   'h-4 w-4 fill-inherit text-inherit',
-                  validity && validityStyle[validity].icon,
+                  'group-data-[validity=invalid]:hidden group-data-[validity=valid]:hidden',
+                  'group-focus-within:!block'
+                )}
+              />
+            )}
+            {validity && !units && (
+              <SvgIcon
+                name={validity === 'valid' ? 'Check' : 'Cross'}
+                className={clsxm(
+                  'h-4 w-4 fill-inherit text-inherit',
+                  'group-focus-within:hidden'
                 )}
               />
             )}
             {units && (
-              <span
-                className={clsxm(
-                  'text-inherit',
-                  validity && validityStyle[validity].units
-                )}
-              >
+              <span className="text-inherit">
                 {units}
               </span>
             )}
           </button>
         </div>
       </div>
-    );
-  },
+    )
+  
 );

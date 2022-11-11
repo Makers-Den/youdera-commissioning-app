@@ -1,14 +1,17 @@
+import { ApiFile } from "../files/types";
+import { CommunicationStatus } from "../types";
 
 export type Inverter = {
   id: number;
   name: string;
-  number: string;
-  factor: number;
+  serial_number: string;
+  communication_status: CommunicationStatus;
+
   manufacturer: string;
   model: string;
 
   mpp_trackers?: MppTracker[];
-  files?: File[];
+  files?: ApiFile[];
 }
 
 

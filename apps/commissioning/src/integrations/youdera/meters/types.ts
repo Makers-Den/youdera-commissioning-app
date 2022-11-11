@@ -1,8 +1,12 @@
+import { ApiFile } from "../files/types";
+import { CommunicationStatus } from "../types";
 
 export type Meter = {
   id: number;
   name: string;
   number: string;
+  communication_status: CommunicationStatus;
+
   factor: number;
   manufacturer: string;
   model: string;
@@ -21,5 +25,5 @@ export type Meter = {
   created_at: string;
   updated_at: string;
   
-  files?: File[];
+  files?: ApiFile[];
 }

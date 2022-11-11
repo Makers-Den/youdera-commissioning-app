@@ -1,50 +1,35 @@
-import React, { useState } from 'react';
-import { Input } from 'ui/inputs/Input';
-import { NumberInput } from 'ui/inputs/NumberInput';
-import {
-  AutocompleteSelect,
-  AutocompleteSelectOption,
-} from 'ui/select/AutocompleteSelect';
-import { Select } from 'ui/select/Select';
+import { getUserInfo } from '@src/integrations/youdera/auth/queries/getUserInfo';
+import { Role } from '@src/integrations/youdera/auth/types';
+import { protectRoute } from '@src/middlewares/protectRoute';
+import { GetServerSideProps } from 'next';
+import React from 'react';
 
-const options: AutocompleteSelectOption[] = [];
-
-for (let i = 0; i < 10; i += 1) {
-  options.push({
-    key: `${i}`,
-    label: `T-${i}00`,
-    icon: 'Envelope',
-  });
-}
-
-const Home = () => {
-  const [value, setValue] = useState<AutocompleteSelectOption>();
-  const handleAutoSelect = (val: AutocompleteSelectOption | undefined) =>
-    setValue(val);
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center space-y-8">
-      <AutocompleteSelect
-        label="Label"
-        placeholder="Placeholder"
-        options={options}
-        className="z-20"
-        action={{ label: 'Add', onClick: () => alert('aaa'), icon: 'Plus' }}
-        value={value}
-        onChange={handleAutoSelect}
-        noOptionsString="Nothing found."
-        validity='invalid'
-      />
-      <Select
-        label="Label"
-        placeholder="sth"
-        options={options}
-        wrapperClassName="w-64"
-        validity='invalid'
-      />
-      <Input label='Input' validity='invalid' />
-      <NumberInput label='NumberInput' validity='invalid' />
-    </div>
-  );
-};
+const Home = () => <div />
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = protectRoute([
+  Role.electrician, Role.roofer,
+]).then(async () => {
+  const currentUser = await getUserInfo();
+
+  if (currentUser.role === Role.electrician) {
+    return {
+      redirect: {
+        destination: '/electrician/select-task'
+      }
+    };
+  }
+
+  if (currentUser.role === Role.roofer) {
+    return {
+      redirect: {
+        destination: '/roofer/select-task'
+      }
+    };
+  }
+
+  return {
+    props: {}
+  };
+});

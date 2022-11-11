@@ -1,5 +1,5 @@
-import { SiteWithFiles } from '../types';
 import { youderaApiInstance } from '../../api-instances/youdera';
+import { SiteWithFiles } from '../../sites/types';
 import { CreateDataResponse } from '../../types';
 
 export const getSiteFiles = async (siteId: string) => {

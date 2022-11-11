@@ -1,4 +1,5 @@
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
+import { DevicesContent } from '@src/components/page-content/DevicesContent';
 import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
@@ -38,7 +39,7 @@ return (
       buttons: [
         {
           content: intl.formatMessage({
-            defaultMessage: 'Back',
+            defaultMessage: 'Change gateway',
           }),
           variant: 'additional-gray',
           type: 'button',
@@ -56,7 +57,7 @@ return (
     }}
   >
     <Suspense fallback={<LargeBoxSkeleton />}>
-        <div className="min-h-[70vh]">TODO: devices</div>
+      <DevicesContent siteId={project.id} />
     </Suspense>
   </AuthenticatedLayout>
 );
