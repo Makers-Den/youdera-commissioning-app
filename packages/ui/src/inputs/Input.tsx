@@ -79,6 +79,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <button
             type="button"
             className={clsxm(
+              'text-gray-500 fill-gray-500',
               'peer-focus/input:text-orange-400 peer-focus/input:fill-orange-400',
               `absolute inset-y-0 right-0 flex items-center pr-3 text-sm`,
               !onClickRightElement && 'hover:cursor-default'

@@ -1,5 +1,6 @@
 import React, { SVGProps } from 'react';
 import {
+  FaBatteryFull,
   FaCalendarAlt,
   FaCheck,
   FaEnvelope,
@@ -21,11 +22,15 @@ import { Extention } from './icons/Extension';
 import { Gateway } from './icons/Gateway';
 import { LogOut } from './icons/LogOut';
 import { MagnifyingGlass } from './icons/MagnifyingGlass';
+import { Meter } from './icons/Meter';
 import { Plus } from './icons/Plus';
 import { Problem } from './icons/Problem';
 import { SafetyHelmet } from './icons/SafetyHelmet';
 import { Settings } from './icons/Settings';
 import { SolarPanel } from './icons/SolarPanel';
+import { StatusError } from './icons/StatusError';
+import { StatusOk } from './icons/StatusOk';
+import { StatusPending } from './icons/StatusPending';
 import { Suitcase } from './icons/Suitcase';
 import { ThumbsUp } from './icons/ThumbsUp';
 import { Trashbin } from './icons/Trashbin';
@@ -40,6 +45,9 @@ const iconMap = {
   Unlock: FaUnlockAlt,
   Table: FaTable,
   Chip: FaMicrochip,
+  Meter,
+  Battery: FaBatteryFull,
+  Inverter: FaTable,
   ChevronDown,
   Settings,
   LogOut,
@@ -59,7 +67,10 @@ const iconMap = {
   Suitcase,
   MagnifyingGlass,
   SolarPanel,
-  Gateway
+  Gateway,
+  StatusOk,
+  StatusError,
+  StatusPending,
 };
 
 export type IconName = keyof typeof iconMap;
