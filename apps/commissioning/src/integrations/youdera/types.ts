@@ -4,6 +4,4 @@ export type CreateDataResponse<T> = {
 
 export type UpdateDataResponse<T> = {
   data: T;
-}
-
-export type CommunicationStatus = 'pending' | 'failed' | 'success';
+};

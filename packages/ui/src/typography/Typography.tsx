@@ -2,7 +2,7 @@ import React, { CSSProperties } from 'react';
 
 import clsxm from '../utils/clsxm';
 
-export type TypographyVariant = 'body' | 'h1' | 'h2' | 'h3' | 'label';
+export type TypographyVariant = 'body' | 'bodySmall' | 'h1' | 'h2' | 'h3' | 'label';
 
 export type TypographyWeight = 'normal' | 'medium' | 'bold';
 
@@ -33,6 +33,7 @@ export interface TypographyProps {
 
 export const variantToClasses: { [key in TypographyVariant]: string[] } = {
   body: ['text-base', 'text-current', 'font-roboto'],
+  bodySmall: ['text-sm', 'text-current', 'font-roboto'],
   h1: ['text-3xl', 'text-current', 'font-roboto'],
   h2: ['text-2xl', 'text-current', 'font-roboto'],
   h3: ['text-lg', 'text-current', 'font-roboto'],
@@ -76,6 +77,10 @@ export type TypographyPropsWithoutVariant = Omit<TypographyProps, 'variant'>;
 /** Equivalent to "Paragraph" in Design System */
 export const BodyText = (props: TypographyPropsWithoutVariant) => (
   <Typography variant="body" as="p" {...props} />
+);
+
+export const BodySmallText = (props: TypographyPropsWithoutVariant) => (
+  <Typography variant="bodySmall" as="p" {...props} />
 );
 
 /** There should only be one instance of an H1 tag on the page */

@@ -23,7 +23,7 @@ export function VerificationContent({ siteId }: VerificationContentProps) {
     <LargeBox>
       <BoxHeader>
         <BoxTitle
-          title={intl.formatMessage({ defaultMessage: 'Devices' })}
+          title={intl.formatMessage({ defaultMessage: 'Test and Verify' })}
         />
       </BoxHeader>
       <BoxContent>

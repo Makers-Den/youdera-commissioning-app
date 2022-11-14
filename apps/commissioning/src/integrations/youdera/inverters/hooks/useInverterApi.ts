@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { addFileToInverter } from '../mutations/addFileToInverter';
 import { createInverter } from '../mutations/createInverter';
-import { deleteInverter } from '../mutations/deleteInverter';
+import { deleteInverter } from '../../apiRequests';
 import { QueryKeys } from '../../enums/queryKeys';
 
 export const useInverterApi = (siteId: number) => {
