@@ -42,6 +42,7 @@ const stringInverterValidation = z.object({
     key: z.string(),
     label: z.string(),
   }),
+  file: z.instanceof(File),
 });
 
 // const updateModuleTypeValidation = z.object({
@@ -119,12 +120,11 @@ export function StringsContent({
 
   const stringInverterSubmitHandler: StringInverterDialogProps<
     typeof stringInverterValidation
-  >['onSubmit'] = async values =>
+  >['onSubmit'] = async ({ input, inverter, file }, resetForm) =>
     // { inverter, input },
     // resetForm,
 
     {
-      console.log(values, 'values');
       try {
         const string = await createStringMutation.mutateAsync({
           count: moduleTypeFormData.current!.numberOfModules,
@@ -133,8 +133,12 @@ export function StringsContent({
           cable_cross_section: moduleTypeFormData.current!.cableCrossSection,
         });
 
-        console.log(string, 'string');
-        // resetForm();
+        await addFileToStringMutation.mutateAsync({
+          stringId: string.id,
+          file,
+        });
+
+        resetForm();
         inverterSelectionDialog.onClose();
       } catch (err) {
         // eslint-disable-next-line no-console
