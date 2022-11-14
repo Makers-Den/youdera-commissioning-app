@@ -12,12 +12,10 @@ import {
   DialogProps,
   DialogTitle,
 } from 'ui/dialogs/Dialog';
-import { FileUploaderWithPreview } from 'ui/file-inputs/FileUploaderWithPreview'
 import {
-  useFileUploader,
-  UseFileUploaderArgs,
-} from 'ui/file-inputs/useFileUploader';
-import { AutocompleteSelect, AutocompleteSelectOption } from 'ui/select/AutocompleteSelect';
+  AutocompleteSelect,
+  AutocompleteSelectOption,
+} from 'ui/select/AutocompleteSelect';
 import { Select } from 'ui/select/Select';
 import { IconName, SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
@@ -25,8 +23,8 @@ import clsxm from 'ui/utils/clsxm';
 import { z, ZodObject, ZodTypeAny } from 'zod';
 
 import { Field, FieldState } from './Field';
+import { FileField } from './FileField';
 import { Form } from './Form';
-
 
 // TODO: Handlers for Cancel and Save buttons
 type RawFormShape = {
@@ -41,10 +39,10 @@ type RawFormShape = {
 export type StringInverterDialogProps<
   ResolverType extends ZodObject<RawFormShape>,
 > = {
-  inverters: Inverter[]
-  inverterModels: InverterModel[]
+  inverters: Inverter[];
+  inverterModels: InverterModel[];
   open: DialogProps['open'];
-  onClose: (reset: () => void, removeUploadedFile: () => void) => void;
+  onClose: (reset: () => void) => void;
   className?: string;
   onSubmit: (values: z.infer<ResolverType>, resetForm: () => void) => void;
   resolver: ResolverType;
@@ -59,9 +57,8 @@ export const StringInverterDialog = <
   onSubmit,
   resolver,
   inverters,
-  inverterModels
+  inverterModels,
 }: StringInverterDialogProps<ResolverType>) => {
-
   const intl = useIntl();
   const method = useForm({
     resolver: zodResolver(resolver),
@@ -69,91 +66,54 @@ export const StringInverterDialog = <
 
   const { handleSubmit, reset, formState, watch } = method;
 
-  const watchInverter = watch('inverter')
-  const watchInput = watch('input')
-  const watchManufacturer = watch('manufacturer')
-  const watchModel = watch('model')
+  const watchInverter = watch('inverter');
+  const watchInput = watch('input');
+  const watchManufacturer = watch('manufacturer');
+  const watchModel = watch('model');
+  const watchFile = watch('file');
   //TODO: Waiting for mpp_trackers on backend side
-  // const inverterInputs = watchInverter?.key && inverters.filter((inverter) => inverter.id === watchInverter.key)[0] 
+  // const inverterInputs = watchInverter?.key && inverters.filter((inverter) => inverter.id === watchInverter.key)[0]
 
-  function asyncTimeout(ms: number) {
-    return new Promise(resolve => {
-      setTimeout(resolve, ms);
+  const inverterManufactures: AutocompleteSelectOption[] | [] = useMemo(() => {
+    if (!inverterModels) return [];
+
+    const result: AutocompleteSelectOption[] = [];
+    const map = new Map();
+    inverterModels.forEach(model => {
+      if (!map.has(model.manufacturer_id)) {
+        map.set(model.manufacturer_id, true);
+        result.push({
+          key: model.manufacturer_id.toString(),
+          label: model.manufacturer_name,
+        });
+      }
     });
-  }
+    return result;
+  }, [inverterModels]);
 
-  function getRandomIntInRange(min: number, max: number) {
-    return Math.floor(Math.random() * max) + min;
-  }
-
-  const uploadFileMock: UseFileUploaderArgs['uploadFile'] = (
-    event,
-    setUploadProgress,
-    addNewFile,
-    setErrorMessage,
-  ) => {
-    if (event.currentTarget.files?.length) {
-      const file = event.currentTarget.files?.[0];
-
-      const reader = new FileReader();
-
-      reader.addEventListener('load', async ev => {
-        for (let i = 0; i < 100; i += getRandomIntInRange(2, 5)) {
-          setUploadProgress(i);
-          // eslint-disable-next-line no-await-in-loop
-          await asyncTimeout(getRandomIntInRange(50, 300));
-        }
-        addNewFile((ev.target?.result as string) || '');
-      });
-      // reader.addEventListener('progress', ev => {
-      //   setUploadProgress(Math.floor((100 * ev.loaded) / ev.total));
-      // });
-      reader.addEventListener('error', () => {
-        setErrorMessage('Error. try again later');
-      });
-
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const { fileUploaderProps, uploadedFilesUrls, removeFile } = useFileUploader({
-    uploadFile: uploadFileMock,
-  });
-
-  const inverterManufactures: AutocompleteSelectOption[] | [] = useMemo(
-    () => {
-      if (!inverterModels) return []
-
-      const result: AutocompleteSelectOption[] = [];
-      const map = new Map();
-      inverterModels.forEach((model) => {
-        if (!map.has(model.manufacturer_id)) {
-          map.set(model.manufacturer_id, true);
-          result.push({
-            key: model.manufacturer_id.toString(),
-            label: model.manufacturer_name
-          });
-        }
-      })
-      return result
-    }
-    , [inverterModels]
-  );
-
-  const inverterFilteredModels: AutocompleteSelectOption[] | [] = useMemo(
-    () => {
-      if (!watchManufacturer || watchManufacturer?.length < 1 || !inverterModels) return []
+  const inverterFilteredModels: AutocompleteSelectOption[] | [] =
+    useMemo(() => {
+      if (
+        !watchManufacturer ||
+        watchManufacturer?.length < 1 ||
+        !inverterModels
+      )
+        return [];
       return inverterModels
-        .filter(model => model.manufacturer_id.toString() === watchManufacturer.key)
-        .map((model) => ({ key: model.id.toString(), label: model.name, icon: "Table" }))
-    }
-    , [inverterModels, watchManufacturer]
-  );
+        .filter(
+          model => model.manufacturer_id.toString() === watchManufacturer.key,
+        )
+        .map(model => ({
+          key: model.id.toString(),
+          label: model.name,
+          icon: 'Table',
+        }));
+    }, [inverterModels, watchManufacturer]);
 
   return (
     <Dialog
       open={open}
-      onClose={() => onClose(reset, () => removeFile(uploadedFilesUrls[0]))}
+      onClose={() => onClose(reset)}
       className={clsxm('w-[400px]', className)}
     >
       <DialogHeader>
@@ -165,7 +125,7 @@ export const StringInverterDialog = <
         <SvgIcon
           name="Close"
           className="ml-auto h-4 hover:cursor-pointer"
-          onClick={() => onClose(reset, () => removeFile(uploadedFilesUrls[0]))}
+          onClick={() => onClose(reset)}
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
@@ -174,152 +134,266 @@ export const StringInverterDialog = <
           className="flex flex-col gap-5"
           {...method}
         >
-          <Field name='inverter'>
-            {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
+          <Field name="inverter">
+            {(
+              register: UseFormRegister<FieldValues>,
+              fieldState: FieldState,
+            ) => {
               const { onChange, ...rest } = register('inverter', {
-                setValueAs: v => (v || undefined),
-              })
-              return <AutocompleteSelect
-                label={intl.formatMessage({ defaultMessage: 'Select inverter' })}
-                placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                noOptionsString={intl.formatMessage({
-                  defaultMessage: 'Nothing found.',
-                })}
-                options={[{
-                  key: '-1',
-                  label: intl.formatMessage({ defaultMessage: 'Add new inverter' }),
-                  icon: 'Plus' as IconName
-                }].concat(inverters.map((inverter) => ({
-                  key: String(inverter.id),
-                  label: inverter.name,
-                  icon: 'Table'
-                })))}
-                onChange={(value) => onChange({ target: { value, name: 'inverter', key: value?.key } })}
-                {...rest}
-                validity={fieldState.invalid ? 'invalid' : undefined}
-              />
-            }}
-          </Field>
-          {watchInverter && (watchInverter.key !== '-1' ?
-            <Field name='input'>
-              {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
-                const { onChange, ...rest } = register('input', {
-                  setValueAs: v => (v || undefined),
-                })
-                return <AutocompleteSelect
-                  label={intl.formatMessage({ defaultMessage: 'Select input' })}
+                setValueAs: v => v || undefined,
+              });
+              return (
+                <AutocompleteSelect
+                  label={intl.formatMessage({
+                    defaultMessage: 'Select inverter',
+                  })}
                   placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
                   noOptionsString={intl.formatMessage({
                     defaultMessage: 'Nothing found.',
                   })}
-                  options={
-                    // TODO: Waiting for mpp_trackers on backend side
-                    // inverterInputs.mpp_trackers.map(() => ({
-                    //   key: '1', // unknown values
-                    //   label: 'TODO' // unknown values
-                    // }))
-                    [
-                      {
-                        key: '1',
-                        label: 'I11'
-                      }
-                    ]
+                  options={[
+                    {
+                      key: '-1',
+                      label: intl.formatMessage({
+                        defaultMessage: 'Add new inverter',
+                      }),
+                      icon: 'Plus' as IconName,
+                    },
+                  ].concat(
+                    inverters.map(inverter => ({
+                      key: String(inverter.id),
+                      label: inverter.name,
+                      icon: 'Table',
+                    })),
+                  )}
+                  onChange={value =>
+                    onChange({
+                      target: { value, name: 'inverter', key: value?.key },
+                    })
                   }
-                  onChange={(value) => onChange({ target: { value, name: 'input' } })}
                   {...rest}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />
-              }}
-            </Field>
-            :
-            <>
-              <Field name='manufacturer'>
-                {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
-                  const { onChange, ...rest } = register('manufacturer', {
-                    setValueAs: v => (v || ''),
-                  })
-                  return <Select
-                    wrapperClassName='z-30'
-                    label={intl.formatMessage({ defaultMessage: 'Manufacturer' })}
-                    placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                    options={inverterManufactures}
-                    onChange={(value) => onChange({ target: { value, name: 'manufacturer' } })}
-                    {...rest}
-                    validity={fieldState.invalid ? 'invalid' : undefined}
-                  />
+              );
+            }}
+          </Field>
+          {watchInverter &&
+            (watchInverter.key !== '-1' ? (
+              <Field name="input">
+                {(
+                  register: UseFormRegister<FieldValues>,
+                  fieldState: FieldState,
+                ) => {
+                  const { onChange, ...rest } = register('input', {
+                    setValueAs: v => v || undefined,
+                  });
+                  return (
+                    <AutocompleteSelect
+                      label={intl.formatMessage({
+                        defaultMessage: 'Select input',
+                      })}
+                      placeholder={intl.formatMessage({
+                        defaultMessage: 'Select',
+                      })}
+                      noOptionsString={intl.formatMessage({
+                        defaultMessage: 'Nothing found.',
+                      })}
+                      options={
+                        // TODO: Waiting for mpp_trackers on backend side
+                        // inverterInputs.mpp_trackers.map(() => ({
+                        //   key: '1', // unknown values
+                        //   label: 'TODO' // unknown values
+                        // }))
+                        [
+                          {
+                            key: '1',
+                            label: 'I11',
+                          },
+                        ]
+                      }
+                      onChange={value =>
+                        onChange({ target: { value, name: 'input' } })
+                      }
+                      {...rest}
+                      validity={fieldState.invalid ? 'invalid' : undefined}
+                    />
+                  );
                 }}
               </Field>
-              {watchManufacturer &&
-                <Field name='model'>
-                  {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
-                    const { onChange, ...rest } = register('model', {
-                      setValueAs: v => (v || ''),
-                    })
-                    return <Select
-                      wrapperClassName='z-20'
-                      label={intl.formatMessage({ defaultMessage: 'Inverter Model' })}
-                      placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                      options={inverterFilteredModels}
-                      onChange={(value) => onChange({ target: { value, name: 'model' } })}
-                      {...rest}
-                      validity={fieldState.invalid ? 'invalid' : undefined}
-                    />
+            ) : (
+              <>
+                <Field name="manufacturer">
+                  {(
+                    register: UseFormRegister<FieldValues>,
+                    fieldState: FieldState,
+                  ) => {
+                    const { onChange, ...rest } = register('manufacturer', {
+                      setValueAs: v => v || '',
+                    });
+                    return (
+                      <Select
+                        wrapperClassName="z-30"
+                        label={intl.formatMessage({
+                          defaultMessage: 'Manufacturer',
+                        })}
+                        placeholder={intl.formatMessage({
+                          defaultMessage: 'Select',
+                        })}
+                        options={inverterManufactures}
+                        onChange={value =>
+                          onChange({ target: { value, name: 'manufacturer' } })
+                        }
+                        {...rest}
+                        validity={fieldState.invalid ? 'invalid' : undefined}
+                      />
+                    );
                   }}
                 </Field>
-              }
-              {watchModel &&
-                <Field name='input'>
-                  {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
-                    const { onChange, ...rest } = register('input', {
-                      setValueAs: v => (v || ''),
-                    })
-                    return <Select
-                      wrapperClassName='z-10'
-                      label={intl.formatMessage({ defaultMessage: 'Input' })}
-                      placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                      options={[
-                        {
-                          key: '1',
-                          label: 'I11',
-                        },
-                      ]}
-                      onChange={(value) => onChange({ target: { value, name: 'input' } })}
-                      {...rest}
-                      validity={fieldState.invalid ? 'invalid' : undefined}
-                    />
-                  }}
-                </Field>
-              }
-            </>)
-          }
-          {watchInput &&
+                {watchManufacturer && (
+                  <Field name="model">
+                    {(
+                      register: UseFormRegister<FieldValues>,
+                      fieldState: FieldState,
+                    ) => {
+                      const { onChange, ...rest } = register('model', {
+                        setValueAs: v => v || '',
+                      });
+                      return (
+                        <Select
+                          wrapperClassName="z-20"
+                          label={intl.formatMessage({
+                            defaultMessage: 'Inverter Model',
+                          })}
+                          placeholder={intl.formatMessage({
+                            defaultMessage: 'Select',
+                          })}
+                          options={inverterFilteredModels}
+                          onChange={value =>
+                            onChange({ target: { value, name: 'model' } })
+                          }
+                          {...rest}
+                          validity={fieldState.invalid ? 'invalid' : undefined}
+                        />
+                      );
+                    }}
+                  </Field>
+                )}
+                {watchModel && (
+                  <Field name="input">
+                    {(
+                      register: UseFormRegister<FieldValues>,
+                      fieldState: FieldState,
+                    ) => {
+                      const { onChange, ...rest } = register('input', {
+                        setValueAs: v => v || '',
+                      });
+                      return (
+                        <Select
+                          wrapperClassName="z-10"
+                          label={intl.formatMessage({
+                            defaultMessage: 'Input',
+                          })}
+                          placeholder={intl.formatMessage({
+                            defaultMessage: 'Select',
+                          })}
+                          options={[
+                            {
+                              key: '1',
+                              label: 'I11',
+                            },
+                          ]}
+                          onChange={value =>
+                            onChange({ target: { value, name: 'input' } })
+                          }
+                          {...rest}
+                          validity={fieldState.invalid ? 'invalid' : undefined}
+                        />
+                      );
+                    }}
+                  </Field>
+                )}
+              </>
+            ))}
+          {watchInput && (
+            <FileField
+              className="w-full"
+              label={intl.formatMessage({
+                defaultMessage: 'String test result',
+              })}
+              name="file"
+            >
+              <div className="flex items-center gap-4">
+                <SvgIcon name="Camera" className="w-8 text-green-400" />
+                <div>
+                  <Typography>
+                    {intl.formatMessage({
+                      defaultMessage: 'Take photo by camera',
+                      description:
+                        'Context: Take photo by camera or click here to upload',
+                    })}
+                  </Typography>
+                  <Typography>
+                    {intl.formatMessage({
+                      defaultMessage: 'or',
+                      description:
+                        'Context: Take photo by camera or click here to upload',
+                    })}{' '}
+                    <span className="text-green-400 underline">
+                      {intl.formatMessage({
+                        defaultMessage: 'click here to upload',
+                        description:
+                          'Context: Take photo by camera or click here to upload',
+                      })}
+                    </span>
+                  </Typography>
+                </div>
+              </div>
+            </FileField>
+          )}
+          {/* {watchInput && (
             <FileUploaderWithPreview
               fileUploaderProps={{ ...fileUploaderProps, className: 'w-full' }}
               onDeleteFile={removeFile}
               uploadedFiles={uploadedFilesUrls}
               className="w-full"
-              label={intl.formatMessage({ defaultMessage: "String test result" })}
+              label={intl.formatMessage({
+                defaultMessage: 'String test result',
+              })}
             >
               <div className="flex items-center gap-4">
                 <SvgIcon name="Camera" className="w-8 text-green-400" />
                 <div>
-                  <Typography>{intl.formatMessage({ defaultMessage: 'Take photo by camera', description: 'Context: Take photo by camera or click here to upload' })}</Typography>
                   <Typography>
-                    {intl.formatMessage({ defaultMessage: 'or', description: 'Context: Take photo by camera or click here to upload' })}{' '}
+                    {intl.formatMessage({
+                      defaultMessage: 'Take photo by camera',
+                      description:
+                        'Context: Take photo by camera or click here to upload',
+                    })}
+                  </Typography>
+                  <Typography>
+                    {intl.formatMessage({
+                      defaultMessage: 'or',
+                      description:
+                        'Context: Take photo by camera or click here to upload',
+                    })}{' '}
                     <span className="text-green-400 underline">
-                      {intl.formatMessage({ defaultMessage: 'click here to upload', description: 'Context: Take photo by camera or click here to upload' })}
+                      {intl.formatMessage({
+                        defaultMessage: 'click here to upload',
+                        description:
+                          'Context: Take photo by camera or click here to upload',
+                      })}
                     </span>
                   </Typography>
                 </div>
               </div>
             </FileUploaderWithPreview>
-          }
-          {watchInverter && watchInput && uploadedFilesUrls.length > 0 &&
+          )} */}
+          {watchInverter && watchInput && watchFile && (
             <div className="mt-3 flex gap-5">
               <Button
                 variant="additional-gray"
                 className="w-full"
-                onClick={() => onClose(reset, () => removeFile(uploadedFilesUrls[0]))}
+                onClick={() => onClose(reset)}
               >
                 {intl.formatMessage({ defaultMessage: 'Cancel' })}
               </Button>
@@ -332,9 +406,30 @@ export const StringInverterDialog = <
                 {intl.formatMessage({ defaultMessage: 'Ok' })}
               </Button>
             </div>
-          }
+          )}
+          {/* {watchInverter && watchInput && uploadedFilesUrls.length > 0 && (
+            <div className="mt-3 flex gap-5">
+              <Button
+                variant="additional-gray"
+                className="w-full"
+                onClick={() =>
+                  onClose(reset, () => removeFile(uploadedFilesUrls[0]))
+                }
+              >
+                {intl.formatMessage({ defaultMessage: 'Cancel' })}
+              </Button>
+              <Button
+                variant="main-green"
+                className="w-full"
+                type="submit"
+                isLoading={formState.isSubmitting}
+              >
+                {intl.formatMessage({ defaultMessage: 'Ok' })}
+              </Button>
+            </div>
+          )} */}
         </Form>
       </DialogContent>
-    </Dialog >
+    </Dialog>
   );
 };
