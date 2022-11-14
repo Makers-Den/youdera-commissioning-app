@@ -18,6 +18,7 @@ export const addFileToString = async ({
 }: AddFileToStringArgs) => {
   const formData = new FormData();
   formData.append('file', file);
+  formData.append('type', 'image');
 
   const response = await youderaApiInstance.post<CreateDataResponse<ApiFile>>(
     `/strings/${stringId}/files`,
