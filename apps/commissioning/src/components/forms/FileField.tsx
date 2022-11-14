@@ -17,13 +17,12 @@ export type FileFieldProps = {
 >;
 
 export const FileField = ({ children, name, ...props }: FileFieldProps) => {
-  const { resetField } = useFormContext();
+  const { resetField, setValue } = useFormContext();
   const value = useWatch({ name });
 
   const [files, setFiles] = useState<UploadedFile[]>([]);
 
   useEffect(() => {
-    console.log(value, 'use watch');
     if (value) {
       const url = URL.createObjectURL(value);
 
@@ -43,14 +42,12 @@ export const FileField = ({ children, name, ...props }: FileFieldProps) => {
     <Field name={name}>
       {(register, fieldState) => {
         const { invalid, error } = fieldState;
-        const { onChange, onBlur, ref } = register(name);
+        const { onBlur } = register(name);
 
         const computedOnChange = (event: React.FormEvent<HTMLInputElement>) => {
           const file = event.currentTarget.files?.[0];
 
-          onChange({
-            target: { value: file, name },
-          });
+          setValue(name, file);
         };
         return (
           <FileUploaderWithPreview
