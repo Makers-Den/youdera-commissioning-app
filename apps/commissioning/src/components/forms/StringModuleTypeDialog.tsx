@@ -81,9 +81,9 @@ export const StringModuleTypeDialog = <
               return <Select
                 label={intl.formatMessage({ defaultMessage: 'Module type' })}
                 placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                options={[
+                options={[ //TODO: request on this endpoint - {{YOUDERA_API_BASE}}/catalogue/models/module
                   {
-                    key: '1',
+                    key: '21',
                     label: 'Holder',
                   },
                 ]}

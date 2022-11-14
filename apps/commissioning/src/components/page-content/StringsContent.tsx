@@ -22,7 +22,7 @@ const stringModuleTypeValidation = z.object({
     label: z.string()
   }),
   numberOfModules: z.number().gte(0),
-  cableCrossSection: z.number().gte(0),
+  cableCrossSection: z.literal(4).or(z.literal(6)).or(z.literal(10)),
 });
 
 type ModuleTypeData = z.infer<typeof stringModuleTypeValidation>
@@ -113,8 +113,9 @@ export function StringsContent({ stringsOnRoof, inverters, inverterModels }: Str
       try {
         await createStringMutation.mutateAsync({
           count: moduleTypeFormData.current!.numberOfModules,
-          wattpeak_per_module: 1,
-          roof: stringsOnRoof.id
+          roof: stringsOnRoof.id,
+          module: moduleTypeFormData.current!.moduleType.key,
+          cable_cross_section: moduleTypeFormData.current!.cableCrossSection
         });
         // resetForm();
         inverterSelectionDialog.onClose()

@@ -8,11 +8,6 @@ export const getStringsOnRoof = async (roofId: number) => {
 	);
 
 	return {
-		...response.data.data,
-		//Hardcoded values - waiting for backend
-		strings: response.data.data.strings.map((string) => ({
-			...string,
-			module_type: 'Hardcoded Value'
-		}))
+		...response.data.data
 	};
 };

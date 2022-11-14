@@ -36,13 +36,13 @@ export function StringsList({ stringsOnRoof, onRowClick }: StringListProps) {
               {string.name ?? ' - '}
             </Td>
             <Td key={`${string.id}-moduleType`}>
-              {string.module_type ?? ' - '}
+              {string.module ?? ' - '}
             </Td>
             <Td key={`${string.id}-count`}>
               {string.count ?? ' - '}
             </Td>
             <Td key={`${string.id}-cableCrossSection`}>
-              -
+              {string.cable_cross_section ?? ' - '}
             </Td>
           </Tr>
         ))}

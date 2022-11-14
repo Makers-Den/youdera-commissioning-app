@@ -2,10 +2,11 @@ export interface String {
 	id: number,
 	name: string | null,
 	count: number,
+	module: string,
+	cable_cross_section: number,
 	wattpeak_per_module: number,
 	created_at: string,
 	updated_at: string,
-	module_type: string
 }
 export interface StringsOnRoof {
 	id: number,
@@ -20,6 +21,7 @@ export interface StringsOnRoof {
 
 export interface CreateStringRequestBody {
 	count: number,
-	wattpeak_per_module: number,
-	roof: number
+	roof: number,
+	module: string,
+	cable_cross_section: number
 }
