@@ -3,7 +3,7 @@ import { Inverter } from '@src/integrations/youdera/inverters/types';
 import { InverterModel } from '@src/integrations/youdera/models/types';
 import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
 import { StringsOnRoof } from '@src/integrations/youdera/strings/types';
-import { useRef, useState } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
@@ -42,7 +42,7 @@ const stringInverterValidation = z.object({
     key: z.string(),
     label: z.string(),
   }),
-  file: z.instanceof(File),
+  file: z.any(),
 });
 
 // const updateModuleTypeValidation = z.object({
@@ -108,15 +108,15 @@ export function StringsContent({
     { moduleType, numberOfModules, cableCrossSection },
     resetForm,
   ) => {
-    moduleTypeFormData.current = {
-      moduleType,
-      numberOfModules,
-      cableCrossSection,
+      moduleTypeFormData.current = {
+        moduleType,
+        numberOfModules,
+        cableCrossSection,
+      };
+      moduleTypeSelectionDialog.onClose();
+      resetForm();
+      inverterSelectionDialog.onOpen();
     };
-    moduleTypeSelectionDialog.onClose();
-    resetForm();
-    inverterSelectionDialog.onOpen();
-  };
 
   const stringInverterSubmitHandler: StringInverterDialogProps<
     typeof stringInverterValidation
@@ -197,12 +197,15 @@ export function StringsContent({
         </Button>
       </ActionsDialog>
 
-      <StringModuleTypeDialog
-        open={moduleTypeSelectionDialog.isOpen}
-        onClose={handleModuleTypeClose}
-        onSubmit={stringModuleTypeSubmitHandler}
-        resolver={stringModuleTypeValidation}
-      />
+      <Suspense>
+        <StringModuleTypeDialog
+          open={moduleTypeSelectionDialog.isOpen}
+          onClose={handleModuleTypeClose}
+          onSubmit={stringModuleTypeSubmitHandler}
+          resolver={stringModuleTypeValidation}
+        />
+      </Suspense>
+
       <StringInverterDialog
         open={inverterSelectionDialog.isOpen}
         onClose={handleInverterClose}

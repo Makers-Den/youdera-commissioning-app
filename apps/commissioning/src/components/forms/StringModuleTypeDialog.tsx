@@ -1,4 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useGetModules } from '@src/integrations/youdera/modules/hooks/useGetModules';
+import Module from 'module';
 import React from 'react';
 import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';
@@ -47,6 +49,14 @@ export const StringModuleTypeDialog = <
 
   const intl = useIntl();
 
+  const { modulesQuery } = useGetModules();
+  const modules = modulesQuery.data
+    ? modulesQuery.data.map(module => ({
+      key: module.id.toString(),
+      label: module.name,
+    }))
+    : [];
+
   const method = useForm({
     resolver: zodResolver(resolver),
   });
@@ -81,12 +91,7 @@ export const StringModuleTypeDialog = <
               return <Select
                 label={intl.formatMessage({ defaultMessage: 'Module type' })}
                 placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                options={[ //TODO: request on this endpoint - {{YOUDERA_API_BASE}}/catalogue/models/module
-                  {
-                    key: '21',
-                    label: 'Holder',
-                  },
-                ]}
+                options={modules}
                 onChange={(value) => onChange({ target: { value, name: 'moduleType' } })}
                 {...rest}
                 validity={fieldState.invalid ? 'invalid' : undefined}
