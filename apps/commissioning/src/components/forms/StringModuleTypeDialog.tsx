@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useGetModules } from '@src/integrations/youdera/modules/hooks/useGetModules';
-import Module from 'module';
 import React from 'react';
 import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';

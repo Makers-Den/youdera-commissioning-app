@@ -1,15 +1,19 @@
+import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
 import { StringsOnRoof } from '@src/integrations/youdera/strings/types';
 import { useIntl } from 'react-intl';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 
 
 export type StringListProps = {
-  stringsOnRoof: StringsOnRoof;
+  roofId: number
   onRowClick: (id: number) => void;
 };
 
-export function StringsList({ stringsOnRoof, onRowClick }: StringListProps) {
+export function StringsList({ roofId, onRowClick }: StringListProps) {
   const intl = useIntl();
+  const {
+    stringsOnRoofQuery,
+  } = useStrings(roofId);
   const columnNames = [
     intl.formatMessage({ defaultMessage: 'String name' }),
     intl.formatMessage({ defaultMessage: 'Module type' }),
@@ -26,7 +30,7 @@ export function StringsList({ stringsOnRoof, onRowClick }: StringListProps) {
         </Tr>
       </Thead>
       <Tbody>
-        {stringsOnRoof?.strings.map(string => (
+        {stringsOnRoofQuery.data?.strings.map(string => (
           <Tr
             key={string.id}
             className="cursor-pointer"

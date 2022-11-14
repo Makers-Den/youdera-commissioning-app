@@ -1,6 +1,17 @@
 import { ApiFile } from "../files/types";
 import { CommunicationStatus } from "../types";
 
+export interface InverterModel {
+  id: number,
+  type: string,
+  name: string,
+  manufacturer_id: number,
+  manufacturer_name: string,
+  data: {
+    auto_serialnumber: boolean
+  }
+}
+
 export type Inverter = {
   id: number;
   name: string;
@@ -32,4 +43,6 @@ export interface CreateInverterRequestBody {
   metered_by?: number,
   cmodel?: number
 }
+
+
 

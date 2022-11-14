@@ -3,7 +3,7 @@ import { Inverter } from '@src/integrations/youdera/inverters/types';
 import { InverterModel } from '@src/integrations/youdera/models/types';
 import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
 import { StringsOnRoof } from '@src/integrations/youdera/strings/types';
-import { Suspense, useRef, useState } from 'react';
+import { Suspense, useMemo, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
@@ -52,23 +52,24 @@ const stringInverterValidation = z.object({
 // });
 
 export interface StringContentProps {
-  stringsOnRoof: StringsOnRoof;
-  inverters: Inverter[];
-  inverterModels: InverterModel[];
+  roofId: number;
+  siteId: number;
 }
 
 export function StringsContent({
-  stringsOnRoof,
-  inverters,
-  inverterModels,
+
+  roofId,
+  siteId
 }: StringContentProps) {
   const intl = useIntl();
   useZodErrorMap();
+
   const {
+    stringsOnRoofQuery,
     createStringMutation,
     deleteStringMutation,
     addFileToStringMutation,
-  } = useStrings(stringsOnRoof.id);
+  } = useStrings(roofId);
   const moduleTypeFormData = useRef<ModuleTypeData | null>(null);
 
   const [selectedId, setSelectedId] = useState<number>();
@@ -120,31 +121,29 @@ export function StringsContent({
 
   const stringInverterSubmitHandler: StringInverterDialogProps<
     typeof stringInverterValidation
-  >['onSubmit'] = async ({ input, inverter, file }, resetForm) =>
-    // { inverter, input },
-    // resetForm,
+  >['onSubmit'] = async ({ input, inverter, file }, resetForm) => {
+    if (!stringsOnRoofQuery.data) return
 
-    {
-      try {
-        const string = await createStringMutation.mutateAsync({
-          count: moduleTypeFormData.current!.numberOfModules,
-          roof: stringsOnRoof.id,
-          module: moduleTypeFormData.current!.moduleType.key,
-          cable_cross_section: moduleTypeFormData.current!.cableCrossSection,
-        });
+    try {
+      const string = await createStringMutation.mutateAsync({
+        count: moduleTypeFormData.current!.numberOfModules,
+        roof: stringsOnRoofQuery.data.id,
+        module: moduleTypeFormData.current!.moduleType.key,
+        cable_cross_section: moduleTypeFormData.current!.cableCrossSection,
+      });
 
-        await addFileToStringMutation.mutateAsync({
-          stringId: string.id,
-          file,
-        });
+      await addFileToStringMutation.mutateAsync({
+        stringId: string.id,
+        file,
+      });
 
-        resetForm();
-        inverterSelectionDialog.onClose();
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.log(err);
-      }
-    };
+      resetForm();
+      inverterSelectionDialog.onClose();
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  };
 
   const confirmDeleteHandler = async () => {
     if (selectedId) {
@@ -169,10 +168,12 @@ export function StringsContent({
           </Button>
         </BoxHeader>
         <BoxContent>
-          <StringsList
-            stringsOnRoof={stringsOnRoof}
-            onRowClick={handleRowClick}
-          />
+          <Suspense>
+            <StringsList
+              roofId={roofId}
+              onRowClick={handleRowClick}
+            />
+          </Suspense>
         </BoxContent>
       </Box>
 
@@ -211,8 +212,7 @@ export function StringsContent({
         onClose={handleInverterClose}
         resolver={stringInverterValidation}
         onSubmit={stringInverterSubmitHandler}
-        inverters={inverters}
-        inverterModels={inverterModels}
+        siteId={siteId}
       />
       <DeletionDialog
         onDelete={confirmDeleteHandler}
