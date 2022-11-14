@@ -68,8 +68,8 @@ export const Dialog = ({ className, children, open, onClose }: DialogProps) => (
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <HeadlessDialog.Panel className="w-full max-w-fit transform overflow-hidden rounded-xl bg-white text-left align-middle shadow-xl transition-all">
-              <div className={clsxm('bg-white pt-5 pb-8', className)}>
+            <HeadlessDialog.Panel className="w-full max-w-fit transform rounded-xl bg-white text-left align-middle shadow-xl transition-all">
+              <div className={clsxm('bg-white pt-5 pb-8 rounded-xl', className)}>
                 {children}
               </div>
             </HeadlessDialog.Panel>

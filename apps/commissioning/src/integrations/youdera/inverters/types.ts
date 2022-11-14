@@ -22,3 +22,14 @@ export type Inverter = {
 export type MppTracker = {
   id: string;
 }
+
+export interface CreateInverterRequestBody {
+  name: string,
+  serial_number: string,
+  site: number,
+  manufacturer: string,
+  model: string,
+  metered_by?: number,
+  cmodel?: number
+}
+

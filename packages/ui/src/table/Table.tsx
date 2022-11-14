@@ -22,6 +22,7 @@ export function Tbody({ className, children }: TbodyProps) {
 
 export type TrProps = {
   className?: string;
+  onClick?: (value?: any) => void
   children: ReactNode;
 } & React.ComponentPropsWithRef<'tr'>;
 

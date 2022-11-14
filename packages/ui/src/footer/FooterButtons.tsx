@@ -22,7 +22,7 @@ export const FooterButtons: React.FC<ButtonsFooterProps> = ({ buttons }) => (
     'flex items-center justify-end space-x-5'
   )}>
     {buttons?.map((button, idx) => (
-      <Button key={idx} {...button}>
+      <Button className='min-w-[140px]' key={idx} {...button}>
         {button.content}
       </Button>
     ))}

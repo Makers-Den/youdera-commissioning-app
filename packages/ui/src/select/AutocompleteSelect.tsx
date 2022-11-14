@@ -1,5 +1,5 @@
 import { Combobox, Transition } from '@headlessui/react';
-import { FocusEvent, Fragment, useState } from 'react';
+import React, { FocusEvent, Fragment, useState } from 'react';
 
 import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
 import { Label } from '../typography/Typography';
@@ -12,12 +12,6 @@ export type AutocompleteSelectOption = {
   icon?: IconName;
 };
 
-export type AutocompleteSelectAction = {
-  label: string;
-  icon?: IconName;
-  onClick: () => void;
-};
-
 export type AutocompleteSelectProps = {
   label: string;
   placeholder: string;
@@ -26,24 +20,25 @@ export type AutocompleteSelectProps = {
   className?: string;
   value?: AutocompleteSelectOption | undefined;
   validity?: 'invalid' | 'valid';
-  action?: AutocompleteSelectAction;
   isRequired?: boolean;
   onChange?: (value: AutocompleteSelectOption | undefined) => void
 } & Omit<React.ComponentPropsWithRef<'input'>, 'value' | 'onChange'>;
 
-export const AutocompleteSelect = ({
-  label,
-  value,
-  onChange,
-  placeholder,
-  options,
-  className,
-  action,
-  validity,
-  isRequired,
-  noOptionsString = 'Nothing found.',
-  ...rest
-}: AutocompleteSelectProps) => {
+export const AutocompleteSelect = React.forwardRef<HTMLInputElement, AutocompleteSelectProps>((
+  {
+    label,
+    value,
+    onChange,
+    placeholder,
+    options,
+    className,
+    validity,
+    isRequired,
+    noOptionsString = 'Nothing found.',
+    ...rest
+  },
+  ref
+) => {
   const [query, setQuery] = useState('');
 
   const filteredOptions =
@@ -84,10 +79,11 @@ export const AutocompleteSelect = ({
                   displayValue={(option: AutocompleteSelectOption) => option?.label}
                   placeholder={placeholder}
                   onChange={event => setQuery(event.target.value)}
-                  {...rest}
                   onFocus={(e: FocusEvent<HTMLInputElement>) => {
                     e.target.select();
                   }}
+                  ref={ref}
+                  {...rest}
                 />
               </Combobox.Button>
 
@@ -117,18 +113,6 @@ export const AutocompleteSelect = ({
                   'drop-shadow-large rounded-md bg-white',
                 )}
               >
-                {action && (
-                  // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
-                  <div
-                    className="flex cursor-pointer select-none items-center py-2 pl-4 pr-4 font-medium hover:bg-gray-100"
-                    onClick={action.onClick}
-                  >
-                    {action.icon && (
-                      <SvgIcon name={action.icon} className="mr-3 h-[14px]" />
-                    )}
-                    {action.label}
-                  </div>
-                )}
                 {filteredOptions.length === 0 && query !== '' ? (
                   <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                     {noOptionsString}
@@ -136,7 +120,7 @@ export const AutocompleteSelect = ({
                 ) : (
                   filteredOptions.map(option => (
                     <Combobox.Option
-                      key={option.label}
+                      key={option.key}
                       value={option}
                       className={({ active }) =>
                         clsxm(
@@ -185,4 +169,4 @@ export const AutocompleteSelect = ({
       </Combobox>
     </div>
   );
-};
+});

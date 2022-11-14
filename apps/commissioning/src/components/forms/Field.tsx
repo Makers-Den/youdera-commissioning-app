@@ -1,6 +1,6 @@
 import { ErrorMessage } from '@hookform/error-message';
 import React, { FC, ReactNode } from "react"
-import { Control, FieldError, FieldValues, useFormContext, UseFormRegister } from "react-hook-form";
+import { FieldError, FieldValues, useFormContext, UseFormRegister } from "react-hook-form";
 import { Label } from 'ui/typography/Typography';
 
 
@@ -12,7 +12,6 @@ export interface FieldState {
 }
 export interface FieldProps {
   name: string
-  control: Control
   children: (register: UseFormRegister<FieldValues>, fieldState: FieldState) => ReactNode
 }
 
@@ -24,7 +23,7 @@ export const Field: FC<FieldProps> = ({
   const { register, formState, getFieldState } = useFormContext();
 
   return (
-    <div>
+    <div className='w-full'>
       {children(register, getFieldState(name))}
       <ErrorMessage
         errors={formState.errors}
