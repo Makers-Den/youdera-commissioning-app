@@ -1,10 +1,10 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode } from 'react';
 
 import { FilePreviewer, FilePreviewerProps } from './FilePreviewer';
 import { FileUploader, FileUploaderProps } from './FileUploader';
 import { UploadedFile } from './types';
-import clsxm from '../utils/clsxm';
 import { Label } from '../typography/Typography';
+import clsxm from '../utils/clsxm';
 
 export type FileUploaderWithPreviewProps = {
   fileUploaderProps: Omit<FileUploaderProps, 'children'>;
@@ -28,7 +28,7 @@ export function FileUploaderWithPreview({
   className,
   children,
   allowMultipleFiles,
-  label
+  label,
 }: FileUploaderWithPreviewProps) {
   const displayFileInput = uploadedFiles.length <= 0 || allowMultipleFiles;
 
