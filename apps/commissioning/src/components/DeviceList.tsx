@@ -118,7 +118,7 @@ export function DeviceList({ siteId, inverters, batteries, meters }: DeviceListP
                 <SvgIcon name={device.type} />
               </Td>
               <Td>
-                <SvgIcon name={commStatusToIcon[device.communication_status]} />
+                <SvgIcon name={commStatusToIcon[device.communication_status || 'success']} />
               </Td>
             </Tr>
           ))}
