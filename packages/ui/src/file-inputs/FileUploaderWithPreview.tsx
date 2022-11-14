@@ -1,8 +1,9 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode } from 'react';
 
 import { FilePreviewer, FilePreviewerProps } from './FilePreviewer';
 import { FileUploader, FileUploaderProps } from './FileUploader';
 import { UploadedFile } from './types';
+import { Label } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
 export type FileUploaderWithPreviewProps = {
@@ -13,6 +14,7 @@ export type FileUploaderWithPreviewProps = {
   >;
   onDeleteFile: (file: UploadedFile) => void;
   uploadedFiles: UploadedFile[];
+  label?: string;
   className?: string;
   children: ReactNode;
   allowMultipleFiles?: boolean;
@@ -26,11 +28,13 @@ export function FileUploaderWithPreview({
   className,
   children,
   allowMultipleFiles,
+  label,
 }: FileUploaderWithPreviewProps) {
-  const displayFileInput =  uploadedFiles.length <= 0 || allowMultipleFiles;
+  const displayFileInput = uploadedFiles.length <= 0 || allowMultipleFiles;
 
   return (
-    <div className={clsxm(className, 'flex flex-col gap-4')}>
+    <div className={clsxm(className, 'flex flex-col gap-3')}>
+      {label && <Label>{label}</Label>}
       {uploadedFiles.map(uploadedFile => (
         <FilePreviewer
           onDeleteClick={() => {

@@ -4,6 +4,8 @@ export enum QueryKeys {
   uncommissionedSites = 'uncommissionedSites',
   modules = 'modules',
   moduleFields = 'moduleFields',
+  strings = 'strings',
+  inverters = 'inverters',
   files = 'files',
   unattachedGateways = 'unattachedGateways',
   editedSite = 'editedSite',

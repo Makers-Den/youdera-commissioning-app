@@ -4,6 +4,7 @@ import {
   FaCalendarAlt,
   FaCheck,
   FaEnvelope,
+  FaMicrochip,
   FaTable,
   FaTimes,
   FaUnlockAlt
@@ -43,6 +44,7 @@ const iconMap = {
   Envelope: FaEnvelope,
   Unlock: FaUnlockAlt,
   Table: FaTable,
+  Chip: FaMicrochip,
   Meter,
   Battery: FaBatteryFull,
   Inverter: FaTable,

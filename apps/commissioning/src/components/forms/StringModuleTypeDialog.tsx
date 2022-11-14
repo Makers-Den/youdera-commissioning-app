@@ -3,7 +3,6 @@ import React from 'react';
 import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
-import { Compass } from 'ui/compass/Compass';
 import {
   Dialog,
   DialogContent,
@@ -11,45 +10,40 @@ import {
   DialogProps,
   DialogTitle,
 } from 'ui/dialogs/Dialog';
-import { Input } from 'ui/inputs/Input';
 import { NumberInput } from 'ui/inputs/NumberInput';
+import { Select } from 'ui/select/Select';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import clsxm from 'ui/utils/clsxm';
 import { z, ZodObject, ZodTypeAny } from 'zod';
 
-import { Field, FieldState } from './Field'
+import { Field, FieldState } from './Field';
 import { Form } from './Form';
 
 type RawFormShape = {
-  name: ZodTypeAny;
-  specificYield: ZodTypeAny;
-  slantAngle: ZodTypeAny;
-  azimut: ZodTypeAny;
+  moduleType: ZodTypeAny;
+  numberOfModules: ZodTypeAny;
+  cableCrossSection: ZodTypeAny;
 };
 
-export type ModuleFieldFormDialogProps<
+export type StringModuleTypeDialogProps<
   ResolverType extends ZodObject<RawFormShape>,
 > = {
   open: DialogProps['open'];
-  onClose: DialogProps['onClose'];
+  onClose: (resetForm: () => void) => void;
   className?: string;
-  dialogTitle: string;
-  submitButtonTitle: string;
   onSubmit: (values: z.infer<ResolverType>, resetForm: () => void) => void;
   resolver: ResolverType;
 };
 
-export const ModuleFieldFormDialog = <
+export const StringModuleTypeDialog = <
   ResolverType extends ZodObject<RawFormShape>,
 >({
   open,
   onClose,
   className,
-  dialogTitle,
-  submitButtonTitle,
   onSubmit,
   resolver,
-}: ModuleFieldFormDialogProps<ResolverType>) => {
+}: StringModuleTypeDialogProps<ResolverType>) => {
 
   const intl = useIntl();
 
@@ -57,104 +51,99 @@ export const ModuleFieldFormDialog = <
     resolver: zodResolver(resolver),
   });
 
-  const { handleSubmit, watch, reset, formState } = method;
+  const { handleSubmit, reset, formState } = method;
 
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={() => onClose(reset)}
       className={clsxm('w-[400px]', className)}
     >
       <DialogHeader>
-        <DialogTitle title={dialogTitle} />
+        <DialogTitle
+          title={intl.formatMessage({
+            defaultMessage: 'Add String',
+          })}
+        />
         <SvgIcon
           name="Close"
           className="ml-auto h-4 hover:cursor-pointer"
-          onClick={onClose}
+          onClick={() => onClose(reset)}
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
         <Form onSubmit={handleSubmit(values => onSubmit(values, reset))} className="flex flex-col gap-5" {...method}>
-          <Field name='name'>
-            {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
-              <Input
-                label={intl.formatMessage({ defaultMessage: 'Name' })}
-                placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
-                className="w-full"
-                {...register('name')}
+          <Field name='moduleType'>
+            {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
+              const { onChange, ...rest } = register('moduleType', {
+                setValueAs: v => (v || ''),
+              })
+              return <Select
+                label={intl.formatMessage({ defaultMessage: 'Module type' })}
+                placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+                options={[ //TODO: request on this endpoint - {{YOUDERA_API_BASE}}/catalogue/models/module
+                  {
+                    key: '21',
+                    label: 'Holder',
+                  },
+                ]}
+                onChange={(value) => onChange({ target: { value, name: 'moduleType' } })}
+                {...rest}
                 validity={fieldState.invalid ? 'invalid' : undefined}
               />
-            }
+            }}
           </Field>
-          <Field name='specificYield'>
-            {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
-              <Input
-                label={intl.formatMessage({ defaultMessage: 'Specific Yield' })}
-                placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
-                className="w-full"
-                units="kWh/kWp"
-                type="number"
-                {...register('specificYield', {
-                  setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
-                })}
-                validity={fieldState.invalid ? 'invalid' : undefined}
-              />
-            }
-          </Field>
-
           <div className="flex items-center justify-center gap-5">
-            <div className="flex flex-1 flex-col gap-5">
-              <Field name='slantAngle'>
+            <div className="flex flex-1 gap-5">
+              <Field name='numberOfModules'>
                 {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
                   <NumberInput
-                    label={intl.formatMessage({ defaultMessage: 'Slant angle' })}
-                    unit="&deg;"
+                    label={intl.formatMessage({
+                      defaultMessage: 'Number of modules',
+                    })}
                     className="w-full"
                     max="359"
-                    {...register('slantAngle', {
+                    {...register('numberOfModules', {
                       setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
                     })}
                     validity={fieldState.invalid ? 'invalid' : undefined}
                   />
                 }
               </Field>
-              <Field name='azimut'>
+              <Field name='cableCrossSection'>
                 {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
                   <NumberInput
-                    label={intl.formatMessage({ defaultMessage: 'Azimut' })}
-                    unit="&deg;"
+                    label={intl.formatMessage({
+                      defaultMessage: 'Cable cross section',
+                    })}
+                    unit="mm&#xB2;"
                     className="w-full"
                     max="359"
-                    {...register('azimut', {
+                    {...register('cableCrossSection', {
                       setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
                     })}
                     validity={fieldState.invalid ? 'invalid' : undefined}
                   />
                 }
               </Field>
-
             </div>
-            <Compass
-              rotationAngle={parseInt(watch('azimut'), 10)}
-              className="flex-1"
-            />
           </div>
 
           <div className="mt-3 flex gap-5">
             <Button
               variant="additional-gray"
               className="w-full"
-              onChange={onClose}
+              onClick={() => onClose(reset)}
             >
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
             <Button
               isLoading={formState.isSubmitting}
-              type="submit"
               variant="main-green"
               className="w-full"
+              type='submit'
             >
-              {submitButtonTitle}
+              {intl.formatMessage({ defaultMessage: 'Ok' })}
             </Button>
           </div>
         </Form>

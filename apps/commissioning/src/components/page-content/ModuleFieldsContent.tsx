@@ -2,6 +2,7 @@ import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
 import { useModuleFields } from '@src/integrations/youdera/module-fields/hooks/useModuleFields';
 import { ModuleField } from '@src/integrations/youdera/module-fields/types';
 import { removeNullAndUndefinedFromObject } from '@src/utils/removeNullAndUndefinedFromObject';
+import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
@@ -52,6 +53,7 @@ export type ModuleFieldsContentProps = {
 
 export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   const intl = useIntl();
+  const router = useRouter();
   useZodErrorMap();
 
   const currentModuleId = useRef<string | null>(null);
@@ -168,6 +170,10 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     updateDialog.onOpen();
   };
 
+  const handleActionUpdateStrings = () => {
+    router.push(`/roofer/projects/${projectId}/module-fields/${currentModuleId.current}`);
+  }
+
   return (
     <>
       <LargeBox>
@@ -175,7 +181,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
           <BoxTitle
             title={intl.formatMessage({ defaultMessage: 'Module Fields' })}
           />
-          <Button className="ml-auto" onClick={createDialog.onOpen}>
+          <Button className="ml-auto w-[200px]" onClick={createDialog.onOpen}>
             + {intl.formatMessage({ defaultMessage: 'Add module field' })}
           </Button>
         </BoxHeader>
@@ -242,7 +248,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
           <Button variant="main-green" onClick={handleActionUpdate}>
             {intl.formatMessage({ defaultMessage: 'Modify properties' })}
           </Button>
-          <Button variant="main-green">
+          <Button variant="main-green" onClick={handleActionUpdateStrings}>
             {intl.formatMessage({ defaultMessage: 'Modify strings' })}
           </Button>
           <Button variant="danger" onClick={handleActionDelete}>

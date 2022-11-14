@@ -11,11 +11,13 @@ export type FileInputWrapperProps = {
   accept?: string;
   capture?: boolean | 'user' | 'environment';
   disabled?: boolean;
+  onBlur?: (event: React.FocusEvent<HTMLLabelElement, Element>) => void;
 };
 
 export function FileInputWrapper({
   children,
   className,
+  onBlur,
   ...inputProps
 }: FileInputWrapperProps) {
   const hiddenFileInput = useRef<HTMLInputElement>(null);
@@ -26,7 +28,12 @@ export function FileInputWrapper({
   };
 
   return (
-    <label htmlFor={id} onClick={handleClick} className={className}>
+    <label
+      htmlFor={id}
+      onBlur={onBlur}
+      onClick={handleClick}
+      className={className}
+    >
       <input ref={hiddenFileInput} type="file" id={id} hidden {...inputProps} />
       {children}
     </label>
