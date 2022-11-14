@@ -42,7 +42,7 @@ const stringInverterValidation = z.object({
     key: z.string(),
     label: z.string(),
   }),
-  file: z.instanceof(File),
+  file: z.any(),
 });
 
 // const updateModuleTypeValidation = z.object({
@@ -108,15 +108,15 @@ export function StringsContent({
     { moduleType, numberOfModules, cableCrossSection },
     resetForm,
   ) => {
-    moduleTypeFormData.current = {
-      moduleType,
-      numberOfModules,
-      cableCrossSection,
+      moduleTypeFormData.current = {
+        moduleType,
+        numberOfModules,
+        cableCrossSection,
+      };
+      moduleTypeSelectionDialog.onClose();
+      resetForm();
+      inverterSelectionDialog.onOpen();
     };
-    moduleTypeSelectionDialog.onClose();
-    resetForm();
-    inverterSelectionDialog.onOpen();
-  };
 
   const stringInverterSubmitHandler: StringInverterDialogProps<
     typeof stringInverterValidation
