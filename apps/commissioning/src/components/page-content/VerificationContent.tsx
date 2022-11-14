@@ -4,14 +4,14 @@ import { Site } from '@src/integrations/youdera/sites/types';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 
-import { DeviceList } from '../DeviceList';
 import { LargeBox } from '../LargeBox';
+import { VerificationList } from '../VerificationList';
 
-export type DevicesContentProps = {
+export type VerificationContentProps = {
   siteId: number;
 };
 
-export function DevicesContent({ siteId }: DevicesContentProps) {
+export function VerificationContent({ siteId }: VerificationContentProps) {
   const intl = useIntl();
 
   const { siteQuery } = useGetSite(siteId);
@@ -27,7 +27,7 @@ export function DevicesContent({ siteId }: DevicesContentProps) {
         />
       </BoxHeader>
       <BoxContent>
-        <DeviceList 
+        <VerificationList 
           siteId={project.id}
           inverters={project.inverters}
           batteries={project.batteries}

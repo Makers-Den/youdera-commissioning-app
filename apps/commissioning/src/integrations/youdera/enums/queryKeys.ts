@@ -8,4 +8,5 @@ export enum QueryKeys {
   inverters = 'inverters',
   files = 'files',
   unattachedGateways = 'unattachedGateways',
+  editedSite = 'editedSite',
 }

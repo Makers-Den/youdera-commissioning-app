@@ -1,9 +1,12 @@
 import { ApiFile } from "../files/types";
+import { CommunicationStatus } from "../types";
 
 export type Meter = {
   id: number;
   name: string;
   number: string;
+  communication_status: CommunicationStatus;
+
   factor: number;
   manufacturer: string;
   model: string;

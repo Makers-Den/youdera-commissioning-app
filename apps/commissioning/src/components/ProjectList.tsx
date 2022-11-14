@@ -20,7 +20,7 @@ export function ProjectList({ projects }: ProjectListProps) {
   return (
     <List>
       {projects.map(({ id, name, street, href }) => (
-        <ListItem key={id}>
+        <ListItem variant="primary" key={id}>
           <Link href={href} legacyBehavior>
             <a className="flex cursor-pointer gap-5">
               <div className="flex aspect-square w-11 items-center justify-center rounded-full bg-green-300">

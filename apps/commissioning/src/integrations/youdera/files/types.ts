@@ -12,6 +12,9 @@ export interface ApiFile {
   created_at: Date;
   updated_at: Date;
   deleted_at: Date | null;
+  url: string;
+  /** Note this can be missing for old image uploads */
+  url_thumb: string | null;
 }
 
 export interface AddFileToSiteRequest {

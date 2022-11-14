@@ -39,7 +39,7 @@ return (
       buttons: [
         {
           content: intl.formatMessage({
-            defaultMessage: 'Back',
+            defaultMessage: 'Change gateway',
           }),
           variant: 'additional-gray',
           type: 'button',
@@ -57,7 +57,7 @@ return (
     }}
   >
     <Suspense fallback={<LargeBoxSkeleton />}>
-        <DevicesContent project={project} />
+      <DevicesContent siteId={project.id} />
     </Suspense>
   </AuthenticatedLayout>
 );

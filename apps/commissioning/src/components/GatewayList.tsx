@@ -18,7 +18,7 @@ export function GatewayList({ gateways, siteId, onSelectGateway }: GatewayListPr
   return (
     <List>
       {gateways.map(gateway => (
-        <ListItem key={gateway.id} 
+        <ListItem variant="primary" key={gateway.id} 
           className={clsxm(gateway.site_id === siteId && 'border-green-400 border-2')}>
           <div
             role="button"

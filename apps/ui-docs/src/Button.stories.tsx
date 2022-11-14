@@ -1,8 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
-
 import { Button } from 'ui/buttons/Button';
 import { H3 } from 'ui/typography/Typography';
+
 import { CenterWrapper } from './utils/CenterWrapper';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -34,6 +34,18 @@ export const Overview = () => (
       Disabled
     </Button>
     <Button variant="main-green" isLoading={true}>
+      Click me
+    </Button>
+    <H3>Small buttons</H3>
+    <Button variant="main-orange" size="sm">Click me</Button>
+    <Button variant="main-green" size="sm">Click me</Button>
+    <Button variant="main-gray" size="sm">Click me</Button>
+    <Button variant="danger" size="sm">Click me</Button>
+    <H3>Additional states</H3>
+    <Button variant="main-green" size="sm" disabled={true}>
+      Disabled
+    </Button>
+    <Button variant="main-green" size="sm" isLoading={true}>
       Click me
     </Button>
   </div>

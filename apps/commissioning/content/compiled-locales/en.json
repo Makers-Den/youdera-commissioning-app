@@ -5,6 +5,12 @@
       "value": "Type here"
     }
   ],
+  "'+20FW7'": [
+    {
+      "type": 0,
+      "value": "Devices"
+    }
+  ],
   "'+7Sv+W'": [
     {
       "type": 0,
@@ -17,10 +23,10 @@
       "value": "Didn't receive the email?"
     }
   ],
-  "'+sQrJP'": [
+  "'+U6ozc'": [
     {
       "type": 0,
-      "value": "Modify String"
+      "value": "Type"
     }
   ],
   "'/vMjUJ'": [
@@ -59,6 +65,24 @@
       "value": "Are you sure that all module fields were added?"
     }
   ],
+  "'29x2r3'": [
+    {
+      "type": 0,
+      "value": "String test result"
+    }
+  ],
+  "'2ACNd6'": [
+    {
+      "type": 0,
+      "value": "Select input"
+    }
+  ],
+  "'2IacYt'": [
+    {
+      "type": 0,
+      "value": "Attached"
+    }
+  ],
   "'2oCaym'": [
     {
       "type": 0,
@@ -83,6 +107,12 @@
       "value": "Legal notice"
     }
   ],
+  "'4jWBb/'": [
+    {
+      "type": 0,
+      "value": "Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well."
+    }
+  ],
   "'5LP274'": [
     {
       "type": 0,
@@ -93,6 +123,18 @@
     {
       "type": 0,
       "value": "Password"
+    }
+  ],
+  "'7/jA3y'": [
+    {
+      "type": 0,
+      "value": "click here to upload"
+    }
+  ],
+  "'76YDpe'": [
+    {
+      "type": 0,
+      "value": "or"
     }
   ],
   "'7tSUe8'": [
@@ -155,6 +197,12 @@
       "value": "Are you sure to delete module field?"
     }
   ],
+  "'CkBSOc'": [
+    {
+      "type": 0,
+      "value": "No unattached gateways"
+    }
+  ],
   "'D7h26G'": [
     {
       "type": 0,
@@ -167,6 +215,12 @@
     {
       "type": 0,
       "value": " character(s)"
+    }
+  ],
+  "'DpO/xz'": [
+    {
+      "type": 0,
+      "value": "Manufacturer and model"
     }
   ],
   "'EZfuT3'": [
@@ -199,6 +253,12 @@
       "value": "Your password has been successfully reset. Click below to log in magically."
     }
   ],
+  "'Jakpjl'": [
+    {
+      "type": 0,
+      "value": "Select gateway"
+    }
+  ],
   "'K3r6DQ'": [
     {
       "type": 0,
@@ -223,10 +283,22 @@
       "value": "String name"
     }
   ],
+  "'Ntjkqd'": [
+    {
+      "type": 0,
+      "value": "or"
+    }
+  ],
   "'QChvcf'": [
     {
       "type": 0,
       "value": "Select main module type"
+    }
+  ],
+  "'R1av2T'": [
+    {
+      "type": 0,
+      "value": "Are you sure to delete this device?"
     }
   ],
   "'SO2mnn'": [
@@ -241,10 +313,28 @@
       "value": "Required"
     }
   ],
+  "'SkNVv8'": [
+    {
+      "type": 0,
+      "value": "Add Inverter"
+    }
+  ],
   "'SzqYd0'": [
     {
       "type": 0,
       "value": "What you want to do with list element?"
+    }
+  ],
+  "'U8gYkQ'": [
+    {
+      "type": 0,
+      "value": "Contact project manager"
+    }
+  ],
+  "'UK3Urd'": [
+    {
+      "type": 0,
+      "value": "Take photo by camera"
     }
   ],
   "'UoPZk+'": [
@@ -265,6 +355,12 @@
       "value": "Manufacturer"
     }
   ],
+  "'VaqLyh'": [
+    {
+      "type": 0,
+      "value": "Are you sure that all roofs and strings have been set up completely?"
+    }
+  ],
   "'VzzYJk'": [
     {
       "type": 0,
@@ -283,16 +379,34 @@
       "value": "Extenstion"
     }
   ],
+  "'XHEKh0'": [
+    {
+      "type": 0,
+      "value": "click here to upload"
+    }
+  ],
   "'XM4l7n'": [
     {
       "type": 0,
       "value": "Click to resend"
     }
   ],
+  "'XayQqk'": [
+    {
+      "type": 0,
+      "value": "Gateway serial number"
+    }
+  ],
   "'Y18Iuk'": [
     {
       "type": 0,
       "value": "Module type"
+    }
+  ],
+  "'YTweLg'": [
+    {
+      "type": 0,
+      "value": "Additional pictures"
     }
   ],
   "'Yy/yDL'": [
@@ -305,6 +419,12 @@
     {
       "type": 0,
       "value": "Add module field"
+    }
+  ],
+  "'ZcUyj3'": [
+    {
+      "type": 0,
+      "value": "String layout"
     }
   ],
   "'Zn6vVy'": [
@@ -355,6 +475,12 @@
       "value": "Strings"
     }
   ],
+  "'hsf++3'": [
+    {
+      "type": 0,
+      "value": "Project setup was finished"
+    }
+  ],
   "'it6Lig'": [
     {
       "type": 0,
@@ -379,10 +505,34 @@
       "value": "Select"
     }
   ],
+  "'nGrCam'": [
+    {
+      "type": 0,
+      "value": "Inverter Model"
+    }
+  ],
   "'nwjxtz'": [
     {
       "type": 0,
       "value": "Device swap"
+    }
+  ],
+  "'o3dLbO'": [
+    {
+      "type": 0,
+      "value": "Change gateway"
+    }
+  ],
+  "'ptgUiM'": [
+    {
+      "type": 0,
+      "value": "Add new inverter"
+    }
+  ],
+  "'r/oW2Z'": [
+    {
+      "type": 0,
+      "value": "Take photo by camera"
     }
   ],
   "'rKbQkm'": [
@@ -391,10 +541,22 @@
       "value": "Modules#"
     }
   ],
+  "'rhSI1/'": [
+    {
+      "type": 0,
+      "value": "Model"
+    }
+  ],
   "'rwbpnL'": [
     {
       "type": 0,
       "value": "Commissioning"
+    }
+  ],
+  "'s3zhVk'": [
+    {
+      "type": 0,
+      "value": "Are you sure to delete the image?"
     }
   ],
   "'sFENBY'": [
@@ -409,6 +571,12 @@
       "value": "Email"
     }
   ],
+  "'tzMNF3'": [
+    {
+      "type": 0,
+      "value": "Status"
+    }
+  ],
   "'vx0nkZ'": [
     {
       "type": 0,
@@ -419,6 +587,12 @@
     {
       "type": 0,
       "value": "Actions"
+    }
+  ],
+  "'x1Xwuo'": [
+    {
+      "type": 0,
+      "value": "Modify communication"
     }
   ],
   "'x2uLD6'": [
