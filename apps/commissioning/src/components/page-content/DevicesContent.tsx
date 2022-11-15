@@ -93,11 +93,9 @@ export function DevicesContent({ siteId }: DevicesContentProps) {
   ) => {
     try {
       const inverter = await createInverterMutation.mutateAsync({
-        name: values.model.label,
         serial_number: values.serialNumber,
         site: siteId,
         manufacturer: values.manufacturer.label,
-        metered_by: 50,
         cmodel: parseInt(values.model.key, 10),
       });
 

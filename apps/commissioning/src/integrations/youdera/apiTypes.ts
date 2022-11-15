@@ -1,4 +1,3 @@
-
 export type DataResponse<T> = {
   data: T;
 };
@@ -47,19 +46,19 @@ export type Meter = {
   /** This might be an enum where "generation" is at least on option? */
   type: string;
 
-  is_auxiliary: 0,
+  is_auxiliary: 0;
 
   /** Assume this can be ISO date string, not sure */
-  replacement_by: string | null,
-  replacement_date: string | null,
+  replacement_by: string | null;
+  replacement_date: string | null;
 
-  testlogs: VerificationTestResult[]
+  testlogs: VerificationTestResult[];
 
   created_at: string;
   updated_at: string;
 
   files?: ApiFile[];
-}
+};
 
 export type Battery = {
   id: number;
@@ -67,14 +66,14 @@ export type Battery = {
   serial_number: string;
   communication_status: CommunicationStatus;
 
-  testlogs: VerificationTestResult[]
+  testlogs: VerificationTestResult[];
 
   manufacturer: string;
   model: string;
   created_at: string;
   updated_at: string;
   files?: ApiFile[];
-}
+};
 
 export type Inverter = {
   id: number;
@@ -82,30 +81,28 @@ export type Inverter = {
   serial_number: string;
   communication_status: CommunicationStatus;
 
-  testlogs: VerificationTestResult[]
+  testlogs: VerificationTestResult[];
 
   manufacturer: string;
   model: string;
 
   mpp_trackers?: MppTracker[];
   files?: ApiFile[];
-}
+};
 
 /**
- * TODO: move somewhere else. 
+ * TODO: move somewhere else.
  * We don't know what this looks like yet.
  */
 export type MppTracker = {
   id: string;
-}
+};
 
 export interface CreateInverterRequestBody {
-  name: string,
-  serial_number: string,
-  site: number,
-  manufacturer: string,
-  metered_by?: number,
-  cmodel?: number
+  serial_number: string;
+  site: number;
+  manufacturer: string;
+  cmodel?: number;
 }
 
 export type MonthMap<T> = {
