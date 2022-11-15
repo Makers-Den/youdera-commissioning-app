@@ -8,10 +8,13 @@ export const getSite = async (siteId: string) => {
     `?with[]=files` + 
     `&with[]=batteries` + 
     `&with[]=batteries.testlogs` + 
+    `&with[]=batteries.files` + 
     `&with[]=meters` + 
     `&with[]=meters.testlogs` + 
+    `&with[]=meters.files` + 
     `&with[]=inverters` + 
     `&with[]=inverters.testlogs` + 
+    `&with[]=inverters.files` + 
     `&with[]=inverters.mpp_trackers`,
   );
 

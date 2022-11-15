@@ -99,11 +99,9 @@ export type MppTracker = {
 };
 
 export interface CreateInverterRequestBody {
-  name: string;
   serial_number: string;
   site: number;
   manufacturer: string;
-  metered_by?: number;
   cmodel?: number;
 }
 
