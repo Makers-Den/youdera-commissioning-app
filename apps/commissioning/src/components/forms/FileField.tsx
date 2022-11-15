@@ -11,12 +11,28 @@ import { Field } from './Field';
 export type FileFieldProps = {
   children: ReactNode;
   name: string;
+  valueMapper?: (value: any) => UploadedFile;
 } & Omit<
   FileUploaderWithPreviewProps,
   'fileUploaderProps' | 'onDeleteFile' | 'uploadedFiles'
 >;
 
-export const FileField = ({ children, name, ...props }: FileFieldProps) => {
+function defaultValueMapper(value: File) {
+  const url = URL.createObjectURL(value);
+
+  return {
+    name: value.name,
+    type: value.type,
+    url,
+  };
+}
+
+export const FileField = ({
+  children,
+  name,
+  valueMapper = defaultValueMapper,
+  ...props
+}: FileFieldProps) => {
   const { resetField, setValue } = useFormContext();
   const value = useWatch({ name });
 
@@ -24,19 +40,11 @@ export const FileField = ({ children, name, ...props }: FileFieldProps) => {
 
   useEffect(() => {
     if (value) {
-      const url = URL.createObjectURL(value);
-
-      setFiles([
-        {
-          name: 'asdsad',
-          type: 'image',
-          url,
-        },
-      ]);
+      setFiles([valueMapper(value)]);
     } else {
       setFiles([]);
     }
-  }, [value]);
+  }, [value, valueMapper]);
 
   return (
     <Field name={name}>
