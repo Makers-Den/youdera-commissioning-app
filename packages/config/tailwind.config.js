@@ -16,9 +16,12 @@ module.exports = {
         },
         green: {
           default: '#5CB85C',
+           50: '#EFF8EF',
           100: '#DCEDC8',
+          200: '#B4DEB4',
           300: '#70B71C',
           400: '#5CB85C',
+          // Should we remove this one? It's very close to 400
           600: '#58B158',
         },
         gray: {
@@ -35,6 +38,7 @@ module.exports = {
         },
         yellow: {
           default: '#FFCD00',
+          200: '#FFE0B2',
           400: '#FFCD00',
           600: '#EFC000',
         },

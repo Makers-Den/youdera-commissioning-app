@@ -9,8 +9,8 @@ import {
   FaTimes,
   FaUnlockAlt,
 } from 'react-icons/fa';
-import { BatteryRect } from './icons/BatteryRect';
 
+import { BatteryRect } from './icons/BatteryRect';
 import { Camera } from './icons/Camera';
 import { CaretDown } from './icons/CaretDown';
 import { CaretUp } from './icons/CaretUp';
@@ -21,6 +21,7 @@ import { Close } from './icons/Cross';
 import { DeviceSwap } from './icons/DeviceSwap';
 import { Extention } from './icons/Extension';
 import { Gateway } from './icons/Gateway';
+import { Inverter } from './icons/Inverter';
 import { InverterRect } from './icons/InverterRect';
 import { LogOut } from './icons/LogOut';
 import { MagnifyingGlass } from './icons/MagnifyingGlass';
@@ -50,7 +51,7 @@ const iconMap = {
   Chip: FaMicrochip,
   Meter,
   Battery: FaBatteryFull,
-  Inverter: FaTable,
+  Inverter,
   ChevronDown,
   Settings,
   LogOut,
