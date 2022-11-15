@@ -119,7 +119,7 @@ function VerificationGuideDialog({ siteId, device, onClose }: { siteId: number; 
       <DialogHeader>
         <DialogTitle title={intl.formatMessage({ defaultMessage: 'Instructions' })} />
       </DialogHeader>
-      <DialogContent className='flex flex-col w-[00px]'>
+      <DialogContent className='flex flex-col w-[500px]'>
         {deviceVerificationGuideQuery.isLoading && '...'}
         <BodyText>{deviceVerificationGuideQuery.data}</BodyText>
         <div className='flex justify-end gap-3 mt-5'>
