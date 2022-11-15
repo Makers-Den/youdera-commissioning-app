@@ -177,3 +177,22 @@ export interface AddFileToBatteryRequest {
   file: File;
   batteryId: Battery['id'];
 }
+
+export interface InverterModel {
+  id: number;
+  type: string;
+  name: string;
+  manufacturer_id: number;
+  manufacturer_name: string;
+  data: {
+    auto_serialnumber: boolean;
+  };
+}
+
+// TODO update
+export interface BatteryModel {
+  id: number;
+  name: string;
+  manufacturer_id: number;
+  manufacturer_name: string;
+}

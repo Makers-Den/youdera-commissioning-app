@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { InverterModel } from '@src/integrations/youdera/apiTypes';
 import { Inverter } from '@src/integrations/youdera/inverters/types';
-import { InverterModel } from '@src/integrations/youdera/models/types';
 import React, { useMemo } from 'react';
 import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';

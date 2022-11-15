@@ -1,6 +1,6 @@
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
+import { InverterModel } from '@src/integrations/youdera/apiTypes';
 import { Inverter } from '@src/integrations/youdera/inverters/types';
-import { InverterModel } from '@src/integrations/youdera/models/types';
 import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
 import { StringsOnRoof } from '@src/integrations/youdera/strings/types';
 import { useRef, useState } from 'react';
@@ -108,15 +108,15 @@ export function StringsContent({
     { moduleType, numberOfModules, cableCrossSection },
     resetForm,
   ) => {
-      moduleTypeFormData.current = {
-        moduleType,
-        numberOfModules,
-        cableCrossSection,
-      };
-      moduleTypeSelectionDialog.onClose();
-      resetForm();
-      inverterSelectionDialog.onOpen();
+    moduleTypeFormData.current = {
+      moduleType,
+      numberOfModules,
+      cableCrossSection,
     };
+    moduleTypeSelectionDialog.onClose();
+    resetForm();
+    inverterSelectionDialog.onOpen();
+  };
 
   const stringInverterSubmitHandler: StringInverterDialogProps<
     typeof stringInverterValidation
