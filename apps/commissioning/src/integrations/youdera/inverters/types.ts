@@ -1,5 +1,5 @@
-import { ApiFile } from "../files/types";
-import { CommunicationStatus } from "../types";
+import { ApiFile } from '../files/types';
+import { CommunicationStatus } from '../types';
 
 export type Inverter = {
   id: number;
@@ -12,24 +12,21 @@ export type Inverter = {
 
   mpp_trackers?: MppTracker[];
   files?: ApiFile[];
-}
-
+};
 
 /**
- * TODO: move somewhere else. 
+ * TODO: move somewhere else.
  * We don't know what this looks like yet.
  */
 export type MppTracker = {
   id: string;
-}
+};
 
 export interface CreateInverterRequestBody {
-  name: string,
-  serial_number: string,
-  site: number,
-  manufacturer: string,
-  model: string,
-  metered_by?: number,
-  cmodel?: number
+  name: string;
+  serial_number: string;
+  site: number;
+  manufacturer: string;
+  metered_by?: number;
+  cmodel?: number;
 }
-

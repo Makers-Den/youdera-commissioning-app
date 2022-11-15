@@ -7,8 +7,9 @@ import {
   FaMicrochip,
   FaTable,
   FaTimes,
-  FaUnlockAlt
+  FaUnlockAlt,
 } from 'react-icons/fa';
+import { BatteryRect } from './icons/BatteryRect';
 
 import { Camera } from './icons/Camera';
 import { CaretDown } from './icons/CaretDown';
@@ -20,9 +21,11 @@ import { Close } from './icons/Cross';
 import { DeviceSwap } from './icons/DeviceSwap';
 import { Extention } from './icons/Extension';
 import { Gateway } from './icons/Gateway';
+import { InverterRect } from './icons/InverterRect';
 import { LogOut } from './icons/LogOut';
 import { MagnifyingGlass } from './icons/MagnifyingGlass';
 import { Meter } from './icons/Meter';
+import { MeterRect } from './icons/MeterRect';
 import { Plus } from './icons/Plus';
 import { Problem } from './icons/Problem';
 import { SafetyHelmet } from './icons/SafetyHelmet';
@@ -71,6 +74,9 @@ const iconMap = {
   StatusOk,
   StatusError,
   StatusPending,
+  InverterRect,
+  BatteryRect,
+  MeterRect,
 };
 
 export type IconName = keyof typeof iconMap;
