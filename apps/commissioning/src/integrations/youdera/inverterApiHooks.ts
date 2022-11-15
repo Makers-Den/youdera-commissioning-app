@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { createInverter, deleteInverter, executeInverterVerification, getInverterVerificationGuide } from './apiRequests';
+import { addFileToInverter,createInverter, deleteInverter, executeInverterVerification, getInverterVerificationGuide } from './apiRequests';
 import { QueryKeys } from './enums/queryKeys';
 
 export const useInverterMutations = (siteId: number) => {
@@ -32,7 +32,14 @@ export const useInverterMutations = (siteId: number) => {
     },
   });
 
+  const addFileToInverterMutation = useMutation(addFileToInverter, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
+    },
+  });
+  
   return {
+    addFileToInverterMutation,
     createInverterMutation,
     deleteInverterMutation,
     executeInverterVerificationMutation

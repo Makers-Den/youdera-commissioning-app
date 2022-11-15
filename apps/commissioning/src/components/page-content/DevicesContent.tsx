@@ -1,6 +1,6 @@
-import { useBatteryApi } from '@src/integrations/youdera/batteries/hooks/useBatteryApi';
-import { useInverterApi } from '@src/integrations/youdera/inverters/hooks/useInverterApi';
-import { useMeterApi } from '@src/integrations/youdera/meters/hooks/useMeterApi';
+import { useBatteryMutations } from '@src/integrations/youdera/batteryApiHooks';
+import { useInverterMutations } from '@src/integrations/youdera/inverterApiHooks';
+import { useMeterMutations } from '@src/integrations/youdera/meterApiHooks';
 import { useGetSite } from '@src/integrations/youdera/sites/hooks/useGetSite';
 import { Site } from '@src/integrations/youdera/sites/types';
 import { Device } from '@src/utils/devices';
@@ -64,9 +64,9 @@ export function DevicesContent({ siteId }: DevicesContentProps) {
     deleteInverterMutation,
     createInverterMutation,
     addFileToInverterMutation,
-  } = useInverterApi(siteId);
-  const { deleteBatteryMutation } = useBatteryApi(siteId);
-  const { deleteMeterMutation } = useMeterApi(siteId);
+  } = useInverterMutations(siteId);
+  const { deleteBatteryMutation } = useBatteryMutations(siteId);
+  const { deleteMeterMutation } = useMeterMutations(siteId);
 
   const confirmDeleteHandler = async () => {
     if (currentDevice) {

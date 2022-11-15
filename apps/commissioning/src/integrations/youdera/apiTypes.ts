@@ -104,7 +104,6 @@ export interface CreateInverterRequestBody {
   serial_number: string,
   site: number,
   manufacturer: string,
-  model: string,
   metered_by?: number,
   cmodel?: number
 }
