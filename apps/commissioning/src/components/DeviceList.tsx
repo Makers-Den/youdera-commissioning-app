@@ -2,10 +2,11 @@
 import { Battery } from '@src/integrations/youdera/batteries/types';
 import { Inverter } from '@src/integrations/youdera/inverters/types';
 import { Meter } from '@src/integrations/youdera/meters/types';
-import { Device, toDevice } from '@src/utils/devices';
+import { commStatusToIcon, Device, toDevice } from '@src/utils/devices';
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { Image } from 'ui/image/Image';
+import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 import { Typography } from 'ui/typography/Typography';
 
@@ -75,9 +76,15 @@ export function DeviceList({
                 {device.model}
               </Typography>
             </Td>
-            <Td>{/* <SvgIcon name={device.type} /> */}</Td>
             <Td>
-              {/* <SvgIcon name={commStatusToIcon[device.communication_status]} /> */}
+              <SvgIcon name={device.type} />
+            </Td>
+            <Td>
+              <SvgIcon
+                name={
+                  commStatusToIcon[device.communication_status] || 'StatusOk'
+                }
+              />
             </Td>
           </Tr>
         ))}
