@@ -21,152 +21,161 @@ export type AutocompleteSelectProps = {
   value?: AutocompleteSelectOption | undefined;
   validity?: 'invalid' | 'valid';
   isRequired?: boolean;
-  onChange?: (value: AutocompleteSelectOption | undefined) => void
+  onChange?: (value: AutocompleteSelectOption | undefined) => void;
 } & Omit<React.ComponentPropsWithRef<'input'>, 'value' | 'onChange'>;
 
-export const AutocompleteSelect = React.forwardRef<HTMLInputElement, AutocompleteSelectProps>((
-  {
-    label,
-    value,
-    onChange,
-    placeholder,
-    options,
-    className,
-    validity,
-    isRequired,
-    noOptionsString = 'Nothing found.',
-    ...rest
-  },
-  ref
-) => {
-  const [query, setQuery] = useState('');
+export const AutocompleteSelect = React.forwardRef<
+  HTMLInputElement,
+  AutocompleteSelectProps
+>(
+  (
+    {
+      label,
+      value,
+      onChange,
+      placeholder,
+      options,
+      className,
+      validity,
+      isRequired,
+      noOptionsString = 'Nothing found.',
+      ...rest
+    },
+    ref,
+  ) => {
+    const [query, setQuery] = useState('');
 
-  const filteredOptions =
-    query === ''
-      ? options
-      : options.filter(option =>
-        option.label
-          .toLowerCase()
-          .replace(/\s+/g, '')
-          .includes(query.toLowerCase().replace(/\s+/g, '')),
-      );
+    const filteredOptions =
+      query === ''
+        ? options
+        : options.filter(option =>
+            option.label
+              .toLowerCase()
+              .replace(/\s+/g, '')
+              .includes(query.toLowerCase().replace(/\s+/g, '')),
+          );
 
-  return (
-    <div className={className}>
-      <Label className={validity && validityStyle[validity].label}>
-        {label}
-        <span>{isRequired && '*'}</span>
-      </Label>
-      <Combobox value={value} onChange={onChange}>
-        {({ open }) => (
-          <div className="relative mt-1">
-            <div>
-              {/* Hack to improve bad UX of Headless UI, 
-                * https://github.com/tailwindlabs/headlessui/discussions/1236#discussioncomment-2970969 */}
-              <Combobox.Button as='div'>
-                <Combobox.Input
-                  className={clsxm(
-                    'inline-flex items-center justify-center rounded-md px-3 py-2',
-                    'bg-gray-100 font-medium text-gray-800',
-                    'placeholder:font-normal',
-                    'border-[1px] border-gray-500',
-                    'focus:outline-none focus-visible:border-orange-400 focus-visible:bg-white',
-                    'transition-colors duration-75',
-                    'w-full',
-                    'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
-                    validity && validityStyle[validity].input,
-                  )}
-                  displayValue={(option: AutocompleteSelectOption) => option?.label}
-                  placeholder={placeholder}
-                  onChange={event => setQuery(event.target.value)}
-                  onFocus={(e: FocusEvent<HTMLInputElement>) => {
-                    e.target.select();
-                  }}
-                  ref={ref}
-                  {...rest}
-                />
-              </Combobox.Button>
+    return (
+      <div className={className}>
+        <Label className={validity && validityStyle[validity].label}>
+          {label}
+          <span>{isRequired && '*'}</span>
+        </Label>
+        <Combobox value={value} onChange={onChange}>
+          {({ open }) => (
+            <div className="relative mt-1">
+              <div>
+                {/* Hack to improve bad UX of Headless UI,
+                 * https://github.com/tailwindlabs/headlessui/discussions/1236#discussioncomment-2970969 */}
+                <Combobox.Button as="div">
+                  <Combobox.Input
+                    className={clsxm(
+                      'inline-flex items-center justify-center rounded-md px-3 py-2',
+                      'bg-gray-100 font-medium text-gray-800',
+                      'placeholder:font-normal',
+                      'border-[1px] border-gray-500',
+                      'focus:outline-none focus-visible:border-orange-400 focus-visible:bg-white',
+                      'transition-colors duration-75',
+                      'w-full',
+                      'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
+                      validity && validityStyle[validity].input,
+                    )}
+                    displayValue={(option: AutocompleteSelectOption) =>
+                      option?.label
+                    }
+                    placeholder={placeholder}
+                    onChange={event => setQuery(event.target.value)}
+                    onFocus={(e: FocusEvent<HTMLInputElement>) => {
+                      e.target.select();
+                    }}
+                    ref={ref}
+                    {...rest}
+                  />
+                </Combobox.Button>
 
-              <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-4">
-                <SvgIcon
-                  name="ChevronDown"
-                  className={clsxm(
-                    'ml-4 w-3 transition-all',
-                    open && 'rotate-180',
-                    validity && validityStyle[validity].icon,
-                  )}
-                />
-              </Combobox.Button>
-            </div>
-            <Transition
-              as={Fragment}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-              afterLeave={() => setQuery('')}
-            >
-              <Combobox.Options
-                static
-                className={clsxm(
-                  'absolute overflow-auto',
-                  'mt-1 max-h-44 w-full py-2 z-10',
-                  'drop-shadow-large rounded-md bg-white',
-                )}
+                <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-4">
+                  <SvgIcon
+                    name="ChevronDown"
+                    className={clsxm(
+                      'ml-4 w-3 transition-all',
+                      open && 'rotate-180',
+                      validity && validityStyle[validity].icon,
+                    )}
+                  />
+                </Combobox.Button>
+              </div>
+              <Transition
+                as={Fragment}
+                leave="transition ease-in duration-100"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+                afterLeave={() => setQuery('')}
               >
-                {filteredOptions.length === 0 && query !== '' ? (
-                  <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
-                    {noOptionsString}
-                  </div>
-                ) : (
-                  filteredOptions.map(option => (
-                    <Combobox.Option
-                      key={option.key}
-                      value={option}
-                      className={({ active }) =>
-                        clsxm(
-                          'flex items-center justify-between py-2 pl-4 pr-4',
-                          'cursor-pointer select-none hover:bg-gray-100',
-                          active && 'bg-gray-100',
-                        )
-                      }
-                    >
-                      {({ selected, active }) => (
-                        <>
-                          <span
-                            className={`flex items-center truncate ${selected ? 'font-medium' : 'font-normal'
+                <Combobox.Options
+                  static
+                  className={clsxm(
+                    'absolute overflow-auto',
+                    'z-10 mt-1 max-h-44 w-full py-2',
+                    'drop-shadow-large rounded-md bg-white',
+                  )}
+                >
+                  {filteredOptions.length === 0 && query !== '' ? (
+                    <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                      {noOptionsString}
+                    </div>
+                  ) : (
+                    filteredOptions.map(option => (
+                      <Combobox.Option
+                        key={option.key}
+                        value={option}
+                        className={({ active }) =>
+                          clsxm(
+                            'flex items-center justify-between py-2 pl-4 pr-4',
+                            'cursor-pointer select-none hover:bg-gray-100',
+                            active && 'bg-gray-100',
+                          )
+                        }
+                      >
+                        {({ selected, active }) => (
+                          <>
+                            <span
+                              className={`flex items-center truncate ${
+                                selected ? 'font-medium' : 'font-normal'
                               }`}
-                          >
-                            {option.icon && (
-                              <span className="mr-3 flex w-4 items-center justify-center">
+                            >
+                              {option.icon && (
+                                <span className="mr-3 flex w-4 items-center justify-center">
+                                  <SvgIcon
+                                    name={option.icon}
+                                    className="h-[14px]"
+                                  />
+                                </span>
+                              )}
+                              {option.label}
+                            </span>
+                            {selected ? (
+                              <span
+                                className={`flex items-center pl-3 ${
+                                  active ? 'text-white' : 'text-teal-600'
+                                }`}
+                              >
                                 <SvgIcon
-                                  name={option.icon}
-                                  className="h-[14px]"
+                                  name="Check"
+                                  className="w-4 text-green-400"
                                 />
                               </span>
-                            )}
-                            {option.label}
-                          </span>
-                          {selected ? (
-                            <span
-                              className={`flex items-center pl-3 ${active ? 'text-white' : 'text-teal-600'
-                                }`}
-                            >
-                              <SvgIcon
-                                name="Check"
-                                className="w-4 text-green-400"
-                              />
-                            </span>
-                          ) : null}
-                        </>
-                      )}
-                    </Combobox.Option>
-                  ))
-                )}
-              </Combobox.Options>
-            </Transition>
-          </div>
-        )}
-      </Combobox>
-    </div>
-  );
-});
+                            ) : null}
+                          </>
+                        )}
+                      </Combobox.Option>
+                    ))
+                  )}
+                </Combobox.Options>
+              </Transition>
+            </div>
+          )}
+        </Combobox>
+      </div>
+    );
+  },
+);
