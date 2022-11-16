@@ -65,7 +65,6 @@ export const StringInverterDialog = <
   const { inverterModelsQuery, invertersQuery } = useInverters(siteId);
   const inverters = invertersQuery.data as Inverter[];
   const inverterModels = inverterModelsQuery.data as InverterModel[];
-
   const inverterOptions = [
     {
       key: '-1',
@@ -85,11 +84,24 @@ export const StringInverterDialog = <
 
   const watchInverter = watch('inverter');
   const watchInput = watch('input');
+  const watchFile = watch('file');
+
   const watchManufacturer = watch('manufacturer');
   const watchModel = watch('model');
-  const watchFile = watch('file');
-  //TODO: Waiting for mpp_trackers on backend side
-  // const inverterInputs = watchInverter?.key && inverters.filter((inverter) => inverter.id === watchInverter.key)[0]
+
+  const inverterInputs: AutocompleteSelectOption[] | [] = useMemo(() => {
+    if (!watchInverter?.key) return [];
+
+    const selectedInverter = inverters.filter(
+      inverter => inverter.id.toString() === watchInverter.key,
+    )[0];
+
+    return selectedInverter.mpp_trackers.map((input, idx) => ({
+      key: input.id.toString(),
+      label: (idx + 1).toString(),
+      icon: 'Chip',
+    }));
+  }, [watchInverter, inverters]);
 
   const inverterManufactures: AutocompleteSelectOption[] | [] = useMemo(() => {
     const result: AutocompleteSelectOption[] = [];
@@ -199,19 +211,7 @@ export const StringInverterDialog = <
                       noOptionsString={intl.formatMessage({
                         defaultMessage: 'Nothing found.',
                       })}
-                      options={
-                        // TODO: Waiting for mpp_trackers on backend side
-                        // inverterInputs.mpp_trackers.map(() => ({
-                        //   key: '1', // unknown values
-                        //   label: 'TODO' // unknown values
-                        // }))
-                        [
-                          {
-                            key: '1',
-                            label: 'I11',
-                          },
-                        ]
-                      }
+                      options={inverterInputs}
                       onChange={value =>
                         onChange({ target: { value, name: 'input' } })
                       }

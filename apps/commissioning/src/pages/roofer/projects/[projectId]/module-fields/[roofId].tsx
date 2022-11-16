@@ -13,8 +13,6 @@ const StringsPage = ({
   project,
   roofId,
   siteId,
-  inverters,
-  inverterModels
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const intl = useIntl();
   const router = useRouter();

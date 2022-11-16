@@ -24,4 +24,5 @@ export interface CreateStringRequestBody {
 	roof: number,
 	module: string,
 	cable_cross_section: number
+	mpp_tracker: number;
 }

@@ -86,7 +86,7 @@ export type Inverter = {
   manufacturer: string;
   model: string;
 
-  mpp_trackers?: MppTracker[];
+  mpp_trackers: MppTracker[];
   files?: ApiFile[];
 };
 export interface InverterModel {

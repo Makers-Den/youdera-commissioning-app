@@ -127,6 +127,7 @@ export function StringsContent({
         roof: stringsOnRoofQuery.data.id,
         module: moduleTypeFormData.current!.moduleType.key,
         cable_cross_section: moduleTypeFormData.current!.cableCrossSection,
+        mpp_tracker: Number(input.key) // ? Make everything related to keys a number?
       });
 
       await addFileToStringMutation.mutateAsync({
@@ -194,23 +195,27 @@ export function StringsContent({
           {intl.formatMessage({ defaultMessage: 'Cancel' })}
         </Button>
       </ActionsDialog>
-      <Suspense>
-        <StringModuleTypeDialog
-          open={moduleTypeSelectionDialog.isOpen}
-          onClose={handleModuleTypeClose}
-          onSubmit={stringModuleTypeSubmitHandler}
-          resolver={stringModuleTypeValidation}
-        />
-      </Suspense>
-      <Suspense>
-        <StringInverterDialog
-          open={inverterSelectionDialog.isOpen}
-          onClose={handleInverterClose}
-          resolver={stringInverterValidation}
-          onSubmit={stringInverterSubmitHandler}
-          siteId={siteId}
-        />
-      </Suspense>
+      {moduleTypeSelectionDialog.isOpen &&
+        <Suspense>
+          <StringModuleTypeDialog
+            open={moduleTypeSelectionDialog.isOpen}
+            onClose={handleModuleTypeClose}
+            onSubmit={stringModuleTypeSubmitHandler}
+            resolver={stringModuleTypeValidation}
+          />
+        </Suspense>
+      }
+      {inverterSelectionDialog.isOpen &&
+        <Suspense>
+          <StringInverterDialog
+            open={inverterSelectionDialog.isOpen}
+            onClose={handleInverterClose}
+            resolver={stringInverterValidation}
+            onSubmit={stringInverterSubmitHandler}
+            siteId={siteId}
+          />
+        </Suspense>
+      }
       <DeletionDialog
         onDelete={confirmDeleteHandler}
         isOpen={deletionDialog.isOpen}
