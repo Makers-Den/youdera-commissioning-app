@@ -1,7 +1,5 @@
-import { Battery } from "../batteries/types";
+import { Battery, Inverter, Meter } from "../apiTypes";
 import { ApiFile } from "../files/types";
-import { Inverter } from "../inverters/types";
-import { Meter } from "../meters/types";
 
 export type MonthMap<T> = {
   apr: T;

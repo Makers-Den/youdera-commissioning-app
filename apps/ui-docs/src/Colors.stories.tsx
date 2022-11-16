@@ -30,6 +30,9 @@ export const Overview = () => (
         <div className="flex items-center justify-center w-10 h-10 bg-green-100">
           100
         </div>
+        <div className="flex items-center justify-center w-10 h-10 bg-green-200">
+          200
+        </div>
         <div className="flex items-center justify-center w-10 h-10 bg-green-300">
           300
         </div>

@@ -20,8 +20,6 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
   const additionalPicturesGallery = useDisclosure();
   const deleteDialog = useDisclosure();
 
-  const fileUrlMap = useRef<Record<string, string>>({});
-
   const { filesQuery, deleteFileFromSiteMutation, addFileToSiteMutation } =
     useFiles(projectId);
 
@@ -40,14 +38,7 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
           type,
           setUploadProgress: setUploadPercentageProgress,
         });
-
-        const reader = new FileReader();
-        reader.addEventListener('load', async ev => {
-          const url = (ev.target?.result as string) || '';
-          setUploadedUrl(url);
-          fileUrlMap.current = { ...fileUrlMap.current, [response.id]: url };
-        });
-        reader.readAsDataURL(file);
+        setUploadedUrl(response.url);
       } catch (err) {
         setErrorMessage('There was an issue');
       }
@@ -84,13 +75,15 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
       <div className="flex flex-col gap-5">
         <ImagesUploadBox
           title={intl.formatMessage({ defaultMessage: 'String layout' })}
-          uploadFile={uploadFile(ApiFileType.additionalPictures)}
-          uploadedFiles={(filesQuery.data || []).map(({ id, name }) => ({
-            name,
-            url: fileUrlMap.current[id]!,
-            id,
-            type: 'image',
-          }))}
+          uploadFile={uploadFile(ApiFileType.stringLayout)}
+          uploadedFiles={(filesQuery.data || [])
+            .filter(({ type }) => type === ApiFileType.stringLayout)
+            .map(({ id, name, url }) => ({
+              name,
+              url,
+              id,
+              type: 'image',
+            }))}
           onDelete={onDelete}
           isGalleryOpen={stringLayoutGallery.isOpen}
           onGalleryClose={stringLayoutGallery.onClose}
@@ -99,12 +92,14 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
         <ImagesUploadBox
           title={intl.formatMessage({ defaultMessage: 'Additional pictures' })}
           uploadFile={uploadFile(ApiFileType.stringLayout)}
-          uploadedFiles={(filesQuery.data || []).map(({ id, name }) => ({
-            name,
-            url: fileUrlMap.current[id]!,
-            id,
-            type: 'image',
-          }))}
+          uploadedFiles={(filesQuery.data || [])
+            .filter(({ type }) => type === ApiFileType.additionalPictures)
+            .map(({ id, name, url }) => ({
+              name,
+              url,
+              id,
+              type: 'image',
+            }))}
           onDelete={onDelete}
           isGalleryOpen={additionalPicturesGallery.isOpen}
           onGalleryClose={additionalPicturesGallery.onClose}

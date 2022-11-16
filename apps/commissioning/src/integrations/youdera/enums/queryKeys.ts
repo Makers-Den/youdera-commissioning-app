@@ -9,4 +9,7 @@ export enum QueryKeys {
   files = 'files',
   unattachedGateways = 'unattachedGateways',
   editedSite = 'editedSite',
+  meterVerificationGuide = 'meterVerificationGuide',
+  batteryVerificationGuide = 'meterVerificationGuide',
+  inverterVerificationGuide = 'meterVerificationGuide'
 }

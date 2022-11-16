@@ -1,6 +1,5 @@
-import { useAuth } from '@src/integrations/youdera/auth/hooks/useAuth';
-import { useModels } from '@src/integrations/youdera/models/hooks/useModels';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useInverterModels } from '@src/integrations/youdera/models/hooks/useInverterModels';
+import React, { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
   Dialog,
@@ -9,7 +8,10 @@ import {
   DialogProps,
   DialogTitle,
 } from 'ui/dialogs/Dialog';
-import { AutocompleteSelect, AutocompleteSelectOption } from 'ui/select/AutocompleteSelect';
+import {
+  AutocompleteSelect,
+  AutocompleteSelectOption,
+} from 'ui/select/AutocompleteSelect';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import clsxm from 'ui/utils/clsxm';
 
@@ -19,67 +21,54 @@ export const AddInverterDialog = ({
   className,
 }: Omit<DialogProps, 'children'>) => {
   const intl = useIntl();
-  const { inverterModelsQuery } = useModels();
-  const { loginMutation } = useAuth()
+  const { inverterModelsQuery } = useInverterModels();
 
-  // TEMPORARY FUNC FOR AUTH
-  const handleOnLogin = async () => {
-    try {
-      await loginMutation.mutateAsync({
-        email: 'roo@fer.com',
-        password: 'roofer123',
-        remember: true
-      });
-    } catch (err) {
-      console.log(err)
-    }
-  };
+  const [manufacturerValue, setManufacturerValue] =
+    useState<AutocompleteSelectOption>();
+  const handleManufacturerValue = (
+    value: AutocompleteSelectOption | undefined,
+  ) => setManufacturerValue(value);
 
-  useEffect(() => {
-    handleOnLogin()
-  }, [])
-  //
+  const inverterManufactures: AutocompleteSelectOption[] | [] = useMemo(() => {
+    if (!inverterModelsQuery.data) return [];
 
-  const [manufacturerValue, setManufacturerValue] = useState<AutocompleteSelectOption>();
-  const handleManufacturerValue = (value: AutocompleteSelectOption | undefined) => setManufacturerValue(value)
-
-  const inverterManufactures: AutocompleteSelectOption[] | [] = useMemo(
-    () => {
-      if (!inverterModelsQuery.data) return []
-
-      const result: AutocompleteSelectOption[] = [];
-      const map = new Map();
-      inverterModelsQuery.data.forEach((model) => {
-        if (!map.has(model.manufacturer_id)) {
-          map.set(model.manufacturer_id, true);
-          result.push({
-            key: model.manufacturer_id.toString(),
-            label: model.manufacturer_name
-          });
-        }
-      })
-      return result
-    }
-    , [inverterModelsQuery.data]
-  );
+    const result: AutocompleteSelectOption[] = [];
+    const map = new Map();
+    inverterModelsQuery.data.forEach(model => {
+      if (!map.has(model.manufacturer_id)) {
+        map.set(model.manufacturer_id, true);
+        result.push({
+          key: model.manufacturer_id.toString(),
+          label: model.manufacturer_name,
+        });
+      }
+    });
+    return result;
+  }, [inverterModelsQuery.data]);
 
   const [modelValue, setModelValue] = useState<AutocompleteSelectOption>();
-  const handleModelValue = (value: AutocompleteSelectOption | undefined) => setModelValue(value)
+  const handleModelValue = (value: AutocompleteSelectOption | undefined) =>
+    setModelValue(value);
 
-  const inverterModels: AutocompleteSelectOption[] | [] = useMemo(
-    () => {
-      if (!manufacturerValue || !inverterModelsQuery.data) return []
-      return inverterModelsQuery.data
-        .filter(model => model.manufacturer_id.toString() === manufacturerValue.key)
-        .map((model) => ({ key: model.id.toString(), label: model.name, icon: "Table" }))
-    }
-    , [inverterModelsQuery.data, manufacturerValue]
-  );
-
-  console.log(inverterModelsQuery.data)
+  const inverterModels: AutocompleteSelectOption[] | [] = useMemo(() => {
+    if (!manufacturerValue || !inverterModelsQuery.data) return [];
+    return inverterModelsQuery.data
+      .filter(
+        model => model.manufacturer_id.toString() === manufacturerValue.key,
+      )
+      .map(model => ({
+        key: model.id.toString(),
+        label: model.name,
+        icon: 'Table',
+      }));
+  }, [inverterModelsQuery.data, manufacturerValue]);
 
   return (
-    <Dialog open={open} onClose={onClose} className={clsxm('w-[400px]', className)}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      className={clsxm('w-[400px]', className)}
+    >
       <DialogHeader>
         <DialogTitle
           title={intl.formatMessage({
@@ -99,7 +88,9 @@ export const AddInverterDialog = ({
           onChange={handleManufacturerValue}
           label={intl.formatMessage({ defaultMessage: 'Manufacturer' })}
           placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-          noOptionsString={intl.formatMessage({ defaultMessage: 'Nothing found.' })}
+          noOptionsString={intl.formatMessage({
+            defaultMessage: 'Nothing found.',
+          })}
         />
         <AutocompleteSelect
           options={inverterModels}
@@ -107,7 +98,9 @@ export const AddInverterDialog = ({
           onChange={handleModelValue}
           label={intl.formatMessage({ defaultMessage: 'Model' })}
           placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-          noOptionsString={intl.formatMessage({ defaultMessage: 'Nothing found.' })}
+          noOptionsString={intl.formatMessage({
+            defaultMessage: 'Nothing found.',
+          })}
         />
       </DialogContent>
     </Dialog>

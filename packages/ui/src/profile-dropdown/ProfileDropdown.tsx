@@ -19,7 +19,7 @@ export type ProfileDropdownProps = {
     lastName: string;
     role: string;
     imgSrc: string | null;
-  },
+  };
 };
 
 export function ProfileDropdown({
@@ -31,22 +31,22 @@ export function ProfileDropdown({
       {({ open }) => (
         <>
           <Menu.Button className="flex items-center space-x-3 pr-7 pl-1">
-            {imgSrc && <RoundImage src={imgSrc} alt="avatar" wrapperClassName="w-9" />}
-            {!imgSrc && <Profile className='w-9' />}
+            {imgSrc && (
+              <RoundImage src={imgSrc} alt="avatar" wrapperClassName="w-9" />
+            )}
+            {!imgSrc && <Profile className="w-9" />}
             <div className="flex flex-col items-start">
-              <Typography weight="bold" className="text-gray-600 flex text-sm">
+              <Typography weight="bold" className="flex text-sm text-gray-600">
                 {firstName} {lastName}
                 <SvgIcon
                   name="ChevronDown"
                   className={clsxm(
-                    'text-inherit transition-transform w-3 ml-2',
+                    'ml-2 w-3 text-inherit transition-transform',
                     open && 'rotate-180',
                   )}
                 />
               </Typography>
-              <Typography className="text-gray-500 text-sm">
-                {role}
-              </Typography>
+              <Typography className="text-sm text-gray-500">{role}</Typography>
             </div>
           </Menu.Button>
 
@@ -59,10 +59,11 @@ export function ProfileDropdown({
             leaveTo="transform scale-95 opacity-0"
           >
             <Menu.Items
+              static
               as="div"
-              className="absolute bg-white rounded-xl drop-shadow-large w-full"
+              className="drop-shadow-large absolute w-full rounded-xl bg-white"
             >
-              <div className="bg-inherit w-5 aspect-square absolute rotate-45 -top-2 rounded right-6" />
+              <div className="absolute -top-2 right-6 aspect-square w-5 rotate-45 rounded bg-inherit" />
               <ul className="px-6 py-5">
                 {items?.map(({ key, children }) => (
                   <Menu.Item as="li" key={key}>
