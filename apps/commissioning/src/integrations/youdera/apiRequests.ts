@@ -177,7 +177,7 @@ export const addFileToMeter = async (
 };
 
 export const getMeterVerificationGuide = async (id: number): Promise<string> => {
-  const response = await youderaApiInstance.get<DataResponse<string>>(`/meters/${id}/guide`);
+  const response = await youderaApiInstance.get<DataResponse<string>>(`/meters/${id}/test`);
   return response.data.data;
 };
 
