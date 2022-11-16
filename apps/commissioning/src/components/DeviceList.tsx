@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
-import { Battery, Meter } from '@src/integrations/youdera/apiTypes';
-import { Inverter } from '@src/integrations/youdera/inverters/types';
+import { Battery, Inverter,Meter } from '@src/integrations/youdera/apiTypes';
 import { commStatusToIcon, Device, toDevice } from '@src/utils/devices';
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
