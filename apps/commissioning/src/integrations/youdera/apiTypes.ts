@@ -96,6 +96,7 @@ export interface InverterModel {
   manufacturer_id: number,
   manufacturer_name: string,
   data: {
+    inputs: number,
     auto_serialnumber: boolean
   }
 }

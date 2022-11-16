@@ -26,7 +26,6 @@ import { Field, FieldState } from './Field';
 import { FileField } from './FileField';
 import { Form } from './Form';
 
-// TODO: Handlers for Cancel and Save buttons
 type RawFormShape = {
   count?: ZodTypeAny;
   moduleType?: ZodTypeAny;
@@ -65,21 +64,6 @@ export const StringInverterDialog = <
   const { inverterModelsQuery, invertersQuery } = useInverters(siteId);
   const inverters = invertersQuery.data as Inverter[];
   const inverterModels = inverterModelsQuery.data as InverterModel[];
-  const inverterOptions = [
-    {
-      key: '-1',
-      label: intl.formatMessage({
-        defaultMessage: 'Add new inverter',
-      }),
-      icon: 'Plus' as IconName,
-    },
-  ].concat(
-    inverters.map(inverter => ({
-      key: String(inverter.id),
-      label: inverter.name,
-      icon: 'Table',
-    })),
-  );
   const { handleSubmit, reset, formState, watch } = method;
 
   const watchInverter = watch('inverter');
@@ -88,9 +72,29 @@ export const StringInverterDialog = <
 
   const watchManufacturer = watch('manufacturer');
   const watchModel = watch('model');
+  const watchNewInput = watch('newInput')
 
-  const inverterInputs: AutocompleteSelectOption[] | [] = useMemo(() => {
-    if (!watchInverter?.key) return [];
+  //  Form with existing inverter
+  const inverterOptions: AutocompleteSelectOption[] | [] = useMemo(() => (
+    [
+      {
+        key: '-1',
+        label: intl.formatMessage({
+          defaultMessage: 'Add new inverter',
+        }),
+        icon: 'Plus' as IconName,
+      },
+    ].concat(
+      inverters.map(inverter => ({
+        key: String(inverter.id),
+        label: inverter.name,
+        icon: 'Table',
+      })),
+    )
+  ), [inverters]);
+
+  const inverterInputsOptions: AutocompleteSelectOption[] | [] = useMemo(() => {
+    if (!watchInverter?.key || watchInverter?.key === "-1") return [];
 
     const selectedInverter = inverters.filter(
       inverter => inverter.id.toString() === watchInverter.key,
@@ -102,8 +106,11 @@ export const StringInverterDialog = <
       icon: 'Chip',
     }));
   }, [watchInverter, inverters]);
+  //
 
-  const inverterManufactures: AutocompleteSelectOption[] | [] = useMemo(() => {
+
+  //  Form with creation of new inverter 
+  const inverterManufacturesOptions: AutocompleteSelectOption[] | [] = useMemo(() => {
     const result: AutocompleteSelectOption[] = [];
     const map = new Map();
     inverterModels.forEach(model => {
@@ -118,7 +125,7 @@ export const StringInverterDialog = <
     return result;
   }, [inverterModels]);
 
-  const inverterFilteredModels: AutocompleteSelectOption[] | [] =
+  const inverterModelsOptions: AutocompleteSelectOption[] | [] =
     useMemo(() => {
       if (
         !watchManufacturer ||
@@ -136,6 +143,17 @@ export const StringInverterDialog = <
           icon: 'Table',
         }));
     }, [inverterModels, watchManufacturer]);
+
+  const inverterNewInputsOptions: AutocompleteSelectOption[] | [] = useMemo(() => {
+    if (!watchModel || !inverterModels) return []
+    const numberOfInputs = inverterModels.filter(model => model.id.toString() === watchModel.key)[0].data.inputs
+    return Array(numberOfInputs).fill(0).map((_, idx) => ({
+      key: idx.toString(),
+      label: (idx + 1).toString(),
+      icon: 'Chip'
+    }));
+  }, [inverterModels, watchModel]);
+  //
 
   return (
     <Dialog
@@ -211,7 +229,7 @@ export const StringInverterDialog = <
                       noOptionsString={intl.formatMessage({
                         defaultMessage: 'Nothing found.',
                       })}
-                      options={inverterInputs}
+                      options={inverterInputsOptions}
                       onChange={value =>
                         onChange({ target: { value, name: 'input' } })
                       }
@@ -240,7 +258,7 @@ export const StringInverterDialog = <
                         placeholder={intl.formatMessage({
                           defaultMessage: 'Select',
                         })}
-                        options={inverterManufactures}
+                        options={inverterManufacturesOptions}
                         onChange={value =>
                           onChange({ target: { value, name: 'manufacturer' } })
                         }
@@ -268,7 +286,7 @@ export const StringInverterDialog = <
                           placeholder={intl.formatMessage({
                             defaultMessage: 'Select',
                           })}
-                          options={inverterFilteredModels}
+                          options={inverterModelsOptions}
                           onChange={value =>
                             onChange({ target: { value, name: 'model' } })
                           }
@@ -280,12 +298,12 @@ export const StringInverterDialog = <
                   </Field>
                 )}
                 {watchModel && (
-                  <Field name="input">
+                  <Field name="newInput">
                     {(
                       register: UseFormRegister<FieldValues>,
                       fieldState: FieldState,
                     ) => {
-                      const { onChange, ...rest } = register('input', {
+                      const { onChange, ...rest } = register('newInput', {
                         setValueAs: v => v || '',
                       });
                       return (
@@ -297,14 +315,9 @@ export const StringInverterDialog = <
                           placeholder={intl.formatMessage({
                             defaultMessage: 'Select',
                           })}
-                          options={[
-                            {
-                              key: '1',
-                              label: 'I11',
-                            },
-                          ]}
+                          options={inverterNewInputsOptions}
                           onChange={value =>
-                            onChange({ target: { value, name: 'input' } })
+                            onChange({ target: { value, name: 'newInput' } })
                           }
                           {...rest}
                           validity={fieldState.invalid ? 'invalid' : undefined}
@@ -315,7 +328,7 @@ export const StringInverterDialog = <
                 )}
               </>
             ))}
-          {watchInput && (
+          {(watchInput || watchNewInput) && (
             <FileField
               className="w-full"
               label={intl.formatMessage({
@@ -351,7 +364,7 @@ export const StringInverterDialog = <
               </div>
             </FileField>
           )}
-          {watchInverter && watchInput && watchFile && (
+          {((watchInverter && watchInput && watchFile) || (watchInverter && watchNewInput && watchFile)) && (
             <div className="mt-3 flex gap-5">
               <Button
                 variant="additional-gray"
