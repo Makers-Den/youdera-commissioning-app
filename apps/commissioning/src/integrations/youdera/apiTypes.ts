@@ -89,6 +89,16 @@ export type Inverter = {
   mpp_trackers?: MppTracker[];
   files?: ApiFile[];
 };
+export interface InverterModel {
+  id: number,
+  type: string,
+  name: string,
+  manufacturer_id: number,
+  manufacturer_name: string,
+  data: {
+    auto_serialnumber: boolean
+  }
+}
 
 /**
  * TODO: move somewhere else.
@@ -98,6 +108,16 @@ export type MppTracker = {
   id: string;
 };
 
+export interface Module {
+  id: number;
+  type: string;
+  name: string;
+  manufacturer_id: number;
+  manufacturer_name: string;
+  data: {
+    wattpeak: number;
+  };
+}
 export interface CreateInverterRequestBody {
   serial_number: string;
   site: number;

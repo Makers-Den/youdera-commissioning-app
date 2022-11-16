@@ -1,8 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Inverter, InverterModel } from '@src/integrations/youdera/apiTypes';
 import { useInverters } from '@src/integrations/youdera/inverters/hooks/useInverters';
-import { Inverter } from '@src/integrations/youdera/inverters/types';
-import { InverterModel } from '@src/integrations/youdera/models/types';
-import React, { Suspense, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -56,14 +55,16 @@ export const StringInverterDialog = <
   className,
   onSubmit,
   resolver,
-  siteId
+  siteId,
 }: StringInverterDialogProps<ResolverType>) => {
   const intl = useIntl();
   const method = useForm({
     resolver: zodResolver(resolver),
   });
 
-  const { inverterModelsQuery, invertersQuery } = useInverters(siteId)
+  const { inverterModelsQuery, invertersQuery } = useInverters(siteId);
+  const inverters = invertersQuery.data as Inverter[];
+  const inverterModels = inverterModelsQuery.data as InverterModel[];
 
   const inverterOptions = [
     {
@@ -74,12 +75,12 @@ export const StringInverterDialog = <
       icon: 'Plus' as IconName,
     },
   ].concat(
-    invertersQuery.data ? invertersQuery.data.map(inverter => ({
+    inverters.map(inverter => ({
       key: String(inverter.id),
       label: inverter.name,
       icon: 'Table',
-    })) : [],
-  )
+    })),
+  );
   const { handleSubmit, reset, formState, watch } = method;
 
   const watchInverter = watch('inverter');
@@ -91,11 +92,9 @@ export const StringInverterDialog = <
   // const inverterInputs = watchInverter?.key && inverters.filter((inverter) => inverter.id === watchInverter.key)[0]
 
   const inverterManufactures: AutocompleteSelectOption[] | [] = useMemo(() => {
-    if (!inverterModelsQuery.data) return [];
-
     const result: AutocompleteSelectOption[] = [];
     const map = new Map();
-    inverterModelsQuery.data.forEach(model => {
+    inverterModels.forEach(model => {
       if (!map.has(model.manufacturer_id)) {
         map.set(model.manufacturer_id, true);
         result.push({
@@ -105,17 +104,17 @@ export const StringInverterDialog = <
       }
     });
     return result;
-  }, [inverterModelsQuery.data]);
+  }, [inverterModels]);
 
   const inverterFilteredModels: AutocompleteSelectOption[] | [] =
     useMemo(() => {
       if (
         !watchManufacturer ||
         watchManufacturer?.length < 1 ||
-        !inverterModelsQuery.data
+        !inverterModels
       )
         return [];
-      return inverterModelsQuery.data
+      return inverterModels
         .filter(
           model => model.manufacturer_id.toString() === watchManufacturer.key,
         )
@@ -124,7 +123,7 @@ export const StringInverterDialog = <
           label: model.name,
           icon: 'Table',
         }));
-    }, [inverterModelsQuery.data, watchManufacturer]);
+    }, [inverterModels, watchManufacturer]);
 
   return (
     <Dialog
@@ -150,37 +149,35 @@ export const StringInverterDialog = <
           className="flex flex-col gap-5"
           {...method}
         >
-          <Suspense>
-            <Field name="inverter">
-              {(
-                register: UseFormRegister<FieldValues>,
-                fieldState: FieldState,
-              ) => {
-                const { onChange, ...rest } = register('inverter', {
-                  setValueAs: v => v || undefined,
-                });
-                return (
-                  <AutocompleteSelect
-                    label={intl.formatMessage({
-                      defaultMessage: 'Select inverter',
-                    })}
-                    placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                    noOptionsString={intl.formatMessage({
-                      defaultMessage: 'Nothing found.',
-                    })}
-                    options={inverterOptions}
-                    onChange={value =>
-                      onChange({
-                        target: { value, name: 'inverter', key: value?.key },
-                      })
-                    }
-                    {...rest}
-                    validity={fieldState.invalid ? 'invalid' : undefined}
-                  />
-                );
-              }}
-            </Field>
-          </Suspense>
+          <Field name="inverter">
+            {(
+              register: UseFormRegister<FieldValues>,
+              fieldState: FieldState,
+            ) => {
+              const { onChange, ...rest } = register('inverter', {
+                setValueAs: v => v || undefined,
+              });
+              return (
+                <AutocompleteSelect
+                  label={intl.formatMessage({
+                    defaultMessage: 'Select inverter',
+                  })}
+                  placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+                  noOptionsString={intl.formatMessage({
+                    defaultMessage: 'Nothing found.',
+                  })}
+                  options={inverterOptions}
+                  onChange={value =>
+                    onChange({
+                      target: { value, name: 'inverter', key: value?.key },
+                    })
+                  }
+                  {...rest}
+                  validity={fieldState.invalid ? 'invalid' : undefined}
+                />
+              );
+            }}
+          </Field>
           {watchInverter &&
             (watchInverter.key !== '-1' ? (
               <Field name="input">

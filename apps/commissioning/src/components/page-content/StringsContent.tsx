@@ -1,9 +1,6 @@
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
-import { Inverter } from '@src/integrations/youdera/inverters/types';
-import { InverterModel } from '@src/integrations/youdera/models/types';
 import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
-import { StringsOnRoof } from '@src/integrations/youdera/strings/types';
-import { Suspense, useMemo, useRef, useState } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
@@ -197,7 +194,6 @@ export function StringsContent({
           {intl.formatMessage({ defaultMessage: 'Cancel' })}
         </Button>
       </ActionsDialog>
-
       <Suspense>
         <StringModuleTypeDialog
           open={moduleTypeSelectionDialog.isOpen}
@@ -206,14 +202,15 @@ export function StringsContent({
           resolver={stringModuleTypeValidation}
         />
       </Suspense>
-
-      <StringInverterDialog
-        open={inverterSelectionDialog.isOpen}
-        onClose={handleInverterClose}
-        resolver={stringInverterValidation}
-        onSubmit={stringInverterSubmitHandler}
-        siteId={siteId}
-      />
+      <Suspense>
+        <StringInverterDialog
+          open={inverterSelectionDialog.isOpen}
+          onClose={handleInverterClose}
+          resolver={stringInverterValidation}
+          onSubmit={stringInverterSubmitHandler}
+          siteId={siteId}
+        />
+      </Suspense>
       <DeletionDialog
         onDelete={confirmDeleteHandler}
         isOpen={deletionDialog.isOpen}

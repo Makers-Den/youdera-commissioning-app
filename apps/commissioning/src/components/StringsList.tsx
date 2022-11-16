@@ -1,5 +1,4 @@
 import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
-import { StringsOnRoof } from '@src/integrations/youdera/strings/types';
 import { useIntl } from 'react-intl';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 
