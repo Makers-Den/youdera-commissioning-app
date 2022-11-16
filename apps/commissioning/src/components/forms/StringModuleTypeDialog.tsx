@@ -46,7 +46,6 @@ export const StringModuleTypeDialog = <
   onSubmit,
   resolver,
 }: StringModuleTypeDialogProps<ResolverType>) => {
-
   const intl = useIntl();
 
   const { modulesQuery } = useGetModules();
@@ -55,6 +54,11 @@ export const StringModuleTypeDialog = <
     key: module.id.toString(),
     label: module.name,
   }));
+  const cableCrossSectionOptions = [
+    { key: '4', label: '4 mm²' },
+    { key: '6', label: '6 mm²' },
+    { key: '10', label: '10 mm²' },
+  ]
 
   const method = useForm({
     resolver: zodResolver(resolver),
@@ -81,26 +85,40 @@ export const StringModuleTypeDialog = <
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
-        <Form onSubmit={handleSubmit(values => onSubmit(values, reset))} className="flex flex-col gap-5" {...method}>
-          <Field name='moduleType'>
-            {(register: UseFormRegister<FieldValues>, fieldState: FieldState) => {
+        <Form
+          onSubmit={handleSubmit(values => onSubmit(values, reset))}
+          className="flex flex-col gap-5"
+          {...method}
+        >
+          <Field name="moduleType">
+            {(
+              register: UseFormRegister<FieldValues>,
+              fieldState: FieldState,
+            ) => {
               const { onChange, ...rest } = register('moduleType', {
-                setValueAs: v => (v || ''),
-              })
-              return <Select
-                label={intl.formatMessage({ defaultMessage: 'Module type' })}
-                placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                options={moduleOptions}
-                onChange={(value) => onChange({ target: { value, name: 'moduleType' } })}
-                {...rest}
-                validity={fieldState.invalid ? 'invalid' : undefined}
-              />
+                setValueAs: v => v || '',
+              });
+              return (
+                <Select
+                  label={intl.formatMessage({ defaultMessage: 'Module type' })}
+                  placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+                  options={moduleOptions}
+                  onChange={value =>
+                    onChange({ target: { value, name: 'moduleType' } })
+                  }
+                  {...rest}
+                  validity={fieldState.invalid ? 'invalid' : undefined}
+                />
+              );
             }}
           </Field>
           <div className="flex items-center justify-center gap-5">
             <div className="flex flex-1 gap-5">
-              <Field name='numberOfModules'>
-                {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
+              <Field name="numberOfModules">
+                {(
+                  register: UseFormRegister<FieldValues>,
+                  fieldState: FieldState,
+                ) => (
                   <NumberInput
                     label={intl.formatMessage({
                       defaultMessage: 'Number of modules',
@@ -112,9 +130,9 @@ export const StringModuleTypeDialog = <
                     })}
                     validity={fieldState.invalid ? 'invalid' : undefined}
                   />
-                }
+                )}
               </Field>
-              <Field name='cableCrossSection'>
+              {/* <Field name='cableCrossSection'>
                 {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
                   <NumberInput
                     label={intl.formatMessage({
@@ -129,6 +147,35 @@ export const StringModuleTypeDialog = <
                     validity={fieldState.invalid ? 'invalid' : undefined}
                   />
                 }
+              </Field> */}
+              <Field name="cableCrossSection">
+                {(
+                  register: UseFormRegister<FieldValues>,
+                  fieldState: FieldState,
+                ) => {
+                  const { onChange, ...rest } = register('cableCrossSection', {
+                    setValueAs: v => v || '',
+                  });
+                  return (
+                    <Select
+                      wrapperClassName="z-30"
+                      label={intl.formatMessage({
+                        defaultMessage: 'Cable cross section',
+                      })}
+                      placeholder={intl.formatMessage({
+                        defaultMessage: 'Select',
+                      })}
+                      options={cableCrossSectionOptions}
+                      onChange={value =>
+                        onChange({
+                          target: { value, name: 'cableCrossSection' },
+                        })
+                      }
+                      {...rest}
+                      validity={fieldState.invalid ? 'invalid' : undefined}
+                    />
+                  );
+                }}
               </Field>
             </div>
           </div>
@@ -145,7 +192,7 @@ export const StringModuleTypeDialog = <
               isLoading={formState.isSubmitting}
               variant="main-green"
               className="w-full"
-              type='submit'
+              type="submit"
             >
               {intl.formatMessage({ defaultMessage: 'Ok' })}
             </Button>

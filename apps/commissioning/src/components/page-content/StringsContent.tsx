@@ -25,7 +25,10 @@ const stringModuleTypeValidation = z.object({
     label: z.string(),
   }),
   numberOfModules: z.number().gte(0),
-  cableCrossSection: z.literal(4).or(z.literal(6)).or(z.literal(10)),
+  cableCrossSection: z.object({
+    key: z.literal('4').or(z.literal('6')).or(z.literal('10')),
+    label: z.string(),
+  }),
 });
 
 type ModuleTypeData = z.infer<typeof stringModuleTypeValidation>;
@@ -53,11 +56,7 @@ export interface StringContentProps {
   siteId: number;
 }
 
-export function StringsContent({
-
-  roofId,
-  siteId
-}: StringContentProps) {
+export function StringsContent({ roofId, siteId }: StringContentProps) {
   const intl = useIntl();
   useZodErrorMap();
 
@@ -119,15 +118,15 @@ export function StringsContent({
   const stringInverterSubmitHandler: StringInverterDialogProps<
     typeof stringInverterValidation
   >['onSubmit'] = async ({ input, inverter, file }, resetForm) => {
-    if (!stringsOnRoofQuery.data) return
+    if (!stringsOnRoofQuery.data) return;
 
     try {
       const string = await createStringMutation.mutateAsync({
         count: moduleTypeFormData.current!.numberOfModules,
         roof: stringsOnRoofQuery.data.id,
         module: moduleTypeFormData.current!.moduleType.key,
-        cable_cross_section: moduleTypeFormData.current!.cableCrossSection,
-        mpp_tracker: Number(input.key) // ? Make everything related to keys a number?
+        cable_cross_section: Number(moduleTypeFormData.current!.cableCrossSection.key), // ? Change keys in selects to be a number by default?
+        mpp_tracker: Number(input.key),
       });
 
       await addFileToStringMutation.mutateAsync({
@@ -167,10 +166,7 @@ export function StringsContent({
         </BoxHeader>
         <BoxContent>
           <Suspense>
-            <StringsList
-              roofId={roofId}
-              onRowClick={handleRowClick}
-            />
+            <StringsList roofId={roofId} onRowClick={handleRowClick} />
           </Suspense>
         </BoxContent>
       </Box>
@@ -195,7 +191,7 @@ export function StringsContent({
           {intl.formatMessage({ defaultMessage: 'Cancel' })}
         </Button>
       </ActionsDialog>
-      {moduleTypeSelectionDialog.isOpen &&
+      {moduleTypeSelectionDialog.isOpen && (
         <Suspense>
           <StringModuleTypeDialog
             open={moduleTypeSelectionDialog.isOpen}
@@ -204,8 +200,8 @@ export function StringsContent({
             resolver={stringModuleTypeValidation}
           />
         </Suspense>
-      }
-      {inverterSelectionDialog.isOpen &&
+      )}
+      {inverterSelectionDialog.isOpen && (
         <Suspense>
           <StringInverterDialog
             open={inverterSelectionDialog.isOpen}
@@ -215,7 +211,7 @@ export function StringsContent({
             siteId={siteId}
           />
         </Suspense>
-      }
+      )}
       <DeletionDialog
         onDelete={confirmDeleteHandler}
         isOpen={deletionDialog.isOpen}
