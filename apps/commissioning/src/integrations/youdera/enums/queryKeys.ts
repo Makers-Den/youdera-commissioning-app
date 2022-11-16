@@ -6,6 +6,7 @@ export enum QueryKeys {
   strings = 'strings',
   inverters = 'inverters',
   inverterModels = 'inverterModels',
+  inverterDetails = 'inverterDetails',
   files = 'files',
   unattachedGateways = 'unattachedGateways',
   editedSite = 'editedSite',

@@ -120,9 +120,8 @@ export interface Module {
   };
 }
 export interface CreateInverterRequestBody {
-  serial_number: string;
+  serial_number?: string;
   site: number;
-  manufacturer: string;
   cmodel?: number;
 }
 

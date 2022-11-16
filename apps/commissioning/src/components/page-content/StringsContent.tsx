@@ -1,4 +1,6 @@
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
+import { Inverter } from '@src/integrations/youdera/apiTypes';
+import { useInverterDetailsQuery, useInverterMutations } from '@src/integrations/youdera/inverterApiHooks';
 import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
 import { Suspense, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -23,11 +25,13 @@ const stringModuleTypeValidation = z.object({
   moduleType: z.object({
     key: z.string(),
     label: z.string(),
+    value: z.any()
   }),
   numberOfModules: z.number().gte(0),
   cableCrossSection: z.object({
     key: z.literal('4').or(z.literal('6')).or(z.literal('10')),
     label: z.string(),
+    value: z.any()
   }),
 });
 
@@ -37,10 +41,26 @@ const stringInverterValidation = z.object({
   inverter: z.object({
     key: z.string(),
     label: z.string(),
+    value: z.any()
   }),
   input: z.object({
     key: z.string(),
     label: z.string(),
+    value: z.any()
+  }),
+  file: z.any(),
+});
+
+const stringNewInverterValidation = z.object({
+  model: z.object({
+    key: z.string(),
+    label: z.string(),
+    value: z.any()
+  }),
+  input: z.object({
+    key: z.string(),
+    label: z.string(),
+    value: z.any()
   }),
   file: z.any(),
 });
@@ -66,6 +86,13 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
     deleteStringMutation,
     addFileToStringMutation,
   } = useStrings(roofId);
+
+  const [inverterId, setInverterId] = useState<number>(0)
+  const inverterDetailsQuery = useInverterDetailsQuery(inverterId)
+  const inverterDetails = inverterDetailsQuery.data as Inverter
+
+  const { createInverterMutation } = useInverterMutations(siteId);
+
   const moduleTypeFormData = useRef<ModuleTypeData | null>(null);
 
   const [selectedId, setSelectedId] = useState<number>();
@@ -115,9 +142,9 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
       inverterSelectionDialog.onOpen();
     };
 
-  const stringInverterSubmitHandler: StringInverterDialogProps<
+  const stringExistingInverterSubmitHandler: StringInverterDialogProps<
     typeof stringInverterValidation
-  >['onSubmit'] = async ({ input, inverter, file }, resetForm) => {
+  >['onSubmit'] = async ({ input, file }, resetForm) => {
     if (!stringsOnRoofQuery.data) return;
 
     try {
@@ -141,6 +168,41 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
       console.log(err);
     }
   };
+
+  //TODO: Use this function inside of StringInverterDialog
+  const stringNewInverterSubmitHandler: StringInverterDialogProps<
+    typeof stringNewInverterValidation
+  >['onSubmit'] = async ({ input, model, file }, resetForm) => {
+    if (!stringsOnRoofQuery.data) return;
+    try {
+      const inverter = await createInverterMutation.mutateAsync({
+        site: siteId,
+        cmodel: model.value
+      })
+
+      setInverterId(inverter.id)
+
+      const string = await createStringMutation.mutateAsync({
+        count: moduleTypeFormData.current!.numberOfModules,
+        roof: stringsOnRoofQuery.data.id,
+        module: moduleTypeFormData.current!.moduleType.key,
+        cable_cross_section: Number(moduleTypeFormData.current!.cableCrossSection.key), // ? Change keys in selects to be a number by default?
+        mpp_tracker: Number(inverterDetails.mpp_trackers[input.value].id),
+      });
+
+      await addFileToStringMutation.mutateAsync({
+        stringId: string.id,
+        file,
+      });
+
+      resetForm();
+      inverterSelectionDialog.onClose();
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  };
+
 
   const confirmDeleteHandler = async () => {
     if (selectedId) {
@@ -207,7 +269,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
             open={inverterSelectionDialog.isOpen}
             onClose={handleInverterClose}
             resolver={stringInverterValidation}
-            onSubmit={stringInverterSubmitHandler}
+            onSubmit={stringExistingInverterSubmitHandler}
             siteId={siteId}
           />
         </Suspense>

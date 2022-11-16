@@ -10,6 +10,7 @@ export type AutocompleteSelectOption = {
   key: string;
   label: string;
   icon?: IconName;
+  value?: any;
 };
 
 export type AutocompleteSelectProps = {
@@ -49,11 +50,11 @@ export const AutocompleteSelect = React.forwardRef<
       query === ''
         ? options
         : options.filter(option =>
-            option.label
-              .toLowerCase()
-              .replace(/\s+/g, '')
-              .includes(query.toLowerCase().replace(/\s+/g, '')),
-          );
+          option.label
+            .toLowerCase()
+            .replace(/\s+/g, '')
+            .includes(query.toLowerCase().replace(/\s+/g, '')),
+        );
 
     return (
       <div className={className}>
@@ -139,9 +140,8 @@ export const AutocompleteSelect = React.forwardRef<
                         {({ selected, active }) => (
                           <>
                             <span
-                              className={`flex items-center truncate ${
-                                selected ? 'font-medium' : 'font-normal'
-                              }`}
+                              className={`flex items-center truncate ${selected ? 'font-medium' : 'font-normal'
+                                }`}
                             >
                               {option.icon && (
                                 <span className="mr-3 flex w-4 items-center justify-center">
@@ -155,9 +155,8 @@ export const AutocompleteSelect = React.forwardRef<
                             </span>
                             {selected ? (
                               <span
-                                className={`flex items-center pl-3 ${
-                                  active ? 'text-white' : 'text-teal-600'
-                                }`}
+                                className={`flex items-center pl-3 ${active ? 'text-white' : 'text-teal-600'
+                                  }`}
                               >
                                 <SvgIcon
                                   name="Check"

@@ -91,6 +91,7 @@ export const StringInverterDialog = <
         icon: 'Table',
       })),
     )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   ), [inverters]);
 
   const inverterInputsOptions: AutocompleteSelectOption[] | [] = useMemo(() => {
@@ -101,9 +102,10 @@ export const StringInverterDialog = <
     )[0];
 
     return selectedInverter.mpp_trackers.map((input, idx) => ({
-      key: input.id.toString(),
+      key: input.id,
       label: (idx + 1).toString(),
       icon: 'Chip',
+      value: input.id
     }));
   }, [watchInverter, inverters]);
   //
@@ -119,6 +121,7 @@ export const StringInverterDialog = <
         result.push({
           key: model.manufacturer_id.toString(),
           label: model.manufacturer_name,
+          value: model.manufacturer_id
         });
       }
     });
@@ -150,7 +153,8 @@ export const StringInverterDialog = <
     return Array(numberOfInputs).fill(0).map((_, idx) => ({
       key: idx.toString(),
       label: (idx + 1).toString(),
-      icon: 'Chip'
+      icon: 'Chip',
+      value: idx.toString()
     }));
   }, [inverterModels, watchModel]);
   //

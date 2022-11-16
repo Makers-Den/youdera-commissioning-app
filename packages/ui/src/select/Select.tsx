@@ -9,6 +9,7 @@ import { validityStyle } from '../utils/constants';
 export type SelectOption = {
   key: string;
   label: ReactNode;
+  value?: any;
 };
 
 export type SelectProps = {

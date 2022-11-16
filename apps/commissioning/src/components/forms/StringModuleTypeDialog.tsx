@@ -53,6 +53,7 @@ export const StringModuleTypeDialog = <
   const moduleOptions = modules.map(module => ({
     key: module.id.toString(),
     label: module.name,
+    value: module
   }));
   const cableCrossSectionOptions = [
     { key: '4', label: '4 mm²' },

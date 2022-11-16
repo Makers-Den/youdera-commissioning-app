@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getInverterModels } from '../queries/getInverterModels';
 import { getInverters } from '../queries/getInverters';
 import { QueryKeys } from '../../enums/queryKeys';
+import { createInverter } from '../../apiRequests';
 
 export const useInverters = (siteId: number) => {
 
