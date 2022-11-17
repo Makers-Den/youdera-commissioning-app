@@ -1,6 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Inverter, InverterModel } from '@src/integrations/youdera/apiTypes';
+import {
+  Inverter,
+  InverterModel,
+  String,
+} from '@src/integrations/youdera/apiTypes';
 import { useInverters } from '@src/integrations/youdera/inverters/hooks/useInverters';
+import { useStringDetailsQuery } from '@src/integrations/youdera/stringsApiHooks';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';
@@ -73,7 +78,7 @@ export const StringInverterDialog = <
   onSubmit,
   resolver,
   siteId,
-  modifiedStringId
+  modifiedStringId,
 }: StringInverterDialogProps<
   ResolverTypeExistingInverter,
   ResolverTypeNewInverter
@@ -82,16 +87,19 @@ export const StringInverterDialog = <
 
   const [isWithNewInverter, setIsWithNewInverter] = useState<boolean>(false);
 
+  const stringDetailsQuery = useStringDetailsQuery(modifiedStringId ?? -1);
+  const stringDetails = stringDetailsQuery.data as String;
+
   const method = useForm({
-    resolver: zodResolver(isWithNewInverter ? resolver.newInverter : resolver.existingInverter),
+    resolver: zodResolver(
+      isWithNewInverter ? resolver.newInverter : resolver.existingInverter,
+    )
   });
   const { handleSubmit, reset, formState, watch } = method;
 
   const { inverterModelsQuery, invertersQuery } = useInverters(siteId);
   const inverters = invertersQuery.data as Inverter[];
   const inverterModels = inverterModelsQuery.data as InverterModel[];
-
-
   const watchInverter = watch('inverter');
   const watchInput = watch('input');
   const watchFile = watch('file');
@@ -100,10 +108,10 @@ export const StringInverterDialog = <
   const watchModel = watch('model');
   const watchNewInput = watch('newInput');
 
-  useEffect(
-    () => { if (watchInverter) setIsWithNewInverter(watchInverter.key === '-1') },
-    [watchInverter],
-  );
+
+  useEffect(() => {
+    if (watchInverter) setIsWithNewInverter(watchInverter.key === '-1');
+  }, [watchInverter]);
 
   // *  Form with existing inverter
   const inverterOptions: AutocompleteSelectOption[] | [] = useMemo(
@@ -118,7 +126,7 @@ export const StringInverterDialog = <
         },
       ].concat(
         inverters.map(inverter => ({
-          key: String(inverter.id),
+          key: inverter.id.toString(),
           label: inverter.name ?? ' - ',
           icon: 'Table',
         })),
@@ -193,6 +201,19 @@ export const StringInverterDialog = <
     }, [inverterModels, watchModel]);
   // *
 
+  // * Default fields
+  const defaultInverter = () => stringDetails ?
+    inverterOptions.filter(inverterOption => inverterOption.key ===
+      inverters.filter(
+        inverter =>
+          !!inverter.mpp_trackers.filter(
+            input => input.id === stringDetails.mpp_tracker.id,
+          )[0],
+      )[0].id.toString()
+    )[0] : undefined
+  const defaultInput = () => inverterInputsOptions.filter(input => input.key === stringDetails.mpp_tracker.id)[0];
+  // * 
+  console.log({ inverterInputsOptions, stringDetails })
   return (
     <Dialog
       open={open}
@@ -244,6 +265,7 @@ export const StringInverterDialog = <
                       target: { value, name: 'inverter', key: value?.key },
                     })
                   }
+                  value={defaultInverter()}
                   {...rest}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />

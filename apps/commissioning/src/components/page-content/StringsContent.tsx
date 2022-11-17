@@ -224,7 +224,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
       <Box className="mx-3 mb-auto w-full md:mx-auto md:w-0 md:min-w-[700px]">
         <BoxHeader>
           <BoxTitle title={intl.formatMessage({ defaultMessage: 'Strings' })} />
-          <Button className="ml-auto w-[200px]" onClick={() => handleModuleTypeOpen}>
+          <Button className="ml-auto w-[200px]" onClick={() => handleModuleTypeOpen()}>
             + {intl.formatMessage({ defaultMessage: 'Add string' })}
           </Button>
         </BoxHeader>
