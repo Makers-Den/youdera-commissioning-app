@@ -1,4 +1,3 @@
-import { Project } from "@src/components/ProjectList";
 import { ApiFile, Battery, Inverter, Meter, Site, VerificationTestStatus } from "@src/integrations/youdera/apiTypes";
 import { reverse, sortBy } from "lodash";
 import { useMemo } from "react";
