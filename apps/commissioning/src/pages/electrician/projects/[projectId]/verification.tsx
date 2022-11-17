@@ -1,5 +1,6 @@
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import { VerificationContent } from '@src/components/page-content/VerificationContent';
+import { useAuth } from '@src/integrations/youdera/auth/hooks/useAuth';
 import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';

@@ -4,10 +4,10 @@ export const routes = {
   electrician: {
     selectTask: '/electrician/select-task',
     selectProject: '/electrician/select-project',
-    selectGateway: (siteId: number) => `electrician/projects/${siteId}/select-gateway`,
-    devices: (siteId: number) => `electrician/projects/${siteId}/devices`,
-    verification: (siteId: number) => `electrician/projects/${siteId}/verification`,
-    completed: (siteId: number) => `electrician/projects/${siteId}/complete`,
+    selectGateway: (siteId: number) => `/electrician/projects/${siteId}/select-gateway`,
+    devices: (siteId: number) => `/electrician/projects/${siteId}/devices`,
+    verification: (siteId: number) => `/electrician/projects/${siteId}/verification`,
+    completed: (siteId: number) => `/electrician/projects/${siteId}/complete`,
   },
   roofer: {
     selectTask: '/roofer/select-task',

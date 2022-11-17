@@ -1,5 +1,7 @@
 
 import { Site } from '@src/integrations/youdera/apiTypes';
+import { useAuth } from '@src/integrations/youdera/auth/hooks/useAuth';
+import { Role } from '@src/integrations/youdera/auth/types';
 import { useGetSite } from '@src/integrations/youdera/sites/hooks/useGetSite';
 import { useContactSiteProjectManagerMutation } from '@src/integrations/youdera/sites/useContactSiteProjectManagerMutation';
 import { useExtractDevices } from '@src/utils/devices';
@@ -85,6 +87,8 @@ type NextButtonStatus = 'none' | 'contact_pm' | 'finish';
 export function VerificationContent({ siteId, setNextButtonProps }: VerificationContentProps) {
   const intl = useIntl();
   const router = useRouter();
+  const { userInfoQuery } = useAuth();
+  const userRole = userInfoQuery.data?.role as Role;
 
   const { siteQuery } = useGetSite(siteId);
   const site = siteQuery.data as Site;
@@ -93,7 +97,7 @@ export function VerificationContent({ siteId, setNextButtonProps }: Verification
 
   const nextButtonStatus: NextButtonStatus = useMemo(() => {
     const latestVerificationStatuses = devices.map(d => d.verificationTestStatus);
-    if (every(latestVerificationStatuses, status => status === 'success')) {
+    if (every(latestVerificationStatuses, status => status === 'success') || userRole === 'admin') {
       return 'finish';
     }
 
@@ -102,7 +106,7 @@ export function VerificationContent({ siteId, setNextButtonProps }: Verification
     }
 
     return 'none';
-  }, [devices]);
+  }, [devices, userRole]);
 
 
   useEffect(() => {
