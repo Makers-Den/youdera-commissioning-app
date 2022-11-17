@@ -101,6 +101,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
   const moduleTypeSelectionDialog = useDisclosure();
   const inverterSelectionDialog = useDisclosure();
 
+  // * Handlers
   const handleRowClick = (id: number) => {
     setSelectedId(id);
     actionsDialog.onOpen();
@@ -169,7 +170,6 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
     }
   };
 
-  //TODO: Use this function inside of StringInverterDialog
   const stringNewInverterSubmitHandler: StringInverterDialogProps<
     typeof stringInverterValidation,
     typeof stringNewInverterValidation
@@ -204,7 +204,6 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
     }
   };
 
-
   const confirmDeleteHandler = async () => {
     if (selectedId) {
       try {
@@ -217,6 +216,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
       }
     }
   };
+  // *
 
   return (
     <>

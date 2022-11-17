@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Inverter, InverterModel } from '@src/integrations/youdera/apiTypes';
 import { useInverters } from '@src/integrations/youdera/inverters/hooks/useInverters';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -33,24 +33,33 @@ type RawFormShapeExistingInverter = {
 };
 
 type RawFormShapeNewInverter = {
-  model: ZodTypeAny,
-  newInput: ZodTypeAny,
-  file: ZodTypeAny,
-}
+  model: ZodTypeAny;
+  newInput: ZodTypeAny;
+  file: ZodTypeAny;
+};
 
 export type StringInverterDialogProps<
   ResolverTypeExistingInverter extends ZodObject<RawFormShapeExistingInverter>,
-  ResolverTypeNewInverter extends ZodObject<RawFormShapeNewInverter>
+  ResolverTypeNewInverter extends ZodObject<RawFormShapeNewInverter>,
 > = {
   siteId: number;
   open: DialogProps['open'];
   onClose: (reset: () => void) => void;
   className?: string;
   onSubmit: {
-    existingInverter: (values: z.infer<ResolverTypeExistingInverter>, resetForm: () => void) => void,
-    newInverter: (values: z.infer<ResolverTypeNewInverter>, resetForm: () => void) => void
-  }
-  resolver: { existingInverter: ResolverTypeExistingInverter, newInverter: ResolverTypeNewInverter };
+    existingInverter: (
+      values: z.infer<ResolverTypeExistingInverter>,
+      resetForm: () => void,
+    ) => void;
+    newInverter: (
+      values: z.infer<ResolverTypeNewInverter>,
+      resetForm: () => void,
+    ) => void;
+  };
+  resolver: {
+    existingInverter: ResolverTypeExistingInverter;
+    newInverter: ResolverTypeNewInverter;
+  };
 };
 
 export const StringInverterDialog = <
@@ -63,16 +72,23 @@ export const StringInverterDialog = <
   onSubmit,
   resolver,
   siteId,
-}: StringInverterDialogProps<ResolverTypeExistingInverter, ResolverTypeNewInverter>) => {
+}: StringInverterDialogProps<
+  ResolverTypeExistingInverter,
+  ResolverTypeNewInverter
+>) => {
   const intl = useIntl();
+
+  const [isWithNewInverter, setIsWithNewInverter] = useState<boolean>(false);
+
   const method = useForm({
-    resolver: zodResolver(resolver.existingInverter),
+    resolver: zodResolver(isWithNewInverter ? resolver.newInverter : resolver.existingInverter),
   });
+  const { handleSubmit, reset, formState, watch } = method;
 
   const { inverterModelsQuery, invertersQuery } = useInverters(siteId);
   const inverters = invertersQuery.data as Inverter[];
   const inverterModels = inverterModelsQuery.data as InverterModel[];
-  const { handleSubmit, reset, formState, watch } = method;
+
 
   const watchInverter = watch('inverter');
   const watchInput = watch('input');
@@ -80,30 +96,37 @@ export const StringInverterDialog = <
 
   const watchManufacturer = watch('manufacturer');
   const watchModel = watch('model');
-  const watchNewInput = watch('newInput')
+  const watchNewInput = watch('newInput');
 
-  //  Form with existing inverter
-  const inverterOptions: AutocompleteSelectOption[] | [] = useMemo(() => (
-    [
-      {
-        key: '-1',
-        label: intl.formatMessage({
-          defaultMessage: 'Add new inverter',
-        }),
-        icon: 'Plus' as IconName,
-      },
-    ].concat(
-      inverters.map(inverter => ({
-        key: String(inverter.id),
-        label: inverter.name,
-        icon: 'Table',
-      })),
-    )
+  useEffect(
+    () => { if (watchInverter) setIsWithNewInverter(watchInverter.key === '-1') },
+    [watchInverter],
+  );
+
+  // *  Form with existing inverter
+  const inverterOptions: AutocompleteSelectOption[] | [] = useMemo(
+    () =>
+      [
+        {
+          key: '-1',
+          label: intl.formatMessage({
+            defaultMessage: 'Add new inverter',
+          }),
+          icon: 'Plus' as IconName,
+        },
+      ].concat(
+        inverters.map(inverter => ({
+          key: String(inverter.id),
+          label: inverter.name,
+          icon: 'Table',
+        })),
+      ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  ), [inverters]);
+    [inverters],
+  );
 
   const inverterInputsOptions: AutocompleteSelectOption[] | [] = useMemo(() => {
-    if (!watchInverter?.key || watchInverter?.key === "-1") return [];
+    if (!watchInverter?.key || watchInverter?.key === '-1') return [];
 
     const selectedInverter = inverters.filter(
       inverter => inverter.id.toString() === watchInverter.key,
@@ -113,58 +136,60 @@ export const StringInverterDialog = <
       key: input.id.toString(),
       label: (idx + 1).toString(),
       icon: 'Chip',
-      value: input.id
+      value: input.id,
     }));
   }, [watchInverter, inverters]);
-  //
+  // *
 
-  //  Form with creation of new inverter 
-  const inverterManufacturesOptions: AutocompleteSelectOption[] | [] = useMemo(() => {
-    const result: AutocompleteSelectOption[] = [];
-    const map = new Map();
-    inverterModels.forEach(model => {
-      if (!map.has(model.manufacturer_id)) {
-        map.set(model.manufacturer_id, true);
-        result.push({
-          key: model.manufacturer_id.toString(),
-          label: model.manufacturer_name,
-          value: model.manufacturer_id
-        });
-      }
-    });
-    return result;
-  }, [inverterModels]);
-
-  const inverterModelsOptions: AutocompleteSelectOption[] | [] =
+  // * Form with creation of new inverter
+  const inverterManufacturesOptions: AutocompleteSelectOption[] | [] =
     useMemo(() => {
-      if (
-        !watchManufacturer ||
-        watchManufacturer?.length < 1 ||
-        !inverterModels
-      )
-        return [];
-      return inverterModels
-        .filter(
-          model => model.manufacturer_id.toString() === watchManufacturer.key,
-        )
-        .map(model => ({
-          key: model.id.toString(),
-          label: model.name,
-          icon: 'Table',
-        }));
-    }, [inverterModels, watchManufacturer]);
+      const result: AutocompleteSelectOption[] = [];
+      const map = new Map();
+      inverterModels.forEach(model => {
+        if (!map.has(model.manufacturer_id)) {
+          map.set(model.manufacturer_id, true);
+          result.push({
+            key: model.manufacturer_id.toString(),
+            label: model.manufacturer_name,
+            value: model.manufacturer_id,
+          });
+        }
+      });
+      return result;
+    }, [inverterModels]);
 
-  const inverterNewInputsOptions: AutocompleteSelectOption[] | [] = useMemo(() => {
-    if (!watchModel || !inverterModels) return []
-    const numberOfInputs = inverterModels.filter(model => model.id.toString() === watchModel.key)[0].data.inputs
-    return Array(numberOfInputs).fill(0).map((_, idx) => ({
-      key: idx.toString(),
-      label: (idx + 1).toString(),
-      icon: 'Chip',
-      value: idx.toString()
-    }));
-  }, [inverterModels, watchModel]);
-  //
+  const inverterModelsOptions: AutocompleteSelectOption[] | [] = useMemo(() => {
+    if (!watchManufacturer || watchManufacturer?.length < 1 || !inverterModels)
+      return [];
+    return inverterModels
+      .filter(
+        model => model.manufacturer_id.toString() === watchManufacturer.key,
+      )
+      .map(model => ({
+        key: model.id.toString(),
+        label: model.name,
+        value: model.id,
+        icon: 'Table',
+      }));
+  }, [inverterModels, watchManufacturer]);
+
+  const inverterNewInputsOptions: AutocompleteSelectOption[] | [] =
+    useMemo(() => {
+      if (!watchModel || !inverterModels) return [];
+      const numberOfInputs = inverterModels.filter(
+        model => model.id.toString() === watchModel.key,
+      )[0].data.inputs;
+      return Array(numberOfInputs)
+        .fill(0)
+        .map((_, idx) => ({
+          key: idx.toString(),
+          label: (idx + 1).toString(),
+          icon: 'Chip',
+          value: idx.toString(),
+        }));
+    }, [inverterModels, watchModel]);
+  // *
 
   return (
     <Dialog
@@ -186,7 +211,11 @@ export const StringInverterDialog = <
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
         <Form
-          onSubmit={handleSubmit(values => onSubmit.existingInverter(values, reset))}
+          onSubmit={handleSubmit(values =>
+            isWithNewInverter
+              ? onSubmit.newInverter(values, reset)
+              : onSubmit.existingInverter(values, reset),
+          )}
           className="flex flex-col gap-5"
           {...method}
         >
@@ -375,25 +404,26 @@ export const StringInverterDialog = <
               </div>
             </FileField>
           )}
-          {((watchInverter && watchInput && watchFile) || (watchInverter && watchNewInput && watchFile)) && (
-            <div className="mt-3 flex gap-5">
-              <Button
-                variant="additional-gray"
-                className="w-full"
-                onClick={() => onClose(reset)}
-              >
-                {intl.formatMessage({ defaultMessage: 'Cancel' })}
-              </Button>
-              <Button
-                variant="main-green"
-                className="w-full"
-                type="submit"
-                isLoading={formState.isSubmitting}
-              >
-                {intl.formatMessage({ defaultMessage: 'Ok' })}
-              </Button>
-            </div>
-          )}
+          {((watchInverter && watchInput && watchFile) ||
+            (watchInverter && watchNewInput && watchFile)) && (
+              <div className="mt-3 flex gap-5">
+                <Button
+                  variant="additional-gray"
+                  className="w-full"
+                  onClick={() => onClose(reset)}
+                >
+                  {intl.formatMessage({ defaultMessage: 'Cancel' })}
+                </Button>
+                <Button
+                  variant="main-green"
+                  className="w-full"
+                  type="submit"
+                  isLoading={formState.isSubmitting}
+                >
+                  {intl.formatMessage({ defaultMessage: 'Ok' })}
+                </Button>
+              </div>
+            )}
         </Form>
       </DialogContent>
     </Dialog>
