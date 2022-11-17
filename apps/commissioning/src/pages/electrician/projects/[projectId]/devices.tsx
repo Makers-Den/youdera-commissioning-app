@@ -7,8 +7,10 @@ import { routes } from '@src/utils/routes';
 import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { Suspense } from 'react';
 import { useIntl } from 'react-intl';
+import { ButtonProps } from 'ui/buttons/Button';
 
 const DevicesPage = ({
   project,
@@ -24,11 +26,7 @@ const backClickHandler = () => {
   router.push(routes.electrician.selectGateway(project.id));
 };
 
-const nextClickHandler = () => {
-  // TODO: prevent next if no inverters
-  // TODO: ask if all inverters have been added before proceeding
-  router.push(routes.electrician.verification(project.id));
-};
+const [nextButtonProps, setNextButtonProps] = useState<ButtonProps & { content: string } | null>(null);
 
 return (
   <AuthenticatedLayout
@@ -45,19 +43,12 @@ return (
           type: 'button',
           onClick: backClickHandler,
         },
-        {
-          content: intl.formatMessage({
-            defaultMessage: 'Next',
-          }),
-          variant: 'main-green',
-          type: 'button',
-          onClick: nextClickHandler,
-        },
+       ...(nextButtonProps ? [nextButtonProps] : []),
       ],
     }}
   >
     <Suspense fallback={<LargeBoxSkeleton />}>
-      <DevicesContent siteId={project.id} />
+      <DevicesContent siteId={project.id} setNextButtonProps={setNextButtonProps} />
     </Suspense>
   </AuthenticatedLayout>
 );

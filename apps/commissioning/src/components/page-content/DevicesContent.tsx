@@ -4,17 +4,20 @@ import { useInverterMutations } from '@src/integrations/youdera/inverterApiHooks
 import { useMeterMutations } from '@src/integrations/youdera/meterApiHooks';
 import { useGetSite } from '@src/integrations/youdera/sites/hooks/useGetSite';
 import { Device, useExtractDevices } from '@src/utils/devices';
-import { useState } from 'react';
+import { routes } from '@src/utils/routes';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { ButtonDropdown } from 'ui/button-dropdown/ButtonDropdown';
-import { Button } from 'ui/buttons/Button';
+import { Button, ButtonProps } from 'ui/buttons/Button';
 import { useDisclosure } from 'ui/dialogs/useDisclosure';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
 
 import { DeviceList } from '../DeviceList';
 import { ActionsDialog } from '../dialogs/ActionsDialog';
+import { ConfimationDialog } from '../dialogs/ConfimationDialog';
 import { DeletionDialog } from '../dialogs/DeletionDialog';
 import {
   InverterFormDialog,
@@ -22,11 +25,42 @@ import {
 } from '../forms/InverterFormDialog';
 import { LargeBox } from '../LargeBox';
 
-export type DevicesContentProps = {
+type AreYouSureDialogProps = {
   siteId: number;
+  disclosure: {
+    isOpen: boolean;
+    onClose: () => void;
+    onOpen: () => void;
+    toggle: () => void;
+  }
 };
 
-export function DevicesContent({ siteId }: DevicesContentProps) {
+function AreYouSureDialog({ siteId, disclosure }: AreYouSureDialogProps) {
+  const intl = useIntl();
+  const router = useRouter();
+
+  return (
+    <ConfimationDialog
+      isOpen={disclosure.isOpen}
+      onClose={disclosure.onClose}
+      title={intl.formatMessage({ defaultMessage: 'All Inverters added?' })}
+      onConfirm={() => {
+        router.push(routes.electrician.verification(siteId));
+      }}
+      onCancel={disclosure.onClose}
+      confirmButtonVariant="main-green"
+      description={intl.formatMessage({ defaultMessage: 'Are you sure that all inverters were added?' })}
+      confirmButtonTitle={intl.formatMessage({ defaultMessage: 'Yes' })}
+    />
+  );
+}
+
+export type DevicesContentProps = {
+  siteId: number;
+  setNextButtonProps: (props: ButtonProps & { content: string }) => void;
+};
+
+export function DevicesContent({ siteId, setNextButtonProps }: DevicesContentProps) {
   const intl = useIntl();
 
   const { siteQuery } = useGetSite(siteId);
@@ -147,6 +181,20 @@ export function DevicesContent({ siteId }: DevicesContentProps) {
   ];
 
   const devices = useExtractDevices(site);
+  const areYouSureDisclosure = useDisclosure();
+
+  useEffect(() => {
+    const hasInverters = !!devices.find(d => d.type === 'Inverter');
+    setNextButtonProps({
+      content: intl.formatMessage({
+        defaultMessage: 'Next',
+      }),
+      variant: 'main-green',
+      type: 'button',
+      disabled: !hasInverters,
+      onClick: areYouSureDisclosure.onOpen
+    });
+  }, [intl, setNextButtonProps, devices, areYouSureDisclosure.onOpen]);
 
   return (
     <>
@@ -219,6 +267,7 @@ export function DevicesContent({ siteId }: DevicesContentProps) {
         title={intl.formatMessage({ defaultMessage: 'Add Inverter' })}
         submitButtonTitle={intl.formatMessage({ defaultMessage: 'Add Device' })}
       />
+      <AreYouSureDialog siteId={siteId} disclosure={areYouSureDisclosure}/>
     </>
   );
 }
