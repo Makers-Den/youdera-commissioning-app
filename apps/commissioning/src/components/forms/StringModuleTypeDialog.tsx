@@ -1,6 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Module } from '@src/integrations/youdera/apiTypes';
+import { Module, String } from '@src/integrations/youdera/apiTypes';
 import { useGetModules } from '@src/integrations/youdera/modules/hooks/useGetModules';
+import { useStringDetailsQuery } from '@src/integrations/youdera/stringsApiHooks';
+import { defaultConfig } from 'next/dist/server/config-shared';
 import React from 'react';
 import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';
@@ -16,7 +18,7 @@ import { NumberInput } from 'ui/inputs/NumberInput';
 import { Select } from 'ui/select/Select';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import clsxm from 'ui/utils/clsxm';
-import { z, ZodObject, ZodTypeAny } from 'zod';
+import { string, z, ZodObject, ZodTypeAny } from 'zod';
 
 import { Field, FieldState } from './Field';
 import { Form } from './Form';
@@ -35,6 +37,7 @@ export type StringModuleTypeDialogProps<
   className?: string;
   onSubmit: (values: z.infer<ResolverType>, resetForm: () => void) => void;
   resolver: ResolverType;
+  modifiedStringId?: number;
 };
 
 export const StringModuleTypeDialog = <
@@ -45,27 +48,45 @@ export const StringModuleTypeDialog = <
   className,
   onSubmit,
   resolver,
+  modifiedStringId,
 }: StringModuleTypeDialogProps<ResolverType>) => {
   const intl = useIntl();
 
+  const stringDetailsQuery = useStringDetailsQuery(modifiedStringId ?? -1);
+  const stringDetails = stringDetailsQuery.data as String;
+  console.log({ stringDetails })
+  // * Options
   const { modulesQuery } = useGetModules();
   const modules = modulesQuery.data as Module[];
   const moduleOptions = modules.map(module => ({
     key: module.id.toString(),
     label: module.name,
-    value: module
+    value: module,
   }));
   const cableCrossSectionOptions = [
     { key: '4', label: '4 mm²' },
     { key: '6', label: '6 mm²' },
     { key: '10', label: '10 mm²' },
-  ]
-
+  ];
+  // *
+  const defaultModuleOption = moduleOptions.filter(
+    module => module.key === stringDetails.module.toString(),
+  )[0];
+  const defaultCableCrossSectionOption = cableCrossSectionOptions.filter(
+    section => section.key === stringDetails.cable_cross_section.toString(),
+  )[0];
   const method = useForm({
     resolver: zodResolver(resolver),
+    defaultValues: modifiedStringId
+      ? {
+        moduleType: defaultModuleOption,
+        cableCrossSection: defaultCableCrossSectionOption,
+        numberOfModules: stringDetails.count,
+      }
+      : undefined,
   });
 
-  const { handleSubmit, reset, formState } = method;
+  const { handleSubmit, reset, formState, getValues } = method;
 
   return (
     <Dialog
@@ -133,22 +154,6 @@ export const StringModuleTypeDialog = <
                   />
                 )}
               </Field>
-              {/* <Field name='cableCrossSection'>
-                {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
-                  <NumberInput
-                    label={intl.formatMessage({
-                      defaultMessage: 'Cable cross section',
-                    })}
-                    unit="mm&#xB2;"
-                    className="w-full"
-                    max="359"
-                    {...register('cableCrossSection', {
-                      setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
-                    })}
-                    validity={fieldState.invalid ? 'invalid' : undefined}
-                  />
-                }
-              </Field> */}
               <Field name="cableCrossSection">
                 {(
                   register: UseFormRegister<FieldValues>,

@@ -110,8 +110,9 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
     actionsDialog.onClose();
     deletionDialog.onOpen();
   };
-  const handleModuleTypeOpen = () => {
+  const handleModuleTypeOpen = (isModified?: boolean) => {
     actionsDialog.onClose();
+    if (!isModified) setSelectedId(undefined)
     moduleTypeSelectionDialog.onOpen();
   };
   const handleModuleTypeClose = (resetForm: () => void) => {
@@ -223,7 +224,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
       <Box className="mx-3 mb-auto w-full md:mx-auto md:w-0 md:min-w-[700px]">
         <BoxHeader>
           <BoxTitle title={intl.formatMessage({ defaultMessage: 'Strings' })} />
-          <Button className="ml-auto w-[200px]" onClick={handleModuleTypeOpen}>
+          <Button className="ml-auto w-[200px]" onClick={() => handleModuleTypeOpen}>
             + {intl.formatMessage({ defaultMessage: 'Add string' })}
           </Button>
         </BoxHeader>
@@ -241,7 +242,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
           defaultMessage: 'What you want to do with list element?',
         })}
       >
-        <Button variant="main-green" onClick={handleModuleTypeOpen}>
+        <Button variant="main-green" onClick={() => handleModuleTypeOpen(true)}>
           {intl.formatMessage({ defaultMessage: 'Modify properties' })}
         </Button>
         <Button variant="main-green" onClick={handleInverterOpen}>
@@ -257,6 +258,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
       {moduleTypeSelectionDialog.isOpen && (
         <Suspense>
           <StringModuleTypeDialog
+            modifiedStringId={selectedId}
             open={moduleTypeSelectionDialog.isOpen}
             onClose={handleModuleTypeClose}
             onSubmit={stringModuleTypeSubmitHandler}
@@ -267,6 +269,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
       {inverterSelectionDialog.isOpen && (
         <Suspense>
           <StringInverterDialog
+            modifiedStringId={selectedId}
             open={inverterSelectionDialog.isOpen}
             onClose={handleInverterClose}
             resolver={{ existingInverter: stringInverterValidation, newInverter: stringNewInverterValidation }}

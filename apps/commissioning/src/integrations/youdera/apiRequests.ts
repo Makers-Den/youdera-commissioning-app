@@ -1,5 +1,5 @@
 import { youderaApiInstance } from "./api-instances/youdera";
-import { ApiFile, Battery, CreateInverterRequestBody, DataResponse, Inverter, Meter, VerificationTestResult } from "./apiTypes";
+import { ApiFile, Battery, CreateInverterRequestBody, DataResponse, Inverter, Meter, String, VerificationTestResult } from "./apiTypes";
 import { Site } from "./sites/types";
 
 export const getUncommissionedSites = async () => {
@@ -22,6 +22,13 @@ export const getSite = async (siteId: string) => {
     `&with[]=inverters.mpp_trackers`,
   );
 
+  return response.data.data;
+};
+
+export const getStringDetails = async (stringId: number): Promise<String> => {
+  const response = await youderaApiInstance.get<DataResponse<String>>(
+    `strings/${stringId}?with[]=mpp_tracker&with[]=files`,
+  );
   return response.data.data;
 };
 

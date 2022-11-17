@@ -60,6 +60,7 @@ export type StringInverterDialogProps<
     existingInverter: ResolverTypeExistingInverter;
     newInverter: ResolverTypeNewInverter;
   };
+  modifiedStringId?: number;
 };
 
 export const StringInverterDialog = <
@@ -72,6 +73,7 @@ export const StringInverterDialog = <
   onSubmit,
   resolver,
   siteId,
+  modifiedStringId
 }: StringInverterDialogProps<
   ResolverTypeExistingInverter,
   ResolverTypeNewInverter
