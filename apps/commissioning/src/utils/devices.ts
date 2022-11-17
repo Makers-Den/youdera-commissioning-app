@@ -9,10 +9,10 @@ export type DeviceType = 'Inverter' | 'Battery' | 'Meter';
  * the same list.
  */
 export type Device = (
-  | Inverter & { type: 'Inverter' }
-  | Battery & { type: 'Battery' }
+  | Inverter & { deviceType: 'Inverter' }
+  | Battery & { deviceType: 'Battery' }
   | Meter & {
-    type: 'Meter',
+    deviceType: 'Meter',
     /** copy of `number` for Meter. Inverter and Battery already have this field */
     serial_number: string;
   }
@@ -36,7 +36,7 @@ export function toDevice(thing: Inverter | Battery | Meter, type: DeviceType) {
   const newestFirstTestLogs = reverse(sortBy(thing.testlogs || [], ['created_at']));
   return {
     ...thing,
-    type,
+    deviceType: type,
     ...(type === 'Meter' && { serial_number: (thing as Meter).number }),
     imageUrl: toThumbnailUrl(thing?.files?.[0]),
     verificationTestStatus: newestFirstTestLogs?.[0]?.status, 

@@ -35,6 +35,17 @@ export type VerificationTestResult = {
   updated_at: string;
 };
 
+/** 
+ * This is some generic data structure embedded in devices (inverters, batteries, meters) 
+ * Currently the communication method settings are stored inside.
+ */
+export type Datapoint = {
+  import_config: {
+    ip?: string;
+    slave_id: number;
+  }
+}
+
 export type Meter = {
   id: number;
   name: string;
@@ -63,7 +74,10 @@ export type Meter = {
   updated_at: string;
 
   files?: ApiFile[];
-};
+
+  /** maps to some JSON column in db */
+  datapoints?: Datapoint[];
+}
 
 export type Battery = {
   id: number;
@@ -81,6 +95,9 @@ export type Battery = {
   created_at: string;
   updated_at: string;
   files?: ApiFile[];
+
+  /** maps to some JSON column in db */
+  datapoints?: Datapoint[];
 };
 
 export type Inverter = {
@@ -98,6 +115,9 @@ export type Inverter = {
 
   mpp_trackers: MppTracker[];
   files?: ApiFile[];
+
+  /** maps to some JSON column in db */
+  datapoints?: Datapoint[];
 };
 export interface InverterModel {
   id: number,
@@ -226,4 +246,21 @@ export interface CreateStringRequestBody {
 
 export type ProjectManagerContactInfo = {
   phone: string;
+}
+
+export type CommsStatus = 'failed'
+
+export type CommsTestResult = {
+  status: CommunicationStatus;
+  serial_number: string | null;
+  /** Only set for batteries (if successful) */
+  power: number | null;
+}
+
+export type CommsParams = {
+  /** Set if the method is DHCP */
+  dhcp?: true,
+  /** Set if the method is Fixed IP */
+  ip?: string;
+  slave_id: number;
 }

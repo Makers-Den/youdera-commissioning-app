@@ -37,12 +37,12 @@ export function DeviceList({
         {devices.map(device => (
           <Tr
             className="cursor-pointer"
-            key={device.id}
+            key={`${device.deviceType}-${device.id}`}
             onClick={rowClickHandler(device)}
           >
             <Td>
               <div className="ml-2 flex aspect-square w-11 items-center justify-center overflow-hidden rounded">
-                <Image src={device.imageUrl} alt={`${device.type} image`} />
+                <Image src={device.imageUrl} alt={`${device.deviceType} image`} />
               </div>
             </Td>
             <Td>
@@ -60,7 +60,7 @@ export function DeviceList({
               </Typography>
             </Td>
             <Td>
-              <SvgIcon name={device.type} />
+              <SvgIcon name={device.deviceType} />
             </Td>
             <Td>
               <SvgIcon

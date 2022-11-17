@@ -6,8 +6,8 @@ import { Label, Typography } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 import { validityStyle } from '../utils/constants';
 
-export type SelectOption = {
-  key: string;
+export type SelectOption<TKey = string> = {
+  key: TKey;
   label: ReactNode;
   icon?: IconName;
   value?: any;

@@ -65,6 +65,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...rest}
           />
           <button
+            tabIndex={-1}
             type="button"
             className={clsxm(
               'text-gray-500 fill-gray-500',
