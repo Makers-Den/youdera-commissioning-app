@@ -3,6 +3,7 @@ import { Site } from '@src/integrations/youdera/apiTypes';
 import { useGetSite } from '@src/integrations/youdera/sites/hooks/useGetSite';
 import { useContactSiteProjectManagerMutation } from '@src/integrations/youdera/sites/useContactSiteProjectManagerMutation';
 import { useExtractDevices } from '@src/utils/devices';
+import { routes } from '@src/utils/routes';
 import { every } from 'lodash';
 import { useRouter } from 'next/router';
 import { useEffect,useMemo,useState } from 'react';
@@ -124,7 +125,7 @@ export function VerificationContent({ siteId, setNextButtonProps }: Verification
         variant: 'main-green',
         type: 'button',
         onClick: () => {
-          router.push(`/electrician/${siteId}/complete`);
+          router.push(routes.electrician.completed(siteId));
         },
       });
     }

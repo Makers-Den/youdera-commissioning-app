@@ -4,6 +4,7 @@ import { Role } from '@src/integrations/youdera/auth/types';
 import { useGetGateways } from '@src/integrations/youdera/gateways/hooks/useGetGateways';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
+import { routes } from '@src/utils/routes';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React, { Suspense, useCallback } from 'react';
@@ -16,10 +17,10 @@ const SelectProjectContentWithGatewaySkip = () => {
     (siteId: number) => {
       const hasGateway = !!gatewaysQuery.data?.find(gateway => gateway.site_id === siteId)
       if (hasGateway) {
-        return `/electrician/projects/${siteId}/devices`;
+        return routes.electrician.devices(siteId);
       }
       
-      return `/electrician/projects/${siteId}/select-gateway`;
+      return routes.electrician.selectGateway(siteId);
     },
     [gatewaysQuery.data]
   );
@@ -32,7 +33,7 @@ const SelectProjectPage = () => {
   const router = useRouter();
 
   const navCrossClickHandler = () => {
-    router.push('/electrician/select-task');
+    router.push(routes.electrician.selectTask);
   };
 
   return (
@@ -59,7 +60,7 @@ const SelectProjectPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.electrician,
+  Role.electrician, Role.admin,
 ]).then(async _context => ({
   props: {},
 }));

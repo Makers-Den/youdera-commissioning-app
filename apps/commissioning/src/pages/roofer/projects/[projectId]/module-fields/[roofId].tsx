@@ -3,6 +3,7 @@ import { StringsContent } from '@src/components/page-content/StringsContent'
 import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
+import { routes } from '@src/utils/routes';
 import { fetchStringsFromParams } from '@src/utils/server/fetchStringsFromParams'
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
@@ -19,11 +20,11 @@ const StringsPage = ({
   const router = useRouter();
 
   const navCrossClickHandler = () => {
-    router.push('/roofer/select-task');
+    router.push(routes.roofer.selectTask);
   };
 
   const okClickHandler = () => {
-    router.push(`/roofer/projects/${project.id}/module-fields`);
+    router.push(routes.roofer.moduleFields(project.id));
   };
 
   return (
@@ -52,7 +53,7 @@ const StringsPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.roofer,
+  Role.roofer, Role.admin,
 ]).then(fetchStringsFromParams);
 
 export default StringsPage;

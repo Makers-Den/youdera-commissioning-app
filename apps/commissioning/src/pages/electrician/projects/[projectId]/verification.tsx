@@ -3,6 +3,7 @@ import { VerificationContent } from '@src/components/page-content/VerificationCo
 import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
+import { routes } from '@src/utils/routes';
 import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
@@ -17,11 +18,11 @@ const intl = useIntl();
 const router = useRouter();
 
 const navCrossClickHandler = () => {
-  router.push('/electrician/select-task');
+  router.push(routes.electrician.selectTask);
 };
 
 const backClickHandler = () => {
-  router.push(`/electrician/projects/${site.id}/devices`);
+  router.push(routes.electrician.devices(site.id));
 };
 
 const [nextButtonProps, setNextButtonProps] = useState<ButtonProps & { content: string } | null>(null);
@@ -56,7 +57,7 @@ return (
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.electrician,
+  Role.electrician, Role.admin,
 ]).then(fetchProjectFromParams);
 
 export default VerificationPage;

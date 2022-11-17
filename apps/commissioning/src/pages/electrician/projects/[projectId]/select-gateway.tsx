@@ -4,6 +4,7 @@ import { Role } from '@src/integrations/youdera/auth/types';
 import { useGetGateways } from '@src/integrations/youdera/gateways/hooks/useGetGateways';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
+import { routes } from '@src/utils/routes';
 import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
@@ -17,15 +18,15 @@ const SelectGatewayPage = ({
   const router = useRouter();
 
   const navCrossClickHandler = () => {
-    router.push('/electrician/select-task');
+    router.push(routes.electrician.selectTask);
   };
 
   const backClickHandler = () => {
-    router.push('/electrician/select-project');
+    router.push(routes.electrician.selectProject);
   };
 
   const onGatewaySelected = () => {
-    router.push(`/electrician/projects/${project.id}/devices`);
+    router.push(routes.electrician.devices(project.id));
   };
 
   const { gatewaysQuery } = useGetGateways({ suspense: false });
@@ -68,7 +69,7 @@ const SelectGatewayPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.electrician,
+  Role.electrician, Role.admin,
 ]).then(fetchProjectFromParams);
 
 export default SelectGatewayPage;

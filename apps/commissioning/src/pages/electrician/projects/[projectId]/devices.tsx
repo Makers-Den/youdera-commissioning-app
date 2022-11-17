@@ -3,6 +3,7 @@ import { DevicesContent } from '@src/components/page-content/DevicesContent';
 import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
+import { routes } from '@src/utils/routes';
 import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
@@ -16,19 +17,18 @@ const intl = useIntl();
 const router = useRouter();
 
 const navCrossClickHandler = () => {
-  router.push('/electrician/select-task');
+  router.push(routes.electrician.selectTask);
 };
 
 const backClickHandler = () => {
-  router.push(`/electrician/projects/${project.id}/select-gateway`);
+  router.push(routes.electrician.selectGateway(project.id));
 };
 
 const nextClickHandler = () => {
   // TODO: prevent next if no inverters
   // TODO: ask if all inverters have been added before proceeding
-  router.push(`/electrician/projects/${project.id}/verification`);
+  router.push(routes.electrician.verification(project.id));
 };
-
 
 return (
   <AuthenticatedLayout
@@ -64,7 +64,7 @@ return (
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.electrician,
+  Role.electrician, Role.admin,
 ]).then(fetchProjectFromParams);
 
 export default DevicesPage;

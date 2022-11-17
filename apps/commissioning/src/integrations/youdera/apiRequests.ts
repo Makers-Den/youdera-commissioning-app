@@ -107,7 +107,7 @@ export const getBattery = async (id: number): Promise<Battery> => {
 };
 
 export const getBatteryVerificationGuide = async (id: number): Promise<string> => {
-  const response = await youderaApiInstance.get<DataResponse<string>>(`/batteries/${id}/guide`);
+  const response = await youderaApiInstance.get<DataResponse<string>>(`/batteries/${id}/test`);
   return response.data.data;
 };
 

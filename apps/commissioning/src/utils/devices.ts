@@ -22,8 +22,8 @@ export type Device = (
 };
 
 function toThumbnailUrl(file?: ApiFile) {
-  // TODO: get proper placeholder image
-  return file?.url_thumb || "https://picsum.photos/100";
+  // defaults to 100x100 pixel grey image
+  return file?.url_thumb || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgB7dFBAQAgDAChaf9iS6U17gEVOLv7how7pAiJERIjJEZIjJAYITFCYoTECIkREiMkRkiMkBghMUJihMQIiRESIyRGSIyQGCExQmKExAiJERIjJEZIjJAYITFCYoTECIkREiMkRkiMkBghMUJihMQIiRESIyRGSIyQGCExQmKExAiJERIjJEZIjJAYITFCYoTECIkREiMkRkiMkBghMUJihMQIiRESIyRGSIyQGCExQmKExAiJERIjJEZIjJAYITFCYoTECIkREiMkRkiMkBghMUJihMQIiRESIyRGSIyQGCExQmKExAiJERLzAeQABCK5P9z4AAAAAElFTkSuQmCC";
 }
 
 export const commStatusToIcon = {
