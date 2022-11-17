@@ -165,3 +165,8 @@ export interface Site {
 export interface SiteWithFiles extends Site {
   files: ApiFile[];
 }
+
+
+export type ProjectManagerContactInfo = {
+  phone: string;
+}

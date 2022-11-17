@@ -5,6 +5,7 @@ import {
   FaCheck,
   FaEnvelope,
   FaMicrochip,
+  FaPhone,
   FaTable,
   FaTimes,
   FaUnlockAlt,
@@ -78,6 +79,7 @@ const iconMap = {
   InverterRect,
   BatteryRect,
   MeterRect,
+  Phone: FaPhone,
 };
 
 export type IconName = keyof typeof iconMap;
