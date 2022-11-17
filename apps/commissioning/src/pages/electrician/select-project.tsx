@@ -1,15 +1,31 @@
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import { SelectProjectContent } from '@src/components/page-content/SelectProjectContent';
 import { Role } from '@src/integrations/youdera/auth/types';
+import { useGetGateways } from '@src/integrations/youdera/gateways/hooks/useGetGateways';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import React, { Suspense } from 'react';
+import React, { Suspense, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 
-const projectPathCreator = (id: number) =>
-  `/electrician/projects/${id}/select-gateway`;
+const SelectProjectContentWithGatewaySkip = () => {
+  const { gatewaysQuery } = useGetGateways();
+  
+  const projectPathCreator = useCallback(
+    (siteId: number) => {
+      const hasGateway = !!gatewaysQuery.data?.find(gateway => gateway.site_id === siteId)
+      if (hasGateway) {
+        return `/electrician/projects/${siteId}/devices`;
+      }
+      
+      return `/electrician/projects/${siteId}/select-gateway`;
+    },
+    [gatewaysQuery.data]
+  );
+
+  return <SelectProjectContent projectPathCreator={projectPathCreator} />
+}
 
 const SelectProjectPage = () => {
   const intl = useIntl();
@@ -36,7 +52,7 @@ const SelectProjectPage = () => {
       }}
     >
       <Suspense fallback={<LargeBoxSkeleton />}>
-        <SelectProjectContent projectPathCreator={projectPathCreator} />
+        <SelectProjectContentWithGatewaySkip />
       </Suspense>
     </AuthenticatedLayout>
   );
