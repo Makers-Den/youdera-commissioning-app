@@ -6,11 +6,12 @@ import { protectRoute } from '@src/middlewares/protectRoute';
 import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { ButtonProps } from 'ui/buttons/Button';
 
 const VerificationPage = ({
-  project,
+  project: site,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 const intl = useIntl();
 const router = useRouter();
@@ -20,13 +21,15 @@ const navCrossClickHandler = () => {
 };
 
 const backClickHandler = () => {
-  router.push(`/electrician/projects/${project.id}/devices`);
+  router.push(`/electrician/projects/${site.id}/devices`);
 };
+
+const [nextButtonProps, setNextButtonProps] = useState<ButtonProps & { content: string } | null>(null);
 
 return (
   <AuthenticatedLayout
     navVariant="primary"
-    navHeader={project.name}
+    navHeader={site.name}
     onNavCrossClick={navCrossClickHandler}
     footerProps={{
       buttons: [
@@ -38,19 +41,15 @@ return (
           type: 'button',
           onClick: backClickHandler,
         },
-        {
-          content: intl.formatMessage({
-            defaultMessage: 'Contact project manager',
-          }),
-          variant: 'main-green',
-          type: 'button',
-          onClick: () => {},
-        },
+        ...(nextButtonProps ? [nextButtonProps] : []),
       ],
     }}
   >
     <Suspense fallback={<LargeBoxSkeleton />}>
-      <VerificationContent siteId={project.id} />
+      <VerificationContent
+        siteId={site.id}
+        setNextButtonProps={setNextButtonProps}
+      />
     </Suspense>
   </AuthenticatedLayout>
 );

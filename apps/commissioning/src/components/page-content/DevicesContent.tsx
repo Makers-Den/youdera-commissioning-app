@@ -1,9 +1,9 @@
+import { Site } from '@src/integrations/youdera/apiTypes';
 import { useBatteryMutations } from '@src/integrations/youdera/batteryApiHooks';
 import { useInverterMutations } from '@src/integrations/youdera/inverterApiHooks';
 import { useMeterMutations } from '@src/integrations/youdera/meterApiHooks';
 import { useGetSite } from '@src/integrations/youdera/sites/hooks/useGetSite';
-import { Site } from '@src/integrations/youdera/sites/types';
-import { Device } from '@src/utils/devices';
+import { Device, useExtractDevices } from '@src/utils/devices';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
@@ -30,9 +30,7 @@ export function DevicesContent({ siteId }: DevicesContentProps) {
   const intl = useIntl();
 
   const { siteQuery } = useGetSite(siteId);
-  // TODO: how do we get non-null type more elegantly?
-  // We should assume suspense so it's always set.
-  const project = siteQuery.data as Site;
+  const site = siteQuery.data as Site;
 
   const [currentDevice, setCurrentDevice] = useState<Device | null>(null);
 
@@ -148,6 +146,8 @@ export function DevicesContent({ siteId }: DevicesContentProps) {
     },
   ];
 
+  const devices = useExtractDevices(site);
+
   return (
     <>
       <LargeBox>
@@ -165,9 +165,7 @@ export function DevicesContent({ siteId }: DevicesContentProps) {
         <BoxContent>
           <DeviceList
             rowClickHandler={rowClickHandler}
-            inverters={project.inverters}
-            batteries={project.batteries}
-            meters={project.meters}
+            devices={devices}
           />
         </BoxContent>
       </LargeBox>

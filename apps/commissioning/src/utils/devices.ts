@@ -1,5 +1,6 @@
-import { ApiFile, Battery, Inverter, Meter, VerificationTestStatus } from "@src/integrations/youdera/apiTypes";
+import { ApiFile, Battery, Inverter, Meter, Site, VerificationTestStatus } from "@src/integrations/youdera/apiTypes";
 import { reverse, sortBy } from "lodash";
+import { useMemo } from "react";
 
 export type DeviceType = 'Inverter' | 'Battery' | 'Meter';
 
@@ -43,3 +44,13 @@ export function toDevice(thing: Inverter | Battery | Meter, type: DeviceType) {
   } as Device;
 }
 
+/**
+ * Convenience hook to transform inverters, batteries and meters of a site to the `Device` type
+ */
+export function useExtractDevices({ inverters, batteries, meters }: Site) {
+  return useMemo(() => [
+    ...(inverters || []).map(d => toDevice(d, 'Inverter')),
+    ...(batteries || []).map(d => toDevice(d, 'Battery')),
+    ...(meters || []).map(d => toDevice(d, 'Meter'))
+  ], [inverters, batteries, meters]);
+}
