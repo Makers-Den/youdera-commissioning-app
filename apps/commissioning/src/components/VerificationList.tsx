@@ -170,8 +170,8 @@ function DeviceVerification({ siteId, device }: { siteId: number; device: Device
             <Typography variant="label">{device.serial_number}</Typography>
           </div>
           <div>
-            <Typography variant="label" className='truncate'>{device.manufacturer}</Typography>
-            <Typography variant="label" className='truncate'>{device.model}</Typography>
+            <Typography variant="label" className='truncate'>{device.manufacturer_name || '-'}</Typography>
+            <Typography variant="label" className='truncate'>{device.model_name || '-'}</Typography>
           </div>
           <div className={FLEX_CENTER}>
             <SvgIcon name={device.type} />

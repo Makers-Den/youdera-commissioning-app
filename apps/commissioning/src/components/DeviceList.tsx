@@ -53,10 +53,10 @@ export function DeviceList({
             </Td>
             <Td>
               <Typography variant="label" className="w-[160px] truncate">
-                {device.manufacturer}
+                {device.manufacturer_name || '-'}
               </Typography>
               <Typography variant="label" className="w-[160px] truncate">
-                {device.model}
+                {device.model_name || '-'}
               </Typography>
             </Td>
             <Td>

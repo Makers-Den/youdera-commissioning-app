@@ -51,7 +51,7 @@ const iconMap = {
   Table: FaTable,
   Chip: FaMicrochip,
   Meter,
-  Battery: FaBatteryFull,
+  Battery: BatteryRect,
   Inverter,
   ChevronDown,
   Settings,
