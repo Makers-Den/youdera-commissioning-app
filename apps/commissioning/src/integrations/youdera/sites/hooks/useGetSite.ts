@@ -1,7 +1,7 @@
 import { UseBaseQueryResult, useQuery } from '@tanstack/react-query';
 
 import { getSite } from '../queries/getSite';
-import { Site } from '../types';
+import { Site } from '../../apiTypes';
 import { QueryKeys } from '../../enums/queryKeys';
 
 export declare type UseSuspenseQueryResult<TData = unknown, TError = unknown> = UseBaseQueryResult<TData, TError> & {

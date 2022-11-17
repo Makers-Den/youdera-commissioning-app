@@ -1,12 +1,11 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
-import { Battery, Inverter, Meter, VerificationTestResult, VerificationTestStatus } from '@src/integrations/youdera/apiTypes';
+import { VerificationTestResult, VerificationTestStatus } from '@src/integrations/youdera/apiTypes';
 import { useBatteryMutations, useBatteryVerificationGuideQuery } from '@src/integrations/youdera/batteryApiHooks';
 import { useInverterMutations, useInverterVerificationGuideQuery } from '@src/integrations/youdera/inverterApiHooks';
 import { useMeterMutations, useMeterVerificationGuideQuery } from '@src/integrations/youdera/meterApiHooks';
 import { formatIsoDate } from '@src/utils/dateUtils';
-import { Device, DeviceType, toDevice } from '@src/utils/devices';
+import { Device, DeviceType } from '@src/utils/devices';
 import { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
-import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import {
@@ -26,12 +25,6 @@ const GRID_COLS = 'grid-cols-[100px_150px_minmax(100px,_1fr)_100px_50px]';
 /** 3 columns */
 const INNER_GRID_COLS = 'grid-cols-[230px_minmax(100px,_1fr)_130px]';
 
-export type VerificationListProps = {
-  inverters?: Inverter[];
-  batteries?: Battery[];
-  meters?: Meter[];
-  siteId: number;
-};
 
 const FLEX_CENTER = 'flex items-center';
 
@@ -245,15 +238,13 @@ function DeviceVerification({ siteId, device }: { siteId: number; device: Device
   )
 }
 
-export function VerificationList({ siteId, inverters, batteries, meters }: VerificationListProps) {
+export type VerificationListProps = {
+  devices: Device[];
+  siteId: number;
+};
+
+export function VerificationList({ siteId, devices }: VerificationListProps) {
   const intl = useIntl();
-
-  const devices: Device[] = useMemo(() => [
-    ...(inverters || []).map(d => toDevice(d, 'Inverter')),
-    ...(batteries || []).map(d => toDevice(d, 'Battery')),
-    ...(meters || []).map(d => toDevice(d, 'Meter'))
-  ], [inverters, batteries, meters]);
-
 
   return (
     <div className="w-full">
