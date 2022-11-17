@@ -117,7 +117,7 @@ export const StringInverterDialog = <
       ].concat(
         inverters.map(inverter => ({
           key: String(inverter.id),
-          label: inverter.name,
+          label: inverter.name ?? ' - ',
           icon: 'Table',
         })),
       ),
@@ -261,7 +261,7 @@ export const StringInverterDialog = <
                   return (
                     <AutocompleteSelect
                       label={intl.formatMessage({
-                        defaultMessage: 'Select input',
+                        defaultMessage: 'Input',
                       })}
                       placeholder={intl.formatMessage({
                         defaultMessage: 'Select',

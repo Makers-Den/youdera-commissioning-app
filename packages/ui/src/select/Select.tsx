@@ -1,7 +1,7 @@
 import { Listbox, Transition } from '@headlessui/react';
 import React, { Fragment, ReactNode } from 'react';
 
-import { SvgIcon } from '../svg-icons/SvgIcon';
+import { IconName, SvgIcon } from '../svg-icons/SvgIcon';
 import { Label, Typography } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 import { validityStyle } from '../utils/constants';
@@ -9,6 +9,7 @@ import { validityStyle } from '../utils/constants';
 export type SelectOption = {
   key: string;
   label: ReactNode;
+  icon?: IconName;
   value?: any;
 };
 
@@ -103,12 +104,25 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                   return (
                     <Listbox.Option
                       key={key}
-                      className="flex cursor-pointer select-none items-center justify-between py-2 pl-3 pr-4 hover:bg-gray-100"
+                      className="flex cursor-pointer select-none items-center py-2 pl-3 pr-4 hover:bg-gray-100 justify-between"
                       value={option}
                     >
                       {({ selected }) => (
                         <>
-                          <Typography variant="body">{label}</Typography>
+                          <span
+                            className={`flex items-center truncate ${selected ? 'font-medium' : 'font-normal'
+                              }`}
+                          >
+                            {option.icon && (
+                              <span className="mr-3 flex w-4 items-center justify-center">
+                                <SvgIcon
+                                  name={option.icon}
+                                  className="h-[14px]"
+                                />
+                              </span>
+                            )}
+                            <Typography variant="body">{label}</Typography>
+                          </span>
                           {selected && (
                             <SvgIcon
                               name="Check"
