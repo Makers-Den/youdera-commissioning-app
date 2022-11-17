@@ -57,7 +57,7 @@ const stringNewInverterValidation = z.object({
     label: z.string(),
     value: z.any()
   }),
-  input: z.object({
+  newInput: z.object({
     key: z.string(),
     label: z.string(),
     value: z.any()
@@ -143,10 +143,10 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
     };
 
   const stringExistingInverterSubmitHandler: StringInverterDialogProps<
-    typeof stringInverterValidation
-  >['onSubmit'] = async ({ input, file }, resetForm) => {
+    typeof stringInverterValidation,
+    typeof stringNewInverterValidation
+  >['onSubmit']['existingInverter'] = async ({ input, file }, resetForm) => {
     if (!stringsOnRoofQuery.data) return;
-
     try {
       const string = await createStringMutation.mutateAsync({
         count: moduleTypeFormData.current!.numberOfModules,
@@ -171,8 +171,9 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
 
   //TODO: Use this function inside of StringInverterDialog
   const stringNewInverterSubmitHandler: StringInverterDialogProps<
+    typeof stringInverterValidation,
     typeof stringNewInverterValidation
-  >['onSubmit'] = async ({ input, model, file }, resetForm) => {
+  >['onSubmit']['newInverter'] = async ({ newInput, model, file }, resetForm) => {
     if (!stringsOnRoofQuery.data) return;
     try {
       const inverter = await createInverterMutation.mutateAsync({
@@ -186,8 +187,8 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
         count: moduleTypeFormData.current!.numberOfModules,
         roof: stringsOnRoofQuery.data.id,
         module: moduleTypeFormData.current!.moduleType.key,
-        cable_cross_section: Number(moduleTypeFormData.current!.cableCrossSection.key), // ? Change keys in selects to be a number by default?
-        mpp_tracker: Number(inverterDetails.mpp_trackers[input.value].id),
+        cable_cross_section: Number(moduleTypeFormData.current!.cableCrossSection.key),
+        mpp_tracker: Number(inverterDetails.mpp_trackers[newInput.value].id),
       });
 
       await addFileToStringMutation.mutateAsync({
@@ -268,8 +269,8 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
           <StringInverterDialog
             open={inverterSelectionDialog.isOpen}
             onClose={handleInverterClose}
-            resolver={stringInverterValidation}
-            onSubmit={stringExistingInverterSubmitHandler}
+            resolver={{ existingInverter: stringInverterValidation, newInverter: stringNewInverterValidation }}
+            onSubmit={{ existingInverter: stringExistingInverterSubmitHandler, newInverter: stringNewInverterSubmitHandler }}
             siteId={siteId}
           />
         </Suspense>

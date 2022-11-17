@@ -26,28 +26,36 @@ import { Field, FieldState } from './Field';
 import { FileField } from './FileField';
 import { Form } from './Form';
 
-type RawFormShape = {
-  count?: ZodTypeAny;
-  moduleType?: ZodTypeAny;
-  cabelCrossSection?: ZodTypeAny;
-  inverter?: ZodTypeAny;
-  input?: ZodTypeAny;
-  file?: ZodTypeAny;
+type RawFormShapeExistingInverter = {
+  inverter: ZodTypeAny;
+  input: ZodTypeAny;
+  file: ZodTypeAny;
 };
 
+type RawFormShapeNewInverter = {
+  model: ZodTypeAny,
+  newInput: ZodTypeAny,
+  file: ZodTypeAny,
+}
+
 export type StringInverterDialogProps<
-  ResolverType extends ZodObject<RawFormShape>,
+  ResolverTypeExistingInverter extends ZodObject<RawFormShapeExistingInverter>,
+  ResolverTypeNewInverter extends ZodObject<RawFormShapeNewInverter>
 > = {
   siteId: number;
   open: DialogProps['open'];
   onClose: (reset: () => void) => void;
   className?: string;
-  onSubmit: (values: z.infer<ResolverType>, resetForm: () => void) => void;
-  resolver: ResolverType;
+  onSubmit: {
+    existingInverter: (values: z.infer<ResolverTypeExistingInverter>, resetForm: () => void) => void,
+    newInverter: (values: z.infer<ResolverTypeNewInverter>, resetForm: () => void) => void
+  }
+  resolver: { existingInverter: ResolverTypeExistingInverter, newInverter: ResolverTypeNewInverter };
 };
 
 export const StringInverterDialog = <
-  ResolverType extends ZodObject<RawFormShape>,
+  ResolverTypeExistingInverter extends ZodObject<RawFormShapeExistingInverter>,
+  ResolverTypeNewInverter extends ZodObject<RawFormShapeNewInverter>,
 >({
   open,
   onClose,
@@ -55,10 +63,10 @@ export const StringInverterDialog = <
   onSubmit,
   resolver,
   siteId,
-}: StringInverterDialogProps<ResolverType>) => {
+}: StringInverterDialogProps<ResolverTypeExistingInverter, ResolverTypeNewInverter>) => {
   const intl = useIntl();
   const method = useForm({
-    resolver: zodResolver(resolver),
+    resolver: zodResolver(resolver.existingInverter),
   });
 
   const { inverterModelsQuery, invertersQuery } = useInverters(siteId);
@@ -102,14 +110,13 @@ export const StringInverterDialog = <
     )[0];
 
     return selectedInverter.mpp_trackers.map((input, idx) => ({
-      key: input.id,
+      key: input.id.toString(),
       label: (idx + 1).toString(),
       icon: 'Chip',
       value: input.id
     }));
   }, [watchInverter, inverters]);
   //
-
 
   //  Form with creation of new inverter 
   const inverterManufacturesOptions: AutocompleteSelectOption[] | [] = useMemo(() => {
@@ -179,7 +186,7 @@ export const StringInverterDialog = <
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
         <Form
-          onSubmit={handleSubmit(values => onSubmit(values, reset))}
+          onSubmit={handleSubmit(values => onSubmit.existingInverter(values, reset))}
           className="flex flex-col gap-5"
           {...method}
         >
