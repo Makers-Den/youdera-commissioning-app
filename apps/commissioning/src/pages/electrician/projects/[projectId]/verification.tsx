@@ -6,8 +6,7 @@ import { protectRoute } from '@src/middlewares/protectRoute';
 import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { useCallback, useRef } from 'react';
-import { Suspense } from 'react';
+import { Suspense,useCallback, useRef  } from 'react';
 import { useIntl } from 'react-intl';
 
 const VerificationPage = ({

@@ -53,8 +53,6 @@ const ContactProjectManagerDialog = ({ isOpen, siteId, onClose }: ContactProject
                   } catch (err) {
                     // eslint-disable-next-line no-console
                     console.error("Failed contacting pm", err);
-                  } finally {
-                    onClose();
                   }
                 }}
                 isLoading={contactSiteProjectManagerMutation.isLoading}
@@ -74,7 +72,6 @@ const ContactProjectManagerDialog = ({ isOpen, siteId, onClose }: ContactProject
             </Button>
           </div>}
       </DialogContent>
-
     </Dialog>
   )
 }
