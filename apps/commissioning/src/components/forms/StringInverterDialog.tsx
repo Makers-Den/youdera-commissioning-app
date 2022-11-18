@@ -9,10 +9,7 @@ import { useInverters } from '@src/integrations/youdera/inverters/hooks/useInver
 import { useStringDetailsQuery } from '@src/integrations/youdera/stringsApiHooks';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  FieldValues,
   useForm,
-  UseFormRegister,
-  useWatch,
 } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -24,7 +21,6 @@ import {
   DialogTitle,
 } from 'ui/dialogs/Dialog';
 import {
-  AutocompleteSelect,
   AutocompleteSelectOption,
 } from 'ui/select/AutocompleteSelect';
 import { IconName, SvgIcon } from 'ui/svg-icons/SvgIcon';
@@ -32,7 +28,7 @@ import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z, ZodObject, ZodTypeAny } from 'zod';
 
-import { Field, FieldState } from './Field';
+import { AutocompleteSelectField } from './AutocompleteField'
 import { FileField } from './FileField';
 import { Form } from './Form';
 import { SelectField } from './SelectField';
@@ -48,7 +44,14 @@ type RawFormShapeNewInverter = {
   newInput: ZodTypeAny;
   file: ZodTypeAny;
 };
-
+export type InverterDefaultValuesProps = {
+  inverter: AutocompleteSelectOption,
+  input: AutocompleteSelectOption,
+  file: ApiFile,
+  manufacturer: AutocompleteSelectOption,
+  model: AutocompleteSelectOption,
+  newInput: AutocompleteSelectOption,
+}
 export type StringInverterDialogProps<
   ResolverTypeExistingInverter extends ZodObject<RawFormShapeExistingInverter>,
   ResolverTypeNewInverter extends ZodObject<RawFormShapeNewInverter>,
@@ -72,6 +75,7 @@ export type StringInverterDialogProps<
     newInverter: ResolverTypeNewInverter;
   };
   modifiedStringId?: number;
+  defaultValues?: InverterDefaultValuesProps
 };
 
 const fileValueMapper = (file: ApiFile | File) => (
@@ -92,6 +96,7 @@ export const StringInverterDialog = <
   resolver,
   siteId,
   modifiedStringId,
+  defaultValues
 }: StringInverterDialogProps<
   ResolverTypeExistingInverter,
   ResolverTypeNewInverter
@@ -104,53 +109,13 @@ export const StringInverterDialog = <
   const stringDetails = stringDetailsQuery.data as String;
 
   const method = useForm({
+    defaultValues,
     resolver: zodResolver(
       isWithNewInverter ? resolver.newInverter : resolver.existingInverter,
-    ),
-    defaultValues: modifiedStringId
-      ? {
-        inverter: {
-          key: '53',
-          label: ' - ',
-          icon: 'Table',
-        },
-        input: {
-          key: '97',
-          label: '1',
-          icon: 'Chip',
-        },
-        file: {
-          name: 'team.png',
-          type: 'image',
-          size: 38662,
-          visible_for_customer: false,
-          url: 'http://5.189.174.75:8096/file/43/team.png?expires=1668775820&signature=c45a4ff5744cdc80e6055b79ce3bf34d81bcc13d78545d25af228b1d08433940',
-          url_thumb:
-            'http://5.189.174.75:8096/thumb/43/team.png?expires=1668775820&signature=a040e75ac99b6d148957ab02d8b9736c1998f92ff62c0b8cd21e45fea35bb7f2',
-          created_at: '2022-11-17T15:09:33+00:00',
-          updated_at: '2022-11-17T15:09:33+00:00',
-          deleted_at: null,
-        },
-        manufacturer: {
-          key: '97',
-          label: '1',
-          icon: 'Chip',
-        },
-        newInput: {
-          key: '97',
-          label: '1',
-          icon: 'Chip',
-        },
-        model: {
-          key: '97',
-          label: '1',
-          icon: 'Chip',
-        },
-      }
-      : undefined,
+    )
   });
-  const { handleSubmit, reset, formState, watch, control, getValues } = method;
-
+  const { handleSubmit, reset, formState, watch, getValues } = method;
+  console.log('????', getValues())
   const { inverterModelsQuery, invertersQuery } = useInverters(siteId);
   const inverters = invertersQuery.data as Inverter[];
   const inverterModels = inverterModelsQuery.data as InverterModel[];
@@ -179,26 +144,8 @@ export const StringInverterDialog = <
   );
   // *
 
-  const defaultInverter = () =>
-    stringDetails
-      ? inverterOptions.filter(
-        inverterOption =>
-          inverterOption.key ===
-          inverters
-            .filter(
-              inverter =>
-                !!inverter.mpp_trackers.filter(
-                  input => input.id === stringDetails.mpp_tracker.id,
-                )[0],
-            )[0]
-            .id.toString(),
-      )[0]
-      : undefined;
-
-  const watchInverter = useWatch({
-    name: 'inverter',
-    control,
-  });
+  const watchInverter = watch('inverter');
+  const watchInput = watch('input');
 
   const watchManufacturer = watch('manufacturer');
   const watchModel = watch('model');
@@ -222,18 +169,7 @@ export const StringInverterDialog = <
       value: input.id,
     }));
   }, [watchInverter, inverters]);
-
-  const defaultInput = () =>
-    stringDetails
-      ? inverterInputsOptions.filter(
-        input => input.key === stringDetails.mpp_tracker.id.toString(),
-      )[0]
-      : undefined;
-
-  const watchInput = watch('input');
-
-  console.log({ watchInput });
-
+  console.log({ inverterInputsOptions })
   // * Form with creation of new inverter
   const inverterManufacturesOptions: AutocompleteSelectOption[] | [] =
     useMemo(() => {
@@ -283,6 +219,7 @@ export const StringInverterDialog = <
     }, [inverterModels, watchModel]);
   // *
 
+  console.log(getValues())
   return (
     <Dialog
       open={open}
@@ -317,35 +254,17 @@ export const StringInverterDialog = <
           className="flex flex-col gap-5"
           {...method}
         >
-          <Field name="inverter">
-            {(
-              register: UseFormRegister<FieldValues>,
-              fieldState: FieldState,
-            ) => {
-              const { onChange, ...rest } = register('inverter', {
-                setValueAs: v => v || undefined,
-              });
-              return (
-                <AutocompleteSelect
-                  label={intl.formatMessage({
-                    defaultMessage: 'Select inverter',
-                  })}
-                  placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                  noOptionsString={intl.formatMessage({
-                    defaultMessage: 'Nothing found.',
-                  })}
-                  options={inverterOptions}
-                  onChange={value =>
-                    onChange({
-                      target: { value, name: 'inverter', key: value?.key },
-                    })
-                  }
-                  {...rest}
-                  validity={fieldState.invalid ? 'invalid' : undefined}
-                />
-              );
-            }}
-          </Field>
+          <AutocompleteSelectField
+            name='inverter'
+            label={intl.formatMessage({
+              defaultMessage: 'Select inverter',
+            })}
+            placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+            noOptionsString={intl.formatMessage({
+              defaultMessage: 'Nothing found.',
+            })}
+            options={inverterOptions}
+          />
           {watchInverter &&
             (watchInverter.key !== '-1' ? (
               <SelectField

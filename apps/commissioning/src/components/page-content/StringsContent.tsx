@@ -253,7 +253,19 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
         label: (defaultInput.id + 1).toString(),
         icon: 'Chip'
       },
-      file: defaultFile
+      file: defaultFile,
+      manufacturer: {
+        label: "",
+        key: "",
+      },
+      model: {
+        label: "",
+        key: "",
+      },
+      newInput: {
+        label: "",
+        key: "",
+      },
     }
   }, [inverters, stringDetails])
   return (

@@ -25,12 +25,13 @@ export interface FieldProps {
 export const Field: FC<FieldProps> = ({ children, name }) => {
   const { register, formState, getFieldState, unregister } = useFormContext();
 
-  useEffect(
-    () => () => {
-      unregister(name);
-    },
-    [unregister, name],
-  );
+  // ? This made that getValues() didn't show defaultValues on initial render
+  // useEffect(
+  //   () => () => {
+  //     unregister(name);
+  //   },
+  //   [unregister, name],
+  // );
 
   return (
     <div className="w-full">
