@@ -12,7 +12,7 @@ import {
   DialogTitle,
 } from 'ui/dialogs/Dialog';
 import { NumberInput } from 'ui/inputs/NumberInput';
-import { Select, SelectOption } from 'ui/select/Select';
+import { SelectOption } from 'ui/select/Select';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Label } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
