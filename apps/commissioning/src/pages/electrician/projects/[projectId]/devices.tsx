@@ -7,8 +7,7 @@ import { routes } from '@src/utils/routes';
 import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { Suspense } from 'react';
+import { Suspense,useState  } from 'react';
 import { useIntl } from 'react-intl';
 import { ButtonProps } from 'ui/buttons/Button';
 

@@ -1,5 +1,5 @@
 import { youderaApiInstance } from "./api-instances/youdera";
-import { ApiFile, Battery, CreateInverterRequestBody, DataResponse, Inverter, Meter, VerificationTestResult } from "./apiTypes";
+import { ApiFile, Battery, CreateInverterRequestBody, DataResponse, Inverter, Meter, String, VerificationTestResult } from "./apiTypes";
 import { Site } from "./sites/types";
 
 export const getUncommissionedSites = async () => {
@@ -11,17 +11,24 @@ export const getUncommissionedSites = async () => {
 
 export const getSite = async (siteId: string) => {
   const response = await youderaApiInstance.get<DataResponse<Site>>(
-    `/sites/${siteId}` + 
-    `?with[]=files` + 
-    `&with[]=batteries` + 
-    `&with[]=batteries.testlogs` + 
-    `&with[]=meters` + 
-    `&with[]=meters.testlogs` + 
-    `&with[]=inverters` + 
-    `&with[]=inverters.testlogs` + 
+    `/sites/${siteId}` +
+    `?with[]=files` +
+    `&with[]=batteries` +
+    `&with[]=batteries.testlogs` +
+    `&with[]=meters` +
+    `&with[]=meters.testlogs` +
+    `&with[]=inverters` +
+    `&with[]=inverters.testlogs` +
     `&with[]=inverters.mpp_trackers`,
   );
 
+  return response.data.data;
+};
+
+export const getStringDetails = async (stringId: number): Promise<String> => {
+  const response = await youderaApiInstance.get<DataResponse<String>>(
+    `strings/${stringId}?with[]=mpp_tracker&with[]=files`,
+  );
   return response.data.data;
 };
 
@@ -36,15 +43,22 @@ export const deleteBattery = async (id: number): Promise<Battery> => {
 };
 
 export const getInverters = async (siteId: number): Promise<Inverter[]> => {
-	const response = await youderaApiInstance.get<DataResponse<Site & { inverters: Inverter[] }>>(
-		`sites/${siteId}?with[]=inverters&with[]=inverters.mpp_trackers`,
-	);
-	return response.data.data.inverters;
+  const response = await youderaApiInstance.get<DataResponse<Site & { inverters: Inverter[] }>>(
+    `sites/${siteId}?with[]=inverters&with[]=inverters.mpp_trackers`,
+  );
+  return response.data.data.inverters;
+};
+
+export const getInverterDetails = async (inverterId: number): Promise<Inverter> => {
+  const response = await youderaApiInstance.get<DataResponse<Inverter>>(
+    `inverters/${inverterId}?with[]=files&with[]=mpp_trackers`,
+  );
+  return response.data.data;
 };
 
 export const createInverter = async (body: CreateInverterRequestBody): Promise<Inverter> => {
-	const response = await youderaApiInstance.post<DataResponse<Inverter>>(`/inverters`, body);
-	return response.data.data;
+  const response = await youderaApiInstance.post<DataResponse<Inverter>>(`/inverters`, body);
+  return response.data.data;
 };
 
 export const deleteInverter = async (id: number): Promise<Inverter> => {

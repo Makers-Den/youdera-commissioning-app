@@ -1,3 +1,4 @@
+
 export type DataResponse<T> = {
   data: T;
 };
@@ -95,18 +96,38 @@ export type Inverter = {
   manufacturer_name: string;
   model_name: string;
 
-  mpp_trackers?: MppTracker[];
+  mpp_trackers: MppTracker[];
   files?: ApiFile[];
 };
+export interface InverterModel {
+  id: number,
+  type: string,
+  name: string,
+  manufacturer_id: number,
+  manufacturer_name: string,
+  data: {
+    inputs: number,
+    auto_serialnumber: boolean
+  }
+}
 
 export type MppTracker = {
   id: string;
 };
 
+export interface Module {
+  id: number;
+  type: string;
+  name: string;
+  manufacturer_id: number;
+  manufacturer_name: string;
+  data: {
+    wattpeak: number;
+  };
+}
 export interface CreateInverterRequestBody {
-  serial_number: string;
+  serial_number?: string;
   site: number;
-  manufacturer: string;
   cmodel?: number;
 }
 
@@ -170,6 +191,37 @@ export interface Site {
 export interface SiteWithFiles extends Site {
   files: ApiFile[];
 }
+export interface String {
+  id: number,
+  name: string | null,
+  count: number,
+  module: number,
+  cable_cross_section: number,
+  wattpeak_per_module: number,
+  mpp_tracker: MppTracker
+  files: ApiFile[]
+  created_at: string,
+  updated_at: string,
+}
+export interface StringsOnRoof {
+  id: number,
+  name: string,
+  orientation: string,
+  inclination: number,
+  specific_yield: number,
+  strings: String[],
+  created_at: string,
+  updated_at: string,
+}
+
+export interface CreateStringRequestBody {
+  count: number,
+  roof: number,
+  module: string,
+  cable_cross_section: number
+  mpp_tracker: number;
+}
+
 
 
 export type ProjectManagerContactInfo = {

@@ -1,18 +1,19 @@
-import React, { FC } from "react";
+import React, { ReactNode } from "react";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 
-export type FormProps = {
+export type FormProps<Values extends object> = {
   className: string,
   onSubmit: (e?: React.BaseSyntheticEvent<object, any, any> | undefined) => Promise<void>
-} & UseFormReturn
+  children: ReactNode
+} & UseFormReturn<Values>
 
-export const Form: FC<React.PropsWithChildren<FormProps>> = (
+export const Form = <Values extends object>(
   {
     children,
     onSubmit,
     className,
     ...rest
-  }
+  }: FormProps<Values>
 ) => (
   <FormProvider {...rest} >
     <form
