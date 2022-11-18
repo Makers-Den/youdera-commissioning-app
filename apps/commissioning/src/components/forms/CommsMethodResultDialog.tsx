@@ -43,20 +43,16 @@ export const CommsMethodResultDialog = ({
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
-          {result.status === 'success' && (
-            <Table>
-              <Tr>
-                <Th>{intl.formatMessage({ defaultMessage: 'Serial number' })}</Th>
-                <Th>{intl.formatMessage({ defaultMessage: 'Power' })}</Th>
-              </Tr>
-              <Tr>
-                <Td>{result.serial_number || '-'}</Td>
-                <Td>{result.power || '-'}</Td>
-              </Tr>
-            </Table>
-          )}
-          {result.status === 'failed' && <BodyText>{intl.formatMessage({ defaultMessage: 'Communication method test failed.' })}</BodyText>}
-          {result.status === 'pending' && <BodyText>{intl.formatMessage({ defaultMessage: 'Communication method test result is pending.' })}</BodyText>}
+          <Table>
+            <Tr>
+              <Th>{intl.formatMessage({ defaultMessage: 'Serial number' })}</Th>
+              <Th>{intl.formatMessage({ defaultMessage: 'Power' })}</Th>
+            </Tr>
+            <Tr>
+              <Td>{result.serial_number || '-'}</Td>
+              <Td>{result.power || '-'}</Td>
+            </Tr>
+          </Table>
 
           <div className="mt-3 flex gap-5">
             <Button
