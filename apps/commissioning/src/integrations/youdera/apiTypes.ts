@@ -242,10 +242,12 @@ export interface CreateStringRequestBody {
 }
 
 export interface CreateBatteryRequest {
-  name: 'DEVICE_NAME';
-  type: 'DEVICE_TYPE';
-  serial_number: '123456789';
-  site: 3;
+  manufacturer: string;
+  model: string;
+  serial_number: string;
+  cmodel: number;
+  site: number;
+  inverter_id: number;
 }
 
 export interface AddFileToBatteryRequest {

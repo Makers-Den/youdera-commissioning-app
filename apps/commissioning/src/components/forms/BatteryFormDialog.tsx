@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
+import { Suspense } from 'react';
 import { useForm } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -16,10 +16,11 @@ import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
 
+import { BatteryModelsSelectField } from './BatteryModelsSelectField';
 import { Field } from './Field';
 import { FileField } from './FileField';
 import { Form } from './Form';
-import { InverterModelSelectFields } from './InverterModelSelectFields';
+import { InverterInstancesSelectField } from './InverterInstancesSelectField';
 
 const validation = z.object({
   manufacturer: z.object({ key: z.string(), label: z.string() }),
@@ -29,6 +30,7 @@ const validation = z.object({
     dependentKey: z.string(),
   }),
   serialNumber: z.string(),
+  inverter: z.object({ key: z.string(), label: z.string() }),
   file: z.any(),
 });
 
@@ -41,6 +43,8 @@ export type BatteryFormDialogProps = {
   onSubmit: (values: FormValues, resetForm: () => void) => void;
   title: string;
   submitButtonTitle: string;
+  siteId: number;
+  defaultValues?: Partial<FormValues>;
 };
 
 export const BatteryFormDialog = ({
@@ -50,22 +54,31 @@ export const BatteryFormDialog = ({
   onSubmit,
   title,
   submitButtonTitle,
+  siteId,
+  defaultValues,
 }: BatteryFormDialogProps) => {
   const intl = useIntl();
 
   const method = useForm({
     resolver: zodResolver(validation),
+    defaultValues,
   });
 
   const { handleSubmit, reset, formState, watch } = method;
 
-  const [model, serialNumber, file] = watch(['model', 'serialNumber', 'file']);
+  const [model, serialNumber, inverter, file] = watch([
+    'model',
+    'serialNumber',
+    'inverter',
+    'file',
+  ]);
 
   const showFields = {
     first: true,
     second: !!model,
     third: !!model && !!serialNumber,
-    fourth: !!model && !!serialNumber && !!file,
+    fourth: !!model && !!serialNumber && !!inverter,
+    fifth: !!model && !!serialNumber && !!inverter && !!file,
   };
 
   return (
@@ -90,8 +103,12 @@ export const BatteryFormDialog = ({
           className="flex flex-col gap-5"
           {...method}
         >
-          {/* TODO component for battery models */}
-          {showFields.first && <InverterModelSelectFields />}
+          {showFields.first && (
+            //TODO fallback for selects
+            <Suspense>
+              <BatteryModelsSelectField />
+            </Suspense>
+          )}
           {showFields.second && (
             <Field name="serialNumber">
               {(register, fieldState) => (
@@ -109,8 +126,13 @@ export const BatteryFormDialog = ({
               )}
             </Field>
           )}
-          {/* TODO select for battery instances */}
           {showFields.third && (
+            <Suspense>
+              <InverterInstancesSelectField siteId={siteId} />
+            </Suspense>
+          )}
+
+          {showFields.fourth && (
             <FileField name="file">
               <div className="flex items-center gap-4">
                 <SvgIcon name="Camera" className="w-8 text-green-400" />
@@ -140,7 +162,7 @@ export const BatteryFormDialog = ({
               </div>
             </FileField>
           )}
-          {showFields.fourth && (
+          {showFields.fifth && (
             <div className="mt-3 flex gap-5">
               <Button
                 variant="additional-gray"

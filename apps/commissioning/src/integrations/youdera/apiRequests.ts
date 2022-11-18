@@ -157,10 +157,10 @@ export const getBattery = async (id: number): Promise<Battery> => {
 export const createBattery = async (body: CreateBatteryRequest) => {
   const response = await youderaApiInstance.post<DataResponse<Battery>>(
     `/batteries`,
-    body,
+    { ...body, name: 'Default' },
   );
 
-  return response.data;
+  return response.data.data;
 };
 export const getBatteryVerificationGuide = async (
   id: number,

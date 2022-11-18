@@ -1,17 +1,29 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
+  addFileToBattery,
   createBattery,
   deleteBattery,
   executeBatteryVerification,
   getBatteryVerificationGuide,
 } from './apiRequests';
+import { CreateBatteryRequest } from './apiTypes';
 import { QueryKeys } from './enums/queryKeys';
 
 export const useBatteryMutations = (siteId: number) => {
   const queryClient = useQueryClient();
 
-  const createBatteryMutation = useMutation(createBattery, {
+  const createBatteryMutation = useMutation(
+    (body: Omit<CreateBatteryRequest, 'site'>) =>
+      createBattery({ site: siteId, ...body }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
+      },
+    },
+  );
+
+  const addFileToBatteryMutation = useMutation(addFileToBattery, {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
     },
@@ -40,6 +52,7 @@ export const useBatteryMutations = (siteId: number) => {
   );
 
   return {
+    addFileToBatteryMutation,
     deleteBatteryMutation,
     executeBatteryVerificationMutation,
     createBatteryMutation,
