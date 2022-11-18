@@ -21,6 +21,7 @@ import { z } from 'zod';
 import { Field } from './Field';
 import { Form } from './Form';
 import { IpAddressInput } from './IpAddressInput';
+import { SelectField } from './SelectField';
 
 const validation = z.object({
   method: z.object({ key: z.string(), label: z.string() }),
@@ -98,18 +99,11 @@ export const CommsMethodFormDialog = ({
           )}
           className="flex flex-col gap-5"
         >
-          <Controller
-            name="method"
-            control={control}
-            render={
-              ({ field }) =>
-                <Select
-                  {...field}
-                  options={methodOptions}
-                  placeholder={intl.formatMessage({ defaultMessage: 'Select method' })}
-                  label={intl.formatMessage({ defaultMessage: 'Select method' })}
-                />
-            }
+          <SelectField
+            name="method"    
+            options={methodOptions}
+            placeholder={intl.formatMessage({ defaultMessage: 'Select method' })}
+            label={intl.formatMessage({ defaultMessage: 'Select method' })}
           />
 
           {methodOption?.key === 'fixed_ip' && (

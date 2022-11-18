@@ -9,8 +9,7 @@ import {
   DialogTitle,
 } from 'ui/dialogs/Dialog';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
-import { Table, Td, Th, Tr } from 'ui/table/Table';
-import { BodyText } from 'ui/typography/Typography';
+import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 import clsxm from 'ui/utils/clsxm';
 
 export type CommsMethodResultDialogProps = {
@@ -27,7 +26,7 @@ export const CommsMethodResultDialog = ({
   result,
 }: CommsMethodResultDialogProps) => {
   const intl = useIntl();
- 
+
   return (
     <Dialog
       open={open}
@@ -43,32 +42,36 @@ export const CommsMethodResultDialog = ({
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
-          <Table>
+        <Table>
+          <Thead>
             <Tr>
               <Th>{intl.formatMessage({ defaultMessage: 'Serial number' })}</Th>
               <Th>{intl.formatMessage({ defaultMessage: 'Power' })}</Th>
             </Tr>
+          </Thead>
+          <Tbody>
             <Tr>
               <Td>{result.serial_number || '-'}</Td>
               <Td>{result.power || '-'}</Td>
             </Tr>
-          </Table>
+          </Tbody>
+        </Table>
 
-          <div className="mt-3 flex gap-5">
-            <Button
-              variant="additional-gray"
-              onClick={onClose}
-            >
-              {intl.formatMessage({ defaultMessage: 'Cancel' })}
-            </Button>
-            <Button
-              variant="main-green"
-              className="flex-1"
-              onClick={onClose}
-            >
-              {intl.formatMessage({ defaultMessage: "Complete" })}
-            </Button>
-          </div>
+        <div className="mt-3 flex gap-5">
+          <Button
+            variant="additional-gray"
+            onClick={onClose}
+          >
+            {intl.formatMessage({ defaultMessage: 'Cancel' })}
+          </Button>
+          <Button
+            variant="main-green"
+            className="flex-1"
+            onClick={onClose}
+          >
+            {intl.formatMessage({ defaultMessage: "Complete" })}
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );
