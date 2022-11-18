@@ -2,17 +2,15 @@ import { SVGProps } from 'react';
 
 export function BatteryRect(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" {...props}>
-      <rect x="1.27832" y="1.06714" width="24" height="24" rx="4.5" stroke="#5CB85C" />
-      <line x1="10.0283" y1="7.73389" x2="10.0283" y2="19.2339" stroke="#5CB85C" strokeLinecap="round" />
-      <line x1="18.7783" y1="7.73389" x2="18.7783" y2="19.2339" stroke="#5CB85C" strokeLinecap="round" />
-      <line x1="16.6953" y1="10.6504" x2="16.6953" y2="16.3171" stroke="#5CB85C" strokeLinecap="round" />
-      <line x1="7.94531" y1="10.6504" x2="7.94531" y2="16.3171" stroke="#5CB85C" strokeLinecap="round" />
-      <line x1="7.86133" y1="13.5671" x2="0.777995" y2="13.5671" stroke="#5CB85C" />
-      <line x1="25.3613" y1="13.5671" x2="18.6947" y2="13.5671" stroke="#5CB85C" />
-      <rect x="1.27832" y="1.06714" width="24" height="24" rx="4.5" stroke="#5CB85C" />
-      <line x1="25.3613" y1="13.5671" x2="18.6947" y2="13.5671" stroke="#5CB85C" />
-      <line x1="15.7783" y1="13.5671" x2="10.3617" y2="13.5671" stroke="#5CB85C" strokeDasharray="4 4" />
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" {...props}>
+      <rect x="0.5" y="0.5" width="21" height="21" rx="3.97826" fill="#D3D5DA" stroke="#D3D5DA" />
+      <line x1="7.64004" y1="4.9999" x2="7.64004" y2="16.9999" stroke="#6D7381" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="16.4398" y1="4.9999" x2="16.4398" y2="16.9999" stroke="#6D7381" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="13.7997" y1="7.64004" x2="13.7997" y2="14.36" stroke="#6D7381" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="4.9999" y1="7.64004" x2="4.9999" y2="14.36" stroke="#6D7381" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="4.78003" y1="11.0601" x2="2.26003" y2="11.0601" stroke="#6D7381" strokeLinecap="round" />
+      <line x1="19.74" y1="11.0601" x2="17.22" y2="11.0601" stroke="#6D7381" strokeLinecap="round" />
+      <line x1="11.8201" y1="11.0601" x2="9.30007" y2="11.0601" stroke="#6D7381" strokeLinecap="round" strokeDasharray="1 1.6" />
     </svg>
   );
 }

@@ -1,6 +1,5 @@
 import React, { SVGProps } from 'react';
 import {
-  FaBatteryFull,
   FaCalendarAlt,
   FaCheck,
   FaEnvelope,
@@ -11,6 +10,7 @@ import {
   FaUnlockAlt,
 } from 'react-icons/fa';
 
+import { Battery } from './icons/Battery';
 import { BatteryRect } from './icons/BatteryRect';
 import { Camera } from './icons/Camera';
 import { CaretDown } from './icons/CaretDown';
@@ -51,7 +51,7 @@ const iconMap = {
   Table: FaTable,
   Chip: FaMicrochip,
   Meter,
-  Battery: BatteryRect,
+  Battery,
   Inverter,
   ChevronDown,
   Settings,
