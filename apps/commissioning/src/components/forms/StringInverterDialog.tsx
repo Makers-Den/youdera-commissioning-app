@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
+  ApiFile,
   Inverter,
   InverterModel,
   String,
@@ -7,7 +8,12 @@ import {
 import { useInverters } from '@src/integrations/youdera/inverters/hooks/useInverters';
 import { useStringDetailsQuery } from '@src/integrations/youdera/stringsApiHooks';
 import React, { useEffect, useMemo, useState } from 'react';
-import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
+import {
+  FieldValues,
+  useForm,
+  UseFormRegister,
+  useWatch,
+} from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import {
@@ -21,7 +27,6 @@ import {
   AutocompleteSelect,
   AutocompleteSelectOption,
 } from 'ui/select/AutocompleteSelect';
-import { Select } from 'ui/select/Select';
 import { IconName, SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
@@ -30,6 +35,7 @@ import { z, ZodObject, ZodTypeAny } from 'zod';
 import { Field, FieldState } from './Field';
 import { FileField } from './FileField';
 import { Form } from './Form';
+import { SelectField } from './SelectField';
 
 type RawFormShapeExistingInverter = {
   inverter: ZodTypeAny;
@@ -68,6 +74,13 @@ export type StringInverterDialogProps<
   modifiedStringId?: number;
 };
 
+const fileValueMapper = (file: ApiFile | File) => (
+  {
+    name: file.name,
+    type: file.type,
+    url: file instanceof File ? URL.createObjectURL(file) : file.url
+  }
+)
 export const StringInverterDialog = <
   ResolverTypeExistingInverter extends ZodObject<RawFormShapeExistingInverter>,
   ResolverTypeNewInverter extends ZodObject<RawFormShapeNewInverter>,
@@ -93,27 +106,57 @@ export const StringInverterDialog = <
   const method = useForm({
     resolver: zodResolver(
       isWithNewInverter ? resolver.newInverter : resolver.existingInverter,
-    )
+    ),
+    defaultValues: modifiedStringId
+      ? {
+        inverter: {
+          key: '53',
+          label: ' - ',
+          icon: 'Table',
+        },
+        input: {
+          key: '97',
+          label: '1',
+          icon: 'Chip',
+        },
+        file: {
+          name: 'team.png',
+          type: 'image',
+          size: 38662,
+          visible_for_customer: false,
+          url: 'http://5.189.174.75:8096/file/43/team.png?expires=1668775820&signature=c45a4ff5744cdc80e6055b79ce3bf34d81bcc13d78545d25af228b1d08433940',
+          url_thumb:
+            'http://5.189.174.75:8096/thumb/43/team.png?expires=1668775820&signature=a040e75ac99b6d148957ab02d8b9736c1998f92ff62c0b8cd21e45fea35bb7f2',
+          created_at: '2022-11-17T15:09:33+00:00',
+          updated_at: '2022-11-17T15:09:33+00:00',
+          deleted_at: null,
+        },
+        manufacturer: {
+          key: '97',
+          label: '1',
+          icon: 'Chip',
+        },
+        newInput: {
+          key: '97',
+          label: '1',
+          icon: 'Chip',
+        },
+        model: {
+          key: '97',
+          label: '1',
+          icon: 'Chip',
+        },
+      }
+      : undefined,
   });
-  const { handleSubmit, reset, formState, watch } = method;
+  const { handleSubmit, reset, formState, watch, control, getValues } = method;
 
   const { inverterModelsQuery, invertersQuery } = useInverters(siteId);
   const inverters = invertersQuery.data as Inverter[];
   const inverterModels = inverterModelsQuery.data as InverterModel[];
-  const watchInverter = watch('inverter');
-  const watchInput = watch('input');
   const watchFile = watch('file');
 
-  const watchManufacturer = watch('manufacturer');
-  const watchModel = watch('model');
-  const watchNewInput = watch('newInput');
-
-
-  useEffect(() => {
-    if (watchInverter) setIsWithNewInverter(watchInverter.key === '-1');
-  }, [watchInverter]);
-
-  // *  Form with existing inverter
+  // * Intersection input
   const inverterOptions: AutocompleteSelectOption[] | [] = useMemo(
     () =>
       [
@@ -134,6 +177,36 @@ export const StringInverterDialog = <
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [inverters],
   );
+  // *
+
+  const defaultInverter = () =>
+    stringDetails
+      ? inverterOptions.filter(
+        inverterOption =>
+          inverterOption.key ===
+          inverters
+            .filter(
+              inverter =>
+                !!inverter.mpp_trackers.filter(
+                  input => input.id === stringDetails.mpp_tracker.id,
+                )[0],
+            )[0]
+            .id.toString(),
+      )[0]
+      : undefined;
+
+  const watchInverter = useWatch({
+    name: 'inverter',
+    control,
+  });
+
+  const watchManufacturer = watch('manufacturer');
+  const watchModel = watch('model');
+  const watchNewInput = watch('newInput');
+
+  useEffect(() => {
+    if (watchInverter) setIsWithNewInverter(watchInverter.key === '-1');
+  }, [watchInverter]);
 
   const inverterInputsOptions: AutocompleteSelectOption[] | [] = useMemo(() => {
     if (!watchInverter?.key || watchInverter?.key === '-1') return [];
@@ -149,7 +222,17 @@ export const StringInverterDialog = <
       value: input.id,
     }));
   }, [watchInverter, inverters]);
-  // *
+
+  const defaultInput = () =>
+    stringDetails
+      ? inverterInputsOptions.filter(
+        input => input.key === stringDetails.mpp_tracker.id.toString(),
+      )[0]
+      : undefined;
+
+  const watchInput = watch('input');
+
+  console.log({ watchInput });
 
   // * Form with creation of new inverter
   const inverterManufacturesOptions: AutocompleteSelectOption[] | [] =
@@ -170,8 +253,7 @@ export const StringInverterDialog = <
     }, [inverterModels]);
 
   const inverterModelsOptions: AutocompleteSelectOption[] | [] = useMemo(() => {
-    if (!watchManufacturer || watchManufacturer?.length < 1 || !inverterModels)
-      return [];
+    if (!watchManufacturer || !inverterModels) return [];
     return inverterModels
       .filter(
         model => model.manufacturer_id.toString() === watchManufacturer.key,
@@ -189,7 +271,7 @@ export const StringInverterDialog = <
       if (!watchModel || !inverterModels) return [];
       const numberOfInputs = inverterModels.filter(
         model => model.id.toString() === watchModel.key,
-      )[0].data.inputs;
+      )[0]?.data.inputs;
       return Array(numberOfInputs)
         .fill(0)
         .map((_, idx) => ({
@@ -201,19 +283,6 @@ export const StringInverterDialog = <
     }, [inverterModels, watchModel]);
   // *
 
-  // * Default fields
-  const defaultInverter = () => stringDetails ?
-    inverterOptions.filter(inverterOption => inverterOption.key ===
-      inverters.filter(
-        inverter =>
-          !!inverter.mpp_trackers.filter(
-            input => input.id === stringDetails.mpp_tracker.id,
-          )[0],
-      )[0].id.toString()
-    )[0] : undefined
-  const defaultInput = () => inverterInputsOptions.filter(input => input.key === stringDetails.mpp_tracker.id)[0];
-  // * 
-  console.log({ inverterInputsOptions, stringDetails })
   return (
     <Dialog
       open={open}
@@ -222,9 +291,15 @@ export const StringInverterDialog = <
     >
       <DialogHeader>
         <DialogTitle
-          title={intl.formatMessage({
-            defaultMessage: 'Add String',
-          })}
+          title={
+            modifiedStringId
+              ? intl.formatMessage({
+                defaultMessage: 'Modify String',
+              })
+              : intl.formatMessage({
+                defaultMessage: 'Add String',
+              })
+          }
         />
         <SvgIcon
           name="Close"
@@ -265,7 +340,6 @@ export const StringInverterDialog = <
                       target: { value, name: 'inverter', key: value?.key },
                     })
                   }
-                  value={defaultInverter()}
                   {...rest}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />
@@ -274,121 +348,55 @@ export const StringInverterDialog = <
           </Field>
           {watchInverter &&
             (watchInverter.key !== '-1' ? (
-              <Field name="input">
-                {(
-                  register: UseFormRegister<FieldValues>,
-                  fieldState: FieldState,
-                ) => {
-                  const { onChange, ...rest } = register('input', {
-                    setValueAs: v => v || undefined,
-                  });
-                  return (
-                    <AutocompleteSelect
-                      label={intl.formatMessage({
-                        defaultMessage: 'Input',
-                      })}
-                      placeholder={intl.formatMessage({
-                        defaultMessage: 'Select',
-                      })}
-                      noOptionsString={intl.formatMessage({
-                        defaultMessage: 'Nothing found.',
-                      })}
-                      options={inverterInputsOptions}
-                      onChange={value =>
-                        onChange({ target: { value, name: 'input' } })
-                      }
-                      {...rest}
-                      validity={fieldState.invalid ? 'invalid' : undefined}
-                    />
-                  );
-                }}
-              </Field>
+              <SelectField
+                name="input"
+                options={inverterInputsOptions}
+                label={intl.formatMessage({
+                  defaultMessage: 'Input',
+                })}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Select',
+                })}
+                wrapperClassName="z-40"
+              />
             ) : (
               <>
-                <Field name="manufacturer">
-                  {(
-                    register: UseFormRegister<FieldValues>,
-                    fieldState: FieldState,
-                  ) => {
-                    const { onChange, ...rest } = register('manufacturer', {
-                      setValueAs: v => v || '',
-                    });
-                    return (
-                      <Select
-                        wrapperClassName="z-30"
-                        label={intl.formatMessage({
-                          defaultMessage: 'Manufacturer',
-                        })}
-                        placeholder={intl.formatMessage({
-                          defaultMessage: 'Select',
-                        })}
-                        options={inverterManufacturesOptions}
-                        onChange={value =>
-                          onChange({ target: { value, name: 'manufacturer' } })
-                        }
-                        {...rest}
-                        validity={fieldState.invalid ? 'invalid' : undefined}
-                      />
-                    );
-                  }}
-                </Field>
+                <SelectField
+                  name="manufacturer"
+                  options={inverterManufacturesOptions}
+                  label={intl.formatMessage({
+                    defaultMessage: 'Manufacturer',
+                  })}
+                  placeholder={intl.formatMessage({
+                    defaultMessage: 'Select',
+                  })}
+                  wrapperClassName="z-30"
+                />
                 {watchManufacturer && (
-                  <Field name="model">
-                    {(
-                      register: UseFormRegister<FieldValues>,
-                      fieldState: FieldState,
-                    ) => {
-                      const { onChange, ...rest } = register('model', {
-                        setValueAs: v => v || '',
-                      });
-                      return (
-                        <Select
-                          wrapperClassName="z-20"
-                          label={intl.formatMessage({
-                            defaultMessage: 'Inverter Model',
-                          })}
-                          placeholder={intl.formatMessage({
-                            defaultMessage: 'Select',
-                          })}
-                          options={inverterModelsOptions}
-                          onChange={value =>
-                            onChange({ target: { value, name: 'model' } })
-                          }
-                          {...rest}
-                          validity={fieldState.invalid ? 'invalid' : undefined}
-                        />
-                      );
-                    }}
-                  </Field>
+                  <SelectField
+                    name="model"
+                    options={inverterModelsOptions}
+                    label={intl.formatMessage({
+                      defaultMessage: 'Inverter Mode',
+                    })}
+                    placeholder={intl.formatMessage({
+                      defaultMessage: 'Select',
+                    })}
+                    wrapperClassName="z-20"
+                  />
                 )}
                 {watchModel && (
-                  <Field name="newInput">
-                    {(
-                      register: UseFormRegister<FieldValues>,
-                      fieldState: FieldState,
-                    ) => {
-                      const { onChange, ...rest } = register('newInput', {
-                        setValueAs: v => v || '',
-                      });
-                      return (
-                        <Select
-                          wrapperClassName="z-10"
-                          label={intl.formatMessage({
-                            defaultMessage: 'Input',
-                          })}
-                          placeholder={intl.formatMessage({
-                            defaultMessage: 'Select',
-                          })}
-                          options={inverterNewInputsOptions}
-                          onChange={value =>
-                            onChange({ target: { value, name: 'newInput' } })
-                          }
-                          {...rest}
-                          validity={fieldState.invalid ? 'invalid' : undefined}
-                        />
-                      );
-                    }}
-                  </Field>
+                  <SelectField
+                    name="newInput"
+                    options={inverterNewInputsOptions}
+                    label={intl.formatMessage({
+                      defaultMessage: 'Input',
+                    })}
+                    placeholder={intl.formatMessage({
+                      defaultMessage: 'Select',
+                    })}
+                    wrapperClassName="z-10"
+                  />
                 )}
               </>
             ))}
@@ -399,6 +407,7 @@ export const StringInverterDialog = <
                 defaultMessage: 'String test result',
               })}
               name="file"
+              valueMapper={fileValueMapper}
             >
               <div className="flex items-center gap-4">
                 <SvgIcon name="Camera" className="w-8 text-green-400" />

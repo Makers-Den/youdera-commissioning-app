@@ -14,13 +14,13 @@ import {
   DialogTitle,
 } from 'ui/dialogs/Dialog';
 import { NumberInput } from 'ui/inputs/NumberInput';
-import { Select } from 'ui/select/Select';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import clsxm from 'ui/utils/clsxm';
 import { z, ZodObject, ZodTypeAny } from 'zod';
 
 import { Field, FieldState } from './Field';
 import { Form } from './Form';
+import { SelectField } from './SelectField'
 
 type RawFormShape = {
   moduleType: ZodTypeAny;
@@ -53,7 +53,7 @@ export const StringModuleTypeDialog = <
 
   const stringDetailsQuery = useStringDetailsQuery(modifiedStringId ?? -1);
   const stringDetails = stringDetailsQuery.data as String;
-  console.log({ stringDetails })
+
   // * Options
   const { modulesQuery } = useGetModules();
   const modules = modulesQuery.data as Module[];
@@ -62,18 +62,21 @@ export const StringModuleTypeDialog = <
     label: module.name,
     value: module,
   }));
+
   const cableCrossSectionOptions = [
     { key: '4', label: '4 mm²' },
     { key: '6', label: '6 mm²' },
     { key: '10', label: '10 mm²' },
   ];
   // *
-  const defaultModuleOption = () => moduleOptions.filter(
-    module => module.key === stringDetails.module.toString(),
-  )[0];
-  const defaultCableCrossSectionOption = () => cableCrossSectionOptions.filter(
-    section => section.key === stringDetails.cable_cross_section.toString(),
-  )[0];
+  const defaultModuleOption = () =>
+    moduleOptions.filter(
+      module => module.key === stringDetails.module.toString(),
+    )[0];
+  const defaultCableCrossSectionOption = () =>
+    cableCrossSectionOptions.filter(
+      section => section.key === stringDetails.cable_cross_section.toString(),
+    )[0];
   const method = useForm({
     resolver: zodResolver(resolver),
     defaultValues: modifiedStringId
@@ -85,7 +88,7 @@ export const StringModuleTypeDialog = <
       : undefined,
   });
 
-  const { handleSubmit, reset, formState, getValues } = method;
+  const { handleSubmit, reset, formState } = method;
 
   return (
     <Dialog
@@ -95,9 +98,15 @@ export const StringModuleTypeDialog = <
     >
       <DialogHeader>
         <DialogTitle
-          title={intl.formatMessage({
-            defaultMessage: 'Add String',
-          })}
+          title={
+            modifiedStringId
+              ? intl.formatMessage({
+                defaultMessage: 'Modify String',
+              })
+              : intl.formatMessage({
+                defaultMessage: 'Add String',
+              })
+          }
         />
         <SvgIcon
           name="Close"
@@ -111,28 +120,13 @@ export const StringModuleTypeDialog = <
           className="flex flex-col gap-5"
           {...method}
         >
-          <Field name="moduleType">
-            {(
-              register: UseFormRegister<FieldValues>,
-              fieldState: FieldState,
-            ) => {
-              const { onChange, ...rest } = register('moduleType', {
-                setValueAs: v => v || '',
-              });
-              return (
-                <Select
-                  label={intl.formatMessage({ defaultMessage: 'Module type' })}
-                  placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                  options={moduleOptions}
-                  onChange={value =>
-                    onChange({ target: { value, name: 'moduleType' } })
-                  }
-                  {...rest}
-                  validity={fieldState.invalid ? 'invalid' : undefined}
-                />
-              );
-            }}
-          </Field>
+          <SelectField
+            name='moduleType'
+            options={moduleOptions}
+            label={intl.formatMessage({ defaultMessage: 'Module type' })}
+            placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+          />
+
           <div className="flex items-center justify-center gap-5">
             <div className="flex flex-1 gap-5">
               <Field name="numberOfModules">
@@ -153,35 +147,13 @@ export const StringModuleTypeDialog = <
                   />
                 )}
               </Field>
-              <Field name="cableCrossSection">
-                {(
-                  register: UseFormRegister<FieldValues>,
-                  fieldState: FieldState,
-                ) => {
-                  const { onChange, ...rest } = register('cableCrossSection', {
-                    setValueAs: v => v || '',
-                  });
-                  return (
-                    <Select
-                      wrapperClassName="z-30"
-                      label={intl.formatMessage({
-                        defaultMessage: 'Cable cross section',
-                      })}
-                      placeholder={intl.formatMessage({
-                        defaultMessage: 'Select',
-                      })}
-                      options={cableCrossSectionOptions}
-                      onChange={value =>
-                        onChange({
-                          target: { value, name: 'cableCrossSection' },
-                        })
-                      }
-                      {...rest}
-                      validity={fieldState.invalid ? 'invalid' : undefined}
-                    />
-                  );
-                }}
-              </Field>
+              <SelectField
+                name="cableCrossSection"
+                options={cableCrossSectionOptions}
+                label={intl.formatMessage({ defaultMessage: 'Cable cross section' })}
+                placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+                wrapperClassName="z-30"
+              />
             </div>
           </div>
 
