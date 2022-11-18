@@ -1,8 +1,10 @@
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
-import { Inverter } from '@src/integrations/youdera/apiTypes';
+import { Inverter, String } from '@src/integrations/youdera/apiTypes';
 import { useInverterDetailsQuery, useInverterMutations } from '@src/integrations/youdera/inverterApiHooks';
+import { useInverters } from '@src/integrations/youdera/inverters/hooks/useInverters';
 import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
-import { Suspense, useRef, useState } from 'react';
+import { useStringDetailsQuery } from '@src/integrations/youdera/stringsApiHooks';
+import { Suspense, useMemo, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
@@ -12,6 +14,7 @@ import { z } from 'zod';
 import { ActionsDialog } from '../dialogs/ActionsDialog';
 import { DeletionDialog } from '../dialogs/DeletionDialog';
 import {
+  InverterDefaultValuesProps,
   StringInverterDialog,
   StringInverterDialogProps,
 } from '../forms/StringInverterDialog';
@@ -219,6 +222,40 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
   };
   // *
 
+  const { invertersQuery } = useInverters(siteId);
+  const inverters = invertersQuery.data as Inverter[];
+  const stringDetailsQuery = useStringDetailsQuery(selectedId ?? -1);
+  const stringDetails = stringDetailsQuery.data as String;
+
+  const stringInverterDefaultValues: InverterDefaultValuesProps | undefined = useMemo(() => {
+
+    if (!inverters || !stringDetails) return undefined;
+
+    const defaultInverter = inverters.filter(
+      inverter =>
+        !!inverter.mpp_trackers.filter(
+          input => input.id === stringDetails.mpp_tracker.id,
+        )[0],
+    )[0]
+
+    const defaultInput = stringDetails.mpp_tracker
+
+    const defaultFile = stringDetails.files[0]
+
+    return {
+      inverter: {
+        key: defaultInverter.id.toString(),
+        label: defaultInverter.name ?? ' - ',
+        icon: 'Table'
+      },
+      input: {
+        key: defaultInput.id.toString(),
+        label: (defaultInput.id + 1).toString(),
+        icon: 'Chip'
+      },
+      file: defaultFile
+    }
+  }, [inverters, stringDetails])
   return (
     <>
       <Box className="mx-3 mb-auto w-full md:mx-auto md:w-0 md:min-w-[700px]">
@@ -275,6 +312,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
             resolver={{ existingInverter: stringInverterValidation, newInverter: stringNewInverterValidation }}
             onSubmit={{ existingInverter: stringExistingInverterSubmitHandler, newInverter: stringNewInverterSubmitHandler }}
             siteId={siteId}
+            defaultValues={stringInverterDefaultValues}
           />
         </Suspense>
       )}
