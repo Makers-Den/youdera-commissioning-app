@@ -33,8 +33,8 @@ export const FileField = ({
   valueMapper = defaultValueMapper,
   ...props
 }: FileFieldProps) => {
-  const { resetField, setValue } = useFormContext();
-  const value = useWatch({ name });
+  const { resetField, setValue, formState } = useFormContext();
+  const value = useWatch({ name, defaultValue: formState.defaultValues?.[name] });
 
   const [files, setFiles] = useState<UploadedFile[]>([]);
 
