@@ -74,13 +74,11 @@ export type StringInverterDialogProps<
   modifiedStringId?: number;
 };
 
-const fileValueMapper = (file: ApiFile | File) => (
-  {
-    name: file.name,
-    type: file.type,
-    url: file instanceof File ? URL.createObjectURL(file) : file.url
-  }
-)
+const fileValueMapper = (file: ApiFile | File) => ({
+  name: file.name,
+  type: file.type,
+  url: file instanceof File ? URL.createObjectURL(file) : file.url,
+});
 export const StringInverterDialog = <
   ResolverTypeExistingInverter extends ZodObject<RawFormShapeExistingInverter>,
   ResolverTypeNewInverter extends ZodObject<RawFormShapeNewInverter>,
@@ -109,44 +107,44 @@ export const StringInverterDialog = <
     ),
     defaultValues: modifiedStringId
       ? {
-        inverter: {
-          key: '53',
-          label: ' - ',
-          icon: 'Table',
-        },
-        input: {
-          key: '97',
-          label: '1',
-          icon: 'Chip',
-        },
-        file: {
-          name: 'team.png',
-          type: 'image',
-          size: 38662,
-          visible_for_customer: false,
-          url: 'http://5.189.174.75:8096/file/43/team.png?expires=1668775820&signature=c45a4ff5744cdc80e6055b79ce3bf34d81bcc13d78545d25af228b1d08433940',
-          url_thumb:
-            'http://5.189.174.75:8096/thumb/43/team.png?expires=1668775820&signature=a040e75ac99b6d148957ab02d8b9736c1998f92ff62c0b8cd21e45fea35bb7f2',
-          created_at: '2022-11-17T15:09:33+00:00',
-          updated_at: '2022-11-17T15:09:33+00:00',
-          deleted_at: null,
-        },
-        manufacturer: {
-          key: '97',
-          label: '1',
-          icon: 'Chip',
-        },
-        newInput: {
-          key: '97',
-          label: '1',
-          icon: 'Chip',
-        },
-        model: {
-          key: '97',
-          label: '1',
-          icon: 'Chip',
-        },
-      }
+          inverter: {
+            key: '53',
+            label: ' - ',
+            icon: 'Table',
+          },
+          input: {
+            key: '97',
+            label: '1',
+            icon: 'Chip',
+          },
+          file: {
+            name: 'team.png',
+            type: 'image',
+            size: 38662,
+            visible_for_customer: false,
+            url: 'http://5.189.174.75:8096/file/43/team.png?expires=1668775820&signature=c45a4ff5744cdc80e6055b79ce3bf34d81bcc13d78545d25af228b1d08433940',
+            url_thumb:
+              'http://5.189.174.75:8096/thumb/43/team.png?expires=1668775820&signature=a040e75ac99b6d148957ab02d8b9736c1998f92ff62c0b8cd21e45fea35bb7f2',
+            created_at: '2022-11-17T15:09:33+00:00',
+            updated_at: '2022-11-17T15:09:33+00:00',
+            deleted_at: null,
+          },
+          manufacturer: {
+            key: '97',
+            label: '1',
+            icon: 'Chip',
+          },
+          newInput: {
+            key: '97',
+            label: '1',
+            icon: 'Chip',
+          },
+          model: {
+            key: '97',
+            label: '1',
+            icon: 'Chip',
+          },
+        }
       : undefined,
   });
   const { handleSubmit, reset, formState, watch, control, getValues } = method;
@@ -182,17 +180,17 @@ export const StringInverterDialog = <
   const defaultInverter = () =>
     stringDetails
       ? inverterOptions.filter(
-        inverterOption =>
-          inverterOption.key ===
-          inverters
-            .filter(
-              inverter =>
-                !!inverter.mpp_trackers.filter(
-                  input => input.id === stringDetails.mpp_tracker.id,
-                )[0],
-            )[0]
-            .id.toString(),
-      )[0]
+          inverterOption =>
+            inverterOption.key ===
+            inverters
+              .filter(
+                inverter =>
+                  !!inverter.mpp_trackers.filter(
+                    input => input.id === stringDetails.mpp_tracker.id,
+                  )[0],
+              )[0]
+              .id.toString(),
+        )[0]
       : undefined;
 
   const watchInverter = useWatch({
@@ -226,8 +224,8 @@ export const StringInverterDialog = <
   const defaultInput = () =>
     stringDetails
       ? inverterInputsOptions.filter(
-        input => input.key === stringDetails.mpp_tracker.id.toString(),
-      )[0]
+          input => input.key === stringDetails.mpp_tracker.id.toString(),
+        )[0]
       : undefined;
 
   const watchInput = watch('input');
@@ -294,11 +292,11 @@ export const StringInverterDialog = <
           title={
             modifiedStringId
               ? intl.formatMessage({
-                defaultMessage: 'Modify String',
-              })
+                  defaultMessage: 'Modify String',
+                })
               : intl.formatMessage({
-                defaultMessage: 'Add String',
-              })
+                  defaultMessage: 'Add String',
+                })
           }
         />
         <SvgIcon
@@ -439,24 +437,24 @@ export const StringInverterDialog = <
           )}
           {((watchInverter && watchInput && watchFile) ||
             (watchInverter && watchNewInput && watchFile)) && (
-              <div className="mt-3 flex gap-5">
-                <Button
-                  variant="additional-gray"
-                  className="w-full"
-                  onClick={() => onClose(reset)}
-                >
-                  {intl.formatMessage({ defaultMessage: 'Cancel' })}
-                </Button>
-                <Button
-                  variant="main-green"
-                  className="w-full"
-                  type="submit"
-                  isLoading={formState.isSubmitting}
-                >
-                  {intl.formatMessage({ defaultMessage: 'Ok' })}
-                </Button>
-              </div>
-            )}
+            <div className="mt-3 flex gap-5">
+              <Button
+                variant="additional-gray"
+                className="w-full"
+                onClick={() => onClose(reset)}
+              >
+                {intl.formatMessage({ defaultMessage: 'Cancel' })}
+              </Button>
+              <Button
+                variant="main-green"
+                className="w-full"
+                type="submit"
+                isLoading={formState.isSubmitting}
+              >
+                {intl.formatMessage({ defaultMessage: 'Ok' })}
+              </Button>
+            </div>
+          )}
         </Form>
       </DialogContent>
     </Dialog>

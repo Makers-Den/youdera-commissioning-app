@@ -1,6 +1,9 @@
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
 import { Inverter } from '@src/integrations/youdera/apiTypes';
-import { useInverterDetailsQuery, useInverterMutations } from '@src/integrations/youdera/inverterApiHooks';
+import {
+  useInverterDetailsQuery,
+  useInverterMutations,
+} from '@src/integrations/youdera/inverterApiHooks';
 import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
 import { Suspense, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -25,13 +28,13 @@ const stringModuleTypeValidation = z.object({
   moduleType: z.object({
     key: z.string(),
     label: z.string(),
-    value: z.any()
+    value: z.any(),
   }),
   numberOfModules: z.number().gte(0),
   cableCrossSection: z.object({
     key: z.literal('4').or(z.literal('6')).or(z.literal('10')),
     label: z.string(),
-    value: z.any()
+    value: z.any(),
   }),
 });
 
@@ -41,12 +44,12 @@ const stringInverterValidation = z.object({
   inverter: z.object({
     key: z.string(),
     label: z.string(),
-    value: z.any()
+    value: z.any(),
   }),
   input: z.object({
     key: z.string(),
     label: z.string(),
-    value: z.any()
+    value: z.any(),
   }),
   file: z.any(),
 });
@@ -55,12 +58,12 @@ const stringNewInverterValidation = z.object({
   model: z.object({
     key: z.string(),
     label: z.string(),
-    value: z.any()
+    value: z.any(),
   }),
   newInput: z.object({
     key: z.string(),
     label: z.string(),
-    value: z.any()
+    value: z.any(),
   }),
   file: z.any(),
 });
@@ -87,9 +90,9 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
     addFileToStringMutation,
   } = useStrings(roofId);
 
-  const [inverterId, setInverterId] = useState<number>(0)
-  const inverterDetailsQuery = useInverterDetailsQuery(inverterId)
-  const inverterDetails = inverterDetailsQuery.data as Inverter
+  const [inverterId, setInverterId] = useState<number>(0);
+  const inverterDetailsQuery = useInverterDetailsQuery(inverterId);
+  const inverterDetails = inverterDetailsQuery.data as Inverter;
 
   const { createInverterMutation } = useInverterMutations(siteId);
 
@@ -112,7 +115,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
   };
   const handleModuleTypeOpen = (isModified?: boolean) => {
     actionsDialog.onClose();
-    if (!isModified) setSelectedId(undefined)
+    if (!isModified) setSelectedId(undefined);
     moduleTypeSelectionDialog.onOpen();
   };
   const handleModuleTypeClose = (resetForm: () => void) => {
@@ -134,15 +137,15 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
     { moduleType, numberOfModules, cableCrossSection },
     resetForm,
   ) => {
-      moduleTypeFormData.current = {
-        moduleType,
-        numberOfModules,
-        cableCrossSection,
-      };
-      moduleTypeSelectionDialog.onClose();
-      resetForm();
-      inverterSelectionDialog.onOpen();
+    moduleTypeFormData.current = {
+      moduleType,
+      numberOfModules,
+      cableCrossSection,
     };
+    moduleTypeSelectionDialog.onClose();
+    resetForm();
+    inverterSelectionDialog.onOpen();
+  };
 
   const stringExistingInverterSubmitHandler: StringInverterDialogProps<
     typeof stringInverterValidation,
@@ -154,7 +157,9 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
         count: moduleTypeFormData.current!.numberOfModules,
         roof: stringsOnRoofQuery.data.id,
         module: moduleTypeFormData.current!.moduleType.key,
-        cable_cross_section: Number(moduleTypeFormData.current!.cableCrossSection.key), // ? Change keys in selects to be a number by default?
+        cable_cross_section: Number(
+          moduleTypeFormData.current!.cableCrossSection.key,
+        ), // ? Change keys in selects to be a number by default?
         mpp_tracker: Number(input.key),
       });
 
@@ -174,21 +179,26 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
   const stringNewInverterSubmitHandler: StringInverterDialogProps<
     typeof stringInverterValidation,
     typeof stringNewInverterValidation
-  >['onSubmit']['newInverter'] = async ({ newInput, model, file }, resetForm) => {
+  >['onSubmit']['newInverter'] = async (
+    { newInput, model, file },
+    resetForm,
+  ) => {
     if (!stringsOnRoofQuery.data) return;
     try {
       const inverter = await createInverterMutation.mutateAsync({
         site: siteId,
-        cmodel: model.value
-      })
+        cmodel: model.value,
+      });
 
-      setInverterId(inverter.id)
+      setInverterId(inverter.id);
 
       const string = await createStringMutation.mutateAsync({
         count: moduleTypeFormData.current!.numberOfModules,
         roof: stringsOnRoofQuery.data.id,
         module: moduleTypeFormData.current!.moduleType.key,
-        cable_cross_section: Number(moduleTypeFormData.current!.cableCrossSection.key),
+        cable_cross_section: Number(
+          moduleTypeFormData.current!.cableCrossSection.key,
+        ),
         mpp_tracker: Number(inverterDetails.mpp_trackers[newInput.value].id),
       });
 
@@ -224,7 +234,10 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
       <Box className="mx-3 mb-auto w-full md:mx-auto md:w-0 md:min-w-[700px]">
         <BoxHeader>
           <BoxTitle title={intl.formatMessage({ defaultMessage: 'Strings' })} />
-          <Button className="ml-auto w-[200px]" onClick={() => handleModuleTypeOpen()}>
+          <Button
+            className="ml-auto w-[200px]"
+            onClick={() => handleModuleTypeOpen()}
+          >
             + {intl.formatMessage({ defaultMessage: 'Add string' })}
           </Button>
         </BoxHeader>
@@ -272,8 +285,14 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
             modifiedStringId={selectedId}
             open={inverterSelectionDialog.isOpen}
             onClose={handleInverterClose}
-            resolver={{ existingInverter: stringInverterValidation, newInverter: stringNewInverterValidation }}
-            onSubmit={{ existingInverter: stringExistingInverterSubmitHandler, newInverter: stringNewInverterSubmitHandler }}
+            resolver={{
+              existingInverter: stringInverterValidation,
+              newInverter: stringNewInverterValidation,
+            }}
+            onSubmit={{
+              existingInverter: stringExistingInverterSubmitHandler,
+              newInverter: stringNewInverterSubmitHandler,
+            }}
             siteId={siteId}
           />
         </Suspense>

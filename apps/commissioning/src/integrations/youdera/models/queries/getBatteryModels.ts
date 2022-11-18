@@ -1,10 +1,10 @@
 import { youderaApiInstance } from '../../api-instances/youdera';
-import { InverterModel } from '../../apiTypes';
+import { BatteryModel } from '../../apiTypes';
 import { CreateDataResponse } from '../../types';
 
-export const getInverterModels = async () => {
+export const getBatteryModels = async () => {
   const response = await youderaApiInstance.get<
-    CreateDataResponse<InverterModel[]>
-  >(`/catalogue/models/inverter`);
+    CreateDataResponse<BatteryModel[]>
+  >(`/catalogue/models/battery`);
   return response.data.data;
 };

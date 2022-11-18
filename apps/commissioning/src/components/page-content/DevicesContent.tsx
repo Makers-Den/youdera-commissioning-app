@@ -22,7 +22,14 @@ import { DeviceList } from '../DeviceList';
 import { ActionsDialog } from '../dialogs/ActionsDialog';
 import { ConfimationDialog } from '../dialogs/ConfimationDialog';
 import { DeletionDialog } from '../dialogs/DeletionDialog';
-import { CommsMethodFormDialog, CommType } from '../forms/CommsMethodFormDialog';
+import {
+  BatteryFormDialog,
+  BatteryFormDialogProps,
+} from '../forms/BatteryFormDialog';
+import {
+  CommsMethodFormDialog,
+  CommType,
+} from '../forms/CommsMethodFormDialog';
 import { CommsMethodResultDialog } from '../forms/CommsMethodResultDialog';
 import {
   InverterFormDialog,
@@ -37,7 +44,7 @@ type AreYouSureDialogProps = {
     onClose: () => void;
     onOpen: () => void;
     toggle: () => void;
-  }
+  };
 };
 
 function AreYouSureDialog({ siteId, disclosure }: AreYouSureDialogProps) {
@@ -54,7 +61,9 @@ function AreYouSureDialog({ siteId, disclosure }: AreYouSureDialogProps) {
       }}
       onCancel={disclosure.onClose}
       confirmButtonVariant="main-green"
-      description={intl.formatMessage({ defaultMessage: 'Are you sure that all inverters were added?' })}
+      description={intl.formatMessage({
+        defaultMessage: 'Are you sure that all inverters were added?',
+      })}
       confirmButtonTitle={intl.formatMessage({ defaultMessage: 'Yes' })}
     />
   );
@@ -65,18 +74,23 @@ export type DevicesContentProps = {
   setNextButtonProps: (props: ButtonProps & { content: string }) => void;
 };
 
-export function DevicesContent({ siteId, setNextButtonProps }: DevicesContentProps) {
+export function DevicesContent({
+  siteId,
+  setNextButtonProps,
+}: DevicesContentProps) {
   const intl = useIntl();
 
   const { siteQuery } = useGetSite(siteId);
   const site = siteQuery.data as Site;
 
   const [currentDevice, setCurrentDevice] = useState<Device | null>(null);
-  const [commsTestResult, setCommsTestResult] = useState<CommsTestResult | null>(null);
+  const [commsTestResult, setCommsTestResult] =
+    useState<CommsTestResult | null>(null);
 
   const actionsDialog = useDisclosure();
   const deviceDeletionDialog = useDisclosure();
   const addInverterDialog = useDisclosure();
+  const addBatteryDialog = useDisclosure();
   const commsMethodDialog = useDisclosure();
   const commsResultDialog = useDisclosure();
 
@@ -93,7 +107,7 @@ export function DevicesContent({ siteId, setNextButtonProps }: DevicesContentPro
   const handleActionComms = () => {
     actionsDialog.onClose();
     commsMethodDialog.onOpen();
-  }
+  };
 
   const handleActionDelete = () => {
     actionsDialog.onClose();
@@ -110,7 +124,11 @@ export function DevicesContent({ siteId, setNextButtonProps }: DevicesContentPro
     createInverterMutation,
     addFileToInverterMutation,
   } = useInverterMutations(siteId);
-  const { deleteBatteryMutation } = useBatteryMutations(siteId);
+  const {
+    deleteBatteryMutation,
+    createBatteryMutation,
+    addFileToBatteryMutation,
+  } = useBatteryMutations(siteId);
   const { deleteMeterMutation } = useMeterMutations(siteId);
 
   const confirmDeleteHandler = async () => {
@@ -144,7 +162,6 @@ export function DevicesContent({ siteId, setNextButtonProps }: DevicesContentPro
       const inverter = await createInverterMutation.mutateAsync({
         serial_number: values.serialNumber,
         site: siteId,
-        manufacturer: values.manufacturer.label,
         cmodel: parseInt(values.model.key, 10),
       });
 
@@ -158,6 +175,35 @@ export function DevicesContent({ siteId, setNextButtonProps }: DevicesContentPro
 
       reset();
       addInverterDialog.onClose();
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  };
+
+  const onAddBattery: BatteryFormDialogProps['onSubmit'] = async (
+    values,
+    reset,
+  ) => {
+    try {
+      const battery = await createBatteryMutation.mutateAsync({
+        serial_number: values.serialNumber,
+        cmodel: parseInt(values.model.key, 10),
+        manufacturer: values.manufacturer.label,
+        model: values.manufacturer.label,
+        inverter_id: parseInt(values.inverter.key, 10),
+      });
+
+      await addFileToBatteryMutation.mutateAsync({
+        file: values.file,
+        batteryId: battery.id,
+      });
+
+      setCurrentDevice(toDevice(battery, 'Battery'));
+      commsMethodDialog.onOpen();
+
+      reset();
+      addBatteryDialog.onClose();
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);
@@ -190,7 +236,7 @@ export function DevicesContent({ siteId, setNextButtonProps }: DevicesContentPro
     {
       key: 'battery',
       children: (
-        <button type="button">
+        <button type="button" onClick={addBatteryDialog.onOpen}>
           <Typography className="flex font-medium">
             <SvgIcon name="BatteryRect" className="mr-3 w-5" />
             {intl.formatMessage({ defaultMessage: 'Add Battery' })}
@@ -212,7 +258,7 @@ export function DevicesContent({ siteId, setNextButtonProps }: DevicesContentPro
       variant: 'main-green',
       type: 'button',
       disabled: !hasInverters,
-      onClick: areYouSureDisclosure.onOpen
+      onClick: areYouSureDisclosure.onOpen,
     });
   }, [intl, setNextButtonProps, devices, areYouSureDisclosure.onOpen]);
 
@@ -231,10 +277,7 @@ export function DevicesContent({ siteId, setNextButtonProps }: DevicesContentPro
           />
         </BoxHeader>
         <BoxContent>
-          <DeviceList
-            rowClickHandler={rowClickHandler}
-            devices={devices}
-          />
+          <DeviceList rowClickHandler={rowClickHandler} devices={devices} />
         </BoxContent>
       </LargeBox>
 
@@ -291,7 +334,16 @@ export function DevicesContent({ siteId, setNextButtonProps }: DevicesContentPro
         submitButtonTitle={intl.formatMessage({ defaultMessage: 'Add Device' })}
       />
 
-      {currentDevice && 
+      <BatteryFormDialog
+        open={addBatteryDialog.isOpen}
+        onClose={addBatteryDialog.onClose}
+        onSubmit={onAddBattery}
+        title={intl.formatMessage({ defaultMessage: 'Add Battery' })}
+        submitButtonTitle={intl.formatMessage({ defaultMessage: 'Add Device' })}
+        siteId={siteId}
+      />
+
+      {currentDevice && (
         <CommsMethodFormDialog
           open={commsMethodDialog.isOpen}
           onClose={commsMethodDialog.onClose}
@@ -302,40 +354,39 @@ export function DevicesContent({ siteId, setNextButtonProps }: DevicesContentPro
               if (currentDevice.deviceType === 'Inverter') {
                 return updateInveterCommsMutation;
               }
-              
+
               if (currentDevice.deviceType === 'Battery') {
                 return updateBatteryCommsMutation;
-              } 
-              
+              }
+
               return updateMeterCommsMutation;
             })();
 
             try {
               const testResult = await updateDeviceCommsMutation.mutateAsync(
                 commType === 'fixed_ip'
-                ? {
-                  id: currentDevice.id,
-                  ip: ipAddress,
-                  slave_id: Number(slaveId),
-                }
-                : {
-                  id: currentDevice.id,
-                  dhcp: true,
-                  slave_id: Number(slaveId),
-                }
+                  ? {
+                      id: currentDevice.id,
+                      ip: ipAddress,
+                      slave_id: Number(slaveId),
+                    }
+                  : {
+                      id: currentDevice.id,
+                      dhcp: true,
+                      slave_id: Number(slaveId),
+                    },
               );
 
               setCommsTestResult(testResult);
               commsResultDialog.onOpen();
               commsMethodDialog.onClose();
-
             } catch (err) {
               // eslint-disable-next-line no-console
               console.error(err);
             }
           }}
         />
-      }
+      )}
 
       {currentDevice && commsTestResult && (
         <CommsMethodResultDialog
@@ -345,11 +396,11 @@ export function DevicesContent({ siteId, setNextButtonProps }: DevicesContentPro
             setCurrentDevice(null);
             commsResultDialog.onClose();
           }}
-          result={commsTestResult} 
+          result={commsTestResult}
         />
       )}
 
-      <AreYouSureDialog siteId={siteId} disclosure={areYouSureDisclosure}/>
+      <AreYouSureDialog siteId={siteId} disclosure={areYouSureDisclosure} />
     </>
   );
 }
