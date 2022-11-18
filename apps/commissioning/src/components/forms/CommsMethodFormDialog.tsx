@@ -1,5 +1,6 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -25,6 +26,10 @@ const validation = z.object({
   method: z.object({ key: z.string(), label: z.string() }),
   ipAddress: z.string().regex(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/).optional(),
   slaveId: z.string().min(1).max(255),
+}).refine(schema => schema.method.key === 'fixed_ip' ? !!schema.ipAddress : true, {
+  // TODO: localize
+  path: ['ipAddress'],
+  message: 'Ip is required',
 });
 
 type FormValues = z.infer<typeof validation>;
@@ -50,7 +55,7 @@ export const CommsMethodFormDialog = ({
     resolver: zodResolver(validation),
   });
 
-  const { handleSubmit, reset, formState, watch, control } = rhfProps;
+  const { setValue, handleSubmit, reset, formState, watch, control } = rhfProps;
 
   const [methodOption]: [(SelectOption<CommType> | undefined)] = watch(['method']);
 
@@ -64,6 +69,11 @@ export const CommsMethodFormDialog = ({
       label: intl.formatMessage({ defaultMessage: 'TCP - DHCP' })
     } as const
   ];
+
+  // reset ip address whenever method changes
+  useEffect(() => {
+    setValue('ipAddress', undefined);
+  }, [methodOption, setValue]);
 
   return (
     <Dialog

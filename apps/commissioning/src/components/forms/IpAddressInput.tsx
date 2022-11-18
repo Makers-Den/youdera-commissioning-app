@@ -4,7 +4,7 @@ import { Input, InputProps } from "ui/inputs/Input"
 type IpAddressInputProps = {
   value?: string;
   /** Value passed to onChange is not guaranteed to be valid and needs to validated */
-  onChange?: (value?: string) => void;
+  onChange?: (value: string | undefined) => void;
 }
 
 type IpAddress = [string, string, string, string];
@@ -47,12 +47,14 @@ export const IpAddressInput = ({ value, onChange }: IpAddressInputProps) => {
     setP4(four);
   }, [value]);
 
-  const changeRef = useRef<(val: string) => void>();
+  const changeRef = useRef<(val: string | undefined) => void>();
   changeRef.current = onChange;
 
   // Change stemming from internal source (user input)
   useEffect(() => {
-    changeRef.current?.(`${p1}.${p2}.${p3}.${p4}`)
+    const valAsStr = `${p1.trim()}.${p2.trim()}.${p3.trim()}.${p4.trim()}`;
+
+    changeRef.current?.(valAsStr === '...' ? undefined : valAsStr);
   }, [p1, p2, p3, p4]);
 
   const input2ref = useRef<HTMLInputElement>(null);
