@@ -1,22 +1,39 @@
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import { SelectProjectContent } from '@src/components/page-content/SelectProjectContent';
 import { Role } from '@src/integrations/youdera/auth/types';
+import { useGetGateways } from '@src/integrations/youdera/gateways/hooks/useGetGateways';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
+import { routes } from '@src/utils/routes';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import React, { Suspense } from 'react';
+import React, { Suspense, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 
-const projectPathCreator = (id: number) =>
-  `/electrician/projects/${id}/select-gateway`;
+const SelectProjectContentWithGatewaySkip = () => {
+  const { gatewaysQuery } = useGetGateways();
+  
+  const projectPathCreator = useCallback(
+    (siteId: number) => {
+      const hasGateway = !!gatewaysQuery.data?.find(gateway => gateway.site_id === siteId)
+      if (hasGateway) {
+        return routes.electrician.devices(siteId);
+      }
+      
+      return routes.electrician.selectGateway(siteId);
+    },
+    [gatewaysQuery.data]
+  );
+
+  return <SelectProjectContent projectPathCreator={projectPathCreator} />
+}
 
 const SelectProjectPage = () => {
   const intl = useIntl();
   const router = useRouter();
 
   const navCrossClickHandler = () => {
-    router.push('/electrician/select-task');
+    router.push(routes.electrician.selectTask);
   };
 
   return (
@@ -36,14 +53,14 @@ const SelectProjectPage = () => {
       }}
     >
       <Suspense fallback={<LargeBoxSkeleton />}>
-        <SelectProjectContent projectPathCreator={projectPathCreator} />
+        <SelectProjectContentWithGatewaySkip />
       </Suspense>
     </AuthenticatedLayout>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.electrician,
+  Role.electrician, Role.admin,
 ]).then(async _context => ({
   props: {},
 }));

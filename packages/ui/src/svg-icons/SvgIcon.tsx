@@ -5,6 +5,7 @@ import {
   FaCheck,
   FaEnvelope,
   FaMicrochip,
+  FaPhone,
   FaTable,
   FaTimes,
   FaUnlockAlt,
@@ -50,7 +51,7 @@ const iconMap = {
   Table: FaTable,
   Chip: FaMicrochip,
   Meter,
-  Battery: FaBatteryFull,
+  Battery: BatteryRect,
   Inverter,
   ChevronDown,
   Settings,
@@ -78,6 +79,7 @@ const iconMap = {
   InverterRect,
   BatteryRect,
   MeterRect,
+  Phone: FaPhone,
 };
 
 export type IconName = keyof typeof iconMap;

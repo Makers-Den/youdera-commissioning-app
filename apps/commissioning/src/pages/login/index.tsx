@@ -1,5 +1,6 @@
 import { useAuth } from '@src/integrations/youdera/auth/hooks/useAuth';
 import { LEGAL_NOTICE_URL, PRIVACY_POLICY_URL } from '@src/lib/constants';
+import { getAfterLoginRoute } from '@src/utils/routes';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -36,7 +37,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated && userInfoQuery.data) {
-      router.push(`/${userInfoQuery.data.role}/select-task`);
+      router.push(getAfterLoginRoute(userInfoQuery.data.role));
     }
   }, [isAuthenticated, userInfoQuery.data, router]);
 

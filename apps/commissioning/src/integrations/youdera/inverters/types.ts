@@ -1,5 +1,5 @@
+import { CommunicationStatus } from '../apiTypes';
 import { ApiFile } from '../files/types';
-import { CommunicationStatus } from '../types';
 
 export interface InverterModel {
   id: number,

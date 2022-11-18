@@ -24,7 +24,7 @@ export type SelectProps = {
   onChange?: (value: SelectOption) => void;
   isRequired?: boolean;
   wrapperClassName?: string;
-} & Omit<React.ComponentPropsWithRef<'select'>, 'onChange'>;
+} & Omit<React.ComponentPropsWithRef<'select'>, 'onChange' | 'value'>;
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   (

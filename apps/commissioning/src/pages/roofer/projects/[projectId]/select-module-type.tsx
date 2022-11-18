@@ -7,6 +7,7 @@ import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { useMainModuleStore } from '@src/stores/useMainModuleStore';
+import { routes } from '@src/utils/routes';
 import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
@@ -22,17 +23,17 @@ const SelectMainModuleTypePage = ({
   const setMainModule = useMainModuleStore(state => state.setMainModule);
 
   const navCrossClickHandler = () => {
-    router.push('/roofer/select-task');
+    router.push(routes.roofer.selectTask);
   };
 
   const backClickHandler = () => {
-    router.push('/roofer/select-project');
+    router.push(routes.roofer.selectProject);
   };
 
   const moduleClickHandler: SelectMainModuleContentProps['onModuleClick'] =
     module => {
       setMainModule(module);
-      router.push(`/roofer/projects/${project.id}/module-fields`);
+      router.push(routes.roofer.moduleFields(project.id));
     };
 
   return (
@@ -60,10 +61,8 @@ const SelectMainModuleTypePage = ({
   );
 };
 
-//
-
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.roofer,
+  Role.roofer, Role.admin,
 ]).then(fetchProjectFromParams);
 
 export default SelectMainModuleTypePage;

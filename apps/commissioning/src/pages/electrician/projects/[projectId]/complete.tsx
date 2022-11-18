@@ -17,7 +17,7 @@ const CompleteProjectPage = ({
   const router = useRouter();
 
   const backToMainMenu = () => {
-    router.push(routes.roofer.selectTask);
+    router.push(routes.electrician.selectProject);
   };
 
   return (
@@ -44,7 +44,8 @@ const CompleteProjectPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.roofer, Role.admin,
+  Role.electrician,
+  Role.admin
 ]).then(fetchProjectFromParams);
 
 export default CompleteProjectPage;

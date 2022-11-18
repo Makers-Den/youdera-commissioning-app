@@ -4,6 +4,7 @@ import { ModuleFieldsContent } from '@src/components/page-content/ModuleFieldsCo
 import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
+import { routes } from '@src/utils/routes';
 import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
@@ -20,15 +21,15 @@ const ModuleFieldsPage = ({
   const continueDialog = useDisclosure();
 
   const continueClickHandler = () => {
-    router.push(`/roofer/projects/${project.id}/string-layouts`);
+    router.push(routes.roofer.stringLayouts(project.id));
   };
 
   const navCrossClickHandler = () => {
-    router.push('/roofer/select-task');
+    router.push(routes.roofer.selectTask);
   };
 
   const backClickHandler = () => {
-    router.push(`/roofer/projects/${project.id}/select-module-type`);
+    router.push(routes.roofer.selectModuleType(project.id));
   };
 
   const nextClickHandler = () => {
@@ -85,7 +86,7 @@ const ModuleFieldsPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.roofer,
+  Role.roofer, Role.admin,
 ]).then(fetchProjectFromParams);
 
 export default ModuleFieldsPage;

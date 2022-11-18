@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { createMeter, deleteMeter, executeMeterVerification, getMeterVerificationGuide, updateMeter } from './apiRequests';
+import { createMeter, deleteMeter, executeMeterVerification, getMeter, getMeterVerificationGuide, updateMeter } from './apiRequests';
 import { QueryKeys } from './enums/queryKeys';
 
 export const useMeterMutations = (siteId: number) => {
@@ -39,8 +39,8 @@ export const useMeterMutations = (siteId: number) => {
 };
 
 export const useMeterQuery = (meterId: number) => useQuery(
-  [QueryKeys.meterVerificationGuide, meterId],
-  ({ queryKey }) => getMeterVerificationGuide(queryKey[1] as number),
+  [QueryKeys.meter, meterId],
+  ({ queryKey }) => getMeter(queryKey[1] as number),
 );
 
 export const useMeterVerificationGuideQuery = (meterId: number) => useQuery(

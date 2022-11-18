@@ -1,6 +1,7 @@
 export enum Role {
   roofer = 'roofer',
   electrician = 'electrician',
+  admin = 'admin',
 }
 
 export interface LoginJWTResponse {

@@ -1,8 +1,5 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
-import { Battery, Meter } from '@src/integrations/youdera/apiTypes';
-import { Inverter } from '@src/integrations/youdera/inverters/types';
-import { commStatusToIcon, Device, toDevice } from '@src/utils/devices';
-import { useMemo } from 'react';
+import { commStatusToIcon, Device } from '@src/utils/devices';
 import { useIntl } from 'react-intl';
 import { Image } from 'ui/image/Image';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
@@ -10,28 +7,15 @@ import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 import { Typography } from 'ui/typography/Typography';
 
 export type DeviceListProps = {
-  inverters?: Inverter[];
-  batteries?: Battery[];
-  meters?: Meter[];
+  devices?: Device[];
   rowClickHandler: (device: Device) => () => void;
 };
 
 export function DeviceList({
-  inverters,
-  batteries,
-  meters,
+  devices = [],
   rowClickHandler,
 }: DeviceListProps) {
   const intl = useIntl();
-
-  const devices: Device[] = useMemo(
-    () => [
-      ...(inverters || []).map(d => toDevice(d, 'Inverter')),
-      ...(batteries || []).map(d => toDevice(d, 'Battery')),
-      ...(meters || []).map(d => toDevice(d, 'Meter')),
-    ],
-    [inverters, batteries, meters],
-  );
 
   return (
     <Table className="w-full">
@@ -69,10 +53,10 @@ export function DeviceList({
             </Td>
             <Td>
               <Typography variant="label" className="w-[160px] truncate">
-                {device.manufacturer}
+                {device.manufacturer_name || '-'}
               </Typography>
               <Typography variant="label" className="w-[160px] truncate">
-                {device.model}
+                {device.model_name || '-'}
               </Typography>
             </Td>
             <Td>
