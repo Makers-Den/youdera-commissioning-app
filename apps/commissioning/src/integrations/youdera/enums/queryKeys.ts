@@ -13,4 +13,5 @@ export enum QueryKeys {
   batteryVerificationGuide = 'meterVerificationGuide',
   inverterVerificationGuide = 'meterVerificationGuide',
   batteryModels = 'batteryModels',
+  meter = 'meter',
 }

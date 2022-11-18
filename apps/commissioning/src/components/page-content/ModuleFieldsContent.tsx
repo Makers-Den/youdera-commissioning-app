@@ -2,6 +2,7 @@ import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
 import { useModuleFields } from '@src/integrations/youdera/module-fields/hooks/useModuleFields';
 import { ModuleField } from '@src/integrations/youdera/module-fields/types';
 import { removeNullAndUndefinedFromObject } from '@src/utils/removeNullAndUndefinedFromObject';
+import { routes } from '@src/utils/routes';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import { useIntl } from 'react-intl';
@@ -171,7 +172,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   };
 
   const handleActionUpdateStrings = () => {
-    router.push(`/roofer/projects/${projectId}/module-fields/${currentModuleId.current}`);
+    router.push(routes.roofer.moduleFieldStrings(Number(projectId), Number(currentModuleId.current) || 0));
   }
 
   return (

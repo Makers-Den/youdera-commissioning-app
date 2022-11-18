@@ -1,5 +1,6 @@
-import { ApiFile, Battery, Inverter, Meter, VerificationTestStatus } from "@src/integrations/youdera/apiTypes";
+import { ApiFile, Battery, Inverter, Meter, Site, VerificationTestStatus } from "@src/integrations/youdera/apiTypes";
 import { reverse, sortBy } from "lodash";
+import { useMemo } from "react";
 
 export type DeviceType = 'Inverter' | 'Battery' | 'Meter';
 
@@ -21,8 +22,8 @@ export type Device = (
 };
 
 function toThumbnailUrl(file?: ApiFile) {
-  // TODO: get proper placeholder image
-  return file?.url_thumb || "https://picsum.photos/100";
+  // defaults to 100x100 pixel grey image
+  return file?.url_thumb || "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADxSURBVHgB7dFBAQAgDAChaf9iS6U17gEVOLv7how7pAiJERIjJEZIjJAYITFCYoTECIkREiMkRkiMkBghMUJihMQIiRESIyRGSIyQGCExQmKExAiJERIjJEZIjJAYITFCYoTECIkREiMkRkiMkBghMUJihMQIiRESIyRGSIyQGCExQmKExAiJERIjJEZIjJAYITFCYoTECIkREiMkRkiMkBghMUJihMQIiRESIyRGSIyQGCExQmKExAiJERIjJEZIjJAYITFCYoTECIkREiMkRkiMkBghMUJihMQIiRESIyRGSIyQGCExQmKExAiJERLzAeQABCK5P9z4AAAAAElFTkSuQmCC";
 }
 
 export const commStatusToIcon = {
@@ -43,3 +44,13 @@ export function toDevice(thing: Inverter | Battery | Meter, type: DeviceType) {
   } as Device;
 }
 
+/**
+ * Convenience hook to transform inverters, batteries and meters of a site to the `Device` type
+ */
+export function useExtractDevices({ inverters, batteries, meters }: Site) {
+  return useMemo(() => [
+    ...(inverters || []).map(d => toDevice(d, 'Inverter')),
+    ...(batteries || []).map(d => toDevice(d, 'Battery')),
+    ...(meters || []).map(d => toDevice(d, 'Meter'))
+  ], [inverters, batteries, meters]);
+}

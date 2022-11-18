@@ -4,6 +4,7 @@ import { StringLayoutsContent } from '@src/components/page-content/StringLayouts
 import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
+import { routes } from '@src/utils/routes';
 import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
@@ -20,11 +21,11 @@ const StringLayoutsPage = ({
   const continueDialog = useDisclosure();
 
   const navCrossClickHandler = () => {
-    router.push('/roofer/select-task');
+    router.push(routes.roofer.selectTask);
   };
 
   const backClickHandler = () => {
-    router.push(`/roofer/projects/${project.id}/module-fields`);
+    router.push(routes.roofer.moduleFields(project.id));
   };
 
   const nextClickHandler = () => {
@@ -32,7 +33,7 @@ const StringLayoutsPage = ({
   };
 
   const continueClickHandler = () => {
-    router.push(`/roofer/projects/${project.id}/complete`);
+    router.push(routes.roofer.complete(project.id));
   };
 
   return (
@@ -86,7 +87,7 @@ const StringLayoutsPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.roofer,
+  Role.roofer, Role.admin,
 ]).then(fetchProjectFromParams);
 
 export default StringLayoutsPage;

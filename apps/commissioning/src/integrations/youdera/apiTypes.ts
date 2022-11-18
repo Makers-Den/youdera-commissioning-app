@@ -41,8 +41,12 @@ export type Meter = {
   communication_status: CommunicationStatus;
 
   factor: number;
-  manufacturer: string;
-  model: string;
+
+  manufacturer: number;
+  model: number;
+  manufacturer_name: string;
+  model_name: string;
+
   /** This might be an enum where "generation" is at least on option? */
   type: string;
 
@@ -68,8 +72,11 @@ export type Battery = {
 
   testlogs: VerificationTestResult[];
 
-  manufacturer: string;
-  model: string;
+  manufacturer: number;
+  model: number;
+  manufacturer_name: string;
+  model_name: string;
+
   created_at: string;
   updated_at: string;
   files?: ApiFile[];
@@ -83,17 +90,15 @@ export type Inverter = {
 
   testlogs: VerificationTestResult[];
 
-  manufacturer: string;
-  model: string;
+  manufacturer: number;
+  model: number;
+  manufacturer_name: string;
+  model_name: string;
 
   mpp_trackers?: MppTracker[];
   files?: ApiFile[];
 };
 
-/**
- * TODO: move somewhere else.
- * We don't know what this looks like yet.
- */
 export type MppTracker = {
   id: string;
 };
@@ -196,3 +201,7 @@ export interface BatteryModel {
   manufacturer_id: number;
   manufacturer_name: string;
 }
+
+export type ProjectManagerContactInfo = {
+  phone: string;
+};

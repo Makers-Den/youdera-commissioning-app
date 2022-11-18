@@ -1,6 +1,7 @@
 import { getUserInfo } from '@src/integrations/youdera/auth/queries/getUserInfo';
 import { Role } from '@src/integrations/youdera/auth/types';
 import { protectRoute } from '@src/middlewares/protectRoute';
+import { getAfterLoginRoute } from '@src/utils/routes';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 
@@ -13,23 +14,9 @@ export const getServerSideProps: GetServerSideProps = protectRoute([
 ]).then(async () => {
   const currentUser = await getUserInfo();
 
-  if (currentUser.role === Role.electrician) {
-    return {
-      redirect: {
-        destination: '/electrician/select-task'
-      }
-    };
-  }
-
-  if (currentUser.role === Role.roofer) {
-    return {
-      redirect: {
-        destination: '/roofer/select-task'
-      }
-    };
-  }
-
   return {
-    props: {}
+    redirect: {
+      destination: getAfterLoginRoute(currentUser.role)
+    }
   };
 });

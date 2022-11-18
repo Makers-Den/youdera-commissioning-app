@@ -142,6 +142,13 @@ export const createBattery = async (body: CreateBatteryRequest) => {
     `/batteries`,
     body,
   );
+};
+export const getBatteryVerificationGuide = async (
+  id: number,
+): Promise<string> => {
+  const response = await youderaApiInstance.get<DataResponse<string>>(
+    `/batteries/${id}/test`,
+  );
   return response.data.data;
 };
 
@@ -176,15 +183,6 @@ export const addFileToBattery = async ({
     },
   );
 
-  return response.data.data;
-};
-
-export const getBatteryVerificationGuide = async (
-  id: number,
-): Promise<string> => {
-  const response = await youderaApiInstance.get<DataResponse<string>>(
-    `/batteries/${id}/guide`,
-  );
   return response.data.data;
 };
 
@@ -272,7 +270,7 @@ export const getMeterVerificationGuide = async (
   id: number,
 ): Promise<string> => {
   const response = await youderaApiInstance.get<DataResponse<string>>(
-    `/meters/${id}/guide`,
+    `/meters/${id}/test`,
   );
   return response.data.data;
 };
