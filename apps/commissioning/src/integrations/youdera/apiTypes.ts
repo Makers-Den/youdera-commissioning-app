@@ -34,6 +34,17 @@ export type VerificationTestResult = {
   updated_at: string;
 };
 
+/**
+ * This is some generic data structure embedded in devices (inverters, batteries, meters)
+ * Currently the communication method settings are stored inside.
+ */
+export type Datapoint = {
+  import_config: {
+    ip?: string;
+    slave_id: number;
+  };
+};
+
 export type Meter = {
   id: number;
   name: string;
@@ -62,6 +73,9 @@ export type Meter = {
   updated_at: string;
 
   files?: ApiFile[];
+
+  /** maps to some JSON column in db */
+  datapoints?: Datapoint[];
 };
 
 export type Battery = {
@@ -80,6 +94,9 @@ export type Battery = {
   created_at: string;
   updated_at: string;
   files?: ApiFile[];
+
+  /** maps to some JSON column in db */
+  datapoints?: Datapoint[];
 };
 
 export type Inverter = {
@@ -95,18 +112,41 @@ export type Inverter = {
   manufacturer_name: string;
   model_name: string;
 
-  mpp_trackers?: MppTracker[];
+  mpp_trackers: MppTracker[];
   files?: ApiFile[];
+
+  /** maps to some JSON column in db */
+  datapoints?: Datapoint[];
 };
+export interface InverterModel {
+  id: number;
+  type: string;
+  name: string;
+  manufacturer_id: number;
+  manufacturer_name: string;
+  data: {
+    inputs: number;
+    auto_serialnumber: boolean;
+  };
+}
 
 export type MppTracker = {
   id: string;
 };
 
+export interface Module {
+  id: number;
+  type: string;
+  name: string;
+  manufacturer_id: number;
+  manufacturer_name: string;
+  data: {
+    wattpeak: number;
+  };
+}
 export interface CreateInverterRequestBody {
-  serial_number: string;
+  serial_number?: string;
   site: number;
-  manufacturer: string;
   cmodel?: number;
 }
 
@@ -170,6 +210,36 @@ export interface Site {
 export interface SiteWithFiles extends Site {
   files: ApiFile[];
 }
+export interface String {
+  id: number;
+  name: string | null;
+  count: number;
+  module: number;
+  cable_cross_section: number;
+  wattpeak_per_module: number;
+  mpp_tracker: MppTracker;
+  files: ApiFile[];
+  created_at: string;
+  updated_at: string;
+}
+export interface StringsOnRoof {
+  id: number;
+  name: string;
+  orientation: string;
+  inclination: number;
+  specific_yield: number;
+  strings: String[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateStringRequestBody {
+  count: number;
+  roof: number;
+  module: string;
+  cable_cross_section: number;
+  mpp_tracker: number;
+}
 
 export interface CreateBatteryRequest {
   name: 'DEVICE_NAME';
@@ -183,17 +253,6 @@ export interface AddFileToBatteryRequest {
   batteryId: Battery['id'];
 }
 
-export interface InverterModel {
-  id: number;
-  type: string;
-  name: string;
-  manufacturer_id: number;
-  manufacturer_name: string;
-  data: {
-    auto_serialnumber: boolean;
-  };
-}
-
 // TODO update
 export interface BatteryModel {
   id: number;
@@ -204,4 +263,21 @@ export interface BatteryModel {
 
 export type ProjectManagerContactInfo = {
   phone: string;
+};
+
+export type CommsStatus = 'failed';
+
+export type CommsTestResult = {
+  status: CommunicationStatus;
+  serial_number: string | null;
+  /** Only set for batteries (if successful) */
+  power: number | null;
+};
+
+export type CommsParams = {
+  /** Set if the method is DHCP */
+  dhcp?: true;
+  /** Set if the method is Fixed IP */
+  ip?: string;
+  slave_id: number;
 };

@@ -8,6 +8,7 @@ import {
   DataResponse,
   Inverter,
   Meter,
+  String,
   VerificationTestResult,
 } from './apiTypes';
 import { Site } from './sites/types';
@@ -35,6 +36,13 @@ export const getSite = async (siteId: string) => {
   return response.data.data;
 };
 
+export const getStringDetails = async (stringId: number): Promise<String> => {
+  const response = await youderaApiInstance.get<DataResponse<String>>(
+    `strings/${stringId}?with[]=mpp_tracker&with[]=files`,
+  );
+  return response.data.data;
+};
+
 export const deleteMeter = async (id: number): Promise<Meter> => {
   const response = await youderaApiInstance.delete<DataResponse<Meter>>(
     `/meters/${id}`,
@@ -54,6 +62,15 @@ export const getInverters = async (siteId: number): Promise<Inverter[]> => {
     DataResponse<Site & { inverters: Inverter[] }>
   >(`sites/${siteId}?with[]=inverters&with[]=inverters.mpp_trackers`);
   return response.data.data.inverters;
+};
+
+export const getInverterDetails = async (
+  inverterId: number,
+): Promise<Inverter> => {
+  const response = await youderaApiInstance.get<DataResponse<Inverter>>(
+    `inverters/${inverterId}?with[]=files&with[]=mpp_trackers`,
+  );
+  return response.data.data;
 };
 
 export const createInverter = async (
@@ -142,6 +159,8 @@ export const createBattery = async (body: CreateBatteryRequest) => {
     `/batteries`,
     body,
   );
+
+  return response.data;
 };
 export const getBatteryVerificationGuide = async (
   id: number,

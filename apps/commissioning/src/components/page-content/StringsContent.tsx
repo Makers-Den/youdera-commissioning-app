@@ -1,9 +1,11 @@
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
-import { InverterModel } from '@src/integrations/youdera/apiTypes';
-import { Inverter } from '@src/integrations/youdera/inverters/types';
+import { Inverter } from '@src/integrations/youdera/apiTypes';
+import {
+  useInverterDetailsQuery,
+  useInverterMutations,
+} from '@src/integrations/youdera/inverterApiHooks';
 import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
-import { StringsOnRoof } from '@src/integrations/youdera/strings/types';
-import { useRef, useState } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
@@ -26,9 +28,14 @@ const stringModuleTypeValidation = z.object({
   moduleType: z.object({
     key: z.string(),
     label: z.string(),
+    value: z.any(),
   }),
   numberOfModules: z.number().gte(0),
-  cableCrossSection: z.literal(4).or(z.literal(6)).or(z.literal(10)),
+  cableCrossSection: z.object({
+    key: z.literal('4').or(z.literal('6')).or(z.literal('10')),
+    label: z.string(),
+    value: z.any(),
+  }),
 });
 
 type ModuleTypeData = z.infer<typeof stringModuleTypeValidation>;
@@ -37,10 +44,26 @@ const stringInverterValidation = z.object({
   inverter: z.object({
     key: z.string(),
     label: z.string(),
+    value: z.any(),
   }),
   input: z.object({
     key: z.string(),
     label: z.string(),
+    value: z.any(),
+  }),
+  file: z.any(),
+});
+
+const stringNewInverterValidation = z.object({
+  model: z.object({
+    key: z.string(),
+    label: z.string(),
+    value: z.any(),
+  }),
+  newInput: z.object({
+    key: z.string(),
+    label: z.string(),
+    value: z.any(),
   }),
   file: z.any(),
 });
@@ -52,23 +75,27 @@ const stringInverterValidation = z.object({
 // });
 
 export interface StringContentProps {
-  stringsOnRoof: StringsOnRoof;
-  inverters: Inverter[];
-  inverterModels: InverterModel[];
+  roofId: number;
+  siteId: number;
 }
 
-export function StringsContent({
-  stringsOnRoof,
-  inverters,
-  inverterModels,
-}: StringContentProps) {
+export function StringsContent({ roofId, siteId }: StringContentProps) {
   const intl = useIntl();
   useZodErrorMap();
+
   const {
+    stringsOnRoofQuery,
     createStringMutation,
     deleteStringMutation,
     addFileToStringMutation,
-  } = useStrings(stringsOnRoof.id);
+  } = useStrings(roofId);
+
+  const [inverterId, setInverterId] = useState<number>(0);
+  const inverterDetailsQuery = useInverterDetailsQuery(inverterId);
+  const inverterDetails = inverterDetailsQuery.data as Inverter;
+
+  const { createInverterMutation } = useInverterMutations(siteId);
+
   const moduleTypeFormData = useRef<ModuleTypeData | null>(null);
 
   const [selectedId, setSelectedId] = useState<number>();
@@ -77,6 +104,7 @@ export function StringsContent({
   const moduleTypeSelectionDialog = useDisclosure();
   const inverterSelectionDialog = useDisclosure();
 
+  // * Handlers
   const handleRowClick = (id: number) => {
     setSelectedId(id);
     actionsDialog.onOpen();
@@ -85,8 +113,9 @@ export function StringsContent({
     actionsDialog.onClose();
     deletionDialog.onOpen();
   };
-  const handleModuleTypeOpen = () => {
+  const handleModuleTypeOpen = (isModified?: boolean) => {
     actionsDialog.onClose();
+    if (!isModified) setSelectedId(undefined);
     moduleTypeSelectionDialog.onOpen();
   };
   const handleModuleTypeClose = (resetForm: () => void) => {
@@ -118,33 +147,73 @@ export function StringsContent({
     inverterSelectionDialog.onOpen();
   };
 
-  const stringInverterSubmitHandler: StringInverterDialogProps<
-    typeof stringInverterValidation
-  >['onSubmit'] = async ({ input, inverter, file }, resetForm) =>
-    // { inverter, input },
-    // resetForm,
+  const stringExistingInverterSubmitHandler: StringInverterDialogProps<
+    typeof stringInverterValidation,
+    typeof stringNewInverterValidation
+  >['onSubmit']['existingInverter'] = async ({ input, file }, resetForm) => {
+    if (!stringsOnRoofQuery.data) return;
+    try {
+      const string = await createStringMutation.mutateAsync({
+        count: moduleTypeFormData.current!.numberOfModules,
+        roof: stringsOnRoofQuery.data.id,
+        module: moduleTypeFormData.current!.moduleType.key,
+        cable_cross_section: Number(
+          moduleTypeFormData.current!.cableCrossSection.key,
+        ), // ? Change keys in selects to be a number by default?
+        mpp_tracker: Number(input.key),
+      });
 
-    {
-      try {
-        const string = await createStringMutation.mutateAsync({
-          count: moduleTypeFormData.current!.numberOfModules,
-          roof: stringsOnRoof.id,
-          module: moduleTypeFormData.current!.moduleType.key,
-          cable_cross_section: moduleTypeFormData.current!.cableCrossSection,
-        });
+      await addFileToStringMutation.mutateAsync({
+        stringId: string.id,
+        file,
+      });
 
-        await addFileToStringMutation.mutateAsync({
-          stringId: string.id,
-          file,
-        });
+      resetForm();
+      inverterSelectionDialog.onClose();
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  };
 
-        resetForm();
-        inverterSelectionDialog.onClose();
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.log(err);
-      }
-    };
+  const stringNewInverterSubmitHandler: StringInverterDialogProps<
+    typeof stringInverterValidation,
+    typeof stringNewInverterValidation
+  >['onSubmit']['newInverter'] = async (
+    { newInput, model, file },
+    resetForm,
+  ) => {
+    if (!stringsOnRoofQuery.data) return;
+    try {
+      const inverter = await createInverterMutation.mutateAsync({
+        site: siteId,
+        cmodel: model.value,
+      });
+
+      setInverterId(inverter.id);
+
+      const string = await createStringMutation.mutateAsync({
+        count: moduleTypeFormData.current!.numberOfModules,
+        roof: stringsOnRoofQuery.data.id,
+        module: moduleTypeFormData.current!.moduleType.key,
+        cable_cross_section: Number(
+          moduleTypeFormData.current!.cableCrossSection.key,
+        ),
+        mpp_tracker: Number(inverterDetails.mpp_trackers[newInput.value].id),
+      });
+
+      await addFileToStringMutation.mutateAsync({
+        stringId: string.id,
+        file,
+      });
+
+      resetForm();
+      inverterSelectionDialog.onClose();
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  };
 
   const confirmDeleteHandler = async () => {
     if (selectedId) {
@@ -158,21 +227,24 @@ export function StringsContent({
       }
     }
   };
+  // *
 
   return (
     <>
       <Box className="mx-3 mb-auto w-full md:mx-auto md:w-0 md:min-w-[700px]">
         <BoxHeader>
           <BoxTitle title={intl.formatMessage({ defaultMessage: 'Strings' })} />
-          <Button className="ml-auto w-[200px]" onClick={handleModuleTypeOpen}>
+          <Button
+            className="ml-auto w-[200px]"
+            onClick={() => handleModuleTypeOpen()}
+          >
             + {intl.formatMessage({ defaultMessage: 'Add string' })}
           </Button>
         </BoxHeader>
         <BoxContent>
-          <StringsList
-            stringsOnRoof={stringsOnRoof}
-            onRowClick={handleRowClick}
-          />
+          <Suspense>
+            <StringsList roofId={roofId} onRowClick={handleRowClick} />
+          </Suspense>
         </BoxContent>
       </Box>
 
@@ -183,7 +255,7 @@ export function StringsContent({
           defaultMessage: 'What you want to do with list element?',
         })}
       >
-        <Button variant="main-green" onClick={handleModuleTypeOpen}>
+        <Button variant="main-green" onClick={() => handleModuleTypeOpen(true)}>
           {intl.formatMessage({ defaultMessage: 'Modify properties' })}
         </Button>
         <Button variant="main-green" onClick={handleInverterOpen}>
@@ -196,21 +268,35 @@ export function StringsContent({
           {intl.formatMessage({ defaultMessage: 'Cancel' })}
         </Button>
       </ActionsDialog>
-
-      <StringModuleTypeDialog
-        open={moduleTypeSelectionDialog.isOpen}
-        onClose={handleModuleTypeClose}
-        onSubmit={stringModuleTypeSubmitHandler}
-        resolver={stringModuleTypeValidation}
-      />
-      <StringInverterDialog
-        open={inverterSelectionDialog.isOpen}
-        onClose={handleInverterClose}
-        resolver={stringInverterValidation}
-        onSubmit={stringInverterSubmitHandler}
-        inverters={inverters}
-        inverterModels={inverterModels}
-      />
+      {moduleTypeSelectionDialog.isOpen && (
+        <Suspense>
+          <StringModuleTypeDialog
+            modifiedStringId={selectedId}
+            open={moduleTypeSelectionDialog.isOpen}
+            onClose={handleModuleTypeClose}
+            onSubmit={stringModuleTypeSubmitHandler}
+            resolver={stringModuleTypeValidation}
+          />
+        </Suspense>
+      )}
+      {inverterSelectionDialog.isOpen && (
+        <Suspense>
+          <StringInverterDialog
+            modifiedStringId={selectedId}
+            open={inverterSelectionDialog.isOpen}
+            onClose={handleInverterClose}
+            resolver={{
+              existingInverter: stringInverterValidation,
+              newInverter: stringNewInverterValidation,
+            }}
+            onSubmit={{
+              existingInverter: stringExistingInverterSubmitHandler,
+              newInverter: stringNewInverterSubmitHandler,
+            }}
+            siteId={siteId}
+          />
+        </Suspense>
+      )}
       <DeletionDialog
         onDelete={confirmDeleteHandler}
         isOpen={deletionDialog.isOpen}

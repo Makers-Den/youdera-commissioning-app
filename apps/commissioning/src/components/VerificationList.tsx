@@ -104,8 +104,8 @@ function useDeviceVerificationGuide(deviceId: number, type: DeviceType) {
 function VerificationGuideDialog({ siteId, device, onClose }: { siteId: number; device: Device; onClose: () => void }) {
   const intl = useIntl();
 
-  const deviceVerificationGuideQuery = useDeviceVerificationGuide(device.id, device.type);
-  const executeDeviceVerificationMutation = useExecuteDeviceVerificationMutation(siteId, device.type);
+  const deviceVerificationGuideQuery = useDeviceVerificationGuide(device.id, device.deviceType);
+  const executeDeviceVerificationMutation = useExecuteDeviceVerificationMutation(siteId, device.deviceType);
 
   return (
     <Dialog open onClose={onClose}>
@@ -158,7 +158,7 @@ function DeviceVerification({ siteId, device }: { siteId: number; device: Device
           onClick={expanded.toggle}
         >
           <div className="ml-6 flex aspect-square w-11 items-center justify-center overflow-hidden rounded">
-            <Image src={device.imageUrl} alt={`${device.type} image`} />
+            <Image src={device.imageUrl} alt={`${device.deviceType} image`} />
           </div>
           <div>
             <Typography
@@ -174,7 +174,7 @@ function DeviceVerification({ siteId, device }: { siteId: number; device: Device
             <Typography variant="label" className='truncate'>{device.model_name || '-'}</Typography>
           </div>
           <div className={FLEX_CENTER}>
-            <SvgIcon name={device.type} />
+            <SvgIcon name={device.deviceType} />
           </div>
           <div className={clsxm(FLEX_CENTER, 'justify-end pr-6')}>
             <SvgIcon name='ChevronDown' className={clsxm(
@@ -255,7 +255,7 @@ export function VerificationList({ siteId, devices }: VerificationListProps) {
         <div />
         <div />
       </div>
-      {devices.map(device => <DeviceVerification key={`${device.type}-${device.id}`} siteId={siteId} device={(device)} />)}
+      {devices.map(device => <DeviceVerification key={`${device.deviceType}-${device.id}`} siteId={siteId} device={(device)} />)}
     </div>
   );
 }

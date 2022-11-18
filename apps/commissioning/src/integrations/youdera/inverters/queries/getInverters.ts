@@ -1,10 +1,9 @@
-import { Inverter } from '../types'
 import { youderaApiInstance } from '../../api-instances/youdera';
+import { DataResponse, Inverter } from '../../apiTypes';
 import { Site } from '../../sites/types';
-import { CreateDataResponse } from '../../types';
 
-export const getInverters = async (siteId: number) => {
-	const response = await youderaApiInstance.get<CreateDataResponse<Site & { inverters: Inverter[] }>>(
+export const getInverters = async (siteId: number): Promise<Inverter[]> => {
+	const response = await youderaApiInstance.get<DataResponse<Site & { inverters: Inverter[] }>>(
 		`sites/${siteId}?with[]=inverters&with[]=inverters.mpp_trackers`,
 	);
 
