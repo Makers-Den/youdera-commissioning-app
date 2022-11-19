@@ -15,7 +15,7 @@ import { useSiteQuery } from '@src/api/youdera/hooks/sites/hooks';
 import { Device, toDevice, useExtractDevices } from '@src/utils/devices';
 import { routes } from '@src/utils/routes';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { ButtonDropdown } from 'ui/button-dropdown/ButtonDropdown';
@@ -216,6 +216,10 @@ export function DevicesContent({
     }
   };
 
+  const devices = useExtractDevices(site);
+
+  const siteHasInverters = useMemo(() => devices.find((d) => d.deviceType === 'Inverter'), [devices]);
+
   const items = [
     {
       key: 'inverter',
@@ -231,7 +235,11 @@ export function DevicesContent({
     {
       key: 'meter',
       children: (
-        <button type="button">
+        <button
+          type="button"
+          disabled={!siteHasInverters}
+          className="disabled:opacity-30"
+        >
           <Typography className="flex font-medium">
             <SvgIcon name="MeterRect" className="mr-3 w-5" />
             {intl.formatMessage({ defaultMessage: 'Add Meter' })}
@@ -242,7 +250,12 @@ export function DevicesContent({
     {
       key: 'battery',
       children: (
-        <button type="button" onClick={addBatteryDialog.onOpen}>
+        <button
+          type="button"
+          disabled={!siteHasInverters}
+          className="disabled:opacity-30"
+          onClick={addBatteryDialog.onOpen}
+        >
           <Typography className="flex font-medium">
             <SvgIcon name="BatteryRect" className="mr-3 w-5" />
             {intl.formatMessage({ defaultMessage: 'Add Battery' })}
@@ -252,7 +265,6 @@ export function DevicesContent({
     },
   ];
 
-  const devices = useExtractDevices(site);
   const areYouSureDisclosure = useDisclosure();
 
   useEffect(() => {

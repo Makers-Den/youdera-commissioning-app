@@ -12,15 +12,14 @@ export type CardLinkProps = {
 };
 
 export const CardLink = React.forwardRef<HTMLAnchorElement, CardLinkProps>(
-  // eslint-disable-next-line react/prop-types
-  ({ href, title, icon, disabled }, ref) => (
+  ({ title, icon, disabled, ...props}, ref) => (
     <a
       ref={ref}
       className={clsxm(
         'flex aspect-square w-52 flex-col rounded-md bg-gray-100 p-5',
         disabled ? 'pointer-events-none' : 'cursor-pointer',
       )}
-      href={href}
+      {...props}
     >
       <Typography
         variant="body"

@@ -94,7 +94,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     resetForm,
   ) => {
     try {
-      await createModuleFieldsMutation.mutateAsync({
+      const moduleField = await createModuleFieldsMutation.mutateAsync({
         specific_yield: specificYield,
         name,
         orientation: azimut,
@@ -102,6 +102,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
       });
       createDialog.onClose();
       resetForm();
+      router.push(routes.roofer.moduleFieldStrings(Number(projectId), Number(moduleField.id)))
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);

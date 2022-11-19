@@ -46,11 +46,16 @@ export function GatewayList({
                 })}
               </Typography>
             </div>
-            <div className="flex flex-1 items-center justify-end">
-              <Typography weight="medium" className="uppercase text-green-400">
-                {intl.formatMessage({ defaultMessage: 'Attached' })}
-              </Typography>
-            </div>
+            {gateway.site_id === siteId && (
+              <div className="flex flex-1 items-center justify-end">
+                <Typography
+                  weight="medium"
+                  className="uppercase text-green-400"
+                >
+                  {intl.formatMessage({ defaultMessage: 'Attached' })}
+                </Typography>
+              </div>
+            )}
           </div>
         </ListItem>
       ))}
