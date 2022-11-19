@@ -1,8 +1,7 @@
-import Link from 'next/link'
 import { useIntl } from 'react-intl'
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { UnderlineLink } from 'ui/links/UnderlineLink';
-import { BodyText, H1 } from 'ui/typography/Typography';
+import { BodyText } from 'ui/typography/Typography';
 
 export default function FourOhFour() {
   const intl = useIntl();
