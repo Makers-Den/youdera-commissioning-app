@@ -96,6 +96,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
 
   const { stringDetailsQuery, updateStringMutation } = useString(
     selectedId ?? -1,
+    roofId
   );
   const stringDetails = stringDetailsQuery.data as String;
 

@@ -9,7 +9,7 @@ export const useStringDetailsQuery = (stringId: number) => useQuery(
   { suspense: true },
 )
 
-export const useString = (stringId: number) => {
+export const useString = (stringId: number, roofId: number) => {
   const queryClient = useQueryClient();
 
   const stringDetailsQuery = useQuery(
@@ -20,7 +20,7 @@ export const useString = (stringId: number) => {
 
   const updateStringMutation = useMutation(updateString, {
     onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.strings, stringId])
+      queryClient.invalidateQueries([QueryKeys.strings, roofId])
     },
   });
 
