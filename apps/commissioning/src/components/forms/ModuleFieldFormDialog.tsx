@@ -1,6 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
-import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
+import React, { useEffect } from 'react';
+import {
+  DeepPartial,
+  FieldValues,
+  useForm,
+  UseFormRegister,
+} from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import { Compass } from 'ui/compass/Compass';
@@ -17,7 +22,7 @@ import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import clsxm from 'ui/utils/clsxm';
 import { z, ZodObject, ZodTypeAny } from 'zod';
 
-import { Field, FieldState } from './Field'
+import { Field, FieldState } from './Field';
 import { Form } from './Form';
 
 type RawFormShape = {
@@ -37,6 +42,7 @@ export type ModuleFieldFormDialogProps<
   submitButtonTitle: string;
   onSubmit: (values: z.infer<ResolverType>, resetForm: () => void) => void;
   resolver: ResolverType;
+  defaultValues?: DeepPartial<z.infer<ResolverType>>;
 };
 
 export const ModuleFieldFormDialog = <
@@ -49,8 +55,8 @@ export const ModuleFieldFormDialog = <
   submitButtonTitle,
   onSubmit,
   resolver,
+  defaultValues,
 }: ModuleFieldFormDialogProps<ResolverType>) => {
-
   const intl = useIntl();
 
   const method = useForm({
@@ -58,6 +64,12 @@ export const ModuleFieldFormDialog = <
   });
 
   const { handleSubmit, watch, reset, formState } = method;
+
+  useEffect(() => {
+    if (defaultValues) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, reset]);
 
   return (
     <Dialog
@@ -74,23 +86,37 @@ export const ModuleFieldFormDialog = <
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
-        <Form onSubmit={handleSubmit(values => onSubmit(values, reset))} className="flex flex-col gap-5" {...method}>
-          <Field name='name'>
-            {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
+        <Form
+          onSubmit={handleSubmit(values => onSubmit(values, reset))}
+          className="flex flex-col gap-5"
+          {...method}
+        >
+          <Field name="name">
+            {(
+              register: UseFormRegister<FieldValues>,
+              fieldState: FieldState,
+            ) => (
               <Input
                 label={intl.formatMessage({ defaultMessage: 'Name' })}
-                placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Type here',
+                })}
                 className="w-full"
                 {...register('name')}
                 validity={fieldState.invalid ? 'invalid' : undefined}
               />
-            }
+            )}
           </Field>
-          <Field name='specificYield'>
-            {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
+          <Field name="specificYield">
+            {(
+              register: UseFormRegister<FieldValues>,
+              fieldState: FieldState,
+            ) => (
               <Input
                 label={intl.formatMessage({ defaultMessage: 'Specific Yield' })}
-                placeholder={intl.formatMessage({ defaultMessage: 'Type here' })}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Type here',
+                })}
                 className="w-full"
                 units="kWh/kWp"
                 type="number"
@@ -99,15 +125,20 @@ export const ModuleFieldFormDialog = <
                 })}
                 validity={fieldState.invalid ? 'invalid' : undefined}
               />
-            }
+            )}
           </Field>
 
           <div className="flex items-center justify-center gap-5">
             <div className="flex flex-1 flex-col gap-5">
-              <Field name='slantAngle'>
-                {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
+              <Field name="slantAngle">
+                {(
+                  register: UseFormRegister<FieldValues>,
+                  fieldState: FieldState,
+                ) => (
                   <NumberInput
-                    label={intl.formatMessage({ defaultMessage: 'Slant angle' })}
+                    label={intl.formatMessage({
+                      defaultMessage: 'Slant angle',
+                    })}
                     unit="&deg;"
                     className="w-full"
                     max="359"
@@ -116,10 +147,13 @@ export const ModuleFieldFormDialog = <
                     })}
                     validity={fieldState.invalid ? 'invalid' : undefined}
                   />
-                }
+                )}
               </Field>
-              <Field name='azimut'>
-                {(register: UseFormRegister<FieldValues>, fieldState: FieldState) =>
+              <Field name="azimut">
+                {(
+                  register: UseFormRegister<FieldValues>,
+                  fieldState: FieldState,
+                ) => (
                   <NumberInput
                     label={intl.formatMessage({ defaultMessage: 'Azimut' })}
                     unit="&deg;"
@@ -130,11 +164,11 @@ export const ModuleFieldFormDialog = <
                     })}
                     validity={fieldState.invalid ? 'invalid' : undefined}
                   />
-                }
+                )}
               </Field>
-
             </div>
             <Compass
+              //@ts-ignore
               rotationAngle={parseInt(watch('azimut'), 10)}
               className="flex-1"
             />
@@ -144,7 +178,7 @@ export const ModuleFieldFormDialog = <
             <Button
               variant="additional-gray"
               className="w-full"
-              onChange={onClose}
+              onClick={onClose}
             >
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>

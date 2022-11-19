@@ -382,7 +382,7 @@ export interface CreateModuleRequestBody {
 }
 
 export interface UpdateModuleRequestBody {
-  id: string;
+  id: ModuleField['id'];
   name?: string;
   orientation?: number;
   inclination?: number;

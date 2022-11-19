@@ -2,6 +2,7 @@ import { youderaApiInstance } from '../../api-instances/youdera';
 import {
   CreateModuleRequestBody,
   DataResponse,
+  ModuleField,
   SiteWithModuleFields,
   UpdateModuleRequestBody,
 } from '../../apiTypes';
@@ -12,7 +13,7 @@ export const createModuleField = async (body: CreateModuleRequestBody) => {
   return response.data.data.roofs;
 };
 
-export const deleteModuleField = async (moduleFieldId: string) => {
+export const deleteModuleField = async (moduleFieldId: ModuleField['id']) => {
   const response = await youderaApiInstance.delete(`/roofs/${moduleFieldId}`);
 
   return response.data;
