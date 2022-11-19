@@ -34,9 +34,11 @@ export function GatewayList({ gateways, siteId, onSelectGateway }: GatewayListPr
               <Typography weight="medium">{gateway.serial_number}</Typography>
               <Typography variant="label">{intl.formatMessage({ defaultMessage: 'Gateway serial number' })}</Typography>
             </div>
-            <div className="flex-1 flex items-center justify-end">
-              <Typography weight='medium' className='uppercase text-green-400'>{intl.formatMessage({ defaultMessage: 'Attached' })}</Typography>
-            </div>
+            {gateway.site_id === siteId && (
+              <div className="flex-1 flex items-center justify-end">
+                <Typography weight='medium' className='uppercase text-green-400'>{intl.formatMessage({ defaultMessage: 'Attached' })}</Typography>
+              </div>
+            )}
           </div>
         </ListItem>
       ))}
