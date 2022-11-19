@@ -1,9 +1,17 @@
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
-import { Inverter, String } from '@src/integrations/youdera/apiTypes';
-import { useInverterDetailsQuery, useInverterMutations } from '@src/integrations/youdera/inverterApiHooks';
+import {
+  ApiFile,
+  CreateStringRequestBody,
+  Inverter,
+  String,
+} from '@src/integrations/youdera/apiTypes';
+import {
+  useInverterDetailsQuery,
+  useInverterMutations,
+} from '@src/integrations/youdera/inverterApiHooks';
 import { useInverters } from '@src/integrations/youdera/inverters/hooks/useInverters';
 import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
-import { useStringDetailsQuery } from '@src/integrations/youdera/stringsApiHooks';
+import { useString } from '@src/integrations/youdera/stringsApiHooks';
 import { Suspense, useMemo, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
@@ -28,13 +36,13 @@ const stringModuleTypeValidation = z.object({
   moduleType: z.object({
     key: z.string(),
     label: z.string(),
-    value: z.any()
+    value: z.any(),
   }),
   numberOfModules: z.number().gte(0),
   cableCrossSection: z.object({
     key: z.literal('4').or(z.literal('6')).or(z.literal('10')),
     label: z.string(),
-    value: z.any()
+    value: z.any(),
   }),
 });
 
@@ -44,12 +52,12 @@ const stringInverterValidation = z.object({
   inverter: z.object({
     key: z.string(),
     label: z.string(),
-    value: z.any()
+    value: z.any(),
   }),
   input: z.object({
     key: z.string(),
     label: z.string(),
-    value: z.any()
+    value: z.any(),
   }),
   file: z.any(),
 });
@@ -58,22 +66,15 @@ const stringNewInverterValidation = z.object({
   model: z.object({
     key: z.string(),
     label: z.string(),
-    value: z.any()
+    value: z.any(),
   }),
   newInput: z.object({
     key: z.string(),
     label: z.string(),
-    value: z.any()
+    value: z.any(),
   }),
   file: z.any(),
 });
-
-// const updateModuleTypeValidation = z.object({
-//   moduleType: z.string().or(z.literal('')),
-//   numberOfModules: z.number().gt(0).or(z.literal(undefined)),
-//   cableCrossSection: z.number().gt(0).or(z.literal(undefined))
-// });
-
 export interface StringContentProps {
   roofId: number;
   siteId: number;
@@ -83,22 +84,32 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
   const intl = useIntl();
   useZodErrorMap();
 
+  const [selectedId, setSelectedId] = useState<number>();
+
   const {
     stringsOnRoofQuery,
     createStringMutation,
     deleteStringMutation,
     addFileToStringMutation,
+    deleteFileFromStringMutation,
   } = useStrings(roofId);
 
-  const [inverterId, setInverterId] = useState<number>(0)
-  const inverterDetailsQuery = useInverterDetailsQuery(inverterId)
-  const inverterDetails = inverterDetailsQuery.data as Inverter
+  const { stringDetailsQuery, updateStringMutation } = useString(
+    selectedId ?? -1,
+  );
+  const stringDetails = stringDetailsQuery.data as String;
+
+  const [inverterId, setInverterId] = useState<number>(-1);
+
+  const { invertersQuery } = useInverters(siteId);
+  const inverters = invertersQuery.data as Inverter[];
+  const inverterDetailsQuery = useInverterDetailsQuery(inverterId);
+  const inverterDetails = inverterDetailsQuery.data as Inverter;
 
   const { createInverterMutation } = useInverterMutations(siteId);
 
   const moduleTypeFormData = useRef<ModuleTypeData | null>(null);
 
-  const [selectedId, setSelectedId] = useState<number>();
   const actionsDialog = useDisclosure();
   const deletionDialog = useDisclosure();
   const moduleTypeSelectionDialog = useDisclosure();
@@ -115,7 +126,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
   };
   const handleModuleTypeOpen = (isModified?: boolean) => {
     actionsDialog.onClose();
-    if (!isModified) setSelectedId(undefined)
+    if (!isModified) setSelectedId(undefined);
     moduleTypeSelectionDialog.onOpen();
   };
   const handleModuleTypeClose = (resetForm: () => void) => {
@@ -146,67 +157,103 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
       resetForm();
       inverterSelectionDialog.onOpen();
     };
-
-  const stringExistingInverterSubmitHandler: StringInverterDialogProps<
-    typeof stringInverterValidation,
-    typeof stringNewInverterValidation
-  >['onSubmit']['existingInverter'] = async ({ input, file }, resetForm) => {
-    if (!stringsOnRoofQuery.data) return;
-    try {
-      const string = await createStringMutation.mutateAsync({
-        count: moduleTypeFormData.current!.numberOfModules,
-        roof: stringsOnRoofQuery.data.id,
-        module: moduleTypeFormData.current!.moduleType.key,
-        cable_cross_section: Number(moduleTypeFormData.current!.cableCrossSection.key), // ? Change keys in selects to be a number by default?
-        mpp_tracker: Number(input.key),
-      });
+  const stringRequest = async (
+    modifiedStringId: number | undefined,
+    file: ApiFile | File,
+    stringRequestData: CreateStringRequestBody,
+  ) => {
+    if (!modifiedStringId) {
+      const string = await createStringMutation.mutateAsync(stringRequestData);
 
       await addFileToStringMutation.mutateAsync({
         stringId: string.id,
-        file,
+        file: file as File,
+      });
+    } else {
+      await updateStringMutation.mutateAsync({
+        id: modifiedStringId,
+        ...stringRequestData,
       });
 
-      resetForm();
-      inverterSelectionDialog.onClose();
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
+      if (stringDetails.files[0]?.id !== (file as ApiFile).id) {
+        await deleteFileFromStringMutation.mutateAsync({
+          stringId: modifiedStringId,
+          fileId: Number((file as ApiFile).id),
+        });
+        await addFileToStringMutation.mutateAsync({
+          stringId: modifiedStringId.toString(),
+          file: file as File,
+        });
+      }
     }
   };
+  const stringExistingInverterSubmitHandler: StringInverterDialogProps<
+    typeof stringInverterValidation,
+    typeof stringNewInverterValidation
+  >['onSubmit']['existingInverter'] = async (
+    { input, file },
+    resetForm,
+    modifiedStringId,
+  ) => {
+      if (!stringsOnRoofQuery.data) return;
+      try {
+        const stringRequestData = {
+          count: moduleTypeFormData.current!.numberOfModules,
+          roof: stringsOnRoofQuery.data.id,
+          module: moduleTypeFormData.current!.moduleType.key,
+          cable_cross_section: Number(
+            moduleTypeFormData.current!.cableCrossSection.key,
+          ),
+          mpp_tracker: Number(input.key),
+        };
+
+        await stringRequest(modifiedStringId, file, stringRequestData);
+
+        resetForm();
+        inverterSelectionDialog.onClose();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+    };
 
   const stringNewInverterSubmitHandler: StringInverterDialogProps<
     typeof stringInverterValidation,
     typeof stringNewInverterValidation
-  >['onSubmit']['newInverter'] = async ({ newInput, model, file }, resetForm) => {
-    if (!stringsOnRoofQuery.data) return;
-    try {
-      const inverter = await createInverterMutation.mutateAsync({
-        site: siteId,
-        cmodel: model.value
-      })
+  >['onSubmit']['newInverter'] = async (
+    { newInput, model, file },
+    resetForm,
+    modifiedStringId,
+  ) => {
+      if (!stringsOnRoofQuery.data) return;
+      try {
+        const inverter = await createInverterMutation.mutateAsync({
+          site: siteId,
+          cmodel: model.value,
+        });
 
-      setInverterId(inverter.id)
+        // ! Bug in this place -  setInverterId
+        setInverterId(inverter.id);
+        console.log(inverterId)
 
-      const string = await createStringMutation.mutateAsync({
-        count: moduleTypeFormData.current!.numberOfModules,
-        roof: stringsOnRoofQuery.data.id,
-        module: moduleTypeFormData.current!.moduleType.key,
-        cable_cross_section: Number(moduleTypeFormData.current!.cableCrossSection.key),
-        mpp_tracker: Number(inverterDetails.mpp_trackers[newInput.value].id),
-      });
+        const stringRequestData = {
+          count: moduleTypeFormData.current!.numberOfModules,
+          roof: stringsOnRoofQuery.data.id,
+          module: moduleTypeFormData.current!.moduleType.key,
+          cable_cross_section: Number(
+            moduleTypeFormData.current!.cableCrossSection.key,
+          ),
+          mpp_tracker: Number(inverterDetails.mpp_trackers[newInput.value].id),
+        };
 
-      await addFileToStringMutation.mutateAsync({
-        stringId: string.id,
-        file,
-      });
-
-      resetForm();
-      inverterSelectionDialog.onClose();
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
-    }
-  };
+        await stringRequest(modifiedStringId, file, stringRequestData);
+        resetForm();
+        inverterSelectionDialog.onClose();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+    };
 
   const confirmDeleteHandler = async () => {
     if (selectedId) {
@@ -222,58 +269,55 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
   };
   // *
 
-  const { invertersQuery } = useInverters(siteId);
-  const inverters = invertersQuery.data as Inverter[];
-  const stringDetailsQuery = useStringDetailsQuery(selectedId ?? -1);
-  const stringDetails = stringDetailsQuery.data as String;
+  const stringInverterDefaultValues: InverterDefaultValuesProps | undefined =
+    useMemo(() => {
+      if (!inverters || !stringDetails) return undefined;
 
-  const stringInverterDefaultValues: InverterDefaultValuesProps | undefined = useMemo(() => {
+      const defaultInverter = inverters.filter(
+        inverter =>
+          !!inverter.mpp_trackers.filter(
+            input => input.id === stringDetails.mpp_tracker.id,
+          )[0],
+      )[0];
+      const defaultInput = stringDetails.mpp_tracker;
 
-    if (!inverters || !stringDetails) return undefined;
+      const defaultFile = stringDetails.files[0];
 
-    const defaultInverter = inverters.filter(
-      inverter =>
-        !!inverter.mpp_trackers.filter(
-          input => input.id === stringDetails.mpp_tracker.id,
-        )[0],
-    )[0]
-
-    const defaultInput = stringDetails.mpp_tracker
-
-    const defaultFile = stringDetails.files[0]
-
-    return {
-      inverter: {
-        key: defaultInverter.id.toString(),
-        label: defaultInverter.name ?? ' - ',
-        icon: 'Table'
-      },
-      input: {
-        key: defaultInput.id.toString(),
-        label: (defaultInput.id + 1).toString(),
-        icon: 'Chip'
-      },
-      file: defaultFile,
-      manufacturer: {
-        label: "",
-        key: "",
-      },
-      model: {
-        label: "",
-        key: "",
-      },
-      newInput: {
-        label: "",
-        key: "",
-      },
-    }
-  }, [inverters, stringDetails])
+      return {
+        inverter: {
+          key: defaultInverter.id.toString(),
+          label: defaultInverter.name ?? ' - ',
+          icon: 'Table',
+        },
+        input: {
+          key: defaultInput.id.toString(),
+          label: (defaultInverter.mpp_trackers.findIndex(input => input.id === defaultInput.id) + 1).toString(),
+          icon: 'Chip',
+        },
+        file: defaultFile,
+        manufacturer: {
+          label: '',
+          key: '',
+        },
+        model: {
+          label: '',
+          key: '',
+        },
+        newInput: {
+          label: '',
+          key: '',
+        },
+      };
+    }, [inverters, stringDetails]);
   return (
     <>
       <Box className="mx-3 mb-auto w-full md:mx-auto md:w-0 md:min-w-[700px]">
         <BoxHeader>
           <BoxTitle title={intl.formatMessage({ defaultMessage: 'Strings' })} />
-          <Button className="ml-auto w-[200px]" onClick={() => handleModuleTypeOpen()}>
+          <Button
+            className="ml-auto w-[200px]"
+            onClick={() => handleModuleTypeOpen()}
+          >
             + {intl.formatMessage({ defaultMessage: 'Add string' })}
           </Button>
         </BoxHeader>
@@ -321,8 +365,14 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
             modifiedStringId={selectedId}
             open={inverterSelectionDialog.isOpen}
             onClose={handleInverterClose}
-            resolver={{ existingInverter: stringInverterValidation, newInverter: stringNewInverterValidation }}
-            onSubmit={{ existingInverter: stringExistingInverterSubmitHandler, newInverter: stringNewInverterSubmitHandler }}
+            resolver={{
+              existingInverter: stringInverterValidation,
+              newInverter: stringNewInverterValidation,
+            }}
+            onSubmit={{
+              existingInverter: stringExistingInverterSubmitHandler,
+              newInverter: stringNewInverterSubmitHandler,
+            }}
             siteId={siteId}
             defaultValues={stringInverterDefaultValues}
           />

@@ -1,5 +1,5 @@
 import { youderaApiInstance } from "./api-instances/youdera";
-import { ApiFile, Battery, CreateInverterRequestBody, DataResponse, Inverter, Meter, String, VerificationTestResult } from "./apiTypes";
+import { ApiFile, Battery, CreateInverterRequestBody, CreateStringRequestBody, DataResponse, Inverter, Meter, String, UpdateDataResponse, VerificationTestResult } from "./apiTypes";
 import { Site } from "./sites/types";
 
 export const getUncommissionedSites = async () => {
@@ -31,6 +31,18 @@ export const getStringDetails = async (stringId: number): Promise<String> => {
   );
   return response.data.data;
 };
+
+export const updateString = async ({
+  id,
+  ...rest
+}: {
+  id: number,
+} & Partial<CreateStringRequestBody>) => {
+  const response = await youderaApiInstance.patch<UpdateDataResponse<CreateStringRequestBody>>(`/strings/${id}`, { ...rest });
+
+  return response.data.data;
+};
+
 
 export const deleteMeter = async (id: number): Promise<Meter> => {
   const response = await youderaApiInstance.delete<DataResponse<Meter>>(`/meters/${id}`);

@@ -26,3 +26,8 @@ export interface CreateStringRequestBody {
 	cable_cross_section: number
 	mpp_tracker: number;
 }
+
+export interface DeleteFileFromStringRequest {
+	stringId: number,
+	fileId: number
+}

@@ -3,14 +3,10 @@ import {
   ApiFile,
   Inverter,
   InverterModel,
-  String,
 } from '@src/integrations/youdera/apiTypes';
 import { useInverters } from '@src/integrations/youdera/inverters/hooks/useInverters';
-import { useStringDetailsQuery } from '@src/integrations/youdera/stringsApiHooks';
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  useForm,
-} from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import {
@@ -20,15 +16,13 @@ import {
   DialogProps,
   DialogTitle,
 } from 'ui/dialogs/Dialog';
-import {
-  AutocompleteSelectOption,
-} from 'ui/select/AutocompleteSelect';
+import { AutocompleteSelectOption } from 'ui/select/AutocompleteSelect';
 import { IconName, SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z, ZodObject, ZodTypeAny } from 'zod';
 
-import { AutocompleteSelectField } from './AutocompleteField'
+import { AutocompleteSelectField } from './AutocompleteField';
 import { FileField } from './FileField';
 import { Form } from './Form';
 import { SelectField } from './SelectField';
@@ -45,13 +39,13 @@ type RawFormShapeNewInverter = {
   file: ZodTypeAny;
 };
 export type InverterDefaultValuesProps = {
-  inverter: AutocompleteSelectOption,
-  input: AutocompleteSelectOption,
-  file: ApiFile,
-  manufacturer: AutocompleteSelectOption,
-  model: AutocompleteSelectOption,
-  newInput: AutocompleteSelectOption,
-}
+  inverter: AutocompleteSelectOption;
+  input: AutocompleteSelectOption;
+  file: ApiFile;
+  manufacturer: AutocompleteSelectOption;
+  model: AutocompleteSelectOption;
+  newInput: AutocompleteSelectOption;
+};
 export type StringInverterDialogProps<
   ResolverTypeExistingInverter extends ZodObject<RawFormShapeExistingInverter>,
   ResolverTypeNewInverter extends ZodObject<RawFormShapeNewInverter>,
@@ -64,10 +58,12 @@ export type StringInverterDialogProps<
     existingInverter: (
       values: z.infer<ResolverTypeExistingInverter>,
       resetForm: () => void,
+      modifiedStringId?: number,
     ) => void;
     newInverter: (
       values: z.infer<ResolverTypeNewInverter>,
       resetForm: () => void,
+      modifiedStringId?: number,
     ) => void;
   };
   resolver: {
@@ -75,16 +71,14 @@ export type StringInverterDialogProps<
     newInverter: ResolverTypeNewInverter;
   };
   modifiedStringId?: number;
-  defaultValues?: InverterDefaultValuesProps
+  defaultValues?: InverterDefaultValuesProps;
 };
 
-const fileValueMapper = (file: ApiFile | File) => (
-  {
-    name: file.name,
-    type: file.type,
-    url: file instanceof File ? URL.createObjectURL(file) : file.url
-  }
-)
+const fileValueMapper = (file: ApiFile | File) => ({
+  name: file.name,
+  type: file.type,
+  url: file instanceof File ? URL.createObjectURL(file) : file.url,
+});
 export const StringInverterDialog = <
   ResolverTypeExistingInverter extends ZodObject<RawFormShapeExistingInverter>,
   ResolverTypeNewInverter extends ZodObject<RawFormShapeNewInverter>,
@@ -96,7 +90,7 @@ export const StringInverterDialog = <
   resolver,
   siteId,
   modifiedStringId,
-  defaultValues
+  defaultValues,
 }: StringInverterDialogProps<
   ResolverTypeExistingInverter,
   ResolverTypeNewInverter
@@ -105,17 +99,13 @@ export const StringInverterDialog = <
 
   const [isWithNewInverter, setIsWithNewInverter] = useState<boolean>(false);
 
-  const stringDetailsQuery = useStringDetailsQuery(modifiedStringId ?? -1);
-  const stringDetails = stringDetailsQuery.data as String;
-
   const method = useForm({
     defaultValues,
     resolver: zodResolver(
       isWithNewInverter ? resolver.newInverter : resolver.existingInverter,
-    )
+    ),
   });
-  const { handleSubmit, reset, formState, watch, getValues } = method;
-  console.log('????', getValues())
+  const { handleSubmit, reset, formState, watch } = method;
   const { inverterModelsQuery, invertersQuery } = useInverters(siteId);
   const inverters = invertersQuery.data as Inverter[];
   const inverterModels = inverterModelsQuery.data as InverterModel[];
@@ -169,7 +159,6 @@ export const StringInverterDialog = <
       value: input.id,
     }));
   }, [watchInverter, inverters]);
-  console.log({ inverterInputsOptions })
   // * Form with creation of new inverter
   const inverterManufacturesOptions: AutocompleteSelectOption[] | [] =
     useMemo(() => {
@@ -219,7 +208,6 @@ export const StringInverterDialog = <
     }, [inverterModels, watchModel]);
   // *
 
-  console.log(getValues())
   return (
     <Dialog
       open={open}
@@ -248,14 +236,14 @@ export const StringInverterDialog = <
         <Form
           onSubmit={handleSubmit(values =>
             isWithNewInverter
-              ? onSubmit.newInverter(values, reset)
-              : onSubmit.existingInverter(values, reset),
+              ? onSubmit.newInverter(values, reset, modifiedStringId)
+              : onSubmit.existingInverter(values, reset, modifiedStringId),
           )}
           className="flex flex-col gap-5"
           {...method}
         >
           <AutocompleteSelectField
-            name='inverter'
+            name="inverter"
             label={intl.formatMessage({
               defaultMessage: 'Select inverter',
             })}

@@ -222,6 +222,9 @@ export interface CreateStringRequestBody {
   mpp_tracker: number;
 }
 
+export type UpdateDataResponse<T> = {
+  data: T;
+};
 
 
 export type ProjectManagerContactInfo = {
