@@ -1,4 +1,4 @@
-import { CommsTestResult } from '@src/integrations/youdera/apiTypes';
+import { CommsTestResult } from '@src/api/youdera/apiTypes';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import {
@@ -34,7 +34,9 @@ export const CommsMethodResultDialog = ({
       className={clsxm('w-[400px]', className)}
     >
       <DialogHeader>
-        <DialogTitle title={intl.formatMessage({ defaultMessage: 'Fetching data' })} />
+        <DialogTitle
+          title={intl.formatMessage({ defaultMessage: 'Fetching data' })}
+        />
         <SvgIcon
           name="Close"
           className="ml-auto h-4 hover:cursor-pointer"
@@ -58,18 +60,11 @@ export const CommsMethodResultDialog = ({
         </Table>
 
         <div className="mt-3 flex gap-5">
-          <Button
-            variant="additional-gray"
-            onClick={onClose}
-          >
+          <Button variant="additional-gray" onClick={onClose}>
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>
-          <Button
-            variant="main-green"
-            className="flex-1"
-            onClick={onClose}
-          >
-            {intl.formatMessage({ defaultMessage: "Complete" })}
+          <Button variant="main-green" className="flex-1" onClick={onClose}>
+            {intl.formatMessage({ defaultMessage: 'Complete' })}
           </Button>
         </div>
       </DialogContent>

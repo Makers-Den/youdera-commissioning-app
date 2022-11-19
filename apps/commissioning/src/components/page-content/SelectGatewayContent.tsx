@@ -1,6 +1,6 @@
-import { useGetGateways } from '@src/integrations/youdera/gateways/hooks/useGetGateways';
-import { updateGateway } from '@src/integrations/youdera/gateways/mutations/updateGateway';
-import { Gateway } from '@src/integrations/youdera/gateways/types';
+import { Gateway } from '@src/api/youdera/apiTypes';
+import { updateGateway } from '@src/api/youdera/hooks/gateways/apiRequests';
+import { useGatewaysQuery } from '@src/api/youdera/hooks/gateways/hooks';
 import { useCallback, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
@@ -15,19 +15,23 @@ export type SelectGatewayContentProps = {
   onGatewaySelected: () => void;
 };
 
-export function SelectGatewayContent({ siteId, onGatewaySelected }: SelectGatewayContentProps) {
+export function SelectGatewayContent({
+  siteId,
+  onGatewaySelected,
+}: SelectGatewayContentProps) {
   const intl = useIntl();
   const [searchInput, setSearchInput] = useState('');
 
-  const { gatewaysQuery } = useGetGateways();
+  const gatewaysQuery = useGatewaysQuery();
 
   const filteredGateways = useMemo(
     () =>
       (gatewaysQuery.data || [])
         // Filter away attached gateways, except if its attached to this project
         .filter(({ site_id }) => !site_id || site_id === siteId)
-        .filter(({ name }) => name.toLowerCase().includes(searchInput.toLowerCase()))
-      ,
+        .filter(({ name }) =>
+          name.toLowerCase().includes(searchInput.toLowerCase()),
+        ),
     [gatewaysQuery.data, siteId, searchInput],
   );
 
@@ -35,18 +39,20 @@ export function SelectGatewayContent({ siteId, onGatewaySelected }: SelectGatewa
     setSearchInput(e.target.value);
   };
 
-  const onSelectGateway = useCallback(async (gateway: Gateway) => {
-    try {
-      await updateGateway({ gatewayId: gateway.id, siteId });
-    } catch (err) {
-      // TODO: toast feedback system pending
-      // eslint-disable-next-line no-console
-      console.error(err);
-    }
+  const onSelectGateway = useCallback(
+    async (gateway: Gateway) => {
+      try {
+        await updateGateway({ gatewayId: gateway.id, siteId });
+      } catch (err) {
+        // TODO: toast feedback system pending
+        // eslint-disable-next-line no-console
+        console.error(err);
+      }
 
-    onGatewaySelected();
-
-  }, [siteId, onGatewaySelected]);
+      onGatewaySelected();
+    },
+    [siteId, onGatewaySelected],
+  );
 
   return (
     <LargeBox>
@@ -66,7 +72,11 @@ export function SelectGatewayContent({ siteId, onGatewaySelected }: SelectGatewa
       </BoxContent>
       <Divider className="my-5" />
       <BoxContent>
-        <GatewayList gateways={filteredGateways} siteId={siteId} onSelectGateway={onSelectGateway} />
+        <GatewayList
+          gateways={filteredGateways}
+          siteId={siteId}
+          onSelectGateway={onSelectGateway}
+        />
       </BoxContent>
     </LargeBox>
   );

@@ -1,11 +1,17 @@
-import { CommsTestResult, Site } from '@src/integrations/youdera/apiTypes';
-import { useUpdateBatteryCommsMutation } from '@src/integrations/youdera/batteries/useUpdateBatteryCommsMutation';
-import { useBatteryMutations } from '@src/integrations/youdera/batteryApiHooks';
-import { useInverterMutations } from '@src/integrations/youdera/inverterApiHooks';
-import { useUpdateInverterCommsMutation } from '@src/integrations/youdera/inverters/useUpdateInverterCommsMutation';
-import { useMeterMutations } from '@src/integrations/youdera/meterApiHooks';
-import { useUpdateMeterCommsMutation } from '@src/integrations/youdera/meters/useUpdateMeterCommsMutation';
-import { useGetSite } from '@src/integrations/youdera/sites/hooks/useGetSite';
+import { CommsTestResult, Site } from '@src/api/youdera/apiTypes';
+import {
+  useBatteryMutations,
+  useUpdateBatteryCommsMutation,
+} from '@src/api/youdera/hooks/batteries/hooks';
+import {
+  useInverterMutations,
+  useUpdateInverterCommsMutation,
+} from '@src/api/youdera/hooks/inverters/hooks';
+import {
+  useMeterMutations,
+  useUpdateMeterCommsMutation,
+} from '@src/api/youdera/hooks/meters/hooks';
+import { useSiteQuery } from '@src/api/youdera/hooks/sites/hooks';
 import { Device, toDevice, useExtractDevices } from '@src/utils/devices';
 import { routes } from '@src/utils/routes';
 import { useRouter } from 'next/router';
@@ -80,7 +86,7 @@ export function DevicesContent({
 }: DevicesContentProps) {
   const intl = useIntl();
 
-  const { siteQuery } = useGetSite(siteId);
+  const { siteQuery } = useSiteQuery(siteId);
   const site = siteQuery.data as Site;
 
   const [currentDevice, setCurrentDevice] = useState<Device | null>(null);

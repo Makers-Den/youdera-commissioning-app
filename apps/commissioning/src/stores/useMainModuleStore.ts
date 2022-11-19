@@ -1,4 +1,4 @@
-import { Module } from '@src/integrations/youdera/modules/types';
+import { Module } from '@src/api/youdera/apiTypes';
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -17,7 +17,7 @@ export const useMainModuleStore = create<MainModuleState>()(
     }),
     {
       name: 'main-module',
-      getStorage: () => localStorage
-    }
-  )
+      getStorage: () => localStorage,
+    },
+  ),
 );

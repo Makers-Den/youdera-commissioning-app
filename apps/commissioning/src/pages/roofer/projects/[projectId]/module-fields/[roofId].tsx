@@ -1,10 +1,10 @@
+import { Role } from '@src/api/youdera/apiTypes';
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
-import { StringsContent } from '@src/components/page-content/StringsContent'
-import { Role } from '@src/integrations/youdera/auth/types';
+import { StringsContent } from '@src/components/page-content/StringsContent';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { routes } from '@src/utils/routes';
-import { fetchStringsFromParams } from '@src/utils/server/fetchStringsFromParams'
+import { fetchStringsFromParams } from '@src/utils/server/fetchStringsFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import React, { Suspense } from 'react';
@@ -52,7 +52,8 @@ const StringsPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.roofer, Role.admin,
+  Role.roofer,
+  Role.admin,
 ]).then(fetchStringsFromParams);
 
 export default StringsPage;

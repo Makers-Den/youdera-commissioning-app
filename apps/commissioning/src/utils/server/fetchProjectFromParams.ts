@@ -1,4 +1,4 @@
-import { getSite } from '@src/integrations/youdera/sites/queries/getSite';
+import { getSite } from '@src/api/youdera/hooks/sites/apiRequests';
 import { GetServerSidePropsContext } from 'next';
 
 export const fetchProjectFromParams = async (

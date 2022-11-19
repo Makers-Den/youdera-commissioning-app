@@ -1,10 +1,13 @@
-import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
-import { Inverter } from '@src/integrations/youdera/apiTypes';
+import { Inverter } from '@src/api/youdera/apiTypes';
 import {
   useInverterDetailsQuery,
   useInverterMutations,
-} from '@src/integrations/youdera/inverterApiHooks';
-import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
+} from '@src/api/youdera/hooks/inverters/hooks';
+import {
+  useStringsMutations,
+  useStringsQuery,
+} from '@src/api/youdera/hooks/strings/hooks';
+import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
 import { Suspense, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
@@ -83,12 +86,13 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
   const intl = useIntl();
   useZodErrorMap();
 
+  const stringsOnRoofQuery = useStringsQuery(roofId);
+
   const {
-    stringsOnRoofQuery,
     createStringMutation,
     deleteStringMutation,
     addFileToStringMutation,
-  } = useStrings(roofId);
+  } = useStringsMutations(roofId);
 
   const [inverterId, setInverterId] = useState<number>(0);
   const inverterDetailsQuery = useInverterDetailsQuery(inverterId);

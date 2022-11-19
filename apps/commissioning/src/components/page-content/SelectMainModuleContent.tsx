@@ -1,5 +1,5 @@
-import { useGetModules } from '@src/integrations/youdera/modules/hooks/useGetModules';
-import { Module } from '@src/integrations/youdera/modules/types';
+import { Module } from '@src/api/youdera/apiTypes';
+import { useModulesQuery } from '@src/api/youdera/hooks/modules/hooks';
 import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
@@ -23,7 +23,7 @@ export function SelectMainModuleContent({
     SelectOption | undefined
   >();
 
-  const { modulesQuery } = useGetModules();
+  const modulesQuery = useModulesQuery();
 
   const modules: MainModule[] = useMemo(
     () =>

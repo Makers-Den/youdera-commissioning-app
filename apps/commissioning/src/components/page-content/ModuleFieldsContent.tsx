@@ -1,6 +1,9 @@
+import { ModuleField } from '@src/api/youdera/apiTypes';
+import {
+  useModuleFieldsMutations,
+  useModuleFieldsQuery,
+} from '@src/api/youdera/hooks/module-fields/hooks';
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
-import { useModuleFields } from '@src/integrations/youdera/module-fields/hooks/useModuleFields';
-import { ModuleField } from '@src/integrations/youdera/module-fields/types';
 import { removeNullAndUndefinedFromObject } from '@src/utils/removeNullAndUndefinedFromObject';
 import { routes } from '@src/utils/routes';
 import { useRouter } from 'next/router';
@@ -59,12 +62,13 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
 
   const currentModuleId = useRef<string | null>(null);
 
+  const moduleFieldsQuery = useModuleFieldsQuery(projectId);
+
   const {
-    moduleFieldsQuery,
     createModuleFieldsMutation,
     deleteModuleFieldsMutation,
     updateModuleFieldsMutation,
-  } = useModuleFields(projectId);
+  } = useModuleFieldsMutations(projectId);
 
   const actionsDialog = useDisclosure();
   const createDialog = useDisclosure();
@@ -172,8 +176,13 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   };
 
   const handleActionUpdateStrings = () => {
-    router.push(routes.roofer.moduleFieldStrings(Number(projectId), Number(currentModuleId.current) || 0));
-  }
+    router.push(
+      routes.roofer.moduleFieldStrings(
+        Number(projectId),
+        Number(currentModuleId.current) || 0,
+      ),
+    );
+  };
 
   return (
     <>

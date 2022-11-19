@@ -4,9 +4,12 @@ import {
   Inverter,
   InverterModel,
   String,
-} from '@src/integrations/youdera/apiTypes';
-import { useInverters } from '@src/integrations/youdera/inverters/hooks/useInverters';
-import { useStringDetailsQuery } from '@src/integrations/youdera/stringsApiHooks';
+} from '@src/api/youdera/apiTypes';
+import {
+  useInverterModelsQuery,
+  useInvertersQuery,
+} from '@src/api/youdera/hooks/inverters/hooks';
+import { useStringDetailsQuery } from '@src/api/youdera/hooks/strings/hooks';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   FieldValues,
@@ -99,7 +102,7 @@ export const StringInverterDialog = <
   const [isWithNewInverter, setIsWithNewInverter] = useState<boolean>(false);
 
   const stringDetailsQuery = useStringDetailsQuery(modifiedStringId ?? -1);
-  const stringDetails = stringDetailsQuery.data as String;
+  const stringDetails = stringDetailsQuery.data as unknown as String;
 
   const method = useForm({
     resolver: zodResolver(
@@ -149,7 +152,8 @@ export const StringInverterDialog = <
   });
   const { handleSubmit, reset, formState, watch, control, getValues } = method;
 
-  const { inverterModelsQuery, invertersQuery } = useInverters(siteId);
+  const invertersQuery = useInvertersQuery(siteId);
+  const inverterModelsQuery = useInverterModelsQuery();
   const inverters = invertersQuery.data as Inverter[];
   const inverterModels = inverterModelsQuery.data as InverterModel[];
   const watchFile = watch('file');

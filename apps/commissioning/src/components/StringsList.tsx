@@ -1,18 +1,15 @@
-import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
+import { useStringsQuery } from '@src/api/youdera/hooks/strings/hooks';
 import { useIntl } from 'react-intl';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 
-
 export type StringListProps = {
-  roofId: number
+  roofId: number;
   onRowClick: (id: number) => void;
 };
 
 export function StringsList({ roofId, onRowClick }: StringListProps) {
   const intl = useIntl();
-  const {
-    stringsOnRoofQuery,
-  } = useStrings(roofId);
+  const stringsOnRoofQuery = useStringsQuery(roofId);
   const columnNames = [
     intl.formatMessage({ defaultMessage: 'String name' }),
     intl.formatMessage({ defaultMessage: 'Module type' }),
@@ -35,15 +32,9 @@ export function StringsList({ roofId, onRowClick }: StringListProps) {
             className="cursor-pointer"
             onClick={() => onRowClick(string.id)}
           >
-            <Td key={`${string.id}-name`}>
-              {string.name ?? ' - '}
-            </Td>
-            <Td key={`${string.id}-moduleType`}>
-              {string.module ?? ' - '}
-            </Td>
-            <Td key={`${string.id}-count`}>
-              {string.count ?? ' - '}
-            </Td>
+            <Td key={`${string.id}-name`}>{string.name ?? ' - '}</Td>
+            <Td key={`${string.id}-moduleType`}>{string.module ?? ' - '}</Td>
+            <Td key={`${string.id}-count`}>{string.count ?? ' - '}</Td>
             <Td key={`${string.id}-cableCrossSection`}>
               {string.cable_cross_section ?? ' - '}
             </Td>

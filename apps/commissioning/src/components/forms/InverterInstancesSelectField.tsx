@@ -1,4 +1,4 @@
-import { useInvertersQuery } from '@src/integrations/youdera/inverterApiHooks';
+import { useInvertersQuery } from '@src/api/youdera/hooks/inverters/hooks';
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { SelectOption } from 'ui/select/Select';

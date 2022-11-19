@@ -1,7 +1,7 @@
+import { Role } from '@src/api/youdera/apiTypes';
 import { ConfimationDialog } from '@src/components/dialogs/ConfimationDialog';
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import { StringLayoutsContent } from '@src/components/page-content/StringLayoutsContent';
-import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { routes } from '@src/utils/routes';
@@ -87,7 +87,8 @@ const StringLayoutsPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.roofer, Role.admin,
+  Role.roofer,
+  Role.admin,
 ]).then(fetchProjectFromParams);
 
 export default StringLayoutsPage;

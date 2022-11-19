@@ -1,5 +1,5 @@
+import { Role } from '@src/api/youdera/apiTypes';
 import { SuccessPageContent } from '@src/components/page-content/SuccessPageContent';
-import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { routes } from '@src/utils/routes';
@@ -45,7 +45,7 @@ const CompleteProjectPage = ({
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
   Role.electrician,
-  Role.admin
+  Role.admin,
 ]).then(fetchProjectFromParams);
 
 export default CompleteProjectPage;

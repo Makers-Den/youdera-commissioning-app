@@ -1,5 +1,5 @@
-import { youderaApiInstance } from '@src/integrations/youdera/api-instances/youdera';
-import { CookiesKeys } from '@src/integrations/youdera/enums/cookiesKeys';
+import { youderaApiInstance } from '@src/api/youdera/api-instances/youdera';
+import { CookiesKeys } from '@src/api/youdera/enums/cookiesKeys';
 import { getCookie } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
 

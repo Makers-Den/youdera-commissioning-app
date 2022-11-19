@@ -1,4 +1,4 @@
-import { useAuth } from '@src/integrations/youdera/auth/hooks/useAuth';
+import { useAuth } from '@src/api/youdera/hooks/auth/hooks';
 import { LEGAL_NOTICE_URL, PRIVACY_POLICY_URL } from '@src/lib/constants';
 import { useRouter } from 'next/router';
 import { ReactNode, useMemo } from 'react';
@@ -38,14 +38,18 @@ export function AuthenticatedLayout({
     router.push('/login');
   };
 
-  const user: ProfileDropdownProps["user"] | undefined = useMemo(() => (
-    userInfoQuery.data 
-    ? {
-      imgSrc: userInfoQuery.data?.avatar,
-      firstName: userInfoQuery.data?.first_name,
-      lastName: userInfoQuery.data?.last_name,
-      role: userInfoQuery.data?.role,
-    } : undefined), [userInfoQuery.data]); 
+  const user: ProfileDropdownProps['user'] | undefined = useMemo(
+    () =>
+      userInfoQuery.data
+        ? {
+            imgSrc: userInfoQuery.data?.avatar,
+            firstName: userInfoQuery.data?.first_name,
+            lastName: userInfoQuery.data?.last_name,
+            role: userInfoQuery.data?.role,
+          }
+        : undefined,
+    [userInfoQuery.data],
+  );
 
   const profileItems = [
     {
@@ -80,7 +84,7 @@ export function AuthenticatedLayout({
     onClick: onNavCrossClick,
     header: navHeader,
     profileItems,
-    user
+    user,
   };
 
   const computedFooterProps = footerProps || {

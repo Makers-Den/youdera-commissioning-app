@@ -1,9 +1,9 @@
+import { Role } from '@src/api/youdera/apiTypes';
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import {
   SelectMainModuleContent,
   SelectMainModuleContentProps,
 } from '@src/components/page-content/SelectMainModuleContent';
-import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { useMainModuleStore } from '@src/stores/useMainModuleStore';
@@ -62,7 +62,8 @@ const SelectMainModuleTypePage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.roofer, Role.admin,
+  Role.roofer,
+  Role.admin,
 ]).then(fetchProjectFromParams);
 
 export default SelectMainModuleTypePage;

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { useInverterModels } from '@src/integrations/youdera/models/hooks/useInverterModels';
+import { useInverterModelsQuery } from '@src/api/youdera/hooks/inverters/hooks';
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -13,7 +13,7 @@ export type InverterModelSelectFieldsProps = {};
 export function InverterModelSelectFields() {
   const intl = useIntl();
 
-  const { inverterModelsQuery } = useInverterModels();
+  const inverterModelsQuery = useInverterModelsQuery();
 
   const { manufacturerOptions, modelOptions } = useMemo(
     () =>

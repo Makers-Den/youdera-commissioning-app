@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { useBatteryModelsApi } from '@src/integrations/youdera/models/hooks/useBatteryModelsApi';
+import { useBatteryModelsQuery } from '@src/api/youdera/hooks/batteries/hooks';
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -13,7 +13,7 @@ export type BatteryModelsSelectFieldProps = {};
 export function BatteryModelsSelectField() {
   const intl = useIntl();
 
-  const { batteryModelsQuery } = useBatteryModelsApi();
+  const batteryModelsQuery = useBatteryModelsQuery();
 
   const { manufacturerOptions, modelOptions } = useMemo(
     () =>

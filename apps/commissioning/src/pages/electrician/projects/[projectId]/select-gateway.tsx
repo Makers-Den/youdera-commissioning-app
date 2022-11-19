@@ -1,7 +1,7 @@
+import { Role } from '@src/api/youdera/apiTypes';
+import { useGatewaysQuery } from '@src/api/youdera/hooks/gateways/hooks';
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import { SelectGatewayContent } from '@src/components/page-content/SelectGatewayContent';
-import { Role } from '@src/integrations/youdera/auth/types';
-import { useGetGateways } from '@src/integrations/youdera/gateways/hooks/useGetGateways';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { routes } from '@src/utils/routes';
@@ -29,10 +29,12 @@ const SelectGatewayPage = ({
     router.push(routes.electrician.devices(project.id));
   };
 
-  const { gatewaysQuery } = useGetGateways({ suspense: false });
+  const gatewaysQuery = useGatewaysQuery({ suspense: false });
 
-  const nextIsEnabled = (gatewaysQuery.data || [])
-    .reduce((acc, gateway) => gateway.site_id === project.id || acc, false);
+  const nextIsEnabled = (gatewaysQuery.data || []).reduce(
+    (acc, gateway) => gateway.site_id === project.id || acc,
+    false,
+  );
 
   return (
     <AuthenticatedLayout
@@ -56,20 +58,24 @@ const SelectGatewayPage = ({
             variant: 'main-green',
             type: 'button',
             onClick: onGatewaySelected,
-            disabled: !nextIsEnabled
+            disabled: !nextIsEnabled,
           },
         ],
       }}
     >
       <Suspense fallback={<LargeBoxSkeleton />}>
-        <SelectGatewayContent onGatewaySelected={onGatewaySelected} siteId={project.id}/>
+        <SelectGatewayContent
+          onGatewaySelected={onGatewaySelected}
+          siteId={project.id}
+        />
       </Suspense>
     </AuthenticatedLayout>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.electrician, Role.admin,
+  Role.electrician,
+  Role.admin,
 ]).then(fetchProjectFromParams);
 
 export default SelectGatewayPage;

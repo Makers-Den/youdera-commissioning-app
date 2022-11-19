@@ -1,4 +1,4 @@
-import { useAuth } from '@src/integrations/youdera/auth/hooks/useAuth';
+import { useAuth } from '@src/api/youdera/hooks/auth/hooks';
 import { LEGAL_NOTICE_URL, PRIVACY_POLICY_URL } from '@src/lib/constants';
 import { getAfterLoginRoute } from '@src/utils/routes';
 import Image from 'next/image';
@@ -43,7 +43,7 @@ const Login = () => {
 
   const handleChangeRememberUser = (): void => setRememberUser(!rememberUser);
 
-  const handleOnLogin = async (e: FormEvent) => {    
+  const handleOnLogin = async (e: FormEvent) => {
     e.preventDefault();
     try {
       await loginMutation.mutateAsync({
@@ -67,8 +67,10 @@ const Login = () => {
   ];
   return (
     <Layout footer={{ links }}>
-      <form className="my-auto flex h-full max-w-fit flex-col space-y-7"
-        onSubmit={handleOnLogin}>
+      <form
+        className="my-auto flex h-full max-w-fit flex-col space-y-7"
+        onSubmit={handleOnLogin}
+      >
         <Image
           src={Logo}
           alt="logo"

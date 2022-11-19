@@ -1,4 +1,4 @@
-import { useInverterModels } from '@src/integrations/youdera/models/hooks/useInverterModels';
+import { useInverterModelsQuery } from '@src/api/youdera/hooks/inverters/hooks';
 import React, { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
@@ -21,7 +21,7 @@ export const AddInverterDialog = ({
   className,
 }: Omit<DialogProps, 'children'>) => {
   const intl = useIntl();
-  const { inverterModelsQuery } = useInverterModels();
+  const inverterModelsQuery = useInverterModelsQuery();
 
   const [manufacturerValue, setManufacturerValue] =
     useState<AutocompleteSelectOption>();
