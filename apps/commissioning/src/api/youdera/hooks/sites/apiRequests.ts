@@ -14,11 +14,14 @@ export const getSite = async (siteId: string) => {
       `?with[]=files` +
       `&with[]=batteries` +
       `&with[]=batteries.testlogs` +
+      `&with[]=batteries.files` +
       `&with[]=meters` +
       `&with[]=meters.testlogs` +
+      `&with[]=meters.files` +
       `&with[]=inverters` +
       `&with[]=inverters.testlogs` +
-      `&with[]=inverters.mpp_trackers`,
+      `&with[]=inverters.mpp_trackers` +
+      `&with[]=inverters.files`,
   );
 
   return response.data.data;
