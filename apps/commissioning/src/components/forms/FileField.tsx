@@ -33,8 +33,8 @@ export const FileField = ({
   valueMapper = defaultValueMapper,
   ...props
 }: FileFieldProps) => {
-  const { resetField, setValue, formState } = useFormContext();
-  const value = useWatch({ name, defaultValue: formState.defaultValues?.[name] });
+  const { setValue } = useFormContext();
+  const value = useWatch({ name });
 
   const [files, setFiles] = useState<UploadedFile[]>([]);
 
@@ -68,7 +68,7 @@ export const FileField = ({
               className: 'w-full',
             }}
             onDeleteFile={() => {
-              resetField(name, { keepDirty: true });
+              setValue(name, null);
             }}
             uploadedFiles={files}
           >
