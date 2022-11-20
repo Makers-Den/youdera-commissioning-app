@@ -1,5 +1,5 @@
 import { ErrorMessage } from '@hookform/error-message';
-import React, { FC, ReactNode, useEffect } from 'react';
+import React, { FC, ReactNode } from 'react';
 import {
   FieldError,
   FieldValues,
@@ -23,14 +23,7 @@ export interface FieldProps {
 }
 
 export const Field: FC<FieldProps> = ({ children, name }) => {
-  const { register, formState, getFieldState, unregister } = useFormContext();
-
-  useEffect(
-    () => () => {
-      unregister(name);
-    },
-    [unregister, name],
-  );
+  const { register, formState, getFieldState } = useFormContext();
 
   return (
     <div className="w-full">
