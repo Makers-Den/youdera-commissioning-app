@@ -1,4 +1,4 @@
-import { CommsTestResult, Site } from '@src/api/youdera/apiTypes';
+import { ApiFile, CommsTestResult, Site } from '@src/api/youdera/apiTypes';
 import {
   useBatteryMutations,
   useUpdateBatteryCommsMutation,
@@ -75,6 +75,12 @@ function AreYouSureDialog({ siteId, disclosure }: AreYouSureDialogProps) {
   );
 }
 
+const fileValueMapper = (file: ApiFile | File) => ({
+  name: file.name,
+  type: file.type,
+  url: file instanceof File ? URL.createObjectURL(file) : file.url,
+});
+
 export type DevicesContentProps = {
   siteId: number;
   setNextButtonProps: (props: ButtonProps & { content: string }) => void;
@@ -96,6 +102,7 @@ export function DevicesContent({
   const actionsDialog = useDisclosure();
   const deviceDeletionDialog = useDisclosure();
   const addInverterDialog = useDisclosure();
+  const updateInverterDialog = useDisclosure();
   const addBatteryDialog = useDisclosure();
   const commsMethodDialog = useDisclosure();
   const commsResultDialog = useDisclosure();
@@ -103,6 +110,17 @@ export function DevicesContent({
   const rowClickHandler = (device: Device) => () => {
     setCurrentDevice(device);
     actionsDialog.onOpen();
+  };
+
+  const handleActionModify = () => {
+    switch (currentDevice?.deviceType) {
+      case 'Inverter':
+        updateInverterDialog.onOpen();
+        actionsDialog.onClose();
+        break;
+      default:
+        actionsDialog.onClose();
+    }
   };
 
   const handleActionCancel = () => {
@@ -129,6 +147,7 @@ export function DevicesContent({
     deleteInverterMutation,
     createInverterMutation,
     addFileToInverterMutation,
+    updateInverterMutation,
   } = useInverterMutations(siteId);
   const {
     deleteBatteryMutation,
@@ -187,6 +206,34 @@ export function DevicesContent({
     }
   };
 
+  const onUpdateInverter: InverterFormDialogProps['onSubmit'] =
+    async values => {
+      if (!currentDevice) {
+        return;
+      }
+      try {
+        const inverter = await updateInverterMutation.mutateAsync({
+          id: currentDevice?.id,
+          serial_number: values.serialNumber,
+          site: siteId,
+          cmodel: parseInt(values.model.key, 10),
+        });
+
+        if (values.file instanceof File) {
+          await addFileToInverterMutation.mutateAsync({
+            file: values.file,
+            inverterId: inverter.id,
+          });
+        }
+
+        updateInverterDialog.onClose();
+        setCurrentDevice(null);
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+    };
+
   const onAddBattery: BatteryFormDialogProps['onSubmit'] = async (
     values,
     reset,
@@ -218,7 +265,10 @@ export function DevicesContent({
 
   const devices = useExtractDevices(site);
 
-  const siteHasInverters = useMemo(() => devices.find((d) => d.deviceType === 'Inverter'), [devices]);
+  const siteHasInverters = useMemo(
+    () => devices.find(d => d.deviceType === 'Inverter'),
+    [devices],
+  );
 
   const items = [
     {
@@ -280,6 +330,26 @@ export function DevicesContent({
     });
   }, [intl, setNextButtonProps, devices, areYouSureDisclosure.onOpen]);
 
+  const defaultValues = useMemo(() => {
+    if (currentDevice?.deviceType === 'Inverter') {
+      return {
+        manufacturer: {
+          key: currentDevice.manufacturer.toString(),
+          label: currentDevice.manufacturer_name,
+        },
+        model: {
+          key: currentDevice.model.toString(),
+          label: currentDevice.model_name,
+          dependentKey: currentDevice.manufacturer.toString(),
+        },
+        serialNumber: currentDevice.serial_number,
+        file: currentDevice.files?.[0],
+      };
+    }
+
+    return undefined;
+  }, [currentDevice]);
+
   return (
     <>
       <LargeBox>
@@ -307,7 +377,7 @@ export function DevicesContent({
         })}
       >
         <>
-          <Button variant="main-green">
+          <Button variant="main-green" onClick={handleActionModify}>
             {intl.formatMessage({ defaultMessage: 'Modify properties' })}
           </Button>
           <Button variant="main-green" onClick={handleActionComms}>
@@ -350,6 +420,19 @@ export function DevicesContent({
         onSubmit={onAddInverter}
         title={intl.formatMessage({ defaultMessage: 'Add Inverter' })}
         submitButtonTitle={intl.formatMessage({ defaultMessage: 'Add Device' })}
+        fileValueMapper={fileValueMapper}
+      />
+
+      <InverterFormDialog
+        open={updateInverterDialog.isOpen}
+        onClose={updateInverterDialog.onClose}
+        onSubmit={onUpdateInverter}
+        title={intl.formatMessage({ defaultMessage: 'Update Inverter' })}
+        submitButtonTitle={intl.formatMessage({
+          defaultMessage: 'Update Device',
+        })}
+        defaultValues={defaultValues}
+        fileValueMapper={fileValueMapper}
       />
 
       <BatteryFormDialog

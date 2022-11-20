@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import React, { Suspense, useEffect } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import {
@@ -17,7 +17,7 @@ import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
 
 import { Field } from './Field';
-import { FileField } from './FileField';
+import { FileField, FileFieldProps } from './FileField';
 import { Form } from './Form';
 import { InverterModelSelectFields } from './InverterModelSelectFields';
 
@@ -41,6 +41,8 @@ export type InverterFormDialogProps = {
   onSubmit: (values: FormValues, resetForm: () => void) => void;
   title: string;
   submitButtonTitle: string;
+  defaultValues?: Partial<FormValues>;
+  fileValueMapper?: FileFieldProps['valueMapper'];
 };
 
 export const InverterFormDialog = ({
@@ -50,6 +52,8 @@ export const InverterFormDialog = ({
   onSubmit,
   title,
   submitButtonTitle,
+  defaultValues,
+  fileValueMapper,
 }: InverterFormDialogProps) => {
   const intl = useIntl();
 
@@ -57,9 +61,31 @@ export const InverterFormDialog = ({
     resolver: zodResolver(validation),
   });
 
-  const { handleSubmit, reset, formState, watch } = method;
+  const { handleSubmit, reset, formState, control } = method;
 
-  const [model, serialNumber, file] = watch(['model', 'serialNumber', 'file']);
+  useEffect(() => {
+    if (defaultValues) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, reset]);
+
+  const model = useWatch({
+    name: 'model',
+    defaultValue: formState.defaultValues?.model,
+    control,
+  });
+
+  const serialNumber = useWatch({
+    name: 'serialNumber',
+    defaultValue: formState.defaultValues?.serialNumber,
+    control,
+  });
+
+  const file = useWatch({
+    name: 'file',
+    defaultValue: formState.defaultValues?.file,
+    control,
+  });
 
   const showFields = {
     first: true,
@@ -90,7 +116,11 @@ export const InverterFormDialog = ({
           className="flex flex-col gap-5"
           {...method}
         >
-          {showFields.first && <InverterModelSelectFields />}
+          {showFields.first && (
+            <Suspense fallback="loading">
+              <InverterModelSelectFields />
+            </Suspense>
+          )}
           {showFields.second && (
             <Field name="serialNumber">
               {(register, fieldState) => (
@@ -109,7 +139,7 @@ export const InverterFormDialog = ({
             </Field>
           )}
           {showFields.third && (
-            <FileField name="file">
+            <FileField name="file" valueMapper={fileValueMapper}>
               <div className="flex items-center gap-4">
                 <SvgIcon name="Camera" className="w-8 text-green-400" />
                 <div>

@@ -226,6 +226,13 @@ export interface CreateInverterRequestBody {
   cmodel?: number;
 }
 
+export interface UpdateInverterRequestBody {
+  id: Inverter['id'];
+  serial_number?: string;
+  site: number;
+  cmodel?: number;
+}
+
 export type MonthMap<T> = {
   apr: T;
   aug: T;

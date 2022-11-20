@@ -9,6 +9,7 @@ import {
   getInverterModels,
   getInverters,
   getInverterVerificationGuide,
+  updateInverter,
 } from './apiRequests';
 import { youderaApiInstance } from '../../api-instances/youdera';
 import { CommsParams, CommsTestResult, DataResponse } from '../../apiTypes';
@@ -38,30 +39,22 @@ export const useInverterMutations = (siteId: number) => {
 
   const createInverterMutation = useMutation(createInverter, {
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        [QueryKeys.editedSite, siteId],
-        [QueryKeys.inverters, siteId],
-      ]);
+      queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
+      queryClient.invalidateQueries([QueryKeys.inverters, siteId]);
     },
   });
 
-  /*
   const updateInverterMutation = useMutation(updateInverter, {
     onSuccess: () => {
-      queryClient.invalidateQueries([
-          [QueryKeys.editedSite, siteId],
-          [QueryKeys.inverters, siteId],
-        ])
+      queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
+      queryClient.invalidateQueries([QueryKeys.inverters, siteId]);
     },
   });
-  */
 
   const deleteInverterMutation = useMutation(deleteInverter, {
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        [QueryKeys.editedSite, siteId],
-        [QueryKeys.inverters, siteId],
-      ]);
+      queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
+      queryClient.invalidateQueries([QueryKeys.inverters, siteId]);
     },
   });
 
@@ -69,25 +62,22 @@ export const useInverterMutations = (siteId: number) => {
     executeInverterVerification,
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([
-          [QueryKeys.editedSite, siteId],
-          [QueryKeys.inverters, siteId],
-        ]);
+        queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
+        queryClient.invalidateQueries([QueryKeys.inverters, siteId]);
       },
     },
   );
 
   const addFileToInverterMutation = useMutation(addFileToInverter, {
     onSuccess: () => {
-      queryClient.invalidateQueries([
-        [QueryKeys.editedSite, siteId],
-        [QueryKeys.inverters, siteId],
-      ]);
+      queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
+      queryClient.invalidateQueries([QueryKeys.inverters, siteId]);
     },
   });
 
   return {
     addFileToInverterMutation,
+    updateInverterMutation,
     createInverterMutation,
     deleteInverterMutation,
     executeInverterVerificationMutation,
