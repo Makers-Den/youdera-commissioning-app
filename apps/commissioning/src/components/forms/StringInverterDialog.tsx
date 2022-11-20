@@ -42,9 +42,9 @@ export type InverterDefaultValuesProps = {
   inverter: AutocompleteSelectOption;
   input: AutocompleteSelectOption;
   file: ApiFile;
-  manufacturer: AutocompleteSelectOption;
-  model: AutocompleteSelectOption;
-  newInput: AutocompleteSelectOption;
+  manufacturer: undefined;
+  model: undefined;
+  newInput: undefined;
 };
 export type StringInverterDialogProps<
   ResolverTypeExistingInverter extends ZodObject<RawFormShapeExistingInverter>,
@@ -284,7 +284,7 @@ export const StringInverterDialog = <
                     name="model"
                     options={inverterModelsOptions}
                     label={intl.formatMessage({
-                      defaultMessage: 'Inverter Mode',
+                      defaultMessage: 'Inverter Model',
                     })}
                     placeholder={intl.formatMessage({
                       defaultMessage: 'Select',

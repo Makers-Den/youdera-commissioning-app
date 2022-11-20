@@ -234,6 +234,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
         });
 
         // ! Bug in this place -  setInverterId
+        // ! It is esentially one render behind. 
         setInverterId(inverter.id);
         console.log(inverterId)
 
@@ -296,18 +297,9 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
           icon: 'Chip',
         },
         file: defaultFile,
-        manufacturer: {
-          label: '',
-          key: '',
-        },
-        model: {
-          label: '',
-          key: '',
-        },
-        newInput: {
-          label: '',
-          key: '',
-        },
+        manufacturer: undefined,
+        model: undefined,
+        newInput: undefined,
       };
     }, [inverters, stringDetails]);
   return (
