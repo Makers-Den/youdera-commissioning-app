@@ -383,8 +383,8 @@ export interface CreateModuleRequestBody {
 
 export interface UpdateModuleRequestBody {
   id: ModuleField['id'];
-  name?: string;
-  orientation?: number;
-  inclination?: number;
-  specific_yield?: number;
+  name: string;
+  orientation: number;
+  inclination: number;
+  specific_yield: number;
 }

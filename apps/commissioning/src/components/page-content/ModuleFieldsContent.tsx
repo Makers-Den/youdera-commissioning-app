@@ -115,12 +115,18 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
 
   const updateSubmitHandler: ModuleFieldFormDialogProps<
     typeof updateModuleValidation
-  >['onSubmit'] = async (values, resetForm) => {
+  >['onSubmit'] = async (
+    { name, slantAngle, specificYield, azimut },
+    resetForm,
+  ) => {
     if (currentModule.current) {
       try {
         await updateModuleFieldsMutation.mutateAsync({
           id: currentModule.current.id,
-          ...values,
+          specific_yield: specificYield,
+          name,
+          orientation: azimut,
+          inclination: slantAngle,
         });
         updateDialog.onClose();
         setCurrentModule(null);
