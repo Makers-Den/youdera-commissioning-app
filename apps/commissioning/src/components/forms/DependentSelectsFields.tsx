@@ -5,6 +5,7 @@ import {
   AutocompleteSelectProps,
 } from 'ui/select/AutocompleteSelect';
 import { SelectOption, SelectProps } from 'ui/select/Select';
+import clsxm from 'ui/utils/clsxm';
 
 import { AutocompleteSelectField } from './AutocompleteField';
 import { SelectField } from './SelectField';
@@ -31,14 +32,21 @@ export function DependentSelectsFields({
   dependentOptions,
   dependentName,
 }: DependentSelectsFieldsProps) {
-  const { setValue } = useFormContext();
-  const value = useWatch({ name });
+  const { setValue, formState } = useFormContext();
+  const value = useWatch({
+    name,
+    defaultValue: formState.defaultValues?.[name],
+  });
+  const dependentValue = useWatch({
+    name: dependentName,
+    defaultValue: formState.defaultValues?.[dependentName],
+  });
 
   useEffect(() => {
-    if (value?.key) {
+    if (value?.key !== dependentValue?.dependentKey) {
       setValue(dependentName, null);
     }
-  }, [value?.key, dependentName, setValue]);
+  }, [value?.key, dependentValue?.dependentKey, dependentName, setValue]);
 
   const filteredOptions = useMemo(
     () => dependentOptions.filter(option => option.dependentKey === value?.key),
@@ -53,13 +61,12 @@ export function DependentSelectsFields({
         {...autoCompleteProps}
       />
 
-      {value && (
-        <SelectField
-          name={dependentName}
-          options={filteredOptions}
-          {...dependentSelectProps}
-        />
-      )}
+      <SelectField
+        wrapperClassName={clsxm(!value && 'hidden')}
+        name={dependentName}
+        options={filteredOptions}
+        {...dependentSelectProps}
+      />
     </>
   );
 }
