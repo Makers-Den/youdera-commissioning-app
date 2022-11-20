@@ -7,6 +7,7 @@ import {
   executeBatteryVerification,
   getBatteryModels,
   getBatteryVerificationGuide,
+  updateBattery,
 } from './apiRequests';
 import { youderaApiInstance } from '../../api-instances/youdera';
 import {
@@ -14,6 +15,7 @@ import {
   CommsTestResult,
   CreateBatteryRequest,
   DataResponse,
+  UpdateBatteryRequest,
 } from '../../apiTypes';
 import { QueryKeys } from '../../enums/queryKeys';
 
@@ -54,13 +56,16 @@ export const useBatteryMutations = (siteId: number) => {
       queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
     },
   });
-  /*
-  const updateBatteryMutation = useMutation(updateBattery, {
-    onSuccess: () => {
-      queryClient.invalidateQueries([QueryKeys.editedSite, siteId])
+
+  const updateBatteryMutation = useMutation(
+    (body: Omit<UpdateBatteryRequest, 'site'>) =>
+      updateBattery({ site: siteId, ...body }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
+      },
     },
-  });
-  */
+  );
 
   const deleteBatteryMutation = useMutation(deleteBattery, {
     onSuccess: () => {
@@ -82,6 +87,7 @@ export const useBatteryMutations = (siteId: number) => {
     deleteBatteryMutation,
     executeBatteryVerificationMutation,
     createBatteryMutation,
+    updateBatteryMutation,
   };
 };
 

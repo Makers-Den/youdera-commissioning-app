@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -18,7 +18,7 @@ import { z } from 'zod';
 
 import { BatteryModelsSelectField } from './BatteryModelsSelectField';
 import { Field } from './Field';
-import { FileField } from './FileField';
+import { FileField, FileFieldProps } from './FileField';
 import { Form } from './Form';
 import { InverterInstancesSelectField } from './InverterInstancesSelectField';
 
@@ -45,6 +45,7 @@ export type BatteryFormDialogProps = {
   submitButtonTitle: string;
   siteId: number;
   defaultValues?: Partial<FormValues>;
+  fileValueMapper?: FileFieldProps['valueMapper'];
 };
 
 export const BatteryFormDialog = ({
@@ -56,6 +57,7 @@ export const BatteryFormDialog = ({
   submitButtonTitle,
   siteId,
   defaultValues,
+  fileValueMapper,
 }: BatteryFormDialogProps) => {
   const intl = useIntl();
 
@@ -65,6 +67,12 @@ export const BatteryFormDialog = ({
   });
 
   const { handleSubmit, reset, formState, watch } = method;
+
+  useEffect(() => {
+    if (defaultValues) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, reset]);
 
   const [model, serialNumber, inverter, file] = watch([
     'model',
@@ -133,7 +141,7 @@ export const BatteryFormDialog = ({
           )}
 
           {showFields.fourth && (
-            <FileField name="file">
+            <FileField name="file" valueMapper={fileValueMapper}>
               <div className="flex items-center gap-4">
                 <SvgIcon name="Camera" className="w-8 text-green-400" />
                 <div>

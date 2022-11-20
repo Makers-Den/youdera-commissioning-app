@@ -104,6 +104,7 @@ export function DevicesContent({
   const addInverterDialog = useDisclosure();
   const updateInverterDialog = useDisclosure();
   const addBatteryDialog = useDisclosure();
+  const updateBatteryDialog = useDisclosure();
   const commsMethodDialog = useDisclosure();
   const commsResultDialog = useDisclosure();
 
@@ -116,6 +117,10 @@ export function DevicesContent({
     switch (currentDevice?.deviceType) {
       case 'Inverter':
         updateInverterDialog.onOpen();
+        actionsDialog.onClose();
+        break;
+      case 'Battery':
+        updateBatteryDialog.onOpen();
         actionsDialog.onClose();
         break;
       default:
@@ -153,6 +158,7 @@ export function DevicesContent({
     deleteBatteryMutation,
     createBatteryMutation,
     addFileToBatteryMutation,
+    updateBatteryMutation,
   } = useBatteryMutations(siteId);
   const { deleteMeterMutation } = useMeterMutations(siteId);
 
@@ -263,6 +269,35 @@ export function DevicesContent({
     }
   };
 
+  const onUpdateBattery: BatteryFormDialogProps['onSubmit'] = async values => {
+    if (!currentDevice) {
+      return;
+    }
+    try {
+      const battery = await updateBatteryMutation.mutateAsync({
+        id: currentDevice.id,
+        serial_number: values.serialNumber,
+        cmodel: parseInt(values.model.key, 10),
+        manufacturer: values.manufacturer.label,
+        model: values.manufacturer.label,
+        inverter_id: parseInt(values.inverter.key, 10),
+      });
+
+      if (values.file instanceof File) {
+        await addFileToBatteryMutation.mutateAsync({
+          file: values.file,
+          batteryId: battery.id,
+        });
+      }
+
+      setCurrentDevice(null);
+      updateBatteryDialog.onClose();
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  };
+
   const devices = useExtractDevices(site);
 
   const siteHasInverters = useMemo(
@@ -344,6 +379,30 @@ export function DevicesContent({
         },
         serialNumber: currentDevice.serial_number,
         file: currentDevice.files?.[0],
+      };
+    }
+    if (currentDevice?.deviceType === 'Battery') {
+      return {
+        manufacturer: {
+          key: currentDevice.manufacturer.toString(),
+          label: currentDevice.manufacturer_name,
+        },
+        model: {
+          key: currentDevice.model.toString(),
+          label: currentDevice.model_name,
+          dependentKey: currentDevice.manufacturer.toString(),
+        },
+        serialNumber: currentDevice.serial_number,
+        file: {
+          url: currentDevice.imageUrl,
+          type: 'image',
+          name: currentDevice.name,
+        },
+        //TODO inverter data
+        // inverter: {
+        //   key: currentDevice.inverter.toString(),
+        //   label: currentDevice.inverter_name,
+        // },
       };
     }
 
@@ -442,6 +501,20 @@ export function DevicesContent({
         title={intl.formatMessage({ defaultMessage: 'Add Battery' })}
         submitButtonTitle={intl.formatMessage({ defaultMessage: 'Add Device' })}
         siteId={siteId}
+        fileValueMapper={fileValueMapper}
+      />
+
+      <BatteryFormDialog
+        open={updateBatteryDialog.isOpen}
+        onClose={updateBatteryDialog.onClose}
+        onSubmit={onUpdateBattery}
+        title={intl.formatMessage({ defaultMessage: 'Update Battery' })}
+        submitButtonTitle={intl.formatMessage({
+          defaultMessage: 'Update Device',
+        })}
+        siteId={siteId}
+        defaultValues={defaultValues}
+        fileValueMapper={fileValueMapper}
       />
 
       {currentDevice && (

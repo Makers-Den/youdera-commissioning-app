@@ -333,6 +333,16 @@ export interface CreateBatteryRequest {
   inverter_id: number;
 }
 
+export interface UpdateBatteryRequest {
+  id: Battery['id'];
+  manufacturer: string;
+  model: string;
+  serial_number: string;
+  cmodel: number;
+  site: number;
+  inverter_id: number;
+}
+
 export interface AddFileToBatteryRequest {
   file: File;
   batteryId: Battery['id'];

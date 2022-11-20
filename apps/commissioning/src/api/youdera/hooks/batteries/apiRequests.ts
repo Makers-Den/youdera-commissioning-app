@@ -6,6 +6,7 @@ import {
   BatteryModel,
   CreateBatteryRequest,
   DataResponse,
+  UpdateBatteryRequest,
   VerificationTestResult,
 } from '../../apiTypes';
 
@@ -31,6 +32,16 @@ export const createBattery = async (body: CreateBatteryRequest) => {
 
   return response.data.data;
 };
+
+export const updateBattery = async ({ id, ...body }: UpdateBatteryRequest) => {
+  const response = await youderaApiInstance.patch<DataResponse<Battery>>(
+    `/batteries/${id}`,
+    { ...body, name: 'Default' },
+  );
+
+  return response.data.data;
+};
+
 export const getBatteryVerificationGuide = async (
   id: number,
 ): Promise<string> => {
