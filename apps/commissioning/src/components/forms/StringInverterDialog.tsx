@@ -181,7 +181,9 @@ export const StringInverterDialog = <
     if (!watchManufacturer || !inverterModels) return [];
     return inverterModels
       .filter(
-        model => model.manufacturer_id.toString() === watchManufacturer.key,
+        model =>
+          model.manufacturer_id.toString() ===
+          (watchManufacturer as AutocompleteSelectOption).key,
       )
       .map(model => ({
         key: model.id.toString(),
@@ -195,7 +197,8 @@ export const StringInverterDialog = <
     useMemo(() => {
       if (!watchModel || !inverterModels) return [];
       const numberOfInputs = inverterModels.filter(
-        model => model.id.toString() === watchModel.key,
+        model =>
+          model.id.toString() === (watchModel as AutocompleteSelectOption).key,
       )[0]?.data.inputs;
       return Array(numberOfInputs)
         .fill(0)

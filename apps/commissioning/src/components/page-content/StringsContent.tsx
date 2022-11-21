@@ -1,4 +1,5 @@
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
+import { getInverterDetails } from '@src/integrations/youdera/apiRequests';
 import {
   ApiFile,
   CreateStringRequestBody,
@@ -100,12 +101,8 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
   );
   const stringDetails = stringDetailsQuery.data as String;
 
-  const [inverterId, setInverterId] = useState<number>(-1);
-
   const { invertersQuery } = useInverters(siteId);
   const inverters = invertersQuery.data as Inverter[];
-  const inverterDetailsQuery = useInverterDetailsQuery(inverterId);
-  const inverterDetails = inverterDetailsQuery.data as Inverter;
 
   const { createInverterMutation } = useInverterMutations(siteId);
 
@@ -233,10 +230,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
           cmodel: model.value,
         });
 
-        // ! Bug in this place -  setInverterId
-        // ! It is esentially one render behind. 
-        setInverterId(inverter.id);
-        console.log(inverterId)
+        const inverterDetails = await getInverterDetails(inverter.id);
 
         const stringRequestData = {
           count: moduleTypeFormData.current!.numberOfModules,
