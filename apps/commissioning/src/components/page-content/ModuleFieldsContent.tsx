@@ -12,6 +12,7 @@ import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
 import { useDisclosure } from 'ui/dialogs/useDisclosure';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
+import { Toast, useToast } from 'ui/toast/Toast';
 import { z } from 'zod';
 
 import { ActionsDialog } from '../dialogs/ActionsDialog';
@@ -59,6 +60,8 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   const router = useRouter();
   useZodErrorMap();
 
+  const toast = useToast();
+
   const currentModule = useRef<ModuleField | null>(null);
 
   const moduleFieldsQuery = useModuleFieldsQuery(projectId);
@@ -99,6 +102,11 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
         orientation: azimut,
         inclination: slantAngle,
       });
+      toast.success(
+        intl.formatMessage({
+          defaultMessage: 'Module field added successfully!',
+        }),
+      );
       createDialog.onClose();
       resetForm();
       router.push(
@@ -108,8 +116,8 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
         ),
       );
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
+      //@ts-ignore
+      toast.error(err.message);
     }
   };
 
@@ -128,12 +136,19 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
           orientation: azimut,
           inclination: slantAngle,
         });
+        toast.success(
+          intl.formatMessage({
+            defaultMessage: 'Module field updated successfully!',
+          }),
+        );
         updateDialog.onClose();
         setCurrentModule(null);
         resetForm();
       } catch (err) {
+        //@ts-ignore
+        toast.error(err.message);
         // eslint-disable-next-line no-console
-        console.log(err);
+        console.error(err);
       }
     }
   };
@@ -142,11 +157,18 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     if (currentModule.current) {
       try {
         await deleteModuleFieldsMutation.mutateAsync(currentModule.current.id);
+        toast.success(
+          intl.formatMessage({
+            defaultMessage: 'Module field deleted successfully!',
+          }),
+        );
         deletionDialog.onClose();
         setCurrentModule(null);
       } catch (err) {
+        //@ts-ignore
+        toast.error(err.message);
         // eslint-disable-next-line no-console
-        console.log(err);
+        console.error(err);
       }
     }
   };
@@ -294,6 +316,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
         onDelete={confirmDeleteHandler}
         isDeleting={deleteModuleFieldsMutation.isLoading}
       />
+      <Toast />
     </>
   );
 }

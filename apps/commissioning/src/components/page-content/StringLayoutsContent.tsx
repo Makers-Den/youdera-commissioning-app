@@ -6,6 +6,7 @@ import {
 import { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { useDisclosure } from 'ui/dialogs/useDisclosure';
+import { Toast, useToast } from 'ui/toast/Toast';
 
 import { DeletionDialog } from '../dialogs/DeletionDialog';
 import { ImagesUploadBox, ImagesUploadBoxProps } from '../ImagesUploadBox';
@@ -16,6 +17,8 @@ export type StringLayoutsContentProps = {
 
 export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
   const intl = useIntl();
+
+  const toast = useToast();
 
   const fileIdToDelete = useRef<string | null>(null);
 
@@ -44,7 +47,16 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
           setUploadProgress: setUploadPercentageProgress,
         });
         setUploadedUrl(response.url);
+        toast.success(
+          intl.formatMessage({
+            defaultMessage: 'File uploaded successfully!',
+          }),
+        );
       } catch (err) {
+        //@ts-ignore
+        toast.error(err.message);
+        // eslint-disable-next-line no-console
+        console.error(err);
         setErrorMessage('There was an issue');
       }
     };
@@ -61,9 +73,16 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
           documentId: fileIdToDelete.current,
         });
 
+        toast.success(
+          intl.formatMessage({
+            defaultMessage: 'File deleted successfully!',
+          }),
+        );
         fileIdToDelete.current = null;
         deleteDialog.onClose();
       } catch (err) {
+        //@ts-ignore
+        toast.error(err.message);
         // eslint-disable-next-line no-console
         console.error(err);
       }
@@ -121,6 +140,7 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
         isDeleting={deleteFileFromSiteMutation.isLoading}
         onDelete={onDeleteConfrimHandler}
       />
+      <Toast />
     </>
   );
 }
