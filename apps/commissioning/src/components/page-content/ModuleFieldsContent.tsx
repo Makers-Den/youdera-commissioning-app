@@ -1,10 +1,12 @@
+import { ModuleField } from '@src/api/youdera/apiTypes';
+import {
+  useModuleFieldsMutations,
+  useModuleFieldsQuery,
+} from '@src/api/youdera/hooks/module-fields/hooks';
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
-import { useModuleFields } from '@src/integrations/youdera/module-fields/hooks/useModuleFields';
-import { ModuleField } from '@src/integrations/youdera/module-fields/types';
-import { removeNullAndUndefinedFromObject } from '@src/utils/removeNullAndUndefinedFromObject';
 import { routes } from '@src/utils/routes';
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
@@ -28,10 +30,10 @@ const createModuleValidation = z.object({
 });
 
 const updateModuleValidation = z.object({
-  name: z.string().min(2).optional().or(z.literal('')),
-  specificYield: z.number().gt(0).or(z.literal(undefined)),
-  azimut: z.number().gt(0).lte(360).or(z.literal(undefined)),
-  slantAngle: z.number().gt(0).lte(90).or(z.literal(undefined)),
+  name: z.string().min(2),
+  specificYield: z.number().gt(0),
+  azimut: z.number().gt(0).lte(360),
+  slantAngle: z.number().gt(0).lte(90),
 });
 
 const rowKeys: (keyof ModuleField)[] = [
@@ -57,14 +59,15 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   const router = useRouter();
   useZodErrorMap();
 
-  const currentModuleId = useRef<string | null>(null);
+  const currentModule = useRef<ModuleField | null>(null);
+
+  const moduleFieldsQuery = useModuleFieldsQuery(projectId);
 
   const {
-    moduleFieldsQuery,
     createModuleFieldsMutation,
     deleteModuleFieldsMutation,
     updateModuleFieldsMutation,
-  } = useModuleFields(projectId);
+  } = useModuleFieldsMutations(projectId);
 
   const actionsDialog = useDisclosure();
   const createDialog = useDisclosure();
@@ -79,8 +82,8 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     intl.formatMessage({ defaultMessage: 'Specific Yield' }),
   ];
 
-  const setCurrentModuleId = (id: string | null) => {
-    currentModuleId.current = id;
+  const setCurrentModule = (module: ModuleField | null) => {
+    currentModule.current = module;
   };
 
   const createSubmitHandler: ModuleFieldFormDialogProps<
@@ -90,7 +93,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     resetForm,
   ) => {
     try {
-      await createModuleFieldsMutation.mutateAsync({
+      const moduleField = await createModuleFieldsMutation.mutateAsync({
         specific_yield: specificYield,
         name,
         orientation: azimut,
@@ -98,6 +101,12 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
       });
       createDialog.onClose();
       resetForm();
+      router.push(
+        routes.roofer.moduleFieldStrings(
+          Number(projectId),
+          Number(moduleField.id),
+        ),
+      );
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);
@@ -107,24 +116,20 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   const updateSubmitHandler: ModuleFieldFormDialogProps<
     typeof updateModuleValidation
   >['onSubmit'] = async (
-    { specificYield, name, azimut, slantAngle },
+    { name, slantAngle, specificYield, azimut },
     resetForm,
   ) => {
-    if (currentModuleId.current) {
-      const values = removeNullAndUndefinedFromObject({
-        specific_yield: specificYield,
-        name: name || undefined,
-        orientation: azimut,
-        inclination: slantAngle,
-      });
-
+    if (currentModule.current) {
       try {
         await updateModuleFieldsMutation.mutateAsync({
-          id: currentModuleId.current,
-          ...values,
+          id: currentModule.current.id,
+          specific_yield: specificYield,
+          name,
+          orientation: azimut,
+          inclination: slantAngle,
         });
         updateDialog.onClose();
-        setCurrentModuleId(null);
+        setCurrentModule(null);
         resetForm();
       } catch (err) {
         // eslint-disable-next-line no-console
@@ -134,11 +139,11 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   };
 
   const confirmDeleteHandler = async () => {
-    if (currentModuleId.current) {
+    if (currentModule.current) {
       try {
-        await deleteModuleFieldsMutation.mutateAsync(currentModuleId.current);
+        await deleteModuleFieldsMutation.mutateAsync(currentModule.current.id);
         deletionDialog.onClose();
-        setCurrentModuleId(null);
+        setCurrentModule(null);
       } catch (err) {
         // eslint-disable-next-line no-console
         console.log(err);
@@ -146,18 +151,18 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     }
   };
 
-  const rowClickHandler = (moduleId: string) => () => {
-    setCurrentModuleId(moduleId);
+  const rowClickHandler = (module: ModuleField) => () => {
+    setCurrentModule(module);
     actionsDialog.onOpen();
   };
 
   const handleActionCancel = () => {
-    setCurrentModuleId(null);
+    setCurrentModule(null);
     actionsDialog.onClose();
   };
 
   const handleDeleteCancel = () => {
-    setCurrentModuleId(null);
+    setCurrentModule(null);
     deletionDialog.onClose();
   };
 
@@ -172,8 +177,26 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   };
 
   const handleActionUpdateStrings = () => {
-    router.push(routes.roofer.moduleFieldStrings(Number(projectId), Number(currentModuleId.current) || 0));
-  }
+    router.push(
+      routes.roofer.moduleFieldStrings(
+        Number(projectId),
+        Number(currentModule.current?.id) || 0,
+      ),
+    );
+  };
+
+  const defaultValues = useMemo(() => {
+    if (currentModule.current) {
+      return {
+        specificYield: currentModule.current.specific_yield,
+        name: currentModule.current.name,
+        azimut: currentModule.current.orientation,
+        slantAngle: currentModule.current.inclination,
+      };
+    }
+    return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentModule.current?.id]);
 
   return (
     <>
@@ -200,7 +223,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
                 <Tr
                   className="cursor-pointer"
                   key={module.id}
-                  onClick={rowClickHandler(module.id)}
+                  onClick={rowClickHandler(module)}
                 >
                   {rowKeys.map(key => (
                     <Td key={`${module.id}-${key}`}>
@@ -237,6 +260,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
           defaultMessage: 'Save',
         })}
         onSubmit={updateSubmitHandler}
+        defaultValues={defaultValues}
       />
       <ActionsDialog
         isOpen={actionsDialog.isOpen}

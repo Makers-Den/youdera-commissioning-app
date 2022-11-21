@@ -3,8 +3,8 @@ import {
   ApiFile,
   Inverter,
   InverterModel,
-} from '@src/integrations/youdera/apiTypes';
-import { useInverters } from '@src/integrations/youdera/inverters/hooks/useInverters';
+} from '@src/api/youdera/apiTypes';
+import { useInverterModelsQuery, useInvertersQuery } from '@src/api/youdera/hooks/inverters/hooks';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useIntl } from 'react-intl';
@@ -106,7 +106,9 @@ export const StringInverterDialog = <
     ),
   });
   const { handleSubmit, reset, formState, watch } = method;
-  const { inverterModelsQuery, invertersQuery } = useInverters(siteId);
+  const inverterModelsQuery = useInverterModelsQuery()
+  const invertersQuery = useInvertersQuery(siteId)
+
   const inverters = invertersQuery.data as Inverter[];
   const inverterModels = inverterModelsQuery.data as InverterModel[];
   const watchFile = watch('file');
@@ -159,6 +161,7 @@ export const StringInverterDialog = <
       value: input.id,
     }));
   }, [watchInverter, inverters]);
+
   // * Form with creation of new inverter
   const inverterManufacturesOptions: AutocompleteSelectOption[] | [] =
     useMemo(() => {

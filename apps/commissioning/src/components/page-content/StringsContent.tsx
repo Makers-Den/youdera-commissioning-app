@@ -1,18 +1,12 @@
+import { ApiFile, CreateStringRequestBody, Inverter, String } from '@src/api/youdera/apiTypes';
+import { getInverterDetails } from '@src/api/youdera/hooks/inverters/apiRequests';
+import { useInverterMutations, useInvertersQuery } from '@src/api/youdera/hooks/inverters/hooks';
+import {
+  useStringDetailsQuery,
+  useStringsMutations,
+  useStringsQuery,
+} from '@src/api/youdera/hooks/strings/hooks';
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
-import { getInverterDetails } from '@src/integrations/youdera/apiRequests';
-import {
-  ApiFile,
-  CreateStringRequestBody,
-  Inverter,
-  String,
-} from '@src/integrations/youdera/apiTypes';
-import {
-  useInverterDetailsQuery,
-  useInverterMutations,
-} from '@src/integrations/youdera/inverterApiHooks';
-import { useInverters } from '@src/integrations/youdera/inverters/hooks/useInverters';
-import { useStrings } from '@src/integrations/youdera/strings/hooks/useStrings';
-import { useString } from '@src/integrations/youdera/stringsApiHooks';
 import { Suspense, useMemo, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
@@ -86,22 +80,20 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
   useZodErrorMap();
 
   const [selectedId, setSelectedId] = useState<number>();
+  const stringsOnRoofQuery = useStringsQuery(roofId);
 
   const {
-    stringsOnRoofQuery,
     createStringMutation,
     deleteStringMutation,
     addFileToStringMutation,
     deleteFileFromStringMutation,
-  } = useStrings(roofId);
+    updateStringMutation
+  } = useStringsMutations(roofId);
 
-  const { stringDetailsQuery, updateStringMutation } = useString(
-    selectedId ?? -1,
-    roofId
-  );
+  const stringDetailsQuery = useStringDetailsQuery(selectedId ?? -1)
   const stringDetails = stringDetailsQuery.data as String;
 
-  const { invertersQuery } = useInverters(siteId);
+  const invertersQuery = useInvertersQuery(siteId);
   const inverters = invertersQuery.data as Inverter[];
 
   const { createInverterMutation } = useInverterMutations(siteId);

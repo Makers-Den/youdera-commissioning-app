@@ -1,6 +1,6 @@
+import { Role } from '@src/api/youdera/apiTypes';
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import { SelectProjectContent } from '@src/components/page-content/SelectProjectContent';
-import { Role } from '@src/integrations/youdera/auth/types';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { routes } from '@src/utils/routes';
@@ -34,14 +34,17 @@ const SelectProjectPage = () => {
       }}
     >
       <Suspense fallback={<LargeBoxSkeleton />}>
-        <SelectProjectContent projectPathCreator={routes.roofer.selectModuleType} />
+        <SelectProjectContent
+          projectPathCreator={routes.roofer.selectModuleType}
+        />
       </Suspense>
     </AuthenticatedLayout>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.roofer, Role.admin,
+  Role.roofer,
+  Role.admin,
 ]).then(async _context => ({
   props: {},
 }));

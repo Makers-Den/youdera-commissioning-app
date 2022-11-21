@@ -1,4 +1,4 @@
-import { useGetUncommissionedSites } from '@src/integrations/youdera/sites/hooks/useGetUncommissionedSites';
+import { useUncommissionedSitesQuery } from '@src/api/youdera/hooks/sites/hooks';
 import { useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
@@ -18,7 +18,7 @@ export function SelectProjectContent({
   const intl = useIntl();
   const [searchInput, setSearchInput] = useState('');
 
-  const { uncommissionedSitesQuery } = useGetUncommissionedSites();
+  const { uncommissionedSitesQuery } = useUncommissionedSitesQuery();
 
   const projects = useMemo(
     () =>

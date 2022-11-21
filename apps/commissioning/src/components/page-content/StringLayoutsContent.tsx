@@ -1,5 +1,8 @@
-import { useFiles } from '@src/integrations/youdera/files/hooks/useFiles';
-import { ApiFileType } from '@src/integrations/youdera/files/types';
+import { ApiFileType } from '@src/api/youdera/apiTypes';
+import {
+  useFilesMutations,
+  useFilesQuery,
+} from '@src/api/youdera/hooks/files/hooks';
 import { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { useDisclosure } from 'ui/dialogs/useDisclosure';
@@ -20,8 +23,10 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
   const additionalPicturesGallery = useDisclosure();
   const deleteDialog = useDisclosure();
 
-  const { filesQuery, deleteFileFromSiteMutation, addFileToSiteMutation } =
-    useFiles(projectId);
+  const filesQuery = useFilesQuery(projectId);
+
+  const { deleteFileFromSiteMutation, addFileToSiteMutation } =
+    useFilesMutations(projectId);
 
   const uploadFile =
     (type: ApiFileType): ImagesUploadBoxProps['uploadFile'] =>

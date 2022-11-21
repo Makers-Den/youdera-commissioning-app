@@ -1,4 +1,4 @@
-import { getInverters } from '@src/integrations/youdera/inverters/queries/getInverters';
+import { getInverters } from '@src/api/youdera/hooks/inverters/apiRequests';
 import { GetServerSidePropsContext } from 'next';
 
 export const fetchInvertersFromParams = async (

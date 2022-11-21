@@ -1,7 +1,7 @@
+import { Role } from '@src/api/youdera/apiTypes';
+import { useGatewaysQuery } from '@src/api/youdera/hooks/gateways/hooks';
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import { SelectProjectContent } from '@src/components/page-content/SelectProjectContent';
-import { Role } from '@src/integrations/youdera/auth/types';
-import { useGetGateways } from '@src/integrations/youdera/gateways/hooks/useGetGateways';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { routes } from '@src/utils/routes';
@@ -11,22 +11,24 @@ import React, { Suspense, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 
 const SelectProjectContentWithGatewaySkip = () => {
-  const { gatewaysQuery } = useGetGateways();
-  
+  const gatewaysQuery = useGatewaysQuery();
+
   const projectPathCreator = useCallback(
     (siteId: number) => {
-      const hasGateway = !!gatewaysQuery.data?.find(gateway => gateway.site_id === siteId)
+      const hasGateway = !!gatewaysQuery.data?.find(
+        gateway => gateway.site_id === siteId,
+      );
       if (hasGateway) {
         return routes.electrician.devices(siteId);
       }
-      
+
       return routes.electrician.selectGateway(siteId);
     },
-    [gatewaysQuery.data]
+    [gatewaysQuery.data],
   );
 
-  return <SelectProjectContent projectPathCreator={projectPathCreator} />
-}
+  return <SelectProjectContent projectPathCreator={projectPathCreator} />;
+};
 
 const SelectProjectPage = () => {
   const intl = useIntl();
@@ -60,7 +62,8 @@ const SelectProjectPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = protectRoute([
-  Role.electrician, Role.admin,
+  Role.electrician,
+  Role.admin,
 ]).then(async _context => ({
   props: {},
 }));

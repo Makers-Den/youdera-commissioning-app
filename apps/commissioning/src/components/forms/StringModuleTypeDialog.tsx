@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Module, String } from '@src/integrations/youdera/apiTypes';
-import { useGetModules } from '@src/integrations/youdera/modules/hooks/useGetModules';
-import { useStringDetailsQuery } from '@src/integrations/youdera/stringsApiHooks';
+import { Module, String } from '@src/api/youdera/apiTypes';
+import { useModulesQuery } from '@src/api/youdera/hooks/modules/hooks';
+import { useStringDetailsQuery } from '@src/api/youdera/hooks/strings/hooks';
 import React from 'react';
 import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';
@@ -20,7 +20,7 @@ import { z, ZodObject, ZodTypeAny } from 'zod';
 
 import { Field, FieldState } from './Field';
 import { Form } from './Form';
-import { SelectField } from './SelectField'
+import { SelectField } from './SelectField';
 
 type RawFormShape = {
   moduleType: ZodTypeAny;
@@ -52,10 +52,10 @@ export const StringModuleTypeDialog = <
   const intl = useIntl();
 
   const stringDetailsQuery = useStringDetailsQuery(modifiedStringId ?? -1);
-  const stringDetails = stringDetailsQuery.data as String;
+  const stringDetails = stringDetailsQuery.data as unknown as String;
 
   // * Options
-  const { modulesQuery } = useGetModules();
+  const modulesQuery = useModulesQuery();
   const modules = modulesQuery.data as Module[];
   const moduleOptions = modules.map(module => ({
     key: module.id.toString(),
@@ -81,10 +81,10 @@ export const StringModuleTypeDialog = <
     resolver: zodResolver(resolver),
     defaultValues: modifiedStringId
       ? {
-        moduleType: defaultModuleOption(),
-        cableCrossSection: defaultCableCrossSectionOption(),
-        numberOfModules: stringDetails.count,
-      }
+          moduleType: defaultModuleOption(),
+          cableCrossSection: defaultCableCrossSectionOption(),
+          numberOfModules: stringDetails.count,
+        }
       : undefined,
   });
 
@@ -101,11 +101,11 @@ export const StringModuleTypeDialog = <
           title={
             modifiedStringId
               ? intl.formatMessage({
-                defaultMessage: 'Modify String',
-              })
+                  defaultMessage: 'Modify String',
+                })
               : intl.formatMessage({
-                defaultMessage: 'Add String',
-              })
+                  defaultMessage: 'Add String',
+                })
           }
         />
         <SvgIcon
@@ -121,7 +121,7 @@ export const StringModuleTypeDialog = <
           {...method}
         >
           <SelectField
-            name='moduleType'
+            name="moduleType"
             options={moduleOptions}
             label={intl.formatMessage({ defaultMessage: 'Module type' })}
             placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
@@ -150,7 +150,9 @@ export const StringModuleTypeDialog = <
               <SelectField
                 name="cableCrossSection"
                 options={cableCrossSectionOptions}
-                label={intl.formatMessage({ defaultMessage: 'Cable cross section' })}
+                label={intl.formatMessage({
+                  defaultMessage: 'Cable cross section',
+                })}
                 placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
                 wrapperClassName="z-30"
               />

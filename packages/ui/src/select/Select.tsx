@@ -6,9 +6,10 @@ import { Label, Typography } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 import { validityStyle } from '../utils/constants';
 
-export type SelectOption = {
-  key: string;
+export type SelectOption<TKey = string> = {
+  key: TKey;
   label: ReactNode;
+  selectedLabel?: ReactNode;
   icon?: IconName;
   value?: any;
 };
@@ -73,7 +74,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               )}
             >
               <Typography variant="body" weight="medium">
-                {value?.label || placeholder}
+                {value?.selectedLabel || value?.label || placeholder}
               </Typography>
               <SvgIcon
                 name="ChevronDown"
@@ -104,14 +105,15 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                   return (
                     <Listbox.Option
                       key={key}
-                      className="flex cursor-pointer select-none items-center py-2 pl-3 pr-4 hover:bg-gray-100 justify-between"
+                      className="flex cursor-pointer select-none items-center justify-between py-2 pl-3 pr-4 hover:bg-gray-100"
                       value={option}
                     >
                       {({ selected }) => (
                         <>
                           <span
-                            className={`flex items-center truncate ${selected ? 'font-medium' : 'font-normal'
-                              }`}
+                            className={`flex items-center truncate ${
+                              selected ? 'font-medium' : 'font-normal'
+                            }`}
                           >
                             {option.icon && (
                               <span className="mr-3 flex w-4 items-center justify-center">

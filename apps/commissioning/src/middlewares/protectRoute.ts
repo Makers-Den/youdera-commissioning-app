@@ -1,6 +1,6 @@
-import { getUserInfo } from '@src/integrations/youdera/auth/queries/getUserInfo';
-import { Role } from '@src/integrations/youdera/auth/types';
-import { CookiesKeys } from '@src/integrations/youdera/enums/cookiesKeys';
+import { Role } from '@src/api/youdera/apiTypes';
+import { CookiesKeys } from '@src/api/youdera/enums/cookiesKeys';
+import { getUserInfo } from '@src/api/youdera/hooks/auth/apiRequests';
 import { addYouderaAuthInterceptors } from '@src/utils/server/addYouderaAuthInterceptors';
 import { getCookie } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
