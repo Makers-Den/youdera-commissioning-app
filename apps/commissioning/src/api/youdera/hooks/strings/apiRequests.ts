@@ -75,7 +75,7 @@ export const deleteString = async (stringId: number) => {
 
 export const getStringsOnRoof = async (roofId: number) => {
   const response = await youderaApiInstance.get<DataResponse<StringsOnRoof>>(
-    `/roofs/${roofId}?with[]=strings`,
+    `/roofs/${roofId}?with[]=strings&with[]=strings.mpp_tracker&with[]=strings.files`,
   );
 
   return {
