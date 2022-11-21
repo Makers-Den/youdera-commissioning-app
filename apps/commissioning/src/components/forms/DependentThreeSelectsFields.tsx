@@ -11,19 +11,19 @@ export type DependentField = {
   selectProps: Omit<SelectProps, 'onChange' | 'validity' | 'options'>;
   name: string;
 }
-export type DependentSelectsFieldsProps = {
+export type DependentThreeSelectsFieldsProps = {
   value: any;
   dependentField1: DependentField
   dependentField2: DependentField
   dependentField3: DependentField
 };
 
-export function DependentFourSelectsFields({
+export function DependentThreeSelectsFields({
   value,
   dependentField1,
   dependentField2,
   dependentField3,
-}: DependentSelectsFieldsProps) {
+}: DependentThreeSelectsFieldsProps) {
   const { setValue, formState } = useFormContext();
 
   const dependentValue1 = useWatch({
@@ -40,7 +40,6 @@ export function DependentFourSelectsFields({
   });
 
   // * 1
-  // console.log(dependentField1.options, value?.key)
   useEffect(() => {
     if (value?.key !== dependentValue1?.dependentKey) {
       setValue(dependentField1.name, null);
@@ -51,7 +50,6 @@ export function DependentFourSelectsFields({
     () => dependentField1.options.filter(option => option.dependentKey === value?.key),
     [dependentField1.options, value?.key],
   );
-  // console.log(filteredOptions1)
 
   // * 2
   useEffect(() => {

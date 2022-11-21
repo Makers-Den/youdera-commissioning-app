@@ -22,7 +22,7 @@ import clsxm from 'ui/utils/clsxm';
 import { z, ZodObject, ZodTypeAny } from 'zod';
 
 import { AutocompleteSelectField } from './AutocompleteField';
-import { DependentOption } from './DependentFourSelectsFields';
+import { DependentOption } from './DependentThreeSelectsFields';
 import { ExistingInverterSelectField } from './ExistingInverterSelectField';
 import { FileField } from './FileField';
 import { Form } from './Form';
@@ -136,8 +136,7 @@ export const StringInverterDialog = <
   );
   // *
 
-  const watchInverter = watch('inverter');
-  const watchInverterValue = useWatch({
+  const watchInverter = useWatch({
     control,
     name: 'inverter',
     defaultValue: formState.defaultValues?.inverter as any,
@@ -270,12 +269,12 @@ export const StringInverterDialog = <
           />
           {watchInverter?.key !== '-1' ? (
             <ExistingInverterSelectField
-              inverterValue={watchInverterValue}
+              inverterValue={watchInverter}
               inverterInputsOptions={inverterInputsOptions}
             />
           ) : (
             <NewInverterSelectField
-              inverterValue={watchInverterValue}
+              inverterValue={watchInverter}
               inverterManufacturerOptions={inverterManufacturersOptions}
               inverterModelOptions={inverterModelsOptions}
               inverterInputsOptions={inverterNewInputsOptions}

@@ -15,7 +15,7 @@ export type DependentSelectsFieldsOutsideParentProps = {
   value: any;
 };
 
-export function DependentSelectsFieldsOutsideParent({
+export function DependentSelectsField({
   value,
   dependentSelectProps,
   dependentOptions,

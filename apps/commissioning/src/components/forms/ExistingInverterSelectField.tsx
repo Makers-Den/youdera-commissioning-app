@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { useIntl } from 'react-intl';
 
-import { DependentOption, DependentSelectsFieldsOutsideParent } from './DependentSelectsFieldsOutsideParent';
+import { DependentOption, DependentSelectsField } from './DependentSelectsField';
 
 export type ExistingInverterSelectFieldProps = {
   inverterValue: any;
@@ -15,7 +15,7 @@ export const ExistingInverterSelectField = ({
   const intl = useIntl();
 
   return (
-    <DependentSelectsFieldsOutsideParent
+    <DependentSelectsField
       value={inverterValue}
       name="inverter"
       dependentOptions={inverterInputsOptions}

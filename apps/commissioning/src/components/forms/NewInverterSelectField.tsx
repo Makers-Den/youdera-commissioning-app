@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { useIntl } from 'react-intl';
 
-import { DependentFourSelectsFields } from './DependentFourSelectsFields';
-import {
-  DependentOption,
-} from './DependentSelectsFields';
+import { DependentOption, DependentThreeSelectsFields } from './DependentThreeSelectsFields';
+
 
 export type ExistingInverterSelectFieldProps = {
   inverterValue: any;
@@ -22,7 +20,7 @@ export const NewInverterSelectField = ({
   const intl = useIntl();
 
   return (
-    <DependentFourSelectsFields
+    <DependentThreeSelectsFields
       value={inverterValue}
       dependentField1={{
         name: "manufacturer",
