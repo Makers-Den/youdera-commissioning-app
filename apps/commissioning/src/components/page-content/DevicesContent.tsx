@@ -22,6 +22,7 @@ import { ButtonDropdown } from 'ui/button-dropdown/ButtonDropdown';
 import { Button, ButtonProps } from 'ui/buttons/Button';
 import { useDisclosure } from 'ui/dialogs/useDisclosure';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
+import { Toast, useToast } from 'ui/toast/Toast';
 import { Typography } from 'ui/typography/Typography';
 
 import { DeviceList } from '../DeviceList';
@@ -91,6 +92,8 @@ export function DevicesContent({
   setNextButtonProps,
 }: DevicesContentProps) {
   const intl = useIntl();
+
+  const toast = useToast();
 
   const { siteQuery } = useSiteQuery(siteId);
   const site = siteQuery.data as Site;
@@ -174,9 +177,16 @@ export function DevicesContent({
         }
 
         handleDeleteCancel();
+        toast.success(
+          intl.formatMessage({
+            defaultMessage: 'Device deleted successfully!',
+          }),
+        );
       } catch (err) {
+        //@ts-ignore
+        toast.error(err.message);
         // eslint-disable-next-line no-console
-        console.log(err);
+        console.error(err);
       }
     }
   };
@@ -201,14 +211,19 @@ export function DevicesContent({
         inverterId: inverter.id,
       });
 
-      setCurrentDevice(toDevice(inverter, 'Inverter'));
       commsMethodDialog.onOpen();
+      toast.success(
+        intl.formatMessage({
+          defaultMessage: 'Inverter added successfully!',
+        }),
+      );
+      setCurrentDevice(toDevice(inverter, 'Inverter'));
 
       reset();
       addInverterDialog.onClose();
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
+      //@ts-ignore
+      toast.error(err.message);
     }
   };
 
@@ -233,10 +248,17 @@ export function DevicesContent({
         }
 
         updateInverterDialog.onClose();
+        toast.success(
+          intl.formatMessage({
+            defaultMessage: 'Inverter updated successfully!',
+          }),
+        );
         setCurrentDevice(null);
       } catch (err) {
+        //@ts-ignore
+        toast.error(err.message);
         // eslint-disable-next-line no-console
-        console.log(err);
+        console.error(err);
       }
     };
 
@@ -258,14 +280,19 @@ export function DevicesContent({
         batteryId: battery.id,
       });
 
+      toast.success(
+        intl.formatMessage({
+          defaultMessage: 'Battery added successfully!',
+        }),
+      );
       setCurrentDevice(toDevice(battery, 'Battery'));
       commsMethodDialog.onOpen();
 
       reset();
       addBatteryDialog.onClose();
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
+      //@ts-ignore
+      toast.error(err.message);
     }
   };
 
@@ -290,11 +317,17 @@ export function DevicesContent({
         });
       }
 
+      toast.success(
+        intl.formatMessage({
+          defaultMessage: 'Battery updated successfully!',
+        }),
+      );
+
       setCurrentDevice(null);
       updateBatteryDialog.onClose();
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log(err);
+      //@ts-ignore
+      toast.error(err.message);
     }
   };
 
@@ -555,8 +588,8 @@ export function DevicesContent({
               commsResultDialog.onOpen();
               commsMethodDialog.onClose();
             } catch (err) {
-              // eslint-disable-next-line no-console
-              console.error(err);
+              //@ts-ignore
+              toast.error(err.message);
             }
           }}
         />
@@ -575,6 +608,7 @@ export function DevicesContent({
       )}
 
       <AreYouSureDialog siteId={siteId} disclosure={areYouSureDisclosure} />
+      <Toast />
     </>
   );
 }

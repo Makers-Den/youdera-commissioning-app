@@ -10,10 +10,11 @@
   "types": "./src/index.tsx",
   "license": "MIT",
   "dependencies": {
-    "@types/react": "^18.0.21",
     "@headlessui/react": "^1.7.3",
-    "react-icons": "^4.6.0",
+    "@types/react": "^18.0.21",
     "clsx": "^1.2.1",
+    "react-hot-toast": "^2.4.0",
+    "react-icons": "^4.6.0",
     "tailwind-merge": "^1.6.2"
   },
   "devDependencies": {
