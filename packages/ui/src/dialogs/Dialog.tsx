@@ -1,4 +1,4 @@
-import { Dialog as HeadlessDialog, Transition } from '@headlessui/react'
+import { Dialog as HeadlessDialog, Transition } from '@headlessui/react';
 import React, { Fragment, ReactNode } from 'react';
 
 import { Typography } from '../typography/Typography';
@@ -12,7 +12,7 @@ export const DialogTitle = ({ title }: DialogTitleProps) => (
   <Typography variant="h3" weight="medium" as="h3">
     {title}
   </Typography>
-)
+);
 
 export type DialogHeaderProps = {
   children: ReactNode;
@@ -20,8 +20,8 @@ export type DialogHeaderProps = {
 };
 
 export const DialogHeader = ({ className, children }: DialogHeaderProps) => (
-  <div className={clsxm('pr-8 flex items-center', className)}>
-    <div className="bg-orange-400 h-full min-h-[28px] w-1 rounded-r-full relative mr-7" />
+  <div className={clsxm('flex items-center pr-8', className)}>
+    <div className="relative mr-7 h-full min-h-[28px] w-1 rounded-r-full bg-orange-400" />
     {children}
   </div>
 );
@@ -32,7 +32,7 @@ export type DialogContentProps = {
 };
 
 export const DialogContent = ({ className, children }: DialogHeaderProps) => (
-  <div className={clsxm('px-8 mt-6', className)}>{children}</div>
+  <div className={clsxm('mt-6 px-8', className)}>{children}</div>
 );
 
 export type DialogProps = {
@@ -44,7 +44,12 @@ export type DialogProps = {
 
 export const Dialog = ({ className, children, open, onClose }: DialogProps) => (
   <Transition appear show={open} as={Fragment}>
-    <HeadlessDialog as="div" className="relative z-10" onClose={onClose}>
+    <HeadlessDialog
+      as="div"
+      open={open}
+      className="relative z-10"
+      onClose={onClose}
+    >
       <Transition.Child
         as={Fragment}
         enter="ease-out duration-300"
@@ -69,7 +74,9 @@ export const Dialog = ({ className, children, open, onClose }: DialogProps) => (
             leaveTo="opacity-0 scale-95"
           >
             <HeadlessDialog.Panel className="w-full max-w-fit transform rounded-xl bg-white text-left align-middle shadow-xl transition-all">
-              <div className={clsxm('bg-white pt-5 pb-8 rounded-xl', className)}>
+              <div
+                className={clsxm('rounded-xl bg-white pt-5 pb-8', className)}
+              >
                 {children}
               </div>
             </HeadlessDialog.Panel>
