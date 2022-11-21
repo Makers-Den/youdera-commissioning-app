@@ -164,11 +164,10 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
         id: modifiedStringId,
         ...stringRequestData,
       });
-
       if (stringDetails.files[0]?.id !== (file as ApiFile).id) {
         await deleteFileFromStringMutation.mutateAsync({
           stringId: modifiedStringId,
-          fileId: Number((file as ApiFile).id),
+          fileId: Number(stringDetails.files[0]?.id),
         });
         await addFileToStringMutation.mutateAsync({
           stringId: modifiedStringId.toString(),
