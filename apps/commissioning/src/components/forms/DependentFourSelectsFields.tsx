@@ -1,13 +1,8 @@
 import { useEffect, useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import {
-  AutocompleteSelectOption,
-  AutocompleteSelectProps,
-} from 'ui/select/AutocompleteSelect';
 import { SelectOption, SelectProps } from 'ui/select/Select';
 import clsxm from 'ui/utils/clsxm';
 
-import { AutocompleteSelectField } from './AutocompleteField';
 import { SelectField } from './SelectField';
 
 export type DependentOption = SelectOption & { dependentKey: string };
@@ -17,31 +12,20 @@ export type DependentField = {
   name: string;
 }
 export type DependentSelectsFieldsProps = {
-  options: AutocompleteSelectOption[];
-  autoCompleteProps: Omit<
-    AutocompleteSelectProps,
-    'onChange' | 'validity' | 'options'
-  >;
-  name: string;
+  value: any;
   dependentField1: DependentField
   dependentField2: DependentField
   dependentField3: DependentField
 };
 
 export function DependentFourSelectsFields({
-  options,
-  autoCompleteProps,
-  name,
+  value,
   dependentField1,
   dependentField2,
   dependentField3,
 }: DependentSelectsFieldsProps) {
   const { setValue, formState } = useFormContext();
 
-  const value = useWatch({
-    name,
-    defaultValue: formState.defaultValues?.[name],
-  });
   const dependentValue1 = useWatch({
     name: dependentField1.name,
     defaultValue: formState.defaultValues?.[dependentField1.name],
@@ -56,6 +40,7 @@ export function DependentFourSelectsFields({
   });
 
   // * 1
+  // console.log(dependentField1.options, value?.key)
   useEffect(() => {
     if (value?.key !== dependentValue1?.dependentKey) {
       setValue(dependentField1.name, null);
@@ -66,6 +51,7 @@ export function DependentFourSelectsFields({
     () => dependentField1.options.filter(option => option.dependentKey === value?.key),
     [dependentField1.options, value?.key],
   );
+  // console.log(filteredOptions1)
 
   // * 2
   useEffect(() => {
@@ -93,16 +79,10 @@ export function DependentFourSelectsFields({
 
   return (
     <>
-      <AutocompleteSelectField
-        name={name}
-        options={options}
-        {...autoCompleteProps}
-      />
-
       <SelectField
         wrapperClassName={clsxm(!value && 'hidden')}
         name={dependentField1.name}
-        options={dependentField1.options}
+        options={filteredOptions1}
         {...dependentField1.selectProps}
       />
 

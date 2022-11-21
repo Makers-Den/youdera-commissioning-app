@@ -1,37 +1,22 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { useIntl } from 'react-intl';
-import { AutocompleteSelectOption } from 'ui/select/AutocompleteSelect';
 
-import {
-  DependentOption,
-  DependentSelectsFields,
-} from './DependentSelectsFields';
+import { DependentOption, DependentSelectsFieldsOutsideParent } from './DependentSelectsFieldsOutsideParent';
 
 export type ExistingInverterSelectFieldProps = {
-  inverterOptions: AutocompleteSelectOption[];
+  inverterValue: any;
   inverterInputsOptions: DependentOption[];
 };
 
 export const ExistingInverterSelectField = ({
-  inverterOptions,
+  inverterValue,
   inverterInputsOptions,
 }: ExistingInverterSelectFieldProps) => {
   const intl = useIntl();
 
   return (
-    <DependentSelectsFields
-      options={inverterOptions}
-      autoCompleteProps={{
-        label: intl.formatMessage({
-          defaultMessage: 'Select inverter',
-        }),
-        placeholder: intl.formatMessage({
-          defaultMessage: 'Select',
-        }),
-        noOptionsString: intl.formatMessage({
-          defaultMessage: 'Nothing found.',
-        }),
-      }}
+    <DependentSelectsFieldsOutsideParent
+      value={inverterValue}
       name="inverter"
       dependentOptions={inverterInputsOptions}
       dependentSelectProps={{

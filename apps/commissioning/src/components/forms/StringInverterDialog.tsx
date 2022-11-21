@@ -5,7 +5,7 @@ import {
   useInvertersQuery,
 } from '@src/api/youdera/hooks/inverters/hooks';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import {
@@ -21,6 +21,7 @@ import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z, ZodObject, ZodTypeAny } from 'zod';
 
+import { AutocompleteSelectField } from './AutocompleteField';
 import { DependentOption } from './DependentFourSelectsFields';
 import { ExistingInverterSelectField } from './ExistingInverterSelectField';
 import { FileField } from './FileField';
@@ -105,7 +106,7 @@ export const StringInverterDialog = <
       isWithNewInverter ? resolver.newInverter : resolver.existingInverter,
     ),
   });
-  const { handleSubmit, reset, formState, watch } = method;
+  const { handleSubmit, reset, formState, watch, control } = method;
   const inverterModelsQuery = useInverterModelsQuery();
   const inverterModels = inverterModelsQuery.data as InverterModel[];
   const invertersQuery = useInvertersQuery(siteId);
@@ -136,6 +137,11 @@ export const StringInverterDialog = <
   // *
 
   const watchInverter = watch('inverter');
+  const watchInverterValue = useWatch({
+    control,
+    name: 'inverter',
+    defaultValue: formState.defaultValues?.inverter as any,
+  });
   const watchInput = watch('input');
 
   const watchManufacturer = watch('manufacturer');
@@ -180,7 +186,7 @@ export const StringInverterDialog = <
         }
       });
       return result;
-    }, [inverterModels]);
+    }, [inverterModels, watchInverter]);
 
   const inverterModelsOptions: DependentOption[] = useMemo(() => {
     if (!watchManufacturer || !inverterModels) return [];
@@ -251,14 +257,25 @@ export const StringInverterDialog = <
           className="flex flex-col gap-5"
           {...method}
         >
+          <AutocompleteSelectField
+            name="inverter"
+            label={intl.formatMessage({
+              defaultMessage: 'Select inverter',
+            })}
+            placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
+            noOptionsString={intl.formatMessage({
+              defaultMessage: 'Nothing found.',
+            })}
+            options={inverterOptions}
+          />
           {watchInverter?.key !== '-1' ? (
             <ExistingInverterSelectField
-              inverterOptions={inverterOptions}
+              inverterValue={watchInverterValue}
               inverterInputsOptions={inverterInputsOptions}
             />
           ) : (
             <NewInverterSelectField
-              inverterOptions={inverterOptions}
+              inverterValue={watchInverterValue}
               inverterManufacturerOptions={inverterManufacturersOptions}
               inverterModelOptions={inverterModelsOptions}
               inverterInputsOptions={inverterNewInputsOptions}

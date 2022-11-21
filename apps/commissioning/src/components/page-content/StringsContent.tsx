@@ -99,8 +99,6 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
     updateStringMutation,
   } = useStringsMutations(roofId);
 
-  // const stringDetailsQuery = useStringDetailsQuery(selectedString?.id ?? -1)
-  // const stringDetails = stringDetailsQuery.data as String;
   const invertersQuery = useInvertersQuery(siteId);
   const inverters = invertersQuery.data as Inverter[];
 

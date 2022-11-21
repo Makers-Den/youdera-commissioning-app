@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { useIntl } from 'react-intl';
-import { AutocompleteSelectOption } from 'ui/select/AutocompleteSelect';
 
 import { DependentFourSelectsFields } from './DependentFourSelectsFields';
 import {
@@ -8,14 +7,14 @@ import {
 } from './DependentSelectsFields';
 
 export type ExistingInverterSelectFieldProps = {
-  inverterOptions: AutocompleteSelectOption[];
+  inverterValue: any;
   inverterManufacturerOptions: DependentOption[];
   inverterModelOptions: DependentOption[];
   inverterInputsOptions: DependentOption[];
 };
 
 export const NewInverterSelectField = ({
-  inverterOptions,
+  inverterValue,
   inverterManufacturerOptions,
   inverterModelOptions,
   inverterInputsOptions,
@@ -24,19 +23,7 @@ export const NewInverterSelectField = ({
 
   return (
     <DependentFourSelectsFields
-      options={inverterOptions}
-      autoCompleteProps={{
-        label: intl.formatMessage({
-          defaultMessage: 'Select inverter',
-        }),
-        placeholder: intl.formatMessage({
-          defaultMessage: 'Select',
-        }),
-        noOptionsString: intl.formatMessage({
-          defaultMessage: 'Nothing found.',
-        }),
-      }}
-      name="inverter"
+      value={inverterValue}
       dependentField1={{
         name: "manufacturer",
         options: inverterManufacturerOptions,
