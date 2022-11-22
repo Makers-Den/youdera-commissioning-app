@@ -52,9 +52,6 @@ export const StringModuleTypeDialog = <
 }: StringModuleTypeDialogProps<ResolverType>) => {
   const intl = useIntl();
 
-  // const stringDetailsQuery = useStringDetailsQuery(modifiedStringId ?? -1);
-  // const stringDetails = stringDetailsQuery.data as unknown as String;
-
   // * Options
   const modulesQuery = useModulesQuery();
   const modules = modulesQuery.data as Module[];

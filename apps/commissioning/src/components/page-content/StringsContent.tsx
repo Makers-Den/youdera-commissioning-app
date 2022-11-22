@@ -294,7 +294,6 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
   const stringInverterDefaultValues: InverterDefaultValuesProps | undefined =
     useMemo(() => {
       if (!inverters || !selectedString) return undefined;
-
       const defaultInverter = inverters.filter(
         inverter =>
           !!inverter.mpp_trackers.filter(
@@ -340,13 +339,11 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
           </Button>
         </BoxHeader>
         <BoxContent>
-          <Suspense>
-            <StringsList
-              strings={stringsOnRoofQuery.data?.strings as String[]}
-              roofId={roofId}
-              onRowClick={handleRowClick}
-            />
-          </Suspense>
+          <StringsList
+            strings={stringsOnRoofQuery.data?.strings as String[]}
+            roofId={roofId}
+            onRowClick={handleRowClick}
+          />
         </BoxContent>
       </Box>
 
