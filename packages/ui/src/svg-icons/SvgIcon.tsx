@@ -2,12 +2,16 @@ import React, { SVGProps } from 'react';
 import {
   FaCalendarAlt,
   FaCheck,
+  FaDownload,
   FaEnvelope,
+  FaIndustry,
+  FaLightbulb,
   FaMicrochip,
   FaPhone,
+  FaPlug,
   FaTable,
   FaTimes,
-  FaUnlockAlt,
+  FaUnlockAlt
 } from 'react-icons/fa';
 
 import { Battery } from './icons/Battery';
@@ -80,6 +84,10 @@ const iconMap = {
   BatteryRect,
   MeterRect,
   Phone: FaPhone,
+  Industry: FaIndustry,
+  Download: FaDownload,
+  Plug: FaPlug,
+  Lightbulb: FaLightbulb,
 };
 
 export type IconName = keyof typeof iconMap;

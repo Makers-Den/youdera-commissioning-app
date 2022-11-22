@@ -43,6 +43,7 @@ import {
   InverterFormDialog,
   InverterFormDialogProps,
 } from '../forms/InverterFormDialog';
+import { MeterFormDialog } from '../forms/MeterFormDialog';
 import { LargeBox } from '../LargeBox';
 
 type AreYouSureCallbacks = {
@@ -112,6 +113,8 @@ export function DevicesContent({
   const deviceDeletionDialog = useDisclosure();
   const addInverterDialog = useDisclosure();
   const updateInverterDialog = useDisclosure();
+  const addMeterDialog = useDisclosure()
+  const updateMeterDialog = useDisclosure();
   const addBatteryDialog = useDisclosure();
   const updateBatteryDialog = useDisclosure();
   const commsMethodDialog = useDisclosure();
@@ -349,7 +352,7 @@ export function DevicesContent({
     onConfirm: noop,
   });
   const handleAddBattery = () => {
-    if (siteHasBatteries || siteHasMeters) { 
+    if (siteHasBatteries || siteHasMeters) {
       addBatteryDialog.onOpen();
     } else {
       areYouSureDisclosure.onOpen();
@@ -366,7 +369,7 @@ export function DevicesContent({
   };
 
   const handleAddMeter = () => {
-    if (siteHasBatteries || siteHasMeters) { 
+    if (siteHasBatteries || siteHasMeters) {
       // eslint-disable-next-line no-alert
       window.alert("TODO: add meter");
     } else {
@@ -403,7 +406,7 @@ export function DevicesContent({
           type="button"
           disabled={!siteHasInverters}
           className="disabled:opacity-30"
-          onClick={handleAddMeter}
+          onClick={addMeterDialog.onOpen} // TODO  handleAddMeter <- use this 
         >
           <Typography className="flex font-medium">
             <SvgIcon name="MeterRect" className="mr-3 w-5" />
@@ -429,7 +432,7 @@ export function DevicesContent({
       ),
     },
   ];
-  
+
   const router = useRouter();
 
   useEffect(() => {
@@ -539,12 +542,12 @@ export function DevicesContent({
         description={
           currentDevice?.deviceType === 'Inverter'
             ? intl.formatMessage({
-                defaultMessage:
-                  'Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well.',
-              })
+              defaultMessage:
+                'Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well.',
+            })
             : intl.formatMessage({
-                defaultMessage: 'Are you sure to delete this device?',
-              })
+              defaultMessage: 'Are you sure to delete this device?',
+            })
         }
         onCancel={handleDeleteCancel}
         onDelete={confirmDeleteHandler}
@@ -574,6 +577,19 @@ export function DevicesContent({
         })}
         defaultValues={defaultValues}
         fileValueMapper={fileValueMapper}
+      />
+
+      <MeterFormDialog
+        open={addMeterDialog.isOpen}
+        onClose={addMeterDialog.onClose}
+        onSubmit={() => undefined}
+        title={intl.formatMessage({ defaultMessage: 'Add Meter' })}
+        submitButtonTitle={intl.formatMessage({
+          defaultMessage: 'Add Device',
+        })}
+        defaultValues={defaultValues}
+        fileValueMapper={fileValueMapper}
+        inverters={site.inverters}
       />
 
       <BatteryFormDialog
@@ -626,15 +642,15 @@ export function DevicesContent({
               const testResult = await updateDeviceCommsMutation.mutateAsync(
                 commType === 'fixed_ip'
                   ? {
-                      id: currentDevice.id,
-                      ip: ipAddress,
-                      slave_id: Number(slaveId),
-                    }
+                    id: currentDevice.id,
+                    ip: ipAddress,
+                    slave_id: Number(slaveId),
+                  }
                   : {
-                      id: currentDevice.id,
-                      dhcp: true,
-                      slave_id: Number(slaveId),
-                    },
+                    id: currentDevice.id,
+                    dhcp: true,
+                    slave_id: Number(slaveId),
+                  },
               );
 
               setCommsTestResult(testResult);

@@ -4,14 +4,40 @@ import { Fragment, ReactNode, SVGProps } from 'react';
 import { SvgIcon } from '../svg-icons/SvgIcon';
 import { Typography } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
+import { validityStyle } from '../utils/constants';
 
-export type MultiSelectOption = {
-  key: string;
-  label: {
-    option: ReactNode;
-    selected: ReactNode;
-  };
+export interface MultiSelectValue {
+  label: string,
+  key: string
+}
+export type MultiSelectOptionProps<T extends MultiSelectValue> = {
+  value: T;
+  children: (args: {
+    active: boolean,
+    selected: boolean,
+    disabled: boolean
+  }) => ReactNode;
 };
+
+export const MultiSelectOption = <T extends MultiSelectValue>({ value, children }: MultiSelectOptionProps<T>) => (
+  <Listbox.Option
+    className="cursor-pointer Multiselect-none py-2 pl-3 pr-4 flex justify-between items-center hover:bg-gray-100"
+    value={value}
+  >
+    {(args) => (
+      <>
+        <Typography as='div' variant="body">{children(args)}</Typography>
+        {args.selected && (
+          <SvgIcon
+            name="Check"
+            className="w-4 text-green-400"
+          />
+        )}
+      </>
+    )}
+  </Listbox.Option>
+)
+
 
 type SelectedOptionsProps = {
   label: ReactNode;
@@ -52,29 +78,31 @@ function SelectedOptionsCount({ count }: SelectedOptionsCountProps) {
   );
 }
 
-export type MultiSelectProps = {
+export type MultiSelectProps<Value extends MultiSelectValue> = {
   label: string;
   placeholder: string;
   name?: string;
-  options: MultiSelectOption[];
-  defaultValue?: MultiSelectOption[];
-  value: MultiSelectOption[];
-  onChange: (value: MultiSelectOption[]) => void;
+  defaultValue?: Value[];
+  value: Value[];
+  onChange: (value: Value[]) => void;
   isRequired?: boolean;
   wrapperClassName?: string;
+  validity?: 'valid' | 'invalid';
+  children: ReactNode;
 };
 
-export function MultiSelect({
+export function MultiSelect<Value extends MultiSelectValue>({
   label,
   name,
   placeholder,
   value,
   onChange,
-  options,
   defaultValue,
   isRequired,
   wrapperClassName,
-}: MultiSelectProps) {
+  validity,
+  children
+}: MultiSelectProps<Value>) {
   return (
     <div>
       <Typography variant="label">
@@ -101,6 +129,7 @@ export function MultiSelect({
                 open
                   ? 'border-orange-400 bg-white'
                   : 'bg-gray-100 border-gray-500',
+                validity && validityStyle[validity].input,
               )}
             >
               <Typography
@@ -111,7 +140,7 @@ export function MultiSelect({
                   ? value.map(({ label, key }) => (
                     <SelectedOptions
                       key={key}
-                      label={label.selected}
+                      label={label}
                       onDelete={event => {
                         event.stopPropagation();
                         const filteredOptions = value.filter(
@@ -130,6 +159,8 @@ export function MultiSelect({
                   className={clsxm(
                     'w-3 ml-2 transition-all',
                     open && 'rotate-180',
+                    validity && validityStyle[validity].icon,
+
                   )}
                 />
               </div>
@@ -149,28 +180,7 @@ export function MultiSelect({
                   'rounded-md bg-white drop-shadow-large',
                 )}
               >
-                {options.map(option => {
-                  const { key, label } = option;
-                  return (
-                    <Listbox.Option
-                      key={key}
-                      className="cursor-pointer Multiselect-none py-2 pl-3 pr-4 flex justify-between items-center hover:bg-gray-100"
-                      value={option}
-                    >
-                      {({ selected }) => (
-                        <>
-                          <Typography variant="body">{label.option}</Typography>
-                          {selected && (
-                            <SvgIcon
-                              name="Check"
-                              className="w-4 text-green-400"
-                            />
-                          )}
-                        </>
-                      )}
-                    </Listbox.Option>
-                  );
-                })}
+                {children}
               </Listbox.Options>
             </Transition>
           </div>

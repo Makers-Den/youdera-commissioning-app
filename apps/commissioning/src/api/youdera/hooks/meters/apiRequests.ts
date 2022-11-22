@@ -3,8 +3,10 @@ import {
   ApiFile,
   DataResponse,
   Meter,
+  MeterModel,
   VerificationTestResult,
 } from '../../apiTypes';
+import { CreateDataResponse } from '../../types';
 
 export const deleteMeter = async (id: number): Promise<Meter> => {
   const response = await youderaApiInstance.delete<DataResponse<Meter>>(
@@ -99,5 +101,12 @@ export const executeMeterVerification = async (
   const response = await youderaApiInstance.post<
     DataResponse<VerificationTestResult>
   >(`/meters/${id}/test`);
+  return response.data.data;
+};
+
+export const getMeterModels = async () => {
+  const response = await youderaApiInstance.get<
+    CreateDataResponse<MeterModel[]>
+  >(`/catalogue/models/meter`);
   return response.data.data;
 };
