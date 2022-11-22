@@ -7,6 +7,7 @@ export enum UploadStatus {
 
 export type UploadedFile = {
   url: string;
+  thumbnailUrl: string;
   name: string;
   type: string;
 };

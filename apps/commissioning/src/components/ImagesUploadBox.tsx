@@ -57,14 +57,14 @@ export function ImagesUploadBox({
         </BoxHeader>
         <BoxContent>
           <List direction="horizontal" className="mb-5 flex-wrap">
-            {uploadedFiles.map(({ url, name }, index) => (
+            {uploadedFiles.map(({ name, thumbnailUrl }, index) => (
               <ListItem
                 variant="withoutPadding"
                 key={name}
                 className="w-28 cursor-pointer overflow-hidden"
                 onClick={listClickHandler(index)}
               >
-                <SquareImage src={url} alt={name} />
+                <SquareImage src={thumbnailUrl} alt={name} />
               </ListItem>
             ))}
           </List>
@@ -101,8 +101,9 @@ export function ImagesUploadBox({
         onClose={onGalleryClose}
         title={title}
         openImageIndex={currentImageIndex}
-        images={uploadedFiles.map(({ url, id }) => ({
+        images={uploadedFiles.map(({ url, thumbnailUrl, id }) => ({
           url,
+          thumbnailUrl,
           id,
         }))}
         onDelete={onDelete}

@@ -83,8 +83,7 @@ export interface ApiFile {
   updated_at: string;
   deleted_at: string | null;
   url: string;
-  /** Note this can be missing for old image uploads */
-  url_thumb: string | null;
+  url_thumb: string;
 }
 
 export type CommunicationStatus = 'pending' | 'failed' | 'success';

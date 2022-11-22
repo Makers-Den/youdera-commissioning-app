@@ -14,6 +14,7 @@ export type GalleryImage<Id extends string | number> = {
   /** some sort of id we can give to parent in callback in case they delete the image */
   id: Id;
   url: string;
+  thumbnailUrl: string;
 };
 
 export type GalleryProps<Id extends string | number> = {
@@ -152,7 +153,7 @@ export const Gallery = <Id extends string | number>({
                         ? 'border-2 border-orange-400'
                         : 'opacity-50',
                     )}
-                    src={img.url}
+                    src={img.thumbnailUrl}
                   />
                 ))}
               </div>

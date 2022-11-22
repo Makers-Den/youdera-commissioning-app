@@ -102,9 +102,10 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
           uploadFile={uploadFile(ApiFileType.stringLayout)}
           uploadedFiles={(filesQuery.data || [])
             .filter(({ type }) => type === ApiFileType.stringLayout)
-            .map(({ id, name, url }) => ({
+            .map(({ id, name, url, url_thumb }) => ({
               name,
               url,
+              thumbnailUrl: url_thumb,
               id,
               type: 'image',
             }))}
@@ -115,12 +116,13 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
         />
         <ImagesUploadBox
           title={intl.formatMessage({ defaultMessage: 'Additional pictures' })}
-          uploadFile={uploadFile(ApiFileType.stringLayout)}
+          uploadFile={uploadFile(ApiFileType.additionalPictures)}
           uploadedFiles={(filesQuery.data || [])
             .filter(({ type }) => type === ApiFileType.additionalPictures)
-            .map(({ id, name, url }) => ({
+            .map(({ id, name, url, url_thumb }) => ({
               name,
               url,
+              thumbnailUrl: url_thumb,
               id,
               type: 'image',
             }))}
