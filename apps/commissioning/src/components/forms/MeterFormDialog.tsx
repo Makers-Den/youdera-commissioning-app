@@ -12,6 +12,7 @@ import {
 } from 'ui/dialogs/Dialog';
 import { Input } from 'ui/inputs/Input';
 import { MultiSelect } from 'ui/select/MultiSelect'
+import { SelectOption } from 'ui/select/Select';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Toggle } from 'ui/toggle/Toggle'
 import { Typography } from 'ui/typography/Typography';
@@ -22,6 +23,7 @@ import { Field } from './Field';
 import { FileField, FileFieldProps } from './FileField';
 import { Form } from './Form';
 import { MeterModelSelectFields } from './MeterModelSelectFields';
+import { SelectField } from './SelectField';
 
 const validation = z.object({
   manufacturer: z.object({ key: z.string(), label: z.string() }),
@@ -71,6 +73,12 @@ export const MeterFormDialog = ({
     }
   }, [defaultValues, reset]);
 
+  const meterType = useWatch({
+    name: 'meterType',
+    defaultValue: formState.defaultValues?.meterType,
+    control,
+  });
+
   const model = useWatch({
     name: 'model',
     defaultValue: formState.defaultValues?.model,
@@ -104,13 +112,50 @@ export const MeterFormDialog = ({
 
   const showFields = {
     first: true,
-    second: !!model,
-    third: !!model && !!serialNumber,
-    fourth: !!model && !!serialNumber && !!inverters,
-    fifth: !!model && !!serialNumber && !!inverters && !!auxiliary,
-    sixth: !!model && !!serialNumber && !!inverters && !!auxiliary && !!file
+    second: !!meterType,
+    third: !!meterType && !!model,
+    fourth: !!meterType && !!model && !!serialNumber,
+    fifth: !!meterType && !!model && !!serialNumber && !!inverters,
+    sixth: !!meterType && !!model && !!serialNumber && !!inverters && !!auxiliary,
+    seventh: !!meterType && !!model && !!serialNumber && !!inverters && !!auxiliary && !!file
   };
 
+  // * Options
+  const meterTypeOptions: SelectOption[] = [
+    {
+      key: '1',
+      label: intl.formatMessage({
+        defaultMessage: 'Generation',
+      }),
+      value: 'generation',
+      icon: 'Industry',
+    },
+    {
+      key: '2',
+      label: intl.formatMessage({
+        defaultMessage: 'Import/Export',
+      }),
+      value: 'import',
+      icon: 'Download',
+    },
+    {
+      key: '3',
+      label: intl.formatMessage({
+        defaultMessage: 'Consumption',
+      }),
+      value: 'consumption',
+      icon: 'Plug',
+    },
+    {
+      key: '4',
+      label: intl.formatMessage({
+        defaultMessage: 'Own consumption',
+      }),
+      value: 'own_consumption',
+      icon: 'Lightbulb',
+    },
+  ]
+  // *
   return (
     <Dialog
       open={open}
@@ -134,11 +179,24 @@ export const MeterFormDialog = ({
           {...method}
         >
           {showFields.first && (
+            <SelectField
+              name="meterType"
+              options={meterTypeOptions}
+              label={intl.formatMessage({
+                defaultMessage: 'Meter type',
+              })}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select',
+              })}
+            />
+
+          )}
+          {showFields.second && (
             <Suspense fallback="loading">
               <MeterModelSelectFields />
             </Suspense>
           )}
-          {showFields.second && (
+          {showFields.third && (
             <Field name="serialNumber">
               {(register, fieldState) => (
                 <Input
@@ -155,7 +213,7 @@ export const MeterFormDialog = ({
               )}
             </Field>
           )}
-          {showFields.third && (
+          {showFields.fourth && (
             <MultiSelect
               label={intl.formatMessage({
                 defaultMessage: 'Connected inverters'
@@ -168,7 +226,7 @@ export const MeterFormDialog = ({
               onChange={() => undefined}
             />
           )}
-          {showFields.fourth && (
+          {showFields.fifth && (
             <Toggle
               label={intl.formatMessage({
                 defaultMessage: 'Auxiliary meter'
@@ -177,7 +235,7 @@ export const MeterFormDialog = ({
             // onChange={}
             />
           )}
-          {showFields.fifth && (
+          {showFields.sixth && (
             <FileField name="file" valueMapper={fileValueMapper}>
               <div className="flex items-center gap-4">
                 <SvgIcon name="Camera" className="w-8 text-green-400" />
@@ -207,7 +265,7 @@ export const MeterFormDialog = ({
               </div>
             </FileField>
           )}
-          {showFields.sixth && (
+          {showFields.seventh && (
             <div className="mt-3 flex gap-5">
               <Button
                 variant="additional-gray"

@@ -1,23 +1,23 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { useInverterModelsQuery } from '@src/api/youdera/hooks/inverters/hooks';
+import { useMeterModelsQuery } from '@src/api/youdera/hooks/meters/hooks';
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 import {
+  DependentSelectsFields,
   DependentSelectsFieldsProps,
 } from './DependentSelectsFields';
-import { DependentTwoSelectsFields } from './DependentTwoSelectsFields';
 
 export type MeterModelSelectFieldsProps = {};
 
 export function MeterModelSelectFields() {
   const intl = useIntl();
 
-  const inverterModelsQuery = useInverterModelsQuery();
-
+  const meterModelsQuery = useMeterModelsQuery();
+  console.log(meterModelsQuery)
   const { manufacturerOptions, modelOptions } = useMemo(
     () =>
-      (inverterModelsQuery.data || []).reduce<{
+      (meterModelsQuery.data || []).reduce<{
         manufacturerOptions: DependentSelectsFieldsProps['options'];
         modelOptions: DependentSelectsFieldsProps['dependentOptions'];
       }>(
@@ -50,11 +50,11 @@ export function MeterModelSelectFields() {
           modelOptions: [],
         },
       ),
-    [inverterModelsQuery.data],
+    [meterModelsQuery.data],
   );
 
   return (
-    <DependentTwoSelectsFields
+    <DependentSelectsFields
       options={manufacturerOptions}
       autoCompleteProps={{
         label: intl.formatMessage({ defaultMessage: 'Manufacturer' }),
@@ -66,30 +66,16 @@ export function MeterModelSelectFields() {
         }),
       }}
       name="manufacturer"
-      dependentField1={{
-        name: "model",
-        options: modelOptions,
-        selectProps: {
-          label: intl.formatMessage({
-            defaultMessage: 'Model',
-          }),
-          placeholder: intl.formatMessage({
-            defaultMessage: 'Select',
-          }),
-        }
+      dependentOptions={modelOptions}
+      dependentSelectProps={{
+        label: intl.formatMessage({
+          defaultMessage: 'Model',
+        }),
+        placeholder: intl.formatMessage({
+          defaultMessage: 'Select',
+        }),
       }}
-      dependentField2={{
-        name: "model",
-        options: modelOptions,
-        selectProps: {
-          label: intl.formatMessage({
-            defaultMessage: 'Model',
-          }),
-          placeholder: intl.formatMessage({
-            defaultMessage: 'Select',
-          }),
-        }
-      }}
+      dependentName="model"
     />
   );
 }
