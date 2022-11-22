@@ -154,6 +154,18 @@ export type Meter = {
   datapoints?: Datapoint[];
 };
 
+export interface MeterModel {
+  id: number;
+  type: string;
+  name: string;
+  manufacturer_id: number;
+  manufacturer_name: string;
+  data: {
+    indirect: boolean;
+    auto_serialnumber: boolean;
+  };
+}
+
 export type Battery = {
   id: number;
   name: string;

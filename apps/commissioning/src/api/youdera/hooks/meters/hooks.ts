@@ -5,6 +5,7 @@ import {
   deleteMeter,
   executeMeterVerification,
   getMeter,
+  getMeterModels,
   getMeterVerificationGuide,
   updateMeter,
 } from './apiRequests';
@@ -78,3 +79,8 @@ export const useMeterVerificationGuideQuery = (meterId: number) =>
   useQuery([QueryKeys.meterVerificationGuide, meterId], ({ queryKey }) =>
     getMeterVerificationGuide(queryKey[1] as number),
   );
+
+export const useMeterModelsQuery = () =>
+  useQuery([QueryKeys.meterModels], async () => getMeterModels(), {
+    suspense: true,
+  });
