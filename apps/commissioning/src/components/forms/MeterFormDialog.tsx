@@ -12,10 +12,9 @@ import {
   DialogTitle,
 } from 'ui/dialogs/Dialog';
 import { Input } from 'ui/inputs/Input';
-import { MultiSelect, MultiSelectOption } from 'ui/select/MultiSelect'
+import { MultiSelectOption } from 'ui/select/MultiSelect'
 import { SelectOption } from 'ui/select/Select';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
-import { Toggle } from 'ui/toggle/Toggle'
 import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
@@ -26,6 +25,7 @@ import { Form } from './Form';
 import { MeterModelSelectFields } from './MeterModelSelectFields';
 import { MultiSelectField } from './MultiSelectField';
 import { SelectField } from './SelectField';
+import { ToggleField } from './ToggleField';
 
 const validation = z.object({
   manufacturer: z.object({ key: z.string(), label: z.string() }),
@@ -162,26 +162,23 @@ export const MeterFormDialog = ({
 
   // ? Double check that
   const invertersOptions: MultiSelectOption[] = inverters ? inverters.map((inverter, idx) => ({
-    key: `${idx}`,
-    label: {
-      selected: `Inverter ${idx}`,
-      option: (
-        <div>
-          <Typography variant="body" weight="medium">
-            {intl.formatMessage({
-              defaultMessage: 'Inverter',
-            })} {idx} {inverter.name ? `– ${inverter.name}` : ''}
-          </Typography>
-          <Typography variant="label"> {intl.formatMessage({
-            defaultMessage: 'SN',
-            description: 'Context: Shortcut from Serial Number'
-          })}: {inverter.serial_number}</Typography>
-        </div>
-      ),
-    },
+    value: inverter,
+    children: (
+      <div>
+        <Typography variant="body" weight="medium">
+          {intl.formatMessage({
+            defaultMessage: 'Inverter',
+          })} {idx} {inverter.name ? `– ${inverter.name}` : ''}
+        </Typography>
+        <Typography variant="label"> {intl.formatMessage({
+          defaultMessage: 'SN',
+          description: 'Context: Shortcut from Serial Number'
+        })}: {inverter.serial_number}</Typography>
+      </div>
+    ),
   })) : []
 
-  console.log(invertersOptions)
+  // console.log(invertersOptions)
   // *
   return (
     <Dialog
@@ -240,39 +237,48 @@ export const MeterFormDialog = ({
               )}
             </Field>
           )}
-          {showFields.fourth && (
-            <MultiSelect
-              value={[]}
-              onChange={() => undefined}
-              label={intl.formatMessage({
-                defaultMessage: 'Connected inverters'
-              })}
-              placeholder={intl.formatMessage({
-                defaultMessage: 'Select'
-              })}
-              options={invertersOptions}
-            />
+          {showFields.fourth &&
+            (
+              <MultiSelectField
+                name='connectedInverters'
+                label={intl.formatMessage({
+                  defaultMessage: 'Connected inverters'
+                })}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'Select'
+                })}
+              >
 
-
-            //   <MultiSelectField
-            //     name='connectedInverters'
-            //     label={intl.formatMessage({
-            //       defaultMessage: 'Connected inverters'
-            //     })}
-            //     placeholder={intl.formatMessage({
-            //       defaultMessage: 'Select'
-            //     })}
-            //     options={invertersOptions}
-            //   />
-          )}
+                {inverters && inverters.map((inverter, idx) => (
+                  <MultiSelectOption value={{
+                    key: inverter.id.toString(),
+                    label: inverter.name ?? 'Inverter',
+                  }}
+                  >
+                    {() => (
+                      <div>
+                        <Typography variant="body" weight="medium">
+                          {intl.formatMessage({
+                            defaultMessage: 'Inverter',
+                          })} {idx} {inverter.name ? `– ${inverter.name}` : ''}
+                        </Typography>
+                        <Typography variant="label"> {intl.formatMessage({
+                          defaultMessage: 'SN',
+                          description: 'Context: Shortcut from Serial Number'
+                        })}: {inverter.serial_number}</Typography>
+                      </div>)}
+                  </MultiSelectOption>
+                ))}
+              </MultiSelectField>
+            )
+          }
           {
             showFields.fifth && (
-              <Toggle
+              <ToggleField
+                name='auxiliary'
                 label={intl.formatMessage({
                   defaultMessage: 'Auxiliary meter'
                 })}
-              // checked={}
-              // onChange={}
               />
             )
           }
