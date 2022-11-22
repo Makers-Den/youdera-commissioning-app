@@ -552,8 +552,12 @@ export function DevicesContent({
 
       {currentDevice && (
         <CommsMethodFormDialog
+          device={currentDevice}
           open={commsMethodDialog.isOpen}
-          onClose={commsMethodDialog.onClose}
+          onClose={() => {
+            commsMethodDialog.onClose();
+            setCurrentDevice(null);
+          }}
           onSubmit={async ({ method, ipAddress, slaveId }) => {
             const commType = method.key as CommType;
 

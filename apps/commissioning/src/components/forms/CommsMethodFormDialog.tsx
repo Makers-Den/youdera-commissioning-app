@@ -1,5 +1,6 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Device } from '@src/utils/devices';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useIntl } from 'react-intl';
@@ -36,6 +37,7 @@ const validation = z.object({
 type FormValues = z.infer<typeof validation>;
 
 export type CommsMethodFormDialogProps = {
+  device: Device;
   open: DialogProps['open'];
   onClose: DialogProps['onClose'];
   className?: string;
@@ -44,7 +46,19 @@ export type CommsMethodFormDialogProps = {
 
 export type CommType = 'fixed_ip' | 'dhcp';
 
+
+function extractCommsValues(device: Device) {
+  const { ip, dhcp, slave_id: slaveId } = (device.datapoints?.filter(point => !!point.import_config)?.[0]?.import_config) || { dhcp: null, slave_id: null }
+
+  return {
+    ipAddress: ip,
+    dhcp,
+    slaveId
+  };
+}
+
 export const CommsMethodFormDialog = ({
+  device,
   open,
   onClose,
   className,
@@ -52,24 +66,33 @@ export const CommsMethodFormDialog = ({
 }: CommsMethodFormDialogProps) => {
   const intl = useIntl();
 
+  const fixedIpOption = {
+    key: 'fixed_ip',
+    label: intl.formatMessage({ defaultMessage: 'TCP - Fixed IP' })
+  } as const;
+  const dhcpOption = {
+    key: 'dhcp',
+    label: intl.formatMessage({ defaultMessage: 'TCP - DHCP' })
+  } as const;
+
+  const methodOptions: SelectOption<CommType>[] = [fixedIpOption, dhcpOption];
+
+  const defaultValues = extractCommsValues(device);
+
+  const defaultMethodOption = (defaultValues.dhcp && dhcpOption) || (!!defaultValues.ipAddress && fixedIpOption) || undefined;
+
   const rhfProps = useForm({
     resolver: zodResolver(validation),
+    defaultValues: {
+      method: defaultMethodOption,
+      ipAddress: defaultMethodOption?.key === 'fixed_ip' ? defaultValues.ipAddress : null,
+      slaveId: defaultValues.slaveId,
+    }
   });
 
   const { setValue, handleSubmit, reset, formState, watch, control } = rhfProps;
 
   const [methodOption]: [(SelectOption<CommType> | undefined)] = watch(['method']);
-
-  const methodOptions: SelectOption<CommType>[] = [
-    {
-      key: 'fixed_ip',
-      label: intl.formatMessage({ defaultMessage: 'TCP - Fixed IP' })
-    } as const,
-    {
-      key: 'dhcp',
-      label: intl.formatMessage({ defaultMessage: 'TCP - DHCP' })
-    } as const
-  ];
 
   // reset ip address whenever method changes
   useEffect(() => {
