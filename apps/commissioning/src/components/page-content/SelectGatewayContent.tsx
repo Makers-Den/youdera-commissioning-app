@@ -1,7 +1,7 @@
 import { Gateway } from '@src/api/youdera/apiTypes';
 import { updateGateway } from '@src/api/youdera/hooks/gateways/apiRequests';
 import { useGatewaysQuery } from '@src/api/youdera/hooks/gateways/hooks';
-import { reportApiError, toMessage } from '@src/utils/errorUtils';
+import { reportApiError } from '@src/utils/errorUtils';
 import { useCallback, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
