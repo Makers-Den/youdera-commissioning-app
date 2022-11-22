@@ -1,11 +1,13 @@
 import { Gateway } from '@src/api/youdera/apiTypes';
 import { updateGateway } from '@src/api/youdera/hooks/gateways/apiRequests';
 import { useGatewaysQuery } from '@src/api/youdera/hooks/gateways/hooks';
+import { reportApiError, toMessage } from '@src/utils/errorUtils';
 import { useCallback, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Divider } from 'ui/divider/Divider';
 import { Input, InputProps } from 'ui/inputs/Input';
+import { useToast } from 'ui/toast/Toast';
 
 import { GatewayList } from '../GatewayList';
 import { LargeBox } from '../LargeBox';
@@ -19,6 +21,8 @@ export function SelectGatewayContent({
   siteId,
   onGatewaySelected,
 }: SelectGatewayContentProps) {
+  const toast = useToast();
+
   const intl = useIntl();
   const [searchInput, setSearchInput] = useState('');
 
@@ -43,15 +47,18 @@ export function SelectGatewayContent({
     async (gateway: Gateway) => {
       try {
         await updateGateway({ gatewayId: gateway.id, siteId });
+        toast.success(
+          intl.formatMessage({
+            defaultMessage: 'Gateway attached successfully.',
+          }),
+        );
       } catch (err) {
-        // TODO: toast feedback system pending
-        // eslint-disable-next-line no-console
-        console.error(err);
+        reportApiError(toast, err);
       }
 
       onGatewaySelected();
     },
-    [siteId, onGatewaySelected],
+    [onGatewaySelected, siteId, toast, intl],
   );
 
   return (
