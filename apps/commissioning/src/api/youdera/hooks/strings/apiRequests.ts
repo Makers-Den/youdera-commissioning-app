@@ -3,8 +3,11 @@ import {
   ApiFile,
   CreateStringRequestBody,
   DataResponse,
+  DeleteFileFromStringRequest,
+  String,
   StringsOnRoof,
 } from '../../apiTypes';
+import { UpdateDataResponse } from '../../types';
 
 export interface AddFileToStringRequest {
   stringId: string;
@@ -45,6 +48,19 @@ export const addFileToString = async ({
   return response.data.data;
 };
 
+export const deleteFileFromString = async ({
+  stringId,
+  fileId
+}: DeleteFileFromStringRequest) => {
+  const response = await youderaApiInstance.delete(
+    `/strings/${stringId}/files/${fileId}/`,
+  );
+
+  return response.data;
+};
+
+
+
 export const createString = async (body: CreateStringRequestBody) => {
   const response = await youderaApiInstance.post(`/strings`, body);
 
@@ -59,7 +75,7 @@ export const deleteString = async (stringId: number) => {
 
 export const getStringsOnRoof = async (roofId: number) => {
   const response = await youderaApiInstance.get<DataResponse<StringsOnRoof>>(
-    `/roofs/${roofId}?with[]=strings`,
+    `/roofs/${roofId}?with[]=strings&with[]=strings.mpp_tracker&with[]=strings.files`,
   );
 
   return {
@@ -71,5 +87,16 @@ export const getStringDetails = async (stringId: number): Promise<String> => {
   const response = await youderaApiInstance.get<DataResponse<String>>(
     `strings/${stringId}?with[]=mpp_tracker&with[]=files`,
   );
+  return response.data.data;
+};
+
+export const updateString = async ({
+  id,
+  ...rest
+}: {
+  id: number,
+} & Partial<CreateStringRequestBody>) => {
+  const response = await youderaApiInstance.patch<UpdateDataResponse<CreateStringRequestBody>>(`/strings/${id}`, { ...rest });
+
   return response.data.data;
 };

@@ -68,6 +68,10 @@ export interface DeleteFileFromSiteRequest {
   siteId: string;
   documentId: string;
 }
+export interface DeleteFileFromStringRequest {
+  stringId: number,
+  fileId: number
+}
 
 export interface ApiFile {
   id: string;

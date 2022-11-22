@@ -3,9 +3,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   addFileToString,
   createString,
+  deleteFileFromString,
   deleteString,
   getStringDetails,
   getStringsOnRoof,
+  updateString,
 } from './apiRequests';
 import { QueryKeys } from '../../enums/queryKeys';
 
@@ -36,16 +38,27 @@ export const useStringsMutations = (roofId: number) => {
       queryClient.invalidateQueries([QueryKeys.strings, roofId]);
     },
   });
-
+  const deleteFileFromStringMutation = useMutation(deleteFileFromString, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.strings, roofId]);
+    },
+  })
   const deleteStringMutation = useMutation(deleteString, {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKeys.strings, roofId]);
     },
   });
+  const updateStringMutation = useMutation(updateString, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.strings, roofId])
+    },
+  });
 
   return {
     addFileToStringMutation,
+    deleteFileFromStringMutation,
     createStringMutation,
     deleteStringMutation,
+    updateStringMutation
   };
 };
