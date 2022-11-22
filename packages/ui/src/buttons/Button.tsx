@@ -21,7 +21,7 @@ export const buttonVariantStyles: {
     'filter',
     'data-[size=md]:drop-shadow-medium',
     'data-[loading=false]:hover:drop-shadow-small',
-    'data-[loading=false]:active:bg-orange-600',
+    'data-[loading=false]:enabled:active:bg-orange-600',
   ],
   'main-green': [
     'bg-green-400 text-white',
@@ -29,33 +29,33 @@ export const buttonVariantStyles: {
     'filter',
     'data-[size=md]:drop-shadow-medium',
     'data-[loading=false]:hover:drop-shadow-small',
-    'data-[loading=false]:active:bg-green-600',
+    'data-[loading=false]:enabled:active:bg-green-600',
   ],
   'main-gray': [
     'bg-gray-600 text-white',
     'border border-gray-600',
     'filter drop-shadow-medium',
     'data-[loading=false]:hover:drop-shadow-small',
-    'data-[loading=false]:active:bg-gray-700',
+    'data-[loading=false]:enabled:active:bg-gray-700',
   ],
   'additional-gray': [
     'bg-gray-300 text-gray-600',
     'border border-gray-300',
     'data-[loading=false]:hover:bg-gray-400 data-[loading=false]:hover:border-gray-400',
-    'data-[loading=false]:active:bg-[#CDD2E0] data-[loading=false]:active:border-[#CDD2E0]',
+    'data-[loading=false]:enabled:active:bg-[#CDD2E0] data-[loading=false]:active:border-[#CDD2E0]',
   ],
   'additional-white': [
     'bg-gray-100 text-gray-600',
     'border border-gray-500',
     'data-[loading=false]:hover:bg-gray-600 data-[loading=false]:hover:text-white data-[loading=false]:hover:border-gray-600',
-    'data-[loading=false]:active:bg-gray-700 data-[loading=false]:active:text-white data-[loading=false]:active:border-gray-700',
+    'data-[loading=false]:enabled:active:bg-gray-700 data-[loading=false]:active:text-white data-[loading=false]:active:border-gray-700',
   ],
   danger: [
     'bg-red-400 text-white',
     'border border-red-400',
     'filter drop-shadow-medium',
     'data-[loading=false]:hover:drop-shadow-small',
-    'data-[loading=false]:active:bg-red-600 data-[loading=false]:active:border-red-600',
+    'data-[loading=false]:enabled:active:bg-red-600 data-[loading=false]:active:border-red-600',
   ],
 };
 

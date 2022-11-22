@@ -100,7 +100,7 @@ export const useInverterDetailsQuery = (inverterId: number) =>
   useQuery(
     [QueryKeys.inverterDetails, inverterId],
     async ({ queryKey }) =>
-      (queryKey[1] as number) > 0 && getInverterDetails(queryKey[1] as number),
+      (queryKey[1] as number) >= 0 && getInverterDetails(queryKey[1] as number),
   );
 
 export const useInverterVerificationGuideQuery = (id: number) =>

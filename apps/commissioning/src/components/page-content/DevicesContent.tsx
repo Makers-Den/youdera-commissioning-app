@@ -14,6 +14,7 @@ import {
 import { useSiteQuery } from '@src/api/youdera/hooks/sites/hooks';
 import { Device, toDevice, useExtractDevices } from '@src/utils/devices';
 import { routes } from '@src/utils/routes';
+import { noop } from 'lodash';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -45,29 +46,34 @@ import {
 import { MeterFormDialog } from '../forms/MeterFormDialog';
 import { LargeBox } from '../LargeBox';
 
+type AreYouSureCallbacks = {
+  onConfirm: () => void;
+  onCancel: () => void;
+};
+
 type AreYouSureDialogProps = {
-  siteId: number;
   disclosure: {
     isOpen: boolean;
     onClose: () => void;
     onOpen: () => void;
     toggle: () => void;
   };
+  callbacks: AreYouSureCallbacks;
 };
 
-function AreYouSureDialog({ siteId, disclosure }: AreYouSureDialogProps) {
+function AreYouSureDialog({ disclosure, callbacks }: AreYouSureDialogProps) {
   const intl = useIntl();
-  const router = useRouter();
 
   return (
     <ConfimationDialog
       isOpen={disclosure.isOpen}
       onClose={disclosure.onClose}
       title={intl.formatMessage({ defaultMessage: 'All Inverters added?' })}
-      onConfirm={() => {
-        router.push(routes.electrician.verification(siteId));
+      onConfirm={callbacks.onConfirm}
+      onCancel={() => {
+        callbacks.onCancel();
+        disclosure.onClose();
       }}
-      onCancel={disclosure.onClose}
       confirmButtonVariant="main-green"
       description={intl.formatMessage({
         defaultMessage: 'Are you sure that all inverters were added?',
@@ -335,11 +341,51 @@ export function DevicesContent({
   };
 
   const devices = useExtractDevices(site);
+  const siteHasInverters = useMemo(() => devices.find(d => d.deviceType === 'Inverter'), [devices]);
+  const siteHasBatteries = useMemo(() => devices.find(d => d.deviceType === 'Battery'), [devices]);
+  const siteHasMeters = useMemo(() => devices.find(d => d.deviceType === 'Meter'), [devices]);
 
-  const siteHasInverters = useMemo(
-    () => devices.find(d => d.deviceType === 'Inverter'),
-    [devices],
-  );
+  const areYouSureDisclosure = useDisclosure();
+
+  const [onAreYouSureCallbacks, setOnAreYouSureCallbacks] = useState<AreYouSureCallbacks>({
+    onCancel: noop,
+    onConfirm: noop,
+  });
+  const handleAddBattery = () => {
+    if (siteHasBatteries || siteHasMeters) {
+      addBatteryDialog.onOpen();
+    } else {
+      areYouSureDisclosure.onOpen();
+      setOnAreYouSureCallbacks({
+        onCancel: () => {
+          areYouSureDisclosure.onClose();
+        },
+        onConfirm: () => {
+          areYouSureDisclosure.onClose();
+          addBatteryDialog.onOpen();
+        }
+      });
+    }
+  };
+
+  const handleAddMeter = () => {
+    if (siteHasBatteries || siteHasMeters) {
+      // eslint-disable-next-line no-alert
+      window.alert("TODO: add meter");
+    } else {
+      areYouSureDisclosure.onOpen();
+      setOnAreYouSureCallbacks({
+        onCancel: () => {
+          areYouSureDisclosure.onClose();
+        },
+        onConfirm: () => {
+          areYouSureDisclosure.onClose();
+          // eslint-disable-next-line no-alert
+          window.alert("TODO: add meter");
+        }
+      });
+    }
+  };
 
   const items = [
     {
@@ -360,7 +406,7 @@ export function DevicesContent({
           type="button"
           disabled={!siteHasInverters}
           className="disabled:opacity-30"
-          onClick={addMeterDialog.onOpen}
+          onClick={addMeterDialog.onOpen} // TODO  handleAddMeter <- use this 
         >
           <Typography className="flex font-medium">
             <SvgIcon name="MeterRect" className="mr-3 w-5" />
@@ -376,7 +422,7 @@ export function DevicesContent({
           type="button"
           disabled={!siteHasInverters}
           className="disabled:opacity-30"
-          onClick={addBatteryDialog.onOpen}
+          onClick={handleAddBattery}
         >
           <Typography className="flex font-medium">
             <SvgIcon name="BatteryRect" className="mr-3 w-5" />
@@ -387,7 +433,7 @@ export function DevicesContent({
     },
   ];
 
-  const areYouSureDisclosure = useDisclosure();
+  const router = useRouter();
 
   useEffect(() => {
     const hasInverters = !!devices.find(d => d.deviceType === 'Inverter');
@@ -398,9 +444,11 @@ export function DevicesContent({
       variant: 'main-green',
       type: 'button',
       disabled: !hasInverters,
-      onClick: areYouSureDisclosure.onOpen,
+      onClick: () => {
+        router.push(routes.electrician.verification(siteId));
+      },
     });
-  }, [intl, setNextButtonProps, devices, areYouSureDisclosure.onOpen]);
+  }, [intl, setNextButtonProps, devices, areYouSureDisclosure.onOpen, router, siteId]);
 
   const defaultValues = useMemo(() => {
     if (currentDevice?.deviceType === 'Inverter') {
@@ -569,8 +617,12 @@ export function DevicesContent({
 
       {currentDevice && (
         <CommsMethodFormDialog
+          device={currentDevice}
           open={commsMethodDialog.isOpen}
-          onClose={commsMethodDialog.onClose}
+          onClose={() => {
+            commsMethodDialog.onClose();
+            setCurrentDevice(null);
+          }}
           onSubmit={async ({ method, ipAddress, slaveId }) => {
             const commType = method.key as CommType;
 
@@ -624,7 +676,7 @@ export function DevicesContent({
         />
       )}
 
-      <AreYouSureDialog siteId={siteId} disclosure={areYouSureDisclosure} />
+      <AreYouSureDialog callbacks={onAreYouSureCallbacks} disclosure={areYouSureDisclosure} />
       <Toast />
     </>
   );

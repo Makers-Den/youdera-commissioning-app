@@ -35,10 +35,28 @@
       "value": "Type"
     }
   ],
+  "+sQrJP": [
+    {
+      "type": 0,
+      "value": "Modify String"
+    }
+  ],
+  "+u6vBv": [
+    {
+      "type": 0,
+      "value": "Module field added successfully!"
+    }
+  ],
   "/96xkm": [
     {
       "type": 0,
       "value": "Test and Verify"
+    }
+  ],
+  "/o7hHw": [
+    {
+      "type": 0,
+      "value": "Update Device"
     }
   ],
   "/vMjUJ": [
@@ -83,12 +101,6 @@
       "value": "String test result"
     }
   ],
-  "2ACNd6": [
-    {
-      "type": 0,
-      "value": "Select input"
-    }
-  ],
   "2IacYt": [
     {
       "type": 0,
@@ -99,6 +111,18 @@
     {
       "type": 0,
       "value": "Finish"
+    }
+  ],
+  "2OCjsr": [
+    {
+      "type": 0,
+      "value": "Inverter added successfully!"
+    }
+  ],
+  "2QNbdM": [
+    {
+      "type": 0,
+      "value": "File uploaded successfully!"
     }
   ],
   "2oCaym": [
@@ -129,6 +153,18 @@
     {
       "type": 0,
       "value": "Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well."
+    }
+  ],
+  "4k4qvs": [
+    {
+      "type": 0,
+      "value": "Select method"
+    }
+  ],
+  "4yNzxR": [
+    {
+      "type": 0,
+      "value": "Slave id"
     }
   ],
   "5LP274": [
@@ -173,10 +209,22 @@
       "value": "MAIN MENU"
     }
   ],
+  "8STOvg": [
+    {
+      "type": 0,
+      "value": "Test Communication"
+    }
+  ],
   "9+Ddtu": [
     {
       "type": 0,
       "value": "Next"
+    }
+  ],
+  "9/Tu78": [
+    {
+      "type": 0,
+      "value": "File deleted successfully!"
     }
   ],
   "98CJFc": [
@@ -215,6 +263,12 @@
       "value": "Are you sure to delete module field?"
     }
   ],
+  "C7zbxT": [
+    {
+      "type": 0,
+      "value": "404 - Page not found"
+    }
+  ],
   "CkBSOc": [
     {
       "type": 0,
@@ -241,6 +295,12 @@
       "value": "Manufacturer and model"
     }
   ],
+  "DupNoS": [
+    {
+      "type": 0,
+      "value": "Go back home"
+    }
+  ],
   "EEobcb": [
     {
       "type": 0,
@@ -251,6 +311,12 @@
     {
       "type": 0,
       "value": "Add string"
+    }
+  ],
+  "G1O4SM": [
+    {
+      "type": 0,
+      "value": "Update Inverter"
     }
   ],
   "GtVtRN": [
@@ -277,10 +343,22 @@
       "value": "Your password has been successfully reset. Click below to log in magically."
     }
   ],
+  "IyUic2": [
+    {
+      "type": 0,
+      "value": "Communication method"
+    }
+  ],
   "Jakpjl": [
     {
       "type": 0,
       "value": "Select gateway"
+    }
+  ],
+  "JvuK2y": [
+    {
+      "type": 0,
+      "value": "All Inverters added?"
     }
   ],
   "K3r6DQ": [
@@ -307,6 +385,12 @@
       "value": "String name"
     }
   ],
+  "Lfjsvl": [
+    {
+      "type": 0,
+      "value": "Module field updated successfully!"
+    }
+  ],
   "M6phHD": [
     {
       "type": 0,
@@ -329,6 +413,12 @@
     {
       "type": 0,
       "value": "Serial number"
+    }
+  ],
+  "PMr6dE": [
+    {
+      "type": 0,
+      "value": "Battery updated successfully!"
     }
   ],
   "QChvcf": [
@@ -367,10 +457,22 @@
       "value": "Add Inverter"
     }
   ],
+  "SxAUH5": [
+    {
+      "type": 0,
+      "value": "Inverter updated successfully!"
+    }
+  ],
   "SzqYd0": [
     {
       "type": 0,
       "value": "What you want to do with list element?"
+    }
+  ],
+  "U78NhE": [
+    {
+      "type": 0,
+      "value": "Complete"
     }
   ],
   "U8gYkQ": [
@@ -383,6 +485,18 @@
     {
       "type": 0,
       "value": "Take photo by camera"
+    }
+  ],
+  "UN6uei": [
+    {
+      "type": 0,
+      "value": "Inverter"
+    }
+  ],
+  "UXq8EV": [
+    {
+      "type": 0,
+      "value": "Fetching data"
     }
   ],
   "UoPZk+": [
@@ -451,10 +565,22 @@
       "value": "Module type"
     }
   ],
+  "Y3klBK": [
+    {
+      "type": 0,
+      "value": "Are you sure that all inverters were added?"
+    }
+  ],
   "YTweLg": [
     {
       "type": 0,
       "value": "Additional pictures"
+    }
+  ],
+  "YXoHk0": [
+    {
+      "type": 0,
+      "value": "Power"
     }
   ],
   "Yy/yDL": [
@@ -535,6 +661,12 @@
       "value": "Change inverter/mpp"
     }
   ],
+  "eMFtwD": [
+    {
+      "type": 0,
+      "value": "1 - 254"
+    }
+  ],
   "eyDsDC": [
     {
       "type": 0,
@@ -547,6 +679,12 @@
       "value": "Run Test"
     }
   ],
+  "hAkMuw": [
+    {
+      "type": 0,
+      "value": "Battery added successfully!"
+    }
+  ],
   "hsf++3": [
     {
       "type": 0,
@@ -557,6 +695,12 @@
     {
       "type": 0,
       "value": "Input"
+    }
+  ],
+  "j6lEpR": [
+    {
+      "type": 0,
+      "value": "Module field deleted successfully!"
     }
   ],
   "jvo0vs": [
@@ -577,16 +721,22 @@
       "value": "Select"
     }
   ],
+  "kd9+Gn": [
+    {
+      "type": 0,
+      "value": "You may not have access to a requested resource, or it doesn't exist"
+    }
+  ],
+  "mvxOrL": [
+    {
+      "type": 0,
+      "value": "Update Battery"
+    }
+  ],
   "n7u7Wg": [
     {
       "type": 0,
       "value": "ok"
-    }
-  ],
-  "nGrCam": [
-    {
-      "type": 0,
-      "value": "Inverter Model"
     }
   ],
   "nwjxtz": [
@@ -599,6 +749,12 @@
     {
       "type": 0,
       "value": "Change gateway"
+    }
+  ],
+  "ot42Mx": [
+    {
+      "type": 0,
+      "value": "Inverter Mode"
     }
   ],
   "ptgUiM": [
@@ -637,10 +793,22 @@
       "value": "Model"
     }
   ],
+  "rm1EPz": [
+    {
+      "type": 0,
+      "value": "TCP - Fixed IP"
+    }
+  ],
   "rp1sjc": [
     {
       "type": 0,
       "value": "Email will be sent to a project manager"
+    }
+  ],
+  "ruaKuF": [
+    {
+      "type": 0,
+      "value": "TCP - DHCP"
     }
   ],
   "rwbpnL": [
@@ -689,6 +857,12 @@
     {
       "type": 0,
       "value": "Actions"
+    }
+  ],
+  "wpH0GN": [
+    {
+      "type": 0,
+      "value": "Device deleted successfully!"
     }
   ],
   "x1Xwuo": [

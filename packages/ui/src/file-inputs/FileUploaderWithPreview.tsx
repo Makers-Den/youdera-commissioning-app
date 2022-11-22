@@ -35,8 +35,9 @@ export function FileUploaderWithPreview({
   return (
     <div className={clsxm(className, 'flex flex-col gap-3')}>
       {label && <Label>{label}</Label>}
-      {uploadedFiles.map(uploadedFile => (
+      {uploadedFiles.map((uploadedFile, idx) => (
         <FilePreviewer
+          key={idx}
           onDeleteClick={() => {
             onDeleteFile(uploadedFile);
           }}

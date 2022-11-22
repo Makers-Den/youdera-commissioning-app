@@ -24,8 +24,10 @@ const Login = () => {
   const { loginMutation, isAuthenticated, userInfoQuery } = useAuth();
 
   const [email, setEmail] = useState<string>('');
-  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
+    setAreCredentialsValid(undefined);
+  };
 
   const [password, setPassword] = useState<string>('');
   const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +99,9 @@ const Login = () => {
             className="w-64"
             validity={areCredentialsValid}
           />
+          {areCredentialsValid && <Label className='text-red-400'>{intl.formatMessage({ defaultMessage: 'Email or password incorrect.' })}</Label>}
         </div>
+
         <div className="gap flex items-center justify-between">
           <Checkbox
             label={intl.formatMessage({ defaultMessage: 'Remember me' })}

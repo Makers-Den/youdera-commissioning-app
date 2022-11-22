@@ -1,9 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Module, String } from '@src/api/youdera/apiTypes';
+import { Module } from '@src/api/youdera/apiTypes';
 import { useModulesQuery } from '@src/api/youdera/hooks/modules/hooks';
-import { useStringDetailsQuery } from '@src/api/youdera/hooks/strings/hooks';
-import React from 'react';
-import { FieldValues, useForm, UseFormRegister } from 'react-hook-form';
+import React, { useEffect } from 'react';
+import { DeepPartial, FieldValues, useForm, UseFormRegister } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import {
@@ -37,6 +36,7 @@ export type StringModuleTypeDialogProps<
   onSubmit: (values: z.infer<ResolverType>, resetForm: () => void) => void;
   resolver: ResolverType;
   modifiedStringId?: number;
+  defaultValues?: DeepPartial<z.infer<ResolverType>>
 };
 
 export const StringModuleTypeDialog = <
@@ -48,11 +48,9 @@ export const StringModuleTypeDialog = <
   onSubmit,
   resolver,
   modifiedStringId,
+  defaultValues
 }: StringModuleTypeDialogProps<ResolverType>) => {
   const intl = useIntl();
-
-  const stringDetailsQuery = useStringDetailsQuery(modifiedStringId ?? -1);
-  const stringDetails = stringDetailsQuery.data as unknown as String;
 
   // * Options
   const modulesQuery = useModulesQuery();
@@ -69,26 +67,19 @@ export const StringModuleTypeDialog = <
     { key: '10', label: '10 mm²' },
   ];
   // *
-  const defaultModuleOption = () =>
-    moduleOptions.filter(
-      module => module.key === stringDetails.module.toString(),
-    )[0];
-  const defaultCableCrossSectionOption = () =>
-    cableCrossSectionOptions.filter(
-      section => section.key === stringDetails.cable_cross_section.toString(),
-    )[0];
+
   const method = useForm({
     resolver: zodResolver(resolver),
-    defaultValues: modifiedStringId
-      ? {
-          moduleType: defaultModuleOption(),
-          cableCrossSection: defaultCableCrossSectionOption(),
-          numberOfModules: stringDetails.count,
-        }
-      : undefined,
+    defaultValues
   });
 
   const { handleSubmit, reset, formState } = method;
+
+  useEffect(() => {
+    if (defaultValues) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, reset]);
 
   return (
     <Dialog
@@ -101,11 +92,11 @@ export const StringModuleTypeDialog = <
           title={
             modifiedStringId
               ? intl.formatMessage({
-                  defaultMessage: 'Modify String',
-                })
+                defaultMessage: 'Modify String',
+              })
               : intl.formatMessage({
-                  defaultMessage: 'Add String',
-                })
+                defaultMessage: 'Add String',
+              })
           }
         />
         <SvgIcon

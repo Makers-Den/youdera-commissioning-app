@@ -1,5 +1,6 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Device } from '@src/utils/devices';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useIntl } from 'react-intl';
@@ -26,7 +27,7 @@ import { SelectField } from './SelectField';
 const validation = z.object({
   method: z.object({ key: z.string(), label: z.string() }),
   ipAddress: z.string().regex(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/).optional(),
-  slaveId: z.string().min(1).max(255),
+  slaveId: z.number().min(1).max(254),
 }).refine(schema => schema.method.key === 'fixed_ip' ? !!schema.ipAddress : true, {
   // TODO: localize
   path: ['ipAddress'],
@@ -36,6 +37,7 @@ const validation = z.object({
 type FormValues = z.infer<typeof validation>;
 
 export type CommsMethodFormDialogProps = {
+  device: Device;
   open: DialogProps['open'];
   onClose: DialogProps['onClose'];
   className?: string;
@@ -44,7 +46,19 @@ export type CommsMethodFormDialogProps = {
 
 export type CommType = 'fixed_ip' | 'dhcp';
 
+
+function extractCommsValues(device: Device) {
+  const { ip, dhcp, slave_id: slaveId } = (device.datapoints?.filter(point => !!point.import_config)?.[0]?.import_config) || { dhcp: undefined, slave_id: undefined }
+
+  return {
+    ipAddress: ip,
+    dhcp,
+    slaveId
+  };
+}
+
 export const CommsMethodFormDialog = ({
+  device,
   open,
   onClose,
   className,
@@ -52,24 +66,33 @@ export const CommsMethodFormDialog = ({
 }: CommsMethodFormDialogProps) => {
   const intl = useIntl();
 
+  const fixedIpOption = {
+    key: 'fixed_ip',
+    label: intl.formatMessage({ defaultMessage: 'TCP - Fixed IP' })
+  } as const;
+  const dhcpOption = {
+    key: 'dhcp',
+    label: intl.formatMessage({ defaultMessage: 'TCP - DHCP' })
+  } as const;
+
+  const methodOptions: SelectOption<CommType>[] = [fixedIpOption, dhcpOption];
+
+  const defaultValues = extractCommsValues(device);
+
+  const defaultMethodOption = (defaultValues.dhcp && dhcpOption) || (!!defaultValues.ipAddress && fixedIpOption) || undefined;
+
   const rhfProps = useForm({
     resolver: zodResolver(validation),
+    defaultValues: {
+      method: defaultMethodOption,
+      ipAddress: defaultMethodOption?.key === 'fixed_ip' ? defaultValues.ipAddress : undefined,
+      slaveId: defaultValues.slaveId,
+    }
   });
 
   const { setValue, handleSubmit, reset, formState, watch, control } = rhfProps;
 
   const [methodOption]: [(SelectOption<CommType> | undefined)] = watch(['method']);
-
-  const methodOptions: SelectOption<CommType>[] = [
-    {
-      key: 'fixed_ip',
-      label: intl.formatMessage({ defaultMessage: 'TCP - Fixed IP' })
-    } as const,
-    {
-      key: 'dhcp',
-      label: intl.formatMessage({ defaultMessage: 'TCP - DHCP' })
-    } as const
-  ];
 
   // reset ip address whenever method changes
   useEffect(() => {
@@ -138,7 +161,7 @@ export const CommsMethodFormDialog = ({
                   })}
                   type="number"
                   className="w-full"
-                  {...register('slaveId')}
+                  {...register('slaveId', { setValueAs: v => v === '' ? undefined : parseInt(v, 10)})}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />
               )}

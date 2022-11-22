@@ -68,6 +68,10 @@ export interface DeleteFileFromSiteRequest {
   siteId: string;
   documentId: string;
 }
+export interface DeleteFileFromStringRequest {
+  stringId: number,
+  fileId: number
+}
 
 export interface ApiFile {
   id: string;
@@ -116,7 +120,10 @@ export type Gateway = {
  */
 export type Datapoint = {
   import_config: {
+    /** set if fixed ip */
     ip?: string;
+    /** set if dhcp */
+    dhcp?: true;
     slave_id: number;
   };
 };
