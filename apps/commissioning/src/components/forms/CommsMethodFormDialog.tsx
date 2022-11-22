@@ -27,7 +27,7 @@ import { SelectField } from './SelectField';
 const validation = z.object({
   method: z.object({ key: z.string(), label: z.string() }),
   ipAddress: z.string().regex(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/).optional(),
-  slaveId: z.string().min(1).max(255),
+  slaveId: z.number().min(1).max(254),
 }).refine(schema => schema.method.key === 'fixed_ip' ? !!schema.ipAddress : true, {
   // TODO: localize
   path: ['ipAddress'],
@@ -48,7 +48,7 @@ export type CommType = 'fixed_ip' | 'dhcp';
 
 
 function extractCommsValues(device: Device) {
-  const { ip, dhcp, slave_id: slaveId } = (device.datapoints?.filter(point => !!point.import_config)?.[0]?.import_config) || { dhcp: null, slave_id: null }
+  const { ip, dhcp, slave_id: slaveId } = (device.datapoints?.filter(point => !!point.import_config)?.[0]?.import_config) || { dhcp: undefined, slave_id: undefined }
 
   return {
     ipAddress: ip,
@@ -85,7 +85,7 @@ export const CommsMethodFormDialog = ({
     resolver: zodResolver(validation),
     defaultValues: {
       method: defaultMethodOption,
-      ipAddress: defaultMethodOption?.key === 'fixed_ip' ? defaultValues.ipAddress : null,
+      ipAddress: defaultMethodOption?.key === 'fixed_ip' ? defaultValues.ipAddress : undefined,
       slaveId: defaultValues.slaveId,
     }
   });
@@ -161,7 +161,7 @@ export const CommsMethodFormDialog = ({
                   })}
                   type="number"
                   className="w-full"
-                  {...register('slaveId')}
+                  {...register('slaveId', { setValueAs: v => v === '' ? undefined : parseInt(v, 10)})}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />
               )}
