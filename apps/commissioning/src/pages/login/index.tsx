@@ -109,7 +109,7 @@ const Login = () => {
             isChecked={rememberUser}
             disabled={!!areCredentialsValid}
           />
-          <Link href="/forgotten-password" passHref>
+          <Link href="/forgot-password" passHref>
             <Label
               className={clsxm(
                 'ml-8 font-medium underline hover:cursor-pointer',

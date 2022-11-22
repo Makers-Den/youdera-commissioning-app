@@ -2,7 +2,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteCookie, getCookie } from 'cookies-next';
 import { useEffect } from 'react';
 
-import { getUserInfo, login, logOut } from './apiRequests';
+import {
+  forgotPassword,
+  getUserInfo,
+  login,
+  logOut,
+  resetPassword,
+} from './apiRequests';
 import { youderaApiInstance } from '../../api-instances/youdera';
 import { CookiesKeys } from '../../enums/cookiesKeys';
 import { QueryKeys } from '../../enums/queryKeys';
@@ -32,6 +38,10 @@ export const useAuth = () => {
     },
   });
 
+  const forgotPasswordMutation = useMutation(forgotPassword);
+
+  const resetPasswordMutation = useMutation(resetPassword);
+
   useEffect(() => {
     const checkToken = getCookie(CookiesKeys.accessToken);
     if (checkToken) {
@@ -47,8 +57,8 @@ export const useAuth = () => {
           },
         };
       });
+      userInfoQuery.refetch();
     }
-    userInfoQuery.refetch();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -58,5 +68,7 @@ export const useAuth = () => {
     isAuthenticated: !!userInfoQuery.data,
     loginMutation,
     logOutMutation,
+    forgotPasswordMutation,
+    resetPasswordMutation,
   };
 };

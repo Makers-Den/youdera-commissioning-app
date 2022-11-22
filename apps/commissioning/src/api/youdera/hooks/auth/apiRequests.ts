@@ -74,3 +74,25 @@ export const getUserInfo = async () => {
 
   return response.data;
 };
+
+export const forgotPassword = async (email: string) => {
+  const response = await youderaApiInstance.post(`/auth/forgot-password`, {
+    email,
+  });
+  return response.data;
+};
+
+export type ResetPasswordReqBody = {
+  email: string;
+  token: string;
+  password: string;
+  password_confirmation: string;
+};
+
+export const resetPassword = async (body: ResetPasswordReqBody) => {
+  const response = await youderaApiInstance.post(`/auth/reset-password`, {
+    ...body,
+    setMode: false,
+  });
+  return response.data;
+};
