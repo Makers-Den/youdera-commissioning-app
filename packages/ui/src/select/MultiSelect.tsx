@@ -4,6 +4,7 @@ import { Fragment, ReactNode, SVGProps } from 'react';
 import { SvgIcon } from '../svg-icons/SvgIcon';
 import { Typography } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
+import { validityStyle } from '../utils/constants';
 
 export type MultiSelectOption = {
   key: string;
@@ -62,6 +63,7 @@ export type MultiSelectProps = {
   onChange: (value: MultiSelectOption[]) => void;
   isRequired?: boolean;
   wrapperClassName?: string;
+  validity?: 'valid' | 'invalid';
 };
 
 export function MultiSelect({
@@ -74,6 +76,7 @@ export function MultiSelect({
   defaultValue,
   isRequired,
   wrapperClassName,
+  validity
 }: MultiSelectProps) {
   return (
     <div>
@@ -101,6 +104,7 @@ export function MultiSelect({
                 open
                   ? 'border-orange-400 bg-white'
                   : 'bg-gray-100 border-gray-500',
+                validity && validityStyle[validity].input,
               )}
             >
               <Typography
@@ -130,6 +134,8 @@ export function MultiSelect({
                   className={clsxm(
                     'w-3 ml-2 transition-all',
                     open && 'rotate-180',
+                    validity && validityStyle[validity].icon,
+
                   )}
                 />
               </div>

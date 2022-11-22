@@ -541,6 +541,7 @@ export function DevicesContent({
         })}
         defaultValues={defaultValues}
         fileValueMapper={fileValueMapper}
+        inverters={site.inverters}
       />
 
       <BatteryFormDialog
