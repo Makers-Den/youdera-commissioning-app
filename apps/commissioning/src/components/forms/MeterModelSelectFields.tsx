@@ -14,7 +14,6 @@ export function MeterModelSelectFields() {
   const intl = useIntl();
 
   const meterModelsQuery = useMeterModelsQuery();
-  console.log(meterModelsQuery)
   const { manufacturerOptions, modelOptions } = useMemo(
     () =>
       (meterModelsQuery.data || []).reduce<{

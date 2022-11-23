@@ -43,7 +43,10 @@ import {
   InverterFormDialog,
   InverterFormDialogProps,
 } from '../forms/InverterFormDialog';
-import { MeterFormDialog } from '../forms/MeterFormDialog';
+import {
+  MeterFormDialog,
+  MeterFormDialogProps,
+} from '../forms/MeterFormDialog';
 import { LargeBox } from '../LargeBox';
 
 type AreYouSureCallbacks = {
@@ -113,7 +116,7 @@ export function DevicesContent({
   const deviceDeletionDialog = useDisclosure();
   const addInverterDialog = useDisclosure();
   const updateInverterDialog = useDisclosure();
-  const addMeterDialog = useDisclosure()
+  const addMeterDialog = useDisclosure();
   const updateMeterDialog = useDisclosure();
   const addBatteryDialog = useDisclosure();
   const updateBatteryDialog = useDisclosure();
@@ -172,7 +175,12 @@ export function DevicesContent({
     addFileToBatteryMutation,
     updateBatteryMutation,
   } = useBatteryMutations(siteId);
-  const { deleteMeterMutation } = useMeterMutations(siteId);
+  const {
+    deleteMeterMutation,
+    createMeterMutation,
+    addFileToMeterMutation,
+    updateMeterMutation,
+  } = useMeterMutations(siteId);
 
   const confirmDeleteHandler = async () => {
     if (currentDevice) {
@@ -271,6 +279,46 @@ export function DevicesContent({
       }
     };
 
+  const onAddMeter: MeterFormDialogProps['onSubmit'] = async (
+    values,
+    reset,
+  ) => {
+    try {
+      const meter = await createMeterMutation.mutateAsync({
+        site: siteId,
+        type: values.type.key,
+        manufacturer: values.manufacturer.key,
+        model: values.model.key,
+        number: values.serialNumber,
+        is_auxiliary: values.auxiliary,
+        // factor: 1, when indirect flag in model is set to true user has to provide that. 
+      });
+
+      await addFileToMeterMutation.mutateAsync({
+        id: meter.id,
+        file: values.file,
+      });
+
+      // await updateMeterMutation.mutateAsync({
+      //   inverters: [1] // TODO - waiting for backend  (values.connectedInverters)
+      // });
+
+      commsMethodDialog.onOpen();
+      toast.success(
+        intl.formatMessage({
+          defaultMessage: 'Meter added successfully!',
+        }),
+      );
+      setCurrentDevice(toDevice(meter, 'Meter'));
+
+      reset();
+      addInverterDialog.onClose();
+    } catch (err) {
+      //@ts-ignore
+      toast.error(err.message);
+    }
+  };
+
   const onAddBattery: BatteryFormDialogProps['onSubmit'] = async (
     values,
     reset,
@@ -341,16 +389,26 @@ export function DevicesContent({
   };
 
   const devices = useExtractDevices(site);
-  const siteHasInverters = useMemo(() => devices.find(d => d.deviceType === 'Inverter'), [devices]);
-  const siteHasBatteries = useMemo(() => devices.find(d => d.deviceType === 'Battery'), [devices]);
-  const siteHasMeters = useMemo(() => devices.find(d => d.deviceType === 'Meter'), [devices]);
+  const siteHasInverters = useMemo(
+    () => devices.find(d => d.deviceType === 'Inverter'),
+    [devices],
+  );
+  const siteHasBatteries = useMemo(
+    () => devices.find(d => d.deviceType === 'Battery'),
+    [devices],
+  );
+  const siteHasMeters = useMemo(
+    () => devices.find(d => d.deviceType === 'Meter'),
+    [devices],
+  );
 
   const areYouSureDisclosure = useDisclosure();
 
-  const [onAreYouSureCallbacks, setOnAreYouSureCallbacks] = useState<AreYouSureCallbacks>({
-    onCancel: noop,
-    onConfirm: noop,
-  });
+  const [onAreYouSureCallbacks, setOnAreYouSureCallbacks] =
+    useState<AreYouSureCallbacks>({
+      onCancel: noop,
+      onConfirm: noop,
+    });
   const handleAddBattery = () => {
     if (siteHasBatteries || siteHasMeters) {
       addBatteryDialog.onOpen();
@@ -363,7 +421,7 @@ export function DevicesContent({
         onConfirm: () => {
           areYouSureDisclosure.onClose();
           addBatteryDialog.onOpen();
-        }
+        },
       });
     }
   };
@@ -371,7 +429,7 @@ export function DevicesContent({
   const handleAddMeter = () => {
     if (siteHasBatteries || siteHasMeters) {
       // eslint-disable-next-line no-alert
-      window.alert("TODO: add meter");
+      addMeterDialog.onOpen()
     } else {
       areYouSureDisclosure.onOpen();
       setOnAreYouSureCallbacks({
@@ -381,8 +439,8 @@ export function DevicesContent({
         onConfirm: () => {
           areYouSureDisclosure.onClose();
           // eslint-disable-next-line no-alert
-          window.alert("TODO: add meter");
-        }
+          addMeterDialog.onOpen()
+        },
       });
     }
   };
@@ -406,7 +464,7 @@ export function DevicesContent({
           type="button"
           disabled={!siteHasInverters}
           className="disabled:opacity-30"
-          onClick={addMeterDialog.onOpen} // TODO  handleAddMeter <- use this 
+          onClick={handleAddMeter}
         >
           <Typography className="flex font-medium">
             <SvgIcon name="MeterRect" className="mr-3 w-5" />
@@ -448,7 +506,14 @@ export function DevicesContent({
         router.push(routes.electrician.verification(siteId));
       },
     });
-  }, [intl, setNextButtonProps, devices, areYouSureDisclosure.onOpen, router, siteId]);
+  }, [
+    intl,
+    setNextButtonProps,
+    devices,
+    areYouSureDisclosure.onOpen,
+    router,
+    siteId,
+  ]);
 
   const defaultValues = useMemo(() => {
     if (currentDevice?.deviceType === 'Inverter') {
@@ -582,15 +647,27 @@ export function DevicesContent({
       <MeterFormDialog
         open={addMeterDialog.isOpen}
         onClose={addMeterDialog.onClose}
-        onSubmit={() => undefined}
+        onSubmit={onAddMeter}
         title={intl.formatMessage({ defaultMessage: 'Add Meter' })}
         submitButtonTitle={intl.formatMessage({
           defaultMessage: 'Add Device',
         })}
-        defaultValues={defaultValues}
         fileValueMapper={fileValueMapper}
         inverters={site.inverters}
       />
+
+      {/* <MeterFormDialog
+        open={updateMeterDialog.isOpen}
+        onClose={updateMeterDialog.onClose}
+        onSubmit={() => undefined}
+        title={intl.formatMessage({ defaultMessage: 'Update Meter' })}
+        submitButtonTitle={intl.formatMessage({
+          defaultMessage: 'Update Device',
+        })}
+        defaultValues={defaultValues}
+        fileValueMapper={fileValueMapper}
+        inverters={site.inverters}
+      /> */}
 
       <BatteryFormDialog
         open={addBatteryDialog.isOpen}
@@ -676,7 +753,10 @@ export function DevicesContent({
         />
       )}
 
-      <AreYouSureDialog callbacks={onAreYouSureCallbacks} disclosure={areYouSureDisclosure} />
+      <AreYouSureDialog
+        callbacks={onAreYouSureCallbacks}
+        disclosure={areYouSureDisclosure}
+      />
       <Toast />
     </>
   );

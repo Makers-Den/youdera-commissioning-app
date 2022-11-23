@@ -23,13 +23,13 @@ export const getMeter = async (id: number): Promise<Meter> => {
 };
 
 export type CreateMeterArgs = {
-  name: string;
   number: string;
-  factor: number;
+  factor?: number;
   type: string;
   site: number;
   manufacturer: string;
   model: string;
+  is_auxiliary: boolean;
 };
 
 export const createMeter = async (body: CreateMeterArgs): Promise<Meter> => {
@@ -56,11 +56,19 @@ export const updateMeter = async ({
   return response.data.data;
 };
 
-export const addFileToMeter = async (
-  id: number,
-  file: File,
-  setUploadProgress?: (percentage: number) => void,
-) => {
+export interface AddFileToInverterRequest {
+  id: Meter['id'];
+  file: File;
+}
+export interface AddFileToMeterArgs extends AddFileToInverterRequest {
+  setUploadProgress?: (percentage: number) => void;
+}
+
+export const addFileToMeter = async ({
+  id,
+  file,
+  setUploadProgress
+}: AddFileToMeterArgs) => {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('type', 'image');

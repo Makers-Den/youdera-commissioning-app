@@ -34,8 +34,18 @@ const validation = z.object({
     label: z.string(),
     dependentKey: z.string(),
   }),
+  connectedInverters: z.array(z.object({
+    key: z.string(),
+    label: z.string(),
+  })),
   serialNumber: z.string(),
+  auxiliary: z.boolean(),
   file: z.any(),
+  type: z.object({
+    key: z.string(),
+    label: z.string(),
+    icon: z.string(),
+  })
 });
 
 type FormValues = z.infer<typeof validation>;
@@ -69,8 +79,8 @@ export const MeterFormDialog = ({
     resolver: zodResolver(validation),
   });
 
-  const { handleSubmit, reset, formState, control } = method;
-
+  const { handleSubmit, reset, formState, control, getValues } = method;
+  console.log(getValues())
   useEffect(() => {
     if (defaultValues) {
       reset(defaultValues);
@@ -120,66 +130,42 @@ export const MeterFormDialog = ({
     third: !!meterType && !!model,
     fourth: !!meterType && !!model && !!serialNumber,
     fifth: !!meterType && !!model && !!serialNumber && !!connectedInverters,
-    sixth: !!meterType && !!model && !!serialNumber && !!connectedInverters && !!auxiliary,
-    seventh: !!meterType && !!model && !!serialNumber && !!connectedInverters && !!auxiliary && !!file
+    sixth: !!meterType && !!model && !!serialNumber && !!connectedInverters && !!file
   };
 
   // * Options
   const meterTypeOptions: SelectOption[] = [
     {
-      key: '1',
+      key: 'generation',
       label: intl.formatMessage({
         defaultMessage: 'Generation',
       }),
-      value: 'generation',
       icon: 'Industry',
     },
     {
-      key: '2',
+      key: 'import-export',
       label: intl.formatMessage({
         defaultMessage: 'Import/Export',
       }),
-      value: 'import',
       icon: 'Download',
     },
     {
-      key: '3',
+      key: 'consumption',
       label: intl.formatMessage({
         defaultMessage: 'Consumption',
       }),
-      value: 'consumption',
       icon: 'Plug',
     },
     {
-      key: '4',
+      key: 'own-consumption',
       label: intl.formatMessage({
         defaultMessage: 'Own consumption',
       }),
-      value: 'own_consumption',
       icon: 'Lightbulb',
     },
   ]
-
-  // ? Double check that
-  const invertersOptions: MultiSelectOption[] = inverters ? inverters.map((inverter, idx) => ({
-    value: inverter,
-    children: (
-      <div>
-        <Typography variant="body" weight="medium">
-          {intl.formatMessage({
-            defaultMessage: 'Inverter',
-          })} {idx} {inverter.name ? `– ${inverter.name}` : ''}
-        </Typography>
-        <Typography variant="label"> {intl.formatMessage({
-          defaultMessage: 'SN',
-          description: 'Context: Shortcut from Serial Number'
-        })}: {inverter.serial_number}</Typography>
-      </div>
-    ),
-  })) : []
-
-  // console.log(invertersOptions)
   // *
+
   return (
     <Dialog
       open={open}
@@ -247,6 +233,7 @@ export const MeterFormDialog = ({
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Select'
                 })}
+                wrapperClassName='z-10'
               >
 
                 {inverters && inverters.map((inverter, idx) => (
@@ -274,48 +261,48 @@ export const MeterFormDialog = ({
           }
           {
             showFields.fifth && (
-              <ToggleField
-                name='auxiliary'
-                label={intl.formatMessage({
-                  defaultMessage: 'Auxiliary meter'
-                })}
-              />
+              <>
+                <div className='flex h-20 min-w-[340px] bg-gray-100 justify-center items-center rounded-md'>
+                  <ToggleField
+                    name='auxiliary'
+                    label={intl.formatMessage({
+                      defaultMessage: 'Auxiliary meter'
+                    })}
+                  />
+                </div>
+                <FileField name="file" valueMapper={fileValueMapper} className="w-[340px]">
+                  <div className="flex items-center gap-4">
+                    <SvgIcon name="Camera" className="w-8 text-green-400" />
+                    <div>
+                      <Typography>
+                        {intl.formatMessage({
+                          defaultMessage: 'Take photo by camera',
+                          description:
+                            'Context: Take photo by camera or click here to upload',
+                        })}
+                      </Typography>
+                      <Typography>
+                        {intl.formatMessage({
+                          defaultMessage: 'or',
+                          description:
+                            'Context: Take photo by camera or click here to upload',
+                        })}{' '}
+                        <span className="text-green-400 underline">
+                          {intl.formatMessage({
+                            defaultMessage: 'click here to upload',
+                            description:
+                              'Context: Take photo by camera or click here to upload',
+                          })}
+                        </span>
+                      </Typography>
+                    </div>
+                  </div>
+                </FileField>
+              </>
             )
           }
           {
             showFields.sixth && (
-              <FileField name="file" valueMapper={fileValueMapper}>
-                <div className="flex items-center gap-4">
-                  <SvgIcon name="Camera" className="w-8 text-green-400" />
-                  <div>
-                    <Typography>
-                      {intl.formatMessage({
-                        defaultMessage: 'Take photo by camera',
-                        description:
-                          'Context: Take photo by camera or click here to upload',
-                      })}
-                    </Typography>
-                    <Typography>
-                      {intl.formatMessage({
-                        defaultMessage: 'or',
-                        description:
-                          'Context: Take photo by camera or click here to upload',
-                      })}{' '}
-                      <span className="text-green-400 underline">
-                        {intl.formatMessage({
-                          defaultMessage: 'click here to upload',
-                          description:
-                            'Context: Take photo by camera or click here to upload',
-                        })}
-                      </span>
-                    </Typography>
-                  </div>
-                </div>
-              </FileField>
-            )
-          }
-          {
-            showFields.seventh && (
               <div className="mt-3 flex gap-5">
                 <Button
                   variant="additional-gray"

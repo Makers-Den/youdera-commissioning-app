@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
+  addFileToMeter,
   createMeter,
   deleteMeter,
   executeMeterVerification,
@@ -62,11 +63,19 @@ export const useMeterMutations = (siteId: number) => {
     },
   );
 
+  const addFileToMeterMutation = useMutation(addFileToMeter, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
+      queryClient.invalidateQueries([QueryKeys.meter, siteId]);
+    },
+  });
+
   return {
     updateMeterMutation,
     createMeterMutation,
     deleteMeterMutation,
     executeMeterVerificationMutation,
+    addFileToMeterMutation,
   };
 };
 
