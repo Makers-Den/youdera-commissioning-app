@@ -12,9 +12,9 @@ import {
   DialogTitle,
 } from 'ui/dialogs/Dialog';
 import { Input } from 'ui/inputs/Input';
-import { MultiSelectOption } from 'ui/select/MultiSelect'
+import { MultiSelectOption } from 'ui/select/MultiSelect';
 import { SelectOption } from 'ui/select/Select';
-import { SvgIcon } from 'ui/svg-icons/SvgIcon';
+import { IconName, SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
@@ -95,18 +95,17 @@ export const MeterFormDialog = ({
     control,
   });
 
-
   const connectedInverters = useWatch({
     name: 'connectedInverters',
     defaultValue: formState.defaultValues?.inverters,
     control,
-  })
+  });
 
   const auxiliary = useWatch({
     name: 'auxiliary',
     defaultValue: formState.defaultValues?.auxiliary,
     control,
-  })
+  });
 
   const file = useWatch({
     name: 'file',
@@ -120,12 +119,23 @@ export const MeterFormDialog = ({
     third: !!meterType && !!model,
     fourth: !!meterType && !!model && !!serialNumber,
     fifth: !!meterType && !!model && !!serialNumber && !!connectedInverters,
-    sixth: !!meterType && !!model && !!serialNumber && !!connectedInverters && !!auxiliary,
-    seventh: !!meterType && !!model && !!serialNumber && !!connectedInverters && !!auxiliary && !!file
+    sixth:
+      !!meterType &&
+      !!model &&
+      !!serialNumber &&
+      !!connectedInverters &&
+      !!auxiliary,
+    seventh:
+      !!meterType &&
+      !!model &&
+      !!serialNumber &&
+      !!connectedInverters &&
+      !!auxiliary &&
+      !!file,
   };
 
   // * Options
-  const meterTypeOptions: SelectOption[] = [
+  const meterTypeOptions = [
     {
       key: '1',
       label: intl.formatMessage({
@@ -158,28 +168,8 @@ export const MeterFormDialog = ({
       value: 'own_consumption',
       icon: 'Lightbulb',
     },
-  ]
+  ];
 
-  // ? Double check that
-  const invertersOptions: MultiSelectOption[] = inverters ? inverters.map((inverter, idx) => ({
-    value: inverter,
-    children: (
-      <div>
-        <Typography variant="body" weight="medium">
-          {intl.formatMessage({
-            defaultMessage: 'Inverter',
-          })} {idx} {inverter.name ? `– ${inverter.name}` : ''}
-        </Typography>
-        <Typography variant="label"> {intl.formatMessage({
-          defaultMessage: 'SN',
-          description: 'Context: Shortcut from Serial Number'
-        })}: {inverter.serial_number}</Typography>
-      </div>
-    ),
-  })) : []
-
-  // console.log(invertersOptions)
-  // *
   return (
     <Dialog
       open={open}
@@ -205,15 +195,19 @@ export const MeterFormDialog = ({
           {showFields.first && (
             <SelectField
               name="meterType"
-              options={meterTypeOptions}
               label={intl.formatMessage({
                 defaultMessage: 'Meter type',
               })}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select',
               })}
-            />
-
+            >
+              {meterTypeOptions.map(value => (
+                <SelectOption icon={value.icon as IconName} value={value}>
+                  {() => value.label}
+                </SelectOption>
+              ))}
+            </SelectField>
           )}
           {showFields.second && (
             <Suspense fallback="loading">
@@ -237,104 +231,103 @@ export const MeterFormDialog = ({
               )}
             </Field>
           )}
-          {showFields.fourth &&
-            (
-              <MultiSelectField
-                name='connectedInverters'
-                label={intl.formatMessage({
-                  defaultMessage: 'Connected inverters'
-                })}
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Select'
-                })}
-              >
-
-                {inverters && inverters.map((inverter, idx) => (
-                  <MultiSelectOption value={{
+          {showFields.fourth && (
+            <MultiSelectField
+              name="connectedInverters"
+              label={intl.formatMessage({
+                defaultMessage: 'Connected inverters',
+              })}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select',
+              })}
+            >
+              {inverters?.map((inverter, idx) => (
+                <MultiSelectOption
+                  value={{
                     key: inverter.id.toString(),
                     label: inverter.name ?? 'Inverter',
+                    ...inverter,
                   }}
-                  >
-                    {() => (
-                      <div>
-                        <Typography variant="body" weight="medium">
-                          {intl.formatMessage({
-                            defaultMessage: 'Inverter',
-                          })} {idx} {inverter.name ? `– ${inverter.name}` : ''}
-                        </Typography>
-                        <Typography variant="label"> {intl.formatMessage({
+                >
+                  {() => (
+                    <div>
+                      <Typography variant="body" weight="medium">
+                        {intl.formatMessage({
+                          defaultMessage: 'Inverter',
+                        })}{' '}
+                        {idx} {inverter.name ? `– ${inverter.name}` : ''}
+                      </Typography>
+                      <Typography variant="label">
+                        {' '}
+                        {intl.formatMessage({
                           defaultMessage: 'SN',
-                          description: 'Context: Shortcut from Serial Number'
-                        })}: {inverter.serial_number}</Typography>
-                      </div>)}
-                  </MultiSelectOption>
-                ))}
-              </MultiSelectField>
-            )
-          }
-          {
-            showFields.fifth && (
-              <ToggleField
-                name='auxiliary'
-                label={intl.formatMessage({
-                  defaultMessage: 'Auxiliary meter'
-                })}
-              />
-            )
-          }
-          {
-            showFields.sixth && (
-              <FileField name="file" valueMapper={fileValueMapper}>
-                <div className="flex items-center gap-4">
-                  <SvgIcon name="Camera" className="w-8 text-green-400" />
-                  <div>
-                    <Typography>
+                          description: 'Context: Shortcut from Serial Number',
+                        })}
+                        : {inverter.serial_number}
+                      </Typography>
+                    </div>
+                  )}
+                </MultiSelectOption>
+              ))}
+            </MultiSelectField>
+          )}
+          {showFields.fifth && (
+            <ToggleField
+              name="auxiliary"
+              label={intl.formatMessage({
+                defaultMessage: 'Auxiliary meter',
+              })}
+            />
+          )}
+          {showFields.sixth && (
+            <FileField name="file" valueMapper={fileValueMapper}>
+              <div className="flex items-center gap-4">
+                <SvgIcon name="Camera" className="w-8 text-green-400" />
+                <div>
+                  <Typography>
+                    {intl.formatMessage({
+                      defaultMessage: 'Take photo by camera',
+                      description:
+                        'Context: Take photo by camera or click here to upload',
+                    })}
+                  </Typography>
+                  <Typography>
+                    {intl.formatMessage({
+                      defaultMessage: 'or',
+                      description:
+                        'Context: Take photo by camera or click here to upload',
+                    })}{' '}
+                    <span className="text-green-400 underline">
                       {intl.formatMessage({
-                        defaultMessage: 'Take photo by camera',
+                        defaultMessage: 'click here to upload',
                         description:
                           'Context: Take photo by camera or click here to upload',
                       })}
-                    </Typography>
-                    <Typography>
-                      {intl.formatMessage({
-                        defaultMessage: 'or',
-                        description:
-                          'Context: Take photo by camera or click here to upload',
-                      })}{' '}
-                      <span className="text-green-400 underline">
-                        {intl.formatMessage({
-                          defaultMessage: 'click here to upload',
-                          description:
-                            'Context: Take photo by camera or click here to upload',
-                        })}
-                      </span>
-                    </Typography>
-                  </div>
+                    </span>
+                  </Typography>
                 </div>
-              </FileField>
-            )
-          }
-          {
-            showFields.seventh && (
-              <div className="mt-3 flex gap-5">
-                <Button
-                  variant="additional-gray"
-                  className="w-full"
-                  onChange={onClose}
-                >
-                  {intl.formatMessage({ defaultMessage: 'Cancel' })}
-                </Button>
-                <Button
-                  isLoading={formState.isSubmitting}
-                  type="submit"
-                  variant="main-green"
-                  className="w-full"
-                >
-                  {submitButtonTitle}
-                </Button>
               </div>
-            )
-          }
+            </FileField>
+          )}
+          {showFields.seventh && (
+            <div className="mt-3 flex gap-5">
+              <Button
+                variant="additional-gray"
+                className="w-full"
+                onChange={onClose}
+              >
+                {intl.formatMessage({ defaultMessage: 'Cancel' })}
+              </Button>
+              <Button
+                isLoading={formState.isSubmitting}
+                type="submit"
+                variant="main-green"
+                className="w-full"
+              >
+                {submitButtonTitle}
+              </Button>
+            </div>
+          )}
         </Form>
       </DialogContent>
     </Dialog>

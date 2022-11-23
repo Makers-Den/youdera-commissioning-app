@@ -1,14 +1,23 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { useIntl } from 'react-intl';
+import { SelectOptionProps } from 'ui/select/Select';
 
-import { DependentOption, DependentThreeSelectsFields } from './DependentThreeSelectsFields';
-
+import { DependentThreeSelectsFields } from './DependentThreeSelectsFields';
 
 export type ExistingInverterSelectFieldProps = {
   inverterValue: any;
-  inverterManufacturerOptions: DependentOption[];
-  inverterModelOptions: DependentOption[];
-  inverterInputsOptions: DependentOption[];
+  inverterManufacturerOptions: SelectOptionProps<{
+    dependentKey: string;
+    label: string;
+  }>[];
+  inverterModelOptions: SelectOptionProps<{
+    dependentKey: string;
+    label: string;
+  }>[];
+  inverterInputsOptions: SelectOptionProps<{
+    dependentKey: string;
+    label: string;
+  }>[];
 };
 
 export const NewInverterSelectField = ({
@@ -23,7 +32,7 @@ export const NewInverterSelectField = ({
     <DependentThreeSelectsFields
       value={inverterValue}
       dependentField1={{
-        name: "manufacturer",
+        name: 'manufacturer',
         options: inverterManufacturerOptions,
         selectProps: {
           label: intl.formatMessage({
@@ -32,10 +41,10 @@ export const NewInverterSelectField = ({
           placeholder: intl.formatMessage({
             defaultMessage: 'Select',
           }),
-        }
+        },
       }}
       dependentField2={{
-        name: "model",
+        name: 'model',
         options: inverterModelOptions,
         selectProps: {
           label: intl.formatMessage({
@@ -44,10 +53,10 @@ export const NewInverterSelectField = ({
           placeholder: intl.formatMessage({
             defaultMessage: 'Select',
           }),
-        }
+        },
       }}
       dependentField3={{
-        name: "newInput",
+        name: 'newInput',
         options: inverterInputsOptions,
         selectProps: {
           label: intl.formatMessage({
@@ -56,9 +65,8 @@ export const NewInverterSelectField = ({
           placeholder: intl.formatMessage({
             defaultMessage: 'Select',
           }),
-        }
+        },
       }}
-
     />
   );
 };

@@ -69,8 +69,8 @@ export interface DeleteFileFromSiteRequest {
   documentId: string;
 }
 export interface DeleteFileFromStringRequest {
-  stringId: number,
-  fileId: number
+  stringId: number;
+  fileId: number;
 }
 
 export interface ApiFile {
@@ -372,6 +372,11 @@ export interface BatteryModel {
   name: string;
   manufacturer_id: number;
   manufacturer_name: string;
+  type: 'battery';
+  data: {
+    ac_coupled: true;
+    auto_serialnumber: true;
+  };
 }
 
 export type ProjectManagerContactInfo = {

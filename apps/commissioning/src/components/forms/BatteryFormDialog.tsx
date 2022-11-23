@@ -27,12 +27,12 @@ import { SelectFallback } from '../SelectFallback';
 const validation = z.object({
   manufacturer: z.object({ key: z.string(), label: z.string() }),
   model: z.object({
-    key: z.string(),
+    id: z.number(),
     label: z.string(),
     dependentKey: z.string(),
   }),
   serialNumber: z.string(),
-  inverter: z.object({ key: z.string(), label: z.string() }),
+  inverter: z.object({ id: z.number(), label: z.string() }),
   files: z.array(z.any()).nonempty(),
 });
 

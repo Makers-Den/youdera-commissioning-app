@@ -6,141 +6,146 @@ import { Label, Typography } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 import { validityStyle } from '../utils/constants';
 
-export type SelectOption<TKey = string> = {
-  key: TKey;
-  label: ReactNode;
-  selectedLabel?: ReactNode;
+export interface SelectValue {
+  label: string;
+}
+export type SelectOptionProps<T extends SelectValue> = {
+  value: T;
   icon?: IconName;
-  value?: any;
+  children: (args: {
+    active: boolean;
+    selected: boolean;
+    disabled: boolean;
+  }) => ReactNode;
 };
 
-export type SelectProps = {
+export const SelectOption = <T extends SelectValue>({
+  value,
+  icon,
+  children,
+}: SelectOptionProps<T>) => (
+  <Listbox.Option
+    className="flex cursor-pointer select-none items-center justify-between py-2 pl-3 pr-4 hover:bg-gray-100"
+    value={value}
+  >
+    {args => (
+      <>
+        <span
+          className={`flex items-center truncate ${
+            args.selected ? 'font-medium' : 'font-normal'
+          }`}
+        >
+          {icon && (
+            <span className="mr-3 flex w-4 items-center justify-center">
+              <SvgIcon name={icon} className="h-[14px]" />
+            </span>
+          )}
+          <Typography variant="body">{children(args)}</Typography>
+        </span>
+        {args.selected && (
+          <SvgIcon name="Check" className="w-4 text-green-400" />
+        )}
+      </>
+    )}
+  </Listbox.Option>
+);
+
+export type SelectProps<Value extends SelectValue> = {
   label?: string;
   placeholder: string;
   name?: string;
-  options: SelectOption[];
-  defaultValue?: SelectOption;
-  value?: SelectOption;
+  defaultValue?: Value;
+  value?: Value;
   validity?: 'valid' | 'invalid';
-  onChange?: (value: SelectOption) => void;
+  onChange?: (value: Value) => void;
   isRequired?: boolean;
   wrapperClassName?: string;
+  compareValueBy?: string;
+  children: ReactNode;
 } & Omit<React.ComponentPropsWithRef<'select'>, 'onChange' | 'value'>;
 
-export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  (
-    {
-      label,
-      name,
-      placeholder,
-      value,
-      onChange,
-      options,
-      defaultValue,
-      isRequired,
-      wrapperClassName,
-      validity,
-      ...rest
-    },
-    ref,
-  ) => (
-    <div className={wrapperClassName}>
-      <Label className={validity && validityStyle[validity].label}>
-        {label}
-        <span>{isRequired && '*'}</span>
-      </Label>
-      <Listbox
-        value={value}
-        onChange={onChange}
-        name={name}
-        defaultValue={defaultValue}
-        by="key"
-        ref={ref}
-        {...rest}
-      >
-        {({ open, value }) => (
-          <div className={clsxm('relative mt-1')}>
-            <Listbox.Button
+const SelectInner = <T extends SelectValue>(
+  {
+    label,
+    name,
+    placeholder,
+    value,
+    onChange,
+    defaultValue,
+    isRequired,
+    wrapperClassName,
+    validity,
+    children,
+    compareValueBy,
+    ...rest
+  }: SelectProps<T>,
+  ref: React.ForwardedRef<HTMLSelectElement>,
+) => (
+  <div className={wrapperClassName}>
+    <Label className={validity && validityStyle[validity].label}>
+      {label}
+      <span>{isRequired && '*'}</span>
+    </Label>
+    <Listbox
+      value={value}
+      onChange={onChange}
+      name={name}
+      defaultValue={defaultValue}
+      ref={ref}
+      by={compareValueBy}
+      {...rest}
+    >
+      {({ open, value }) => (
+        <div className={clsxm('relative mt-1')}>
+          <Listbox.Button
+            className={clsxm(
+              'w-full py-2 pl-3 pr-4',
+              'rounded-md border text-left',
+              'cursor-pointer',
+              'flex items-center justify-between',
+              'transition-all',
+              open
+                ? 'border-orange-400 bg-white'
+                : 'border-gray-500 bg-gray-100',
+              validity && validityStyle[validity].input,
+            )}
+          >
+            <Typography variant="body" weight="medium">
+              {value?.label || placeholder}
+            </Typography>
+            <SvgIcon
+              name="ChevronDown"
               className={clsxm(
-                'w-full py-2 pl-3 pr-4',
-                'rounded-md border text-left',
-                'cursor-pointer',
-                'flex items-center justify-between',
-                'transition-all',
-                open
-                  ? 'border-orange-400 bg-white'
-                  : 'border-gray-500 bg-gray-100',
-                validity && validityStyle[validity].input,
+                'ml-4 w-3 transition-all',
+                validity && validityStyle[validity].icon,
+                open && 'rotate-180',
+              )}
+            />
+          </Listbox.Button>
+          <Transition
+            show={open}
+            as={Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Listbox.Options
+              static
+              className={clsxm(
+                'absolute overflow-auto',
+                'z-10 mt-1 max-h-44 w-full py-3',
+                'drop-shadow-large rounded-md bg-white',
               )}
             >
-              <Typography variant="body" weight="medium">
-                {value?.selectedLabel || value?.label || placeholder}
-              </Typography>
-              <SvgIcon
-                name="ChevronDown"
-                className={clsxm(
-                  'ml-4 w-3 transition-all',
-                  validity && validityStyle[validity].icon,
-                  open && 'rotate-180',
-                )}
-              />
-            </Listbox.Button>
-            <Transition
-              show={open}
-              as={Fragment}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Listbox.Options
-                static
-                className={clsxm(
-                  'absolute overflow-auto',
-                  'z-10 mt-1 max-h-44 w-full py-3',
-                  'drop-shadow-large rounded-md bg-white',
-                )}
-              >
-                {options.map(option => {
-                  const { key, label } = option;
-                  return (
-                    <Listbox.Option
-                      key={key}
-                      className="flex cursor-pointer select-none items-center justify-between py-2 pl-3 pr-4 hover:bg-gray-100"
-                      value={option}
-                    >
-                      {({ selected }) => (
-                        <>
-                          <span
-                            className={`flex items-center truncate ${
-                              selected ? 'font-medium' : 'font-normal'
-                            }`}
-                          >
-                            {option.icon && (
-                              <span className="mr-3 flex w-4 items-center justify-center">
-                                <SvgIcon
-                                  name={option.icon}
-                                  className="h-[14px]"
-                                />
-                              </span>
-                            )}
-                            <Typography variant="body">{label}</Typography>
-                          </span>
-                          {selected && (
-                            <SvgIcon
-                              name="Check"
-                              className="w-4 text-green-400"
-                            />
-                          )}
-                        </>
-                      )}
-                    </Listbox.Option>
-                  );
-                })}
-              </Listbox.Options>
-            </Transition>
-          </div>
-        )}
-      </Listbox>
-    </div>
-  ),
+              {children}
+            </Listbox.Options>
+          </Transition>
+        </div>
+      )}
+    </Listbox>
+  </div>
 );
+
+export const Select = React.forwardRef(SelectInner) as <T extends SelectValue>(
+  props: SelectProps<T> & { ref?: React.ForwardedRef<HTMLSelectElement> },
+) => ReturnType<typeof SelectInner>;
