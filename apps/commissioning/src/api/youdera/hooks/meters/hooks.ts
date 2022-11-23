@@ -12,7 +12,7 @@ import {
   updateMeter,
 } from './apiRequests';
 import { youderaApiInstance } from '../../api-instances/youdera';
-import { CommsParams, CommsTestResult, DataResponse } from '../../apiTypes';
+import { CommsParams, CommsTestResult, Datapoint, DataResponse } from '../../apiTypes';
 import { QueryKeys } from '../../enums/queryKeys';
 
 export const useUpdateMeterCommsMutation = (siteId: number) => {
@@ -21,7 +21,7 @@ export const useUpdateMeterCommsMutation = (siteId: number) => {
   return useMutation(
     ({ id, ...params }: CommsParams & { id: number }) =>
       youderaApiInstance
-        .post<DataResponse<CommsTestResult>>(
+        .post<DataResponse<Datapoint>>(
           `/meters/${id}/communication`,
           params,
         )
@@ -33,6 +33,16 @@ export const useUpdateMeterCommsMutation = (siteId: number) => {
     },
   );
 };
+
+export const useMeterCommsTestMutation = () => useMutation(
+  ({ id, ...params }: CommsParams & { id: number }) =>
+    youderaApiInstance
+      .post<DataResponse<CommsTestResult>>(
+        `/meters/${id}/communication/test`,
+        params,
+      )
+      .then(resp => resp.data.data),
+);
 
 export const useMeterMutations = (siteId: number) => {
   const queryClient = useQueryClient();

@@ -1,19 +1,28 @@
-import { ApiFile, CommsTestResult, Site } from '@src/api/youdera/apiTypes';
 import {
+  ApiFile,
+  CommsParams,
+  CommsTestResult,
+  Site,
+} from '@src/api/youdera/apiTypes';
+import {
+  useBatteryCommsTestMutation,
   useBatteryMutations,
   useUpdateBatteryCommsMutation,
 } from '@src/api/youdera/hooks/batteries/hooks';
 import {
+  useInverterCommsTestMutation,
   useInverterMutations,
   useUpdateInverterCommsMutation,
 } from '@src/api/youdera/hooks/inverters/hooks';
 import {
+  useMeterCommsTestMutation,
   useMeterMutations,
   useUpdateMeterCommsMutation,
 } from '@src/api/youdera/hooks/meters/hooks';
 import { useSiteQuery } from '@src/api/youdera/hooks/sites/hooks';
 import { useMeterTypeOptions } from '@src/hooks/useMeterTypeOptions';
 import { Device, toDevice, useExtractDevices } from '@src/utils/devices';
+import { reportApiError } from '@src/utils/errorUtils';
 import { routes } from '@src/utils/routes';
 import { noop } from 'lodash';
 import { useRouter } from 'next/router';
@@ -92,11 +101,18 @@ const fileValueMapper = (file: ApiFile | File) => ({
   name: file.name,
   type: file.type,
   url: file instanceof File ? URL.createObjectURL(file) : file.url,
+  thumbnailUrl:
+    file instanceof File ? URL.createObjectURL(file) : file.url_thumb,
 });
 
 export type DevicesContentProps = {
   siteId: number;
   setNextButtonProps: (props: ButtonProps & { content: string }) => void;
+};
+
+type CommsParamsAndTestResult = {
+  params: CommsParams & { id: number };
+  result: CommsTestResult;
 };
 
 export function DevicesContent({
@@ -113,8 +129,8 @@ export function DevicesContent({
   const site = siteQuery.data as Site;
 
   const [currentDevice, setCurrentDevice] = useState<Device | null>(null);
-  const [commsTestResult, setCommsTestResult] =
-    useState<CommsTestResult | null>(null);
+  const [commsParamsAndTestResult, setCommsParamsAndTestResult] =
+    useState<CommsParamsAndTestResult | null>(null);
 
   const actionsDialog = useDisclosure();
   const deviceDeletionDialog = useDisclosure();
@@ -176,12 +192,14 @@ export function DevicesContent({
     createInverterMutation,
     addFileToInverterMutation,
     updateInverterMutation,
+    deleteFileFromInverterMutation,
   } = useInverterMutations(siteId);
   const {
     deleteBatteryMutation,
     createBatteryMutation,
     addFileToBatteryMutation,
     updateBatteryMutation,
+    deleteFileFromBatteryMutation,
   } = useBatteryMutations(siteId);
   const {
     createMeterMutation,
@@ -218,8 +236,11 @@ export function DevicesContent({
   };
 
   const updateMeterCommsMutation = useUpdateMeterCommsMutation(siteId);
+  const meterCommsTestMutation = useMeterCommsTestMutation();
   const updateInveterCommsMutation = useUpdateInverterCommsMutation(siteId);
+  const inverterCommsTestMutation = useInverterCommsTestMutation();
   const updateBatteryCommsMutation = useUpdateBatteryCommsMutation(siteId);
+  const batteryCommsTestMutation = useBatteryCommsTestMutation();
 
   const onAddInverter: InverterFormDialogProps['onSubmit'] = async (
     values,
@@ -232,10 +253,14 @@ export function DevicesContent({
         cmodel: parseInt(values.model.key, 10),
       });
 
-      await addFileToInverterMutation.mutateAsync({
-        file: values.file,
-        inverterId: inverter.id,
-      });
+      // eslint-disable-next-line no-restricted-syntax
+      for (const file of values.files) {
+        // eslint-disable-next-line no-await-in-loop
+        await addFileToInverterMutation.mutateAsync({
+          file,
+          inverterId: inverter.id,
+        });
+      }
 
       commsMethodDialog.onOpen();
       toast.success(
@@ -266,12 +291,30 @@ export function DevicesContent({
           cmodel: parseInt(values.model.key, 10),
         });
 
-        if (values.file instanceof File) {
-          await addFileToInverterMutation.mutateAsync({
-            file: values.file,
-            inverterId: inverter.id,
-          });
-        }
+        const filesToAdd = values.files
+          .filter(file => file instanceof File)
+          .map(file =>
+            addFileToInverterMutation.mutateAsync({
+              file,
+              inverterId: inverter.id,
+            }),
+          );
+        const filesToRemove = (currentDevice.files || [])
+          .filter(({ id }) => {
+            const findFile = values.files.find(
+              file => !(file instanceof File) && file.id === id,
+            );
+
+            return !findFile;
+          })
+          .map(({ id }) =>
+            deleteFileFromInverterMutation.mutateAsync({
+              inverterId: inverter.id,
+              fileId: id,
+            }),
+          );
+
+        await Promise.all([...filesToAdd, ...filesToRemove]);
 
         updateInverterDialog.onClose();
         toast.success(
@@ -380,10 +423,14 @@ export function DevicesContent({
         inverter_id: parseInt(values.inverter.key, 10),
       });
 
-      await addFileToBatteryMutation.mutateAsync({
-        file: values.file,
-        batteryId: battery.id,
-      });
+      // eslint-disable-next-line no-restricted-syntax
+      for (const file of values.files) {
+        // eslint-disable-next-line no-await-in-loop
+        await addFileToBatteryMutation.mutateAsync({
+          file,
+          batteryId: battery.id,
+        });
+      }
 
       toast.success(
         intl.formatMessage({
@@ -415,12 +462,30 @@ export function DevicesContent({
         inverter_id: parseInt(values.inverter.key, 10),
       });
 
-      if (values.file instanceof File) {
-        await addFileToBatteryMutation.mutateAsync({
-          file: values.file,
-          batteryId: battery.id,
-        });
-      }
+      const filesToAdd = values.files
+        .filter(file => file instanceof File)
+        .map(file =>
+          addFileToBatteryMutation.mutateAsync({
+            file,
+            batteryId: battery.id,
+          }),
+        );
+      const filesToRemove = (currentDevice.files || [])
+        .filter(({ id }) => {
+          const findFile = values.files.find(
+            file => !(file instanceof File) && file.id === id,
+          );
+
+          return !findFile;
+        })
+        .map(({ id }) =>
+          deleteFileFromBatteryMutation.mutateAsync({
+            batteryId: battery.id,
+            fileId: id,
+          }),
+        );
+
+      await Promise.all([...filesToAdd, ...filesToRemove]);
 
       toast.success(
         intl.formatMessage({
@@ -574,7 +639,7 @@ export function DevicesContent({
           dependentKey: currentDevice.manufacturer.toString(),
         },
         serialNumber: currentDevice.serial_number,
-        file: currentDevice.files?.[0],
+        files: currentDevice.files,
       };
     }
     if (currentDevice?.deviceType === 'Battery') {
@@ -589,11 +654,7 @@ export function DevicesContent({
           dependentKey: currentDevice.manufacturer.toString(),
         },
         serialNumber: currentDevice.serial_number,
-        file: {
-          url: currentDevice.imageUrl,
-          type: 'image',
-          name: currentDevice.name,
-        },
+        files: currentDevice.files,
         //TODO inverter data
         // inverter: {
         //   key: currentDevice.inverter.toString(),
@@ -774,9 +835,60 @@ export function DevicesContent({
             commsMethodDialog.onClose();
             setCurrentDevice(null);
           }}
+          isLoading={
+            inverterCommsTestMutation.isLoading ||
+            batteryCommsTestMutation.isLoading ||
+            meterCommsTestMutation.isLoading
+          }
           onSubmit={async ({ method, ipAddress, slaveId }) => {
             const commType = method.key as CommType;
 
+            const testDeviceCommsMutation = (() => {
+              if (currentDevice.deviceType === 'Inverter') {
+                return inverterCommsTestMutation;
+              }
+
+              if (currentDevice.deviceType === 'Battery') {
+                return batteryCommsTestMutation;
+              }
+
+              return meterCommsTestMutation;
+            })();
+
+            const commsParams: CommsParams & { id: number } =
+              commType === 'fixed_ip'
+                ? {
+                  id: currentDevice.id,
+                  ip: ipAddress,
+                  slave_id: Number(slaveId),
+                }
+                : {
+                  id: currentDevice.id,
+                  dhcp: true,
+                  slave_id: Number(slaveId),
+                };
+
+            try {
+              const testResult = await testDeviceCommsMutation.mutateAsync(
+                commsParams,
+              );
+              setCommsParamsAndTestResult({
+                params: commsParams,
+                result: testResult,
+              });
+              commsResultDialog.onOpen();
+              commsMethodDialog.onClose();
+            } catch (err) {
+              reportApiError(toast, err);
+            }
+          }}
+        />
+      )}
+
+      {currentDevice && commsParamsAndTestResult && (
+        <CommsMethodResultDialog
+          open={commsResultDialog.isOpen}
+          onConfirm={async () => {
             const updateDeviceCommsMutation = (() => {
               if (currentDevice.deviceType === 'Inverter') {
                 return updateInveterCommsMutation;
@@ -790,40 +902,32 @@ export function DevicesContent({
             })();
 
             try {
-              const testResult = await updateDeviceCommsMutation.mutateAsync(
-                commType === 'fixed_ip'
-                  ? {
-                    id: currentDevice.id,
-                    ip: ipAddress,
-                    slave_id: Number(slaveId),
-                  }
-                  : {
-                    id: currentDevice.id,
-                    dhcp: true,
-                    slave_id: Number(slaveId),
-                  },
+              await updateDeviceCommsMutation.mutateAsync(
+                commsParamsAndTestResult.params,
               );
-
-              setCommsTestResult(testResult);
-              commsResultDialog.onOpen();
-              commsMethodDialog.onClose();
+              toast.success(
+                intl.formatMessage({
+                  defaultMessage: 'Saved communication parameters.',
+                }),
+              );
+              setCommsParamsAndTestResult(null);
+              setCurrentDevice(null);
+              commsResultDialog.onClose();
             } catch (err) {
-              //@ts-ignore
-              toast.error(err.message);
+              reportApiError(toast, err);
             }
           }}
-        />
-      )}
-
-      {currentDevice && commsTestResult && (
-        <CommsMethodResultDialog
-          open={commsResultDialog.isOpen}
           onClose={() => {
-            setCommsTestResult(null);
+            setCommsParamsAndTestResult(null);
             setCurrentDevice(null);
             commsResultDialog.onClose();
           }}
-          result={commsTestResult}
+          onBack={() => {
+            setCommsParamsAndTestResult(null);
+            commsResultDialog.onClose();
+            commsMethodDialog.onOpen();
+          }}
+          result={commsParamsAndTestResult.result}
         />
       )}
 

@@ -14,7 +14,7 @@ export type FileFieldProps = {
   valueMapper?: (value: any) => UploadedFile;
 } & Omit<
   FileUploaderWithPreviewProps,
-  'fileUploaderProps' | 'onDeleteFile' | 'uploadedFiles'
+  'fileUploaderProps' | 'onDeleteFile' | 'uploadedFiles' | 'allowMultipleFiles'
 >;
 
 function defaultValueMapper(value: File) {
@@ -28,24 +28,25 @@ function defaultValueMapper(value: File) {
   };
 }
 
-export const FileField = ({
+export const FilesField = ({
   children,
   name,
   valueMapper = defaultValueMapper,
   ...props
 }: FileFieldProps) => {
   const { setValue } = useFormContext();
-  const value = useWatch({ name });
+  const values = useWatch({ name });
+  const computedValue: unknown[] = values || [];
 
   const [files, setFiles] = useState<UploadedFile[]>([]);
 
   useEffect(() => {
-    if (value) {
-      setFiles([valueMapper(value)]);
+    if (values) {
+      setFiles(values.map(valueMapper));
     } else {
       setFiles([]);
     }
-  }, [value, valueMapper]);
+  }, [values, valueMapper]);
 
   return (
     <Field name={name}>
@@ -56,11 +57,12 @@ export const FileField = ({
         const computedOnChange = (event: React.FormEvent<HTMLInputElement>) => {
           const file = event.currentTarget.files?.[0];
 
-          setValue(name, file);
+          setValue(name, [file, ...computedValue]);
         };
         return (
           <FileUploaderWithPreview
             {...props}
+            allowMultipleFiles
             fileUploaderProps={{
               status: invalid ? UploadStatus.error : UploadStatus.idle,
               onChange: computedOnChange,
@@ -68,8 +70,13 @@ export const FileField = ({
               errorMessage: error?.message,
               className: 'w-full',
             }}
-            onDeleteFile={() => {
-              setValue(name, null);
+            onDeleteFile={(_, indexToRemove) => {
+              if (values) {
+                setValue(
+                  name,
+                  computedValue.filter((_, index) => index !== indexToRemove),
+                );
+              }
             }}
             uploadedFiles={files}
           >
