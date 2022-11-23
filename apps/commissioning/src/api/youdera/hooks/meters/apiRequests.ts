@@ -2,6 +2,7 @@ import { youderaApiInstance } from '../../api-instances/youdera';
 import {
   ApiFile,
   DataResponse,
+  DeleteFileFromMeterRequest,
   Meter,
   MeterModel,
   VerificationTestResult,
@@ -23,13 +24,13 @@ export const getMeter = async (id: number): Promise<Meter> => {
 };
 
 export type CreateMeterArgs = {
-  name: string;
   number: string;
-  factor: number;
+  factor?: number;
   type: string;
   site: number;
   manufacturer: string;
   model: string;
+  is_auxiliary: boolean;
 };
 
 export const createMeter = async (body: CreateMeterArgs): Promise<Meter> => {
@@ -40,33 +41,40 @@ export const createMeter = async (body: CreateMeterArgs): Promise<Meter> => {
   return response.data.data;
 };
 
-export type UpdateMeterArgs = {
+export type UpdateMeterRequestBody = {
   id: number;
-  meter: Partial<Meter>;
-};
+} & Partial<Meter>;
 
 export const updateMeter = async ({
   id,
-  meter,
-}: UpdateMeterArgs): Promise<Meter> => {
-  const response = await youderaApiInstance.patch<DataResponse<Meter>>(
+  ...meter
+}: UpdateMeterRequestBody): Promise<Meter> => {
+  const response = await youderaApiInstance.patch<CreateDataResponse<Meter>>(
     `/meters/${id}`,
     meter,
   );
   return response.data.data;
 };
 
-export const addFileToMeter = async (
-  id: number,
-  file: File,
-  setUploadProgress?: (percentage: number) => void,
-) => {
+export interface AddFileToInverterRequest {
+  meterId: Meter['id'];
+  file: File;
+}
+export interface AddFileToMeterArgs extends AddFileToInverterRequest {
+  setUploadProgress?: (percentage: number) => void;
+}
+
+export const addFileToMeter = async ({
+  meterId,
+  file,
+  setUploadProgress
+}: AddFileToMeterArgs) => {
   const formData = new FormData();
   formData.append('file', file);
   formData.append('type', 'image');
 
   const response = await youderaApiInstance.post<DataResponse<ApiFile>>(
-    `/meters/${id}/files`,
+    `/meters/${meterId}/files`,
     formData,
     {
       headers: {
@@ -84,6 +92,17 @@ export const addFileToMeter = async (
   );
 
   return response.data.data;
+};
+
+export const deleteFileFromString = async ({
+  meterId,
+  fileId
+}: DeleteFileFromMeterRequest) => {
+  const response = await youderaApiInstance.delete(
+    `/strings/${meterId}/files/${fileId}/`,
+  );
+
+  return response.data;
 };
 
 export const getMeterVerificationGuide = async (

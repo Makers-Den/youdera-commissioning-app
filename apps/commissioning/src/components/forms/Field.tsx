@@ -26,7 +26,7 @@ export const Field: FC<FieldProps> = ({ children, name }) => {
   const { register, formState, getFieldState } = useFormContext();
 
   return (
-    <div className="w-full">
+    <>
       {children(register, getFieldState(name))}
       <ErrorMessage
         errors={formState.errors}
@@ -35,6 +35,6 @@ export const Field: FC<FieldProps> = ({ children, name }) => {
           <Label className="text-red-400">{message}</Label>
         )}
       />
-    </div>
+    </>
   );
 };
