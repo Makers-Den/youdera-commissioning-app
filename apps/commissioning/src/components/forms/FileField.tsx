@@ -24,6 +24,7 @@ function defaultValueMapper(value: File) {
     name: value.name,
     type: value.type,
     url,
+    thumbnailUrl: url,
   };
 }
 

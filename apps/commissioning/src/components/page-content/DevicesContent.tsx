@@ -87,6 +87,7 @@ const fileValueMapper = (file: ApiFile | File) => ({
   name: file.name,
   type: file.type,
   url: file instanceof File ? URL.createObjectURL(file) : file.url,
+  thumbnailUrl: file instanceof File ? URL.createObjectURL(file) : file.url_thumb,
 });
 
 export type DevicesContentProps = {
