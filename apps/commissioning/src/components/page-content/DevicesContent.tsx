@@ -1,18 +1,22 @@
-import { ApiFile, CommsTestResult, Site } from '@src/api/youdera/apiTypes';
+import { ApiFile, CommsParams, CommsTestResult, Site } from '@src/api/youdera/apiTypes';
 import {
+  useBatteryCommsTestMutation,
   useBatteryMutations,
   useUpdateBatteryCommsMutation,
 } from '@src/api/youdera/hooks/batteries/hooks';
 import {
+  useInverterCommsTestMutation,
   useInverterMutations,
   useUpdateInverterCommsMutation,
 } from '@src/api/youdera/hooks/inverters/hooks';
 import {
+  useMeterCommsTestMutation,
   useMeterMutations,
   useUpdateMeterCommsMutation,
 } from '@src/api/youdera/hooks/meters/hooks';
 import { useSiteQuery } from '@src/api/youdera/hooks/sites/hooks';
 import { Device, toDevice, useExtractDevices } from '@src/utils/devices';
+import { reportApiError } from '@src/utils/errorUtils';
 import { routes } from '@src/utils/routes';
 import { noop } from 'lodash';
 import { useRouter } from 'next/router';
@@ -95,6 +99,11 @@ export type DevicesContentProps = {
   setNextButtonProps: (props: ButtonProps & { content: string }) => void;
 };
 
+type CommsParamsAndTestResult = {
+  params: CommsParams & { id: number },
+  result: CommsTestResult
+};
+
 export function DevicesContent({
   siteId,
   setNextButtonProps,
@@ -107,8 +116,8 @@ export function DevicesContent({
   const site = siteQuery.data as Site;
 
   const [currentDevice, setCurrentDevice] = useState<Device | null>(null);
-  const [commsTestResult, setCommsTestResult] =
-    useState<CommsTestResult | null>(null);
+  const [commsParamsAndTestResult, setCommsParamsAndTestResult] =
+    useState<CommsParamsAndTestResult| null>(null);
 
   const actionsDialog = useDisclosure();
   const deviceDeletionDialog = useDisclosure();
@@ -202,8 +211,11 @@ export function DevicesContent({
   };
 
   const updateMeterCommsMutation = useUpdateMeterCommsMutation(siteId);
+  const meterCommsTestMutation = useMeterCommsTestMutation();
   const updateInveterCommsMutation = useUpdateInverterCommsMutation(siteId);
+  const inverterCommsTestMutation = useInverterCommsTestMutation();
   const updateBatteryCommsMutation = useUpdateBatteryCommsMutation(siteId);
+  const batteryCommsTestMutation = useBatteryCommsTestMutation();
 
   const onAddInverter: InverterFormDialogProps['onSubmit'] = async (
     values,
@@ -624,9 +636,54 @@ export function DevicesContent({
             commsMethodDialog.onClose();
             setCurrentDevice(null);
           }}
+          isLoading={
+            inverterCommsTestMutation.isLoading
+            || batteryCommsTestMutation.isLoading
+            || meterCommsTestMutation.isLoading
+          }
           onSubmit={async ({ method, ipAddress, slaveId }) => {
             const commType = method.key as CommType;
 
+            const testDeviceCommsMutation = (() => {
+              if (currentDevice.deviceType === 'Inverter') {
+                return inverterCommsTestMutation;
+              }
+
+              if (currentDevice.deviceType === 'Battery') {
+                return batteryCommsTestMutation;
+              }
+
+              return meterCommsTestMutation;
+            })();
+
+            const commsParams: CommsParams & { id: number } = commType === 'fixed_ip'
+              ? {
+                id: currentDevice.id,
+                ip: ipAddress,
+                slave_id: Number(slaveId),
+              }
+              : {
+                id: currentDevice.id,
+                dhcp: true,
+                slave_id: Number(slaveId),
+              };
+
+            try {
+              const testResult = await testDeviceCommsMutation.mutateAsync(commsParams);
+              setCommsParamsAndTestResult({ params: commsParams, result: testResult });
+              commsResultDialog.onOpen();
+              commsMethodDialog.onClose();
+            } catch (err) {
+              reportApiError(toast, err);
+            }
+          }}
+        />
+      )}
+
+      {currentDevice && commsParamsAndTestResult && (
+        <CommsMethodResultDialog
+          open={commsResultDialog.isOpen}
+          onConfirm={async () => {
             const updateDeviceCommsMutation = (() => {
               if (currentDevice.deviceType === 'Inverter') {
                 return updateInveterCommsMutation;
@@ -640,40 +697,28 @@ export function DevicesContent({
             })();
 
             try {
-              const testResult = await updateDeviceCommsMutation.mutateAsync(
-                commType === 'fixed_ip'
-                  ? {
-                    id: currentDevice.id,
-                    ip: ipAddress,
-                    slave_id: Number(slaveId),
-                  }
-                  : {
-                    id: currentDevice.id,
-                    dhcp: true,
-                    slave_id: Number(slaveId),
-                  },
-              );
-
-              setCommsTestResult(testResult);
-              commsResultDialog.onOpen();
-              commsMethodDialog.onClose();
+              await updateDeviceCommsMutation.mutateAsync(commsParamsAndTestResult.params);
+              toast.success(intl.formatMessage({
+                defaultMessage: 'Saved communication parameters.'
+              }));
+              setCommsParamsAndTestResult(null);
+              setCurrentDevice(null);
+              commsResultDialog.onClose();
             } catch (err) {
-              //@ts-ignore
-              toast.error(err.message);
+              reportApiError(toast, err);
             }
           }}
-        />
-      )}
-
-      {currentDevice && commsTestResult && (
-        <CommsMethodResultDialog
-          open={commsResultDialog.isOpen}
           onClose={() => {
-            setCommsTestResult(null);
+            setCommsParamsAndTestResult(null);
             setCurrentDevice(null);
             commsResultDialog.onClose();
           }}
-          result={commsTestResult}
+          onBack={() => {
+            setCommsParamsAndTestResult(null);
+            commsResultDialog.onClose();
+            commsMethodDialog.onOpen();
+          }}
+          result={commsParamsAndTestResult.result}
         />
       )}
 

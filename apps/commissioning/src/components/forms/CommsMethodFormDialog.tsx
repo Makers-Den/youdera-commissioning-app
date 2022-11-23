@@ -42,6 +42,7 @@ export type CommsMethodFormDialogProps = {
   onClose: DialogProps['onClose'];
   className?: string;
   onSubmit: (values: FormValues, resetForm: () => void) => void;
+  isLoading?: boolean;
 };
 
 export type CommType = 'fixed_ip' | 'dhcp';
@@ -63,6 +64,7 @@ export const CommsMethodFormDialog = ({
   onClose,
   className,
   onSubmit,
+  isLoading,
 }: CommsMethodFormDialogProps) => {
   const intl = useIntl();
 
@@ -176,7 +178,7 @@ export const CommsMethodFormDialog = ({
               {intl.formatMessage({ defaultMessage: 'Cancel' })}
             </Button>
             <Button
-              isLoading={formState.isSubmitting}
+              isLoading={formState.isSubmitting || isLoading}
               type="submit"
               variant="main-green"
               className="flex-1"
