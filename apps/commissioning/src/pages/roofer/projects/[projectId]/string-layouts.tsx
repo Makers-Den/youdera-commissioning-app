@@ -1,9 +1,11 @@
 import { Role } from '@src/api/youdera/apiTypes';
+import { useCommissionSiteMutation } from '@src/api/youdera/hooks/sites/hooks';
 import { ConfimationDialog } from '@src/components/dialogs/ConfimationDialog';
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
 import { StringLayoutsContent } from '@src/components/page-content/StringLayoutsContent';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
+import { reportApiError } from '@src/utils/errorUtils';
 import { routes } from '@src/utils/routes';
 import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
@@ -11,13 +13,15 @@ import { useRouter } from 'next/router';
 import { Suspense } from 'react';
 import { useIntl } from 'react-intl';
 import { useDisclosure } from 'ui/dialogs/useDisclosure';
+import { useToast } from 'ui/toast/Toast';
 
 const StringLayoutsPage = ({
   project,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const intl = useIntl();
   const router = useRouter();
-
+  const commissionSiteMutation = useCommissionSiteMutation(project.id);
+  const toast = useToast();
   const continueDialog = useDisclosure();
 
   const navCrossClickHandler = () => {
@@ -32,8 +36,16 @@ const StringLayoutsPage = ({
     continueDialog.onOpen();
   };
 
-  const continueClickHandler = () => {
-    router.push(routes.roofer.complete(project.id));
+  const continueClickHandler = async () => {
+      try {
+        await commissionSiteMutation.mutateAsync();
+        router.push(routes.roofer.complete(project.id));
+        toast.success(intl.formatMessage({
+          defaultMessage: 'Site commissioned.'
+        }));
+      } catch (err) {
+        reportApiError(toast, err);
+      }    
   };
 
   return (

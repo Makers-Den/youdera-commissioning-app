@@ -1,14 +1,16 @@
 import { Role, Site } from '@src/api/youdera/apiTypes';
 import { useAuth } from '@src/api/youdera/hooks/auth/hooks';
 import {
+  useCommissionSiteMutation,
   useContactSiteProjectManagerMutation,
   useSiteQuery,
 } from '@src/api/youdera/hooks/sites/hooks';
 import { useExtractDevices } from '@src/utils/devices';
+import { reportApiError } from '@src/utils/errorUtils';
 import { routes } from '@src/utils/routes';
 import { every } from 'lodash';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { memo , useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button, ButtonProps } from 'ui/buttons/Button';
@@ -20,6 +22,7 @@ import {
 } from 'ui/dialogs/Dialog';
 import { useDisclosure } from 'ui/dialogs/useDisclosure';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
+import { useToast } from 'ui/toast/Toast';
 import { BodyText, Label } from 'ui/typography/Typography';
 
 import { LargeBox } from '../LargeBox';
@@ -119,10 +122,10 @@ export type VerificationContentProps = {
 
 type NextButtonStatus = 'none' | 'contact_pm' | 'finish';
 
-export function VerificationContent({
+export const VerificationContent = memo(({
   siteId,
   setNextButtonProps,
-}: VerificationContentProps) {
+}: VerificationContentProps) => {
   const intl = useIntl();
   const router = useRouter();
   const { userInfoQuery } = useAuth();
@@ -132,7 +135,9 @@ export function VerificationContent({
   const site = siteQuery.data as Site;
   const contactDialog = useDisclosure();
   const devices = useExtractDevices(site);
-
+  const commissionSiteMutation = useCommissionSiteMutation(siteId);
+  const toast = useToast();
+  
   const nextButtonStatus: NextButtonStatus = useMemo(() => {
     const latestVerificationStatuses = devices.map(
       d => d.verificationTestStatus,
@@ -175,19 +180,20 @@ export function VerificationContent({
         }),
         variant: 'main-green',
         type: 'button',
-        onClick: () => {
-          router.push(routes.electrician.completed(siteId));
+        onClick: async () => {
+          try {
+            await commissionSiteMutation.mutateAsync();
+            router.push(routes.electrician.completed(siteId));
+            toast.success(intl.formatMessage({
+              defaultMessage: 'Site commissioned.'
+            }));
+          } catch (err) {
+            reportApiError(toast, err);
+          }
         },
       });
     }
-  }, [
-    intl,
-    contactDialog.onOpen,
-    setNextButtonProps,
-    nextButtonStatus,
-    router,
-    siteId,
-  ]);
+  }, [intl, contactDialog.onOpen, setNextButtonProps, nextButtonStatus, router, siteId, commissionSiteMutation, toast]);
 
   return (
     <LargeBox>
@@ -206,4 +212,4 @@ export function VerificationContent({
       />
     </LargeBox>
   );
-}
+});

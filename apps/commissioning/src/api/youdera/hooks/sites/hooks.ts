@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
 
 import { getSite, getUncommissionedSites } from './apiRequests';
 import { youderaApiInstance } from '../../api-instances/youdera';
@@ -32,10 +33,12 @@ export const useUncommissionedSitesQuery = () => {
 export const useContactSiteProjectManagerMutation = (siteId: number) => {
   const queryClient = useQueryClient();
   return useMutation(
-    () =>
-      youderaApiInstance
+    useCallback(
+      () => youderaApiInstance
         .post<ProjectManagerContactInfo>(`sites/${siteId}/support`)
         .then(res => res.data.phone),
+        [siteId]
+      ),
     {
       onSuccess: () => {
         queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
@@ -43,3 +46,22 @@ export const useContactSiteProjectManagerMutation = (siteId: number) => {
     },
   );
 };
+
+
+export const useCommissionSiteMutation = (siteId: number) => {
+  const queryClient = useQueryClient();
+  
+  return useMutation(
+    useCallback(
+      () => youderaApiInstance
+        .post<ProjectManagerContactInfo>(`sites/${siteId}/commission`)
+        .then(res => res.data.phone),
+        [siteId]
+      ),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
+      },
+    },
+  );
+}
