@@ -79,8 +79,13 @@ export const MeterFormDialog = ({
     resolver: zodResolver(validation),
   });
 
-  const { handleSubmit, reset, formState, control, getValues } = method;
-  console.log(getValues())
+  const { handleSubmit, reset, formState, control } = method;
+
+  const handleClose = () => {
+    onClose();
+    reset();
+  }
+
   useEffect(() => {
     if (defaultValues) {
       reset(defaultValues);
@@ -169,7 +174,7 @@ export const MeterFormDialog = ({
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       className={clsxm('w-[400px]', className)}
     >
       <DialogHeader>
@@ -177,7 +182,7 @@ export const MeterFormDialog = ({
         <SvgIcon
           name="Close"
           className="ml-auto h-4 hover:cursor-pointer"
-          onClick={onClose}
+          onClick={handleClose}
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
@@ -307,7 +312,7 @@ export const MeterFormDialog = ({
                 <Button
                   variant="additional-gray"
                   className="w-full"
-                  onChange={onClose}
+                  onClick={handleClose}
                 >
                   {intl.formatMessage({ defaultMessage: 'Cancel' })}
                 </Button>
