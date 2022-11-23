@@ -80,8 +80,7 @@ export const MeterFormDialog = ({
     resolver: zodResolver(validation),
   });
 
-  const { handleSubmit, reset, formState, control, getValues } = method;
-  console.log(getValues())
+  const { handleSubmit, reset, formState, watch } = method;
   const handleClose = () => {
     onClose();
     reset();
@@ -93,42 +92,13 @@ export const MeterFormDialog = ({
     }
   }, [defaultValues, reset]);
 
-  const meterType = useWatch({
-    name: 'meterType',
-    defaultValue: formState.defaultValues?.meterType,
-    control,
-  });
-
-  const model = useWatch({
-    name: 'model',
-    defaultValue: formState.defaultValues?.model,
-    control,
-  });
-
-  const serialNumber = useWatch({
-    name: 'serialNumber',
-    defaultValue: formState.defaultValues?.serialNumber,
-    control,
-  });
-
-
-  const connectedInverters = useWatch({
-    name: 'connectedInverters',
-    defaultValue: formState.defaultValues?.inverters,
-    control,
-  })
-
-  const auxiliary = useWatch({
-    name: 'auxiliary',
-    defaultValue: formState.defaultValues?.auxiliary,
-    control,
-  })
-
-  const file = useWatch({
-    name: 'file',
-    defaultValue: formState.defaultValues?.file,
-    control,
-  });
+  const [meterType, model, serialNumber, connectedInverters, file] = watch([
+    'meterType',
+    'model',
+    'serialNumber',
+    'connectedInverters',
+    'file',
+  ]);
 
   const showFields = {
     first: true,

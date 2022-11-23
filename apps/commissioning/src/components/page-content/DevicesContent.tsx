@@ -2,6 +2,7 @@ import {
   ApiFile,
   CommsParams,
   CommsTestResult,
+  MeterModel,
   Site,
 } from '@src/api/youdera/apiTypes';
 import {
@@ -16,6 +17,7 @@ import {
 } from '@src/api/youdera/hooks/inverters/hooks';
 import {
   useMeterCommsTestMutation,
+  useMeterModelsQuery,
   useMeterMutations,
   useUpdateMeterCommsMutation,
 } from '@src/api/youdera/hooks/meters/hooks';
@@ -209,6 +211,10 @@ export function DevicesContent({
     deleteFileToMeterMutation,
   } = useMeterMutations(siteId);
 
+  // ! Backend is not producing the names of the model and manufacturer at the moment, hence I used this query
+  const meterModelsQuery = useMeterModelsQuery();
+  const meterModels = meterModelsQuery.data as MeterModel[];
+
   const confirmDeleteHandler = async () => {
     if (currentDevice) {
       try {
@@ -343,9 +349,14 @@ export function DevicesContent({
         model: values.model.key,
         number: values.serialNumber,
         is_auxiliary: values.auxiliary,
-        // factor: 1, when indirect flag in model is set to true user has to provide that.
-        // inverters: [1] // TODO - waiting for backend  (values.connectedInverters)
+        // factor: values.factor, //TODO when indirect flag in model is set to true user has to provide that.
       });
+
+      // TODO uncomment when backend is ready
+      // await updateMeterMutation.mutateAsync({
+      //   id: meter.id,
+      //   inverters: values.connectedInverters.map((inverter) => Number(inverter.key) ) 
+      // });
 
       await addFileToMeterMutation.mutateAsync({
         meterId: meter.id,
@@ -407,8 +418,6 @@ export function DevicesContent({
       console.error(err);
     }
   };
-
-
 
   const onAddBattery: BatteryFormDialogProps['onSubmit'] = async (
     values,
@@ -668,21 +677,30 @@ export function DevicesContent({
           option => option.key === currentDevice.type,
         )[0],
         manufacturer: {
-          key: currentDevice.manufacturer.toString(),
-          label: currentDevice.manufacturer_name,
+          key: currentDevice.manufacturer,
+          label:
+            currentDevice.manufacturer_name ??
+            meterModels.filter(
+              _model => _model.id.toString() === currentDevice.model,
+            )[0].manufacturer_name, // ! Backend is not producing the names at the moment, so I had to fetch manufcaturers and filter them by the key
         },
         model: {
-          key: currentDevice.model.toString(),
-          label: currentDevice.model_name,
+          key: currentDevice.model,
+          label:
+            currentDevice.model_name ??
+            meterModels.filter(
+              _model => _model.id.toString() === currentDevice.model,
+            )[0].name, // ! Backend is not producing the names at the moment, so I had to fetch models and filter them by the key
           dependentKey: currentDevice.manufacturer.toString(),
         },
         serialNumber: currentDevice.number,
         auxiliary: !!currentDevice.is_auxiliary,
         file: {
-          url: currentDevice.imageUrl,
+          url: currentDevice.files?.[0].url_thumb,
           type: 'image',
-          name: currentDevice.name,
+          name: currentDevice.files?.[0].name,
         },
+        connectedInverters: [] // ! Temporary value
         //TODO add connectedInverters data - waiting for backend
         // connectedInverters: {
         //   key: currentDevice.inverter.toString(),
@@ -692,7 +710,7 @@ export function DevicesContent({
     }
 
     return undefined;
-  }, [currentDevice, meterTypeOptions]);
+  }, [currentDevice, meterTypeOptions, meterModels]);
 
   return (
     <>
