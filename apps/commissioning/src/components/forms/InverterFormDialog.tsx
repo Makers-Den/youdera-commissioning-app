@@ -21,6 +21,7 @@ import { FileFieldProps } from './FileField';
 import { FilesField } from './FilesField';
 import { Form } from './Form';
 import { InverterModelSelectFields } from './InverterModelSelectFields';
+import { SelectFallback } from '../SelectFallback';
 
 const validation = z.object({
   manufacturer: z.object({ key: z.string(), label: z.string() }),
@@ -118,7 +119,13 @@ export const InverterFormDialog = ({
           {...method}
         >
           {showFields.first && (
-            <Suspense fallback="loading">
+            <Suspense
+              fallback={
+                <SelectFallback
+                  label={intl.formatMessage({ defaultMessage: 'Manufacturer' })}
+                />
+              }
+            >
               <InverterModelSelectFields />
             </Suspense>
           )}

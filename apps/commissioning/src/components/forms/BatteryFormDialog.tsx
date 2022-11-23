@@ -22,6 +22,7 @@ import { FileFieldProps } from './FileField';
 import { FilesField } from './FilesField';
 import { Form } from './Form';
 import { InverterInstancesSelectField } from './InverterInstancesSelectField';
+import { SelectFallback } from '../SelectFallback';
 
 const validation = z.object({
   manufacturer: z.object({ key: z.string(), label: z.string() }),
@@ -113,8 +114,13 @@ export const BatteryFormDialog = ({
           {...method}
         >
           {showFields.first && (
-            //TODO fallback for selects
-            <Suspense>
+            <Suspense
+              fallback={
+                <SelectFallback
+                  label={intl.formatMessage({ defaultMessage: 'Manufacturer' })}
+                />
+              }
+            >
               <BatteryModelsSelectField />
             </Suspense>
           )}
@@ -136,7 +142,13 @@ export const BatteryFormDialog = ({
             </Field>
           )}
           {showFields.third && (
-            <Suspense>
+            <Suspense
+              fallback={
+                <SelectFallback
+                  label={intl.formatMessage({ defaultMessage: 'Inverter' })}
+                />
+              }
+            >
               <InverterInstancesSelectField siteId={siteId} />
             </Suspense>
           )}
