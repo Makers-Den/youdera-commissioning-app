@@ -12,6 +12,7 @@ import {
   useUpdateMeterCommsMutation,
 } from '@src/api/youdera/hooks/meters/hooks';
 import { useSiteQuery } from '@src/api/youdera/hooks/sites/hooks';
+import { useMeterTypeOptions } from '@src/hooks/useMeterTypeOptions';
 import { Device, toDevice, useExtractDevices } from '@src/utils/devices';
 import { routes } from '@src/utils/routes';
 import { noop } from 'lodash';
@@ -44,6 +45,7 @@ import {
   InverterFormDialogProps,
 } from '../forms/InverterFormDialog';
 import {
+  FormValues,
   MeterFormDialog,
   MeterFormDialogProps,
 } from '../forms/MeterFormDialog';
@@ -105,6 +107,8 @@ export function DevicesContent({
 
   const toast = useToast();
 
+  const meterTypeOptions = useMeterTypeOptions();
+
   const { siteQuery } = useSiteQuery(siteId);
   const site = siteQuery.data as Site;
 
@@ -132,6 +136,10 @@ export function DevicesContent({
     switch (currentDevice?.deviceType) {
       case 'Inverter':
         updateInverterDialog.onOpen();
+        actionsDialog.onClose();
+        break;
+      case 'Meter':
+        updateMeterDialog.onOpen();
         actionsDialog.onClose();
         break;
       case 'Battery':
@@ -176,10 +184,11 @@ export function DevicesContent({
     updateBatteryMutation,
   } = useBatteryMutations(siteId);
   const {
-    deleteMeterMutation,
     createMeterMutation,
-    addFileToMeterMutation,
     updateMeterMutation,
+    deleteMeterMutation,
+    addFileToMeterMutation,
+    deleteFileToMeterMutation,
   } = useMeterMutations(siteId);
 
   const confirmDeleteHandler = async () => {
@@ -286,31 +295,27 @@ export function DevicesContent({
     try {
       const meter = await createMeterMutation.mutateAsync({
         site: siteId,
-        type: values.type.key,
+        type: values.meterType.key,
         manufacturer: values.manufacturer.key,
         model: values.model.key,
         number: values.serialNumber,
         is_auxiliary: values.auxiliary,
-        // factor: 1, when indirect flag in model is set to true user has to provide that. 
+        // factor: 1, when indirect flag in model is set to true user has to provide that.
+        // inverters: [1] // TODO - waiting for backend  (values.connectedInverters)
       });
 
       await addFileToMeterMutation.mutateAsync({
-        id: meter.id,
+        meterId: meter.id,
         file: values.file,
       });
-
-      // await updateMeterMutation.mutateAsync({
-      //   inverters: [1] // TODO - waiting for backend  (values.connectedInverters)
-      // });
-
       commsMethodDialog.onOpen();
       toast.success(
         intl.formatMessage({
           defaultMessage: 'Meter added successfully!',
         }),
       );
-      setCurrentDevice(toDevice(meter, 'Meter'));
 
+      setCurrentDevice(toDevice(meter, 'Meter'));
       reset();
       addInverterDialog.onClose();
     } catch (err) {
@@ -318,6 +323,49 @@ export function DevicesContent({
       toast.error(err.message);
     }
   };
+
+  const onUpdateMeter: MeterFormDialogProps['onSubmit'] = async values => {
+    if (!currentDevice) {
+      return;
+    }
+    try {
+      await updateMeterMutation.mutateAsync({
+        id: currentDevice?.id,
+        type: values.meterType.key,
+        manufacturer: values.manufacturer.key,
+        model: values.model.key,
+        number: values.serialNumber,
+        is_auxiliary: values.auxiliary,
+        // factor: 1, when indirect flag in model is set to true user has to provide that.
+      });
+
+      if (values.file instanceof File) {
+        await deleteFileToMeterMutation.mutateAsync({
+          meterId: currentDevice?.id,
+          fileId: Number(values.file),
+        });
+        await addFileToMeterMutation.mutateAsync({
+          meterId: currentDevice?.id,
+          file: values.file,
+        });
+      }
+      updateMeterDialog.onClose();
+
+      toast.success(
+        intl.formatMessage({
+          defaultMessage: 'Meter updated successfully!',
+        }),
+      );
+      setCurrentDevice(null);
+    } catch (err) {
+      //@ts-ignore
+      toast.error(err.message);
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+  };
+
+
 
   const onAddBattery: BatteryFormDialogProps['onSubmit'] = async (
     values,
@@ -428,8 +476,7 @@ export function DevicesContent({
 
   const handleAddMeter = () => {
     if (siteHasBatteries || siteHasMeters) {
-      // eslint-disable-next-line no-alert
-      addMeterDialog.onOpen()
+      addMeterDialog.onOpen();
     } else {
       areYouSureDisclosure.onOpen();
       setOnAreYouSureCallbacks({
@@ -438,8 +485,7 @@ export function DevicesContent({
         },
         onConfirm: () => {
           areYouSureDisclosure.onClose();
-          // eslint-disable-next-line no-alert
-          addMeterDialog.onOpen()
+          addMeterDialog.onOpen();
         },
       });
     }
@@ -555,9 +601,37 @@ export function DevicesContent({
         // },
       };
     }
+    if (currentDevice?.deviceType === 'Meter') {
+      return {
+        meterType: meterTypeOptions.filter(
+          option => option.key === currentDevice.type,
+        )[0],
+        manufacturer: {
+          key: currentDevice.manufacturer.toString(),
+          label: currentDevice.manufacturer_name,
+        },
+        model: {
+          key: currentDevice.model.toString(),
+          label: currentDevice.model_name,
+          dependentKey: currentDevice.manufacturer.toString(),
+        },
+        serialNumber: currentDevice.number,
+        auxiliary: !!currentDevice.is_auxiliary,
+        file: {
+          url: currentDevice.imageUrl,
+          type: 'image',
+          name: currentDevice.name,
+        },
+        //TODO add connectedInverters data - waiting for backend
+        // connectedInverters: {
+        //   key: currentDevice.inverter.toString(),
+        //   label: currentDevice.inverter_name,
+        // },
+      } as Partial<FormValues>;
+    }
 
     return undefined;
-  }, [currentDevice]);
+  }, [currentDevice, meterTypeOptions]);
 
   return (
     <>
@@ -656,10 +730,10 @@ export function DevicesContent({
         inverters={site.inverters}
       />
 
-      {/* <MeterFormDialog
+      <MeterFormDialog
         open={updateMeterDialog.isOpen}
         onClose={updateMeterDialog.onClose}
-        onSubmit={() => undefined}
+        onSubmit={onUpdateMeter}
         title={intl.formatMessage({ defaultMessage: 'Update Meter' })}
         submitButtonTitle={intl.formatMessage({
           defaultMessage: 'Update Device',
@@ -667,7 +741,7 @@ export function DevicesContent({
         defaultValues={defaultValues}
         fileValueMapper={fileValueMapper}
         inverters={site.inverters}
-      /> */}
+      />
 
       <BatteryFormDialog
         open={addBatteryDialog.isOpen}

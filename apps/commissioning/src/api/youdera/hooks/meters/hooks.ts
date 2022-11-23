@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   addFileToMeter,
   createMeter,
+  deleteFileFromString,
   deleteMeter,
   executeMeterVerification,
   getMeter,
@@ -70,12 +71,20 @@ export const useMeterMutations = (siteId: number) => {
     },
   });
 
+  const deleteFileToMeterMutation = useMutation(deleteFileFromString, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
+      queryClient.invalidateQueries([QueryKeys.meter, siteId]);
+    },
+  })
+
   return {
     updateMeterMutation,
     createMeterMutation,
     deleteMeterMutation,
     executeMeterVerificationMutation,
     addFileToMeterMutation,
+    deleteFileToMeterMutation
   };
 };
 

@@ -2,6 +2,7 @@ import { youderaApiInstance } from '../../api-instances/youdera';
 import {
   ApiFile,
   DataResponse,
+  DeleteFileFromMeterRequest,
   Meter,
   MeterModel,
   VerificationTestResult,
@@ -40,16 +41,15 @@ export const createMeter = async (body: CreateMeterArgs): Promise<Meter> => {
   return response.data.data;
 };
 
-export type UpdateMeterArgs = {
+export type UpdateMeterRequestBody = {
   id: number;
-  meter: Partial<Meter>;
-};
+} & Partial<Meter>;
 
 export const updateMeter = async ({
   id,
-  meter,
-}: UpdateMeterArgs): Promise<Meter> => {
-  const response = await youderaApiInstance.patch<DataResponse<Meter>>(
+  ...meter
+}: UpdateMeterRequestBody): Promise<Meter> => {
+  const response = await youderaApiInstance.patch<CreateDataResponse<Meter>>(
     `/meters/${id}`,
     meter,
   );
@@ -57,7 +57,7 @@ export const updateMeter = async ({
 };
 
 export interface AddFileToInverterRequest {
-  id: Meter['id'];
+  meterId: Meter['id'];
   file: File;
 }
 export interface AddFileToMeterArgs extends AddFileToInverterRequest {
@@ -65,7 +65,7 @@ export interface AddFileToMeterArgs extends AddFileToInverterRequest {
 }
 
 export const addFileToMeter = async ({
-  id,
+  meterId,
   file,
   setUploadProgress
 }: AddFileToMeterArgs) => {
@@ -74,7 +74,7 @@ export const addFileToMeter = async ({
   formData.append('type', 'image');
 
   const response = await youderaApiInstance.post<DataResponse<ApiFile>>(
-    `/meters/${id}/files`,
+    `/meters/${meterId}/files`,
     formData,
     {
       headers: {
@@ -92,6 +92,17 @@ export const addFileToMeter = async ({
   );
 
   return response.data.data;
+};
+
+export const deleteFileFromString = async ({
+  meterId,
+  fileId
+}: DeleteFileFromMeterRequest) => {
+  const response = await youderaApiInstance.delete(
+    `/strings/${meterId}/files/${fileId}/`,
+  );
+
+  return response.data;
 };
 
 export const getMeterVerificationGuide = async (

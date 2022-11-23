@@ -73,6 +73,11 @@ export interface DeleteFileFromStringRequest {
   fileId: number
 }
 
+export interface DeleteFileFromMeterRequest {
+  meterId: number,
+  fileId: number
+}
+
 export interface ApiFile {
   id: string;
   name: string;
@@ -135,15 +140,15 @@ export type Meter = {
 
   factor: number;
 
-  manufacturer: number;
-  model: number;
+  manufacturer: string;
+  model: string;
   manufacturer_name: string;
   model_name: string;
 
   /** This might be an enum where "generation" is at least on option? */
   type: string;
 
-  is_auxiliary: 0;
+  is_auxiliary: boolean;
 
   /** Assume this can be ISO date string, not sure */
   replacement_by: string | null;

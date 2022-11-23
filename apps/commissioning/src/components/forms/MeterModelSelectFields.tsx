@@ -51,7 +51,6 @@ export function MeterModelSelectFields() {
       ),
     [meterModelsQuery.data],
   );
-
   return (
     <DependentSelectsFields
       options={manufacturerOptions}

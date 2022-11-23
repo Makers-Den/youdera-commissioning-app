@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Inverter } from '@src/api/youdera/apiTypes';
+import { useMeterTypeOptions } from '@src/hooks/useMeterTypeOptions';
 import React, { Suspense, useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useIntl } from 'react-intl';
@@ -13,7 +14,6 @@ import {
 } from 'ui/dialogs/Dialog';
 import { Input } from 'ui/inputs/Input';
 import { MultiSelectOption } from 'ui/select/MultiSelect'
-import { SelectOption } from 'ui/select/Select';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
@@ -28,27 +28,27 @@ import { SelectField } from './SelectField';
 import { ToggleField } from './ToggleField';
 
 const validation = z.object({
+  meterType: z.object({
+    key: z.string(),
+    label: z.string(),
+    icon: z.string(),
+  }),
   manufacturer: z.object({ key: z.string(), label: z.string() }),
   model: z.object({
     key: z.string(),
     label: z.string(),
     dependentKey: z.string(),
   }),
+  serialNumber: z.string(),
   connectedInverters: z.array(z.object({
     key: z.string(),
     label: z.string(),
   })),
-  serialNumber: z.string(),
   auxiliary: z.boolean(),
   file: z.any(),
-  type: z.object({
-    key: z.string(),
-    label: z.string(),
-    icon: z.string(),
-  })
 });
 
-type FormValues = z.infer<typeof validation>;
+export type FormValues = z.infer<typeof validation>;
 
 export type MeterFormDialogProps = {
   open: DialogProps['open'];
@@ -74,13 +74,14 @@ export const MeterFormDialog = ({
   fileValueMapper,
 }: MeterFormDialogProps) => {
   const intl = useIntl();
+  const meterTypeOptions = useMeterTypeOptions()
 
   const method = useForm({
     resolver: zodResolver(validation),
   });
 
-  const { handleSubmit, reset, formState, control } = method;
-
+  const { handleSubmit, reset, formState, control, getValues } = method;
+  console.log(getValues())
   const handleClose = () => {
     onClose();
     reset();
@@ -137,39 +138,6 @@ export const MeterFormDialog = ({
     fifth: !!meterType && !!model && !!serialNumber && !!connectedInverters,
     sixth: !!meterType && !!model && !!serialNumber && !!connectedInverters && !!file
   };
-
-  // * Options
-  const meterTypeOptions: SelectOption[] = [
-    {
-      key: 'generation',
-      label: intl.formatMessage({
-        defaultMessage: 'Generation',
-      }),
-      icon: 'Industry',
-    },
-    {
-      key: 'import-export',
-      label: intl.formatMessage({
-        defaultMessage: 'Import/Export',
-      }),
-      icon: 'Download',
-    },
-    {
-      key: 'consumption',
-      label: intl.formatMessage({
-        defaultMessage: 'Consumption',
-      }),
-      icon: 'Plug',
-    },
-    {
-      key: 'own-consumption',
-      label: intl.formatMessage({
-        defaultMessage: 'Own consumption',
-      }),
-      icon: 'Lightbulb',
-    },
-  ]
-  // *
 
   return (
     <Dialog
