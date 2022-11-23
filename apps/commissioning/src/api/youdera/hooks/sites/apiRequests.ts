@@ -16,6 +16,7 @@ export const getSite = async (siteId: string) => {
       `&with[]=batteries.testlogs` +
       `&with[]=batteries.files` +
       `&with[]=batteries.datapoints` +
+      `&with[]=batteries.inverter` +
       `&with[]=meters` +
       `&with[]=meters.testlogs` +
       `&with[]=meters.files` +
