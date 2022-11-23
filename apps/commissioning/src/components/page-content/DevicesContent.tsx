@@ -87,7 +87,8 @@ const fileValueMapper = (file: ApiFile | File) => ({
   name: file.name,
   type: file.type,
   url: file instanceof File ? URL.createObjectURL(file) : file.url,
-  thumbnailUrl: file instanceof File ? URL.createObjectURL(file) : file.url_thumb,
+  thumbnailUrl:
+    file instanceof File ? URL.createObjectURL(file) : file.url_thumb,
 });
 
 export type DevicesContentProps = {
@@ -114,7 +115,7 @@ export function DevicesContent({
   const deviceDeletionDialog = useDisclosure();
   const addInverterDialog = useDisclosure();
   const updateInverterDialog = useDisclosure();
-  const addMeterDialog = useDisclosure()
+  const addMeterDialog = useDisclosure();
   const updateMeterDialog = useDisclosure();
   const addBatteryDialog = useDisclosure();
   const updateBatteryDialog = useDisclosure();
@@ -166,12 +167,14 @@ export function DevicesContent({
     createInverterMutation,
     addFileToInverterMutation,
     updateInverterMutation,
+    deleteFileFromInverterMutation,
   } = useInverterMutations(siteId);
   const {
     deleteBatteryMutation,
     createBatteryMutation,
     addFileToBatteryMutation,
     updateBatteryMutation,
+    deleteFileFromBatteryMutation,
   } = useBatteryMutations(siteId);
   const { deleteMeterMutation } = useMeterMutations(siteId);
 
@@ -216,10 +219,14 @@ export function DevicesContent({
         cmodel: parseInt(values.model.key, 10),
       });
 
-      await addFileToInverterMutation.mutateAsync({
-        file: values.file,
-        inverterId: inverter.id,
-      });
+      // eslint-disable-next-line no-restricted-syntax
+      for (const file of values.files) {
+        // eslint-disable-next-line no-await-in-loop
+        await addFileToInverterMutation.mutateAsync({
+          file,
+          inverterId: inverter.id,
+        });
+      }
 
       commsMethodDialog.onOpen();
       toast.success(
@@ -250,12 +257,30 @@ export function DevicesContent({
           cmodel: parseInt(values.model.key, 10),
         });
 
-        if (values.file instanceof File) {
-          await addFileToInverterMutation.mutateAsync({
-            file: values.file,
-            inverterId: inverter.id,
-          });
-        }
+        const filesToAdd = values.files
+          .filter(file => file instanceof File)
+          .map(file =>
+            addFileToInverterMutation.mutateAsync({
+              file,
+              inverterId: inverter.id,
+            }),
+          );
+        const filesToRemove = (currentDevice.files || [])
+          .filter(({ id }) => {
+            const findFile = values.files.find(
+              file => !(file instanceof File) && file.id === id,
+            );
+
+            return !findFile;
+          })
+          .map(({ id }) =>
+            deleteFileFromInverterMutation.mutateAsync({
+              inverterId: inverter.id,
+              fileId: id,
+            }),
+          );
+
+        await Promise.all([...filesToAdd, ...filesToRemove]);
 
         updateInverterDialog.onClose();
         toast.success(
@@ -285,10 +310,14 @@ export function DevicesContent({
         inverter_id: parseInt(values.inverter.key, 10),
       });
 
-      await addFileToBatteryMutation.mutateAsync({
-        file: values.file,
-        batteryId: battery.id,
-      });
+      // eslint-disable-next-line no-restricted-syntax
+      for (const file of values.files) {
+        // eslint-disable-next-line no-await-in-loop
+        await addFileToBatteryMutation.mutateAsync({
+          file,
+          batteryId: battery.id,
+        });
+      }
 
       toast.success(
         intl.formatMessage({
@@ -320,12 +349,30 @@ export function DevicesContent({
         inverter_id: parseInt(values.inverter.key, 10),
       });
 
-      if (values.file instanceof File) {
-        await addFileToBatteryMutation.mutateAsync({
-          file: values.file,
-          batteryId: battery.id,
-        });
-      }
+      const filesToAdd = values.files
+        .filter(file => file instanceof File)
+        .map(file =>
+          addFileToBatteryMutation.mutateAsync({
+            file,
+            batteryId: battery.id,
+          }),
+        );
+      const filesToRemove = (currentDevice.files || [])
+        .filter(({ id }) => {
+          const findFile = values.files.find(
+            file => !(file instanceof File) && file.id === id,
+          );
+
+          return !findFile;
+        })
+        .map(({ id }) =>
+          deleteFileFromBatteryMutation.mutateAsync({
+            batteryId: battery.id,
+            fileId: id,
+          }),
+        );
+
+      await Promise.all([...filesToAdd, ...filesToRemove]);
 
       toast.success(
         intl.formatMessage({
@@ -342,16 +389,26 @@ export function DevicesContent({
   };
 
   const devices = useExtractDevices(site);
-  const siteHasInverters = useMemo(() => devices.find(d => d.deviceType === 'Inverter'), [devices]);
-  const siteHasBatteries = useMemo(() => devices.find(d => d.deviceType === 'Battery'), [devices]);
-  const siteHasMeters = useMemo(() => devices.find(d => d.deviceType === 'Meter'), [devices]);
+  const siteHasInverters = useMemo(
+    () => devices.find(d => d.deviceType === 'Inverter'),
+    [devices],
+  );
+  const siteHasBatteries = useMemo(
+    () => devices.find(d => d.deviceType === 'Battery'),
+    [devices],
+  );
+  const siteHasMeters = useMemo(
+    () => devices.find(d => d.deviceType === 'Meter'),
+    [devices],
+  );
 
   const areYouSureDisclosure = useDisclosure();
 
-  const [onAreYouSureCallbacks, setOnAreYouSureCallbacks] = useState<AreYouSureCallbacks>({
-    onCancel: noop,
-    onConfirm: noop,
-  });
+  const [onAreYouSureCallbacks, setOnAreYouSureCallbacks] =
+    useState<AreYouSureCallbacks>({
+      onCancel: noop,
+      onConfirm: noop,
+    });
   const handleAddBattery = () => {
     if (siteHasBatteries || siteHasMeters) {
       addBatteryDialog.onOpen();
@@ -364,7 +421,7 @@ export function DevicesContent({
         onConfirm: () => {
           areYouSureDisclosure.onClose();
           addBatteryDialog.onOpen();
-        }
+        },
       });
     }
   };
@@ -372,7 +429,7 @@ export function DevicesContent({
   const handleAddMeter = () => {
     if (siteHasBatteries || siteHasMeters) {
       // eslint-disable-next-line no-alert
-      window.alert("TODO: add meter");
+      window.alert('TODO: add meter');
     } else {
       areYouSureDisclosure.onOpen();
       setOnAreYouSureCallbacks({
@@ -382,8 +439,8 @@ export function DevicesContent({
         onConfirm: () => {
           areYouSureDisclosure.onClose();
           // eslint-disable-next-line no-alert
-          window.alert("TODO: add meter");
-        }
+          window.alert('TODO: add meter');
+        },
       });
     }
   };
@@ -407,7 +464,7 @@ export function DevicesContent({
           type="button"
           disabled={!siteHasInverters}
           className="disabled:opacity-30"
-          onClick={addMeterDialog.onOpen} // TODO  handleAddMeter <- use this 
+          onClick={addMeterDialog.onOpen} // TODO  handleAddMeter <- use this
         >
           <Typography className="flex font-medium">
             <SvgIcon name="MeterRect" className="mr-3 w-5" />
@@ -449,7 +506,14 @@ export function DevicesContent({
         router.push(routes.electrician.verification(siteId));
       },
     });
-  }, [intl, setNextButtonProps, devices, areYouSureDisclosure.onOpen, router, siteId]);
+  }, [
+    intl,
+    setNextButtonProps,
+    devices,
+    areYouSureDisclosure.onOpen,
+    router,
+    siteId,
+  ]);
 
   const defaultValues = useMemo(() => {
     if (currentDevice?.deviceType === 'Inverter') {
@@ -464,7 +528,7 @@ export function DevicesContent({
           dependentKey: currentDevice.manufacturer.toString(),
         },
         serialNumber: currentDevice.serial_number,
-        file: currentDevice.files?.[0],
+        files: currentDevice.files,
       };
     }
     if (currentDevice?.deviceType === 'Battery') {
@@ -479,11 +543,7 @@ export function DevicesContent({
           dependentKey: currentDevice.manufacturer.toString(),
         },
         serialNumber: currentDevice.serial_number,
-        file: {
-          url: currentDevice.imageUrl,
-          type: 'image',
-          name: currentDevice.name,
-        },
+        files: currentDevice.files,
         //TODO inverter data
         // inverter: {
         //   key: currentDevice.inverter.toString(),
@@ -543,12 +603,12 @@ export function DevicesContent({
         description={
           currentDevice?.deviceType === 'Inverter'
             ? intl.formatMessage({
-              defaultMessage:
-                'Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well.',
-            })
+                defaultMessage:
+                  'Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well.',
+              })
             : intl.formatMessage({
-              defaultMessage: 'Are you sure to delete this device?',
-            })
+                defaultMessage: 'Are you sure to delete this device?',
+              })
         }
         onCancel={handleDeleteCancel}
         onDelete={confirmDeleteHandler}
@@ -643,15 +703,15 @@ export function DevicesContent({
               const testResult = await updateDeviceCommsMutation.mutateAsync(
                 commType === 'fixed_ip'
                   ? {
-                    id: currentDevice.id,
-                    ip: ipAddress,
-                    slave_id: Number(slaveId),
-                  }
+                      id: currentDevice.id,
+                      ip: ipAddress,
+                      slave_id: Number(slaveId),
+                    }
                   : {
-                    id: currentDevice.id,
-                    dhcp: true,
-                    slave_id: Number(slaveId),
-                  },
+                      id: currentDevice.id,
+                      dhcp: true,
+                      slave_id: Number(slaveId),
+                    },
               );
 
               setCommsTestResult(testResult);
@@ -677,7 +737,10 @@ export function DevicesContent({
         />
       )}
 
-      <AreYouSureDialog callbacks={onAreYouSureCallbacks} disclosure={areYouSureDisclosure} />
+      <AreYouSureDialog
+        callbacks={onAreYouSureCallbacks}
+        disclosure={areYouSureDisclosure}
+      />
       <Toast />
     </>
   );

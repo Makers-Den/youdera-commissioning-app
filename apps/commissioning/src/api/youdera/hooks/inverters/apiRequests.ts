@@ -50,6 +50,22 @@ export const addFileToInverter = async ({
   return response.data.data;
 };
 
+export interface DeleteFileFromInverterReq {
+  inverterId: Inverter['id'];
+  fileId: ApiFile['id'];
+}
+
+export const deleteFileFromInverter = async ({
+  inverterId,
+  fileId,
+}: DeleteFileFromInverterReq) => {
+  const response = await youderaApiInstance.delete<DataResponse<ApiFile>>(
+    `/inverters/${inverterId}/files/${fileId}`,
+  );
+
+  return response.data.data;
+};
+
 export const createInverter = async (body: CreateInverterRequestBody) => {
   const response = await youderaApiInstance.post<CreateDataResponse<Inverter>>(
     `/inverters`,

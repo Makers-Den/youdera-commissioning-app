@@ -12,7 +12,7 @@ export type FileUploaderWithPreviewProps = {
     FilePreviewerProps,
     'url' | 'name' | 'type' | 'onDeleteClick' | 'onAddClick'
   >;
-  onDeleteFile: (file: UploadedFile) => void;
+  onDeleteFile: (file: UploadedFile, index: number) => void;
   uploadedFiles: UploadedFile[];
   label?: string;
   className?: string;
@@ -39,7 +39,7 @@ export function FileUploaderWithPreview({
         <FilePreviewer
           key={idx}
           onDeleteClick={() => {
-            onDeleteFile(uploadedFile);
+            onDeleteFile(uploadedFile, idx);
           }}
           {...uploadedFile}
           {...filePreviewerProps}

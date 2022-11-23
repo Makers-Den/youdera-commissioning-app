@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   addFileToInverter,
   createInverter,
+  deleteFileFromInverter,
   deleteInverter,
   executeInverterVerification,
   getInverterDetails,
@@ -75,12 +76,20 @@ export const useInverterMutations = (siteId: number) => {
     },
   });
 
+  const deleteFileFromInverterMutation = useMutation(deleteFileFromInverter, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
+      queryClient.invalidateQueries([QueryKeys.inverters, siteId]);
+    },
+  });
+
   return {
     addFileToInverterMutation,
     updateInverterMutation,
     createInverterMutation,
     deleteInverterMutation,
     executeInverterVerificationMutation,
+    deleteFileFromInverterMutation,
   };
 };
 

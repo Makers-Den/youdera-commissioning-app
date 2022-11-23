@@ -17,7 +17,8 @@ import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
 
 import { Field } from './Field';
-import { FileField, FileFieldProps } from './FileField';
+import { FileFieldProps } from './FileField';
+import { FilesField } from './FilesField';
 import { Form } from './Form';
 import { InverterModelSelectFields } from './InverterModelSelectFields';
 
@@ -29,7 +30,7 @@ const validation = z.object({
     dependentKey: z.string(),
   }),
   serialNumber: z.string(),
-  file: z.any(),
+  files: z.array(z.any()).nonempty(),
 });
 
 type FormValues = z.infer<typeof validation>;
@@ -41,7 +42,7 @@ export type InverterFormDialogProps = {
   onSubmit: (values: FormValues, resetForm: () => void) => void;
   title: string;
   submitButtonTitle: string;
-  defaultValues?: Partial<FormValues>;
+  defaultValues?: Partial<Omit<FormValues, 'files'> & { files: any[] }>;
   fileValueMapper?: FileFieldProps['valueMapper'];
 };
 
@@ -82,7 +83,7 @@ export const InverterFormDialog = ({
   });
 
   const file = useWatch({
-    name: 'file',
+    name: 'files',
     defaultValue: formState.defaultValues?.file,
     control,
   });
@@ -139,7 +140,7 @@ export const InverterFormDialog = ({
             </Field>
           )}
           {showFields.third && (
-            <FileField name="file" valueMapper={fileValueMapper}>
+            <FilesField name="files" valueMapper={fileValueMapper}>
               <div className="flex items-center gap-4">
                 <SvgIcon name="Camera" className="w-8 text-green-400" />
                 <div>
@@ -166,7 +167,7 @@ export const InverterFormDialog = ({
                   </Typography>
                 </div>
               </div>
-            </FileField>
+            </FilesField>
           )}
           {showFields.fourth && (
             <div className="mt-3 flex gap-5">

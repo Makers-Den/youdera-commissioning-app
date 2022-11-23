@@ -18,7 +18,8 @@ import { z } from 'zod';
 
 import { BatteryModelsSelectField } from './BatteryModelsSelectField';
 import { Field } from './Field';
-import { FileField, FileFieldProps } from './FileField';
+import { FileFieldProps } from './FileField';
+import { FilesField } from './FilesField';
 import { Form } from './Form';
 import { InverterInstancesSelectField } from './InverterInstancesSelectField';
 
@@ -31,7 +32,7 @@ const validation = z.object({
   }),
   serialNumber: z.string(),
   inverter: z.object({ key: z.string(), label: z.string() }),
-  file: z.any(),
+  files: z.array(z.any()).nonempty(),
 });
 
 type FormValues = z.infer<typeof validation>;
@@ -44,7 +45,7 @@ export type BatteryFormDialogProps = {
   title: string;
   submitButtonTitle: string;
   siteId: number;
-  defaultValues?: Partial<FormValues>;
+  defaultValues?: Partial<Omit<FormValues, 'files'> & { files: any[] }>;
   fileValueMapper?: FileFieldProps['valueMapper'];
 };
 
@@ -78,7 +79,7 @@ export const BatteryFormDialog = ({
     'model',
     'serialNumber',
     'inverter',
-    'file',
+    'files',
   ]);
 
   const showFields = {
@@ -141,7 +142,7 @@ export const BatteryFormDialog = ({
           )}
 
           {showFields.fourth && (
-            <FileField name="file" valueMapper={fileValueMapper}>
+            <FilesField name="files" valueMapper={fileValueMapper}>
               <div className="flex items-center gap-4">
                 <SvgIcon name="Camera" className="w-8 text-green-400" />
                 <div>
@@ -168,7 +169,7 @@ export const BatteryFormDialog = ({
                   </Typography>
                 </div>
               </div>
-            </FileField>
+            </FilesField>
           )}
           {showFields.fifth && (
             <div className="mt-3 flex gap-5">

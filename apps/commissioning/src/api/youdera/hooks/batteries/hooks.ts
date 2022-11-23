@@ -4,6 +4,7 @@ import {
   addFileToBattery,
   createBattery,
   deleteBattery,
+  deleteFileFromBattery,
   executeBatteryVerification,
   getBatteryModels,
   getBatteryVerificationGuide,
@@ -57,6 +58,12 @@ export const useBatteryMutations = (siteId: number) => {
     },
   });
 
+  const deleteFileFromBatteryMutation = useMutation(deleteFileFromBattery, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.editedSite, siteId]);
+    },
+  });
+
   const updateBatteryMutation = useMutation(
     (body: Omit<UpdateBatteryRequest, 'site'>) =>
       updateBattery({ site: siteId, ...body }),
@@ -88,6 +95,7 @@ export const useBatteryMutations = (siteId: number) => {
     executeBatteryVerificationMutation,
     createBatteryMutation,
     updateBatteryMutation,
+    deleteFileFromBatteryMutation,
   };
 };
 

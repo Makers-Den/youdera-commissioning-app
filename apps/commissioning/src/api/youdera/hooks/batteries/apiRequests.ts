@@ -85,6 +85,22 @@ export const addFileToBattery = async ({
   return response.data.data;
 };
 
+export interface DeleteFileFromBatteryReq {
+  batteryId: Battery['id'];
+  fileId: ApiFile['id'];
+}
+
+export const deleteFileFromBattery = async ({
+  batteryId,
+  fileId,
+}: DeleteFileFromBatteryReq) => {
+  const response = await youderaApiInstance.delete<DataResponse<ApiFile>>(
+    `/batteries/${batteryId}/files/${fileId}`,
+  );
+
+  return response.data.data;
+};
+
 export const executeBatteryVerification = async (
   id: number,
 ): Promise<VerificationTestResult> => {
