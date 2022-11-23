@@ -13,7 +13,7 @@ import {
   updateInverter,
 } from './apiRequests';
 import { youderaApiInstance } from '../../api-instances/youdera';
-import { CommsParams, CommsTestResult, DataResponse } from '../../apiTypes';
+import { CommsParams, CommsTestResult, Datapoint, DataResponse } from '../../apiTypes';
 import { QueryKeys } from '../../enums/queryKeys';
 
 export const useUpdateInverterCommsMutation = (siteId: number) => {
@@ -22,7 +22,7 @@ export const useUpdateInverterCommsMutation = (siteId: number) => {
   return useMutation(
     ({ id, ...params }: CommsParams & { id: number }) =>
       youderaApiInstance
-        .post<DataResponse<CommsTestResult>>(
+        .post<DataResponse<Datapoint>>(
           `/inverters/${id}/communication`,
           params,
         )
@@ -34,6 +34,16 @@ export const useUpdateInverterCommsMutation = (siteId: number) => {
     },
   );
 };
+
+export const useInverterCommsTestMutation = () => useMutation(
+  ({ id, ...params }: CommsParams & { id: number }) =>
+    youderaApiInstance
+      .post<DataResponse<CommsTestResult>>(
+        `/inverters/${id}/communication/test`,
+        params,
+      )
+      .then(resp => resp.data.data),
+);
 
 export const useInverterMutations = (siteId: number) => {
   const queryClient = useQueryClient();

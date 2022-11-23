@@ -15,6 +15,8 @@ import clsxm from 'ui/utils/clsxm';
 export type CommsMethodResultDialogProps = {
   open: DialogProps['open'];
   onClose: DialogProps['onClose'];
+  onConfirm: () => void;
+  onBack: () => void;
   className?: string;
   result: CommsTestResult;
 };
@@ -22,6 +24,8 @@ export type CommsMethodResultDialogProps = {
 export const CommsMethodResultDialog = ({
   open,
   onClose,
+  onConfirm,
+  onBack,
   className,
   result,
 }: CommsMethodResultDialogProps) => {
@@ -60,10 +64,10 @@ export const CommsMethodResultDialog = ({
         </Table>
 
         <div className="mt-3 flex gap-5">
-          <Button variant="additional-gray" onClick={onClose}>
-            {intl.formatMessage({ defaultMessage: 'Cancel' })}
+          <Button variant="additional-gray" onClick={onBack}>
+            {intl.formatMessage({ defaultMessage: 'Back' })}
           </Button>
-          <Button variant="main-green" className="flex-1" onClick={onClose}>
+          <Button variant="main-green" className="flex-1" onClick={onConfirm}>
             {intl.formatMessage({ defaultMessage: 'Complete' })}
           </Button>
         </div>

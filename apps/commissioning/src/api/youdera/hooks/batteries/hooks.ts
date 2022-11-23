@@ -15,6 +15,7 @@ import {
   CommsParams,
   CommsTestResult,
   CreateBatteryRequest,
+  Datapoint,
   DataResponse,
   UpdateBatteryRequest,
 } from '../../apiTypes';
@@ -26,7 +27,7 @@ export const useUpdateBatteryCommsMutation = (siteId: number) => {
   return useMutation(
     ({ id, ...params }: CommsParams & { id: number }) =>
       youderaApiInstance
-        .post<DataResponse<CommsTestResult>>(
+        .post<DataResponse<Datapoint>>(
           `/batteries/${id}/communication`,
           params,
         )
@@ -38,6 +39,16 @@ export const useUpdateBatteryCommsMutation = (siteId: number) => {
     },
   );
 };
+
+export const useBatteryCommsTestMutation = () => useMutation(
+  ({ id, ...params }: CommsParams & { id: number }) =>
+    youderaApiInstance
+      .post<DataResponse<CommsTestResult>>(
+        `/batteries/${id}/communication/test`,
+        params,
+      )
+      .then(resp => resp.data.data),
+);
 
 export const useBatteryMutations = (siteId: number) => {
   const queryClient = useQueryClient();
