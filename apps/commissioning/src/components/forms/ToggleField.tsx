@@ -9,11 +9,11 @@ export type SelectFieldProps = {
 
 export function ToggleField({ name, ...props }: SelectFieldProps) {
   const control = useController({ name });
-  console.log(control)
   return (
     <Field name={name}>
-      {(_, fieldState) => (
+      {() => (
         <Toggle
+          checked={control.field.value}
           {...props}
           {...control.field}
         />

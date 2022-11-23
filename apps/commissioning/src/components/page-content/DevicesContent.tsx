@@ -2,6 +2,7 @@ import {
   ApiFile,
   CommsParams,
   CommsTestResult,
+  MeterModel,
   Site,
 } from '@src/api/youdera/apiTypes';
 import {
@@ -16,10 +17,12 @@ import {
 } from '@src/api/youdera/hooks/inverters/hooks';
 import {
   useMeterCommsTestMutation,
+  useMeterModelsQuery,
   useMeterMutations,
   useUpdateMeterCommsMutation,
 } from '@src/api/youdera/hooks/meters/hooks';
 import { useSiteQuery } from '@src/api/youdera/hooks/sites/hooks';
+import { useMeterTypeOptions } from '@src/hooks/useMeterTypeOptions';
 import { Device, toDevice, useExtractDevices } from '@src/utils/devices';
 import { reportApiError } from '@src/utils/errorUtils';
 import { routes } from '@src/utils/routes';
@@ -52,7 +55,11 @@ import {
   InverterFormDialog,
   InverterFormDialogProps,
 } from '../forms/InverterFormDialog';
-import { MeterFormDialog } from '../forms/MeterFormDialog';
+import {
+  FormValues,
+  MeterFormDialog,
+  MeterFormDialogProps,
+} from '../forms/MeterFormDialog';
 import { LargeBox } from '../LargeBox';
 
 type AreYouSureCallbacks = {
@@ -118,6 +125,8 @@ export function DevicesContent({
 
   const toast = useToast();
 
+  const meterTypeOptions = useMeterTypeOptions();
+
   const { siteQuery } = useSiteQuery(siteId);
   const site = siteQuery.data as Site;
 
@@ -145,6 +154,10 @@ export function DevicesContent({
     switch (currentDevice?.deviceType) {
       case 'Inverter':
         updateInverterDialog.onOpen();
+        actionsDialog.onClose();
+        break;
+      case 'Meter':
+        updateMeterDialog.onOpen();
         actionsDialog.onClose();
         break;
       case 'Battery':
@@ -190,7 +203,17 @@ export function DevicesContent({
     updateBatteryMutation,
     deleteFileFromBatteryMutation,
   } = useBatteryMutations(siteId);
-  const { deleteMeterMutation } = useMeterMutations(siteId);
+  const {
+    createMeterMutation,
+    updateMeterMutation,
+    deleteMeterMutation,
+    addFileToMeterMutation,
+    deleteFileToMeterMutation,
+  } = useMeterMutations(siteId);
+
+  // ! Backend is not producing the names of the model and manufacturer at the moment, hence I used this query
+  const meterModelsQuery = useMeterModelsQuery();
+  const meterModels = meterModelsQuery.data as MeterModel[];
 
   const confirmDeleteHandler = async () => {
     if (currentDevice) {
@@ -313,6 +336,88 @@ export function DevicesContent({
         console.error(err);
       }
     };
+
+  const onAddMeter: MeterFormDialogProps['onSubmit'] = async (
+    values,
+    reset,
+  ) => {
+    try {
+      const meter = await createMeterMutation.mutateAsync({
+        site: siteId,
+        type: values.meterType.key,
+        manufacturer: values.manufacturer.key,
+        model: values.model.key,
+        number: values.serialNumber,
+        is_auxiliary: values.auxiliary,
+        // factor: values.factor, //TODO when indirect flag in model is set to true user has to provide that.
+      });
+
+      // TODO uncomment when backend is ready
+      // await updateMeterMutation.mutateAsync({
+      //   id: meter.id,
+      //   inverters: values.connectedInverters.map((inverter) => Number(inverter.key) ) 
+      // });
+
+      await addFileToMeterMutation.mutateAsync({
+        meterId: meter.id,
+        file: values.file,
+      });
+      commsMethodDialog.onOpen();
+      toast.success(
+        intl.formatMessage({
+          defaultMessage: 'Meter added successfully!',
+        }),
+      );
+
+      setCurrentDevice(toDevice(meter, 'Meter'));
+      reset();
+      addInverterDialog.onClose();
+    } catch (err) {
+      //@ts-ignore
+      toast.error(err.message);
+    }
+  };
+
+  const onUpdateMeter: MeterFormDialogProps['onSubmit'] = async values => {
+    if (!currentDevice) {
+      return;
+    }
+    try {
+      await updateMeterMutation.mutateAsync({
+        id: currentDevice?.id,
+        type: values.meterType.key,
+        manufacturer: values.manufacturer.key,
+        model: values.model.key,
+        number: values.serialNumber,
+        is_auxiliary: values.auxiliary,
+        // factor: 1, when indirect flag in model is set to true user has to provide that.
+      });
+
+      if (values.file instanceof File) {
+        await deleteFileToMeterMutation.mutateAsync({
+          meterId: currentDevice?.id,
+          fileId: Number(values.file),
+        });
+        await addFileToMeterMutation.mutateAsync({
+          meterId: currentDevice?.id,
+          file: values.file,
+        });
+      }
+      updateMeterDialog.onClose();
+
+      toast.success(
+        intl.formatMessage({
+          defaultMessage: 'Meter updated successfully!',
+        }),
+      );
+      setCurrentDevice(null);
+    } catch (err) {
+      //@ts-ignore
+      toast.error(err.message);
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+  };
 
   const onAddBattery: BatteryFormDialogProps['onSubmit'] = async (
     values,
@@ -445,8 +550,7 @@ export function DevicesContent({
 
   const handleAddMeter = () => {
     if (siteHasBatteries || siteHasMeters) {
-      // eslint-disable-next-line no-alert
-      window.alert('TODO: add meter');
+      addMeterDialog.onOpen();
     } else {
       areYouSureDisclosure.onOpen();
       setOnAreYouSureCallbacks({
@@ -455,8 +559,7 @@ export function DevicesContent({
         },
         onConfirm: () => {
           areYouSureDisclosure.onClose();
-          // eslint-disable-next-line no-alert
-          window.alert('TODO: add meter');
+          addMeterDialog.onOpen();
         },
       });
     }
@@ -481,7 +584,7 @@ export function DevicesContent({
           type="button"
           disabled={!siteHasInverters}
           className="disabled:opacity-30"
-          onClick={addMeterDialog.onOpen} // TODO  handleAddMeter <- use this
+          onClick={handleAddMeter}
         >
           <Typography className="flex font-medium">
             <SvgIcon name="MeterRect" className="mr-3 w-5" />
@@ -568,9 +671,46 @@ export function DevicesContent({
         // },
       };
     }
+    if (currentDevice?.deviceType === 'Meter') {
+      return {
+        meterType: meterTypeOptions.filter(
+          option => option.key === currentDevice.type,
+        )[0],
+        manufacturer: {
+          key: currentDevice.manufacturer,
+          label:
+            currentDevice.manufacturer_name ??
+            meterModels.filter(
+              _model => _model.id.toString() === currentDevice.model,
+            )[0].manufacturer_name, // ! Backend is not producing the names at the moment, so I had to fetch manufcaturers and filter them by the key
+        },
+        model: {
+          key: currentDevice.model,
+          label:
+            currentDevice.model_name ??
+            meterModels.filter(
+              _model => _model.id.toString() === currentDevice.model,
+            )[0].name, // ! Backend is not producing the names at the moment, so I had to fetch models and filter them by the key
+          dependentKey: currentDevice.manufacturer.toString(),
+        },
+        serialNumber: currentDevice.number,
+        auxiliary: !!currentDevice.is_auxiliary,
+        file: {
+          url: currentDevice.files?.[0].url_thumb,
+          type: 'image',
+          name: currentDevice.files?.[0].name,
+        },
+        connectedInverters: [] // ! Temporary value
+        //TODO add connectedInverters data - waiting for backend
+        // connectedInverters: {
+        //   key: currentDevice.inverter.toString(),
+        //   label: currentDevice.inverter_name,
+        // },
+      } as Partial<FormValues>;
+    }
 
     return undefined;
-  }, [currentDevice]);
+  }, [currentDevice, meterTypeOptions, meterModels]);
 
   return (
     <>
@@ -620,12 +760,12 @@ export function DevicesContent({
         description={
           currentDevice?.deviceType === 'Inverter'
             ? intl.formatMessage({
-                defaultMessage:
-                  'Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well.',
-              })
+              defaultMessage:
+                'Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well.',
+            })
             : intl.formatMessage({
-                defaultMessage: 'Are you sure to delete this device?',
-              })
+              defaultMessage: 'Are you sure to delete this device?',
+            })
         }
         onCancel={handleDeleteCancel}
         onDelete={confirmDeleteHandler}
@@ -660,10 +800,22 @@ export function DevicesContent({
       <MeterFormDialog
         open={addMeterDialog.isOpen}
         onClose={addMeterDialog.onClose}
-        onSubmit={() => undefined}
+        onSubmit={onAddMeter}
         title={intl.formatMessage({ defaultMessage: 'Add Meter' })}
         submitButtonTitle={intl.formatMessage({
           defaultMessage: 'Add Device',
+        })}
+        fileValueMapper={fileValueMapper}
+        inverters={site.inverters}
+      />
+
+      <MeterFormDialog
+        open={updateMeterDialog.isOpen}
+        onClose={updateMeterDialog.onClose}
+        onSubmit={onUpdateMeter}
+        title={intl.formatMessage({ defaultMessage: 'Update Meter' })}
+        submitButtonTitle={intl.formatMessage({
+          defaultMessage: 'Update Device',
         })}
         defaultValues={defaultValues}
         fileValueMapper={fileValueMapper}
@@ -724,15 +876,15 @@ export function DevicesContent({
             const commsParams: CommsParams & { id: number } =
               commType === 'fixed_ip'
                 ? {
-                    id: currentDevice.id,
-                    ip: ipAddress,
-                    slave_id: Number(slaveId),
-                  }
+                  id: currentDevice.id,
+                  ip: ipAddress,
+                  slave_id: Number(slaveId),
+                }
                 : {
-                    id: currentDevice.id,
-                    dhcp: true,
-                    slave_id: Number(slaveId),
-                  };
+                  id: currentDevice.id,
+                  dhcp: true,
+                  slave_id: Number(slaveId),
+                };
 
             try {
               const testResult = await testDeviceCommsMutation.mutateAsync(

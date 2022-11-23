@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Inverter } from '@src/api/youdera/apiTypes';
+import { useMeterTypeOptions } from '@src/hooks/useMeterTypeOptions';
 import React, { Suspense, useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useIntl } from 'react-intl';
@@ -13,7 +14,6 @@ import {
 } from 'ui/dialogs/Dialog';
 import { Input } from 'ui/inputs/Input';
 import { MultiSelectOption } from 'ui/select/MultiSelect'
-import { SelectOption } from 'ui/select/Select';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
@@ -28,6 +28,11 @@ import { SelectField } from './SelectField';
 import { ToggleField } from './ToggleField';
 
 const validation = z.object({
+  meterType: z.object({
+    key: z.string(),
+    label: z.string(),
+    icon: z.string(),
+  }),
   manufacturer: z.object({ key: z.string(), label: z.string() }),
   model: z.object({
     key: z.string(),
@@ -35,10 +40,15 @@ const validation = z.object({
     dependentKey: z.string(),
   }),
   serialNumber: z.string(),
+  connectedInverters: z.array(z.object({
+    key: z.string(),
+    label: z.string(),
+  })),
+  auxiliary: z.boolean(),
   file: z.any(),
 });
 
-type FormValues = z.infer<typeof validation>;
+export type FormValues = z.infer<typeof validation>;
 
 export type MeterFormDialogProps = {
   open: DialogProps['open'];
@@ -64,12 +74,17 @@ export const MeterFormDialog = ({
   fileValueMapper,
 }: MeterFormDialogProps) => {
   const intl = useIntl();
+  const meterTypeOptions = useMeterTypeOptions()
 
   const method = useForm({
     resolver: zodResolver(validation),
   });
 
-  const { handleSubmit, reset, formState, control } = method;
+  const { handleSubmit, reset, formState, watch } = method;
+  const handleClose = () => {
+    onClose();
+    reset();
+  }
 
   useEffect(() => {
     if (defaultValues) {
@@ -77,42 +92,13 @@ export const MeterFormDialog = ({
     }
   }, [defaultValues, reset]);
 
-  const meterType = useWatch({
-    name: 'meterType',
-    defaultValue: formState.defaultValues?.meterType,
-    control,
-  });
-
-  const model = useWatch({
-    name: 'model',
-    defaultValue: formState.defaultValues?.model,
-    control,
-  });
-
-  const serialNumber = useWatch({
-    name: 'serialNumber',
-    defaultValue: formState.defaultValues?.serialNumber,
-    control,
-  });
-
-
-  const connectedInverters = useWatch({
-    name: 'connectedInverters',
-    defaultValue: formState.defaultValues?.inverters,
-    control,
-  })
-
-  const auxiliary = useWatch({
-    name: 'auxiliary',
-    defaultValue: formState.defaultValues?.auxiliary,
-    control,
-  })
-
-  const file = useWatch({
-    name: 'file',
-    defaultValue: formState.defaultValues?.file,
-    control,
-  });
+  const [meterType, model, serialNumber, connectedInverters, file] = watch([
+    'meterType',
+    'model',
+    'serialNumber',
+    'connectedInverters',
+    'file',
+  ]);
 
   const showFields = {
     first: true,
@@ -120,70 +106,13 @@ export const MeterFormDialog = ({
     third: !!meterType && !!model,
     fourth: !!meterType && !!model && !!serialNumber,
     fifth: !!meterType && !!model && !!serialNumber && !!connectedInverters,
-    sixth: !!meterType && !!model && !!serialNumber && !!connectedInverters && !!auxiliary,
-    seventh: !!meterType && !!model && !!serialNumber && !!connectedInverters && !!auxiliary && !!file
+    sixth: !!meterType && !!model && !!serialNumber && !!connectedInverters && !!file
   };
 
-  // * Options
-  const meterTypeOptions: SelectOption[] = [
-    {
-      key: '1',
-      label: intl.formatMessage({
-        defaultMessage: 'Generation',
-      }),
-      value: 'generation',
-      icon: 'Industry',
-    },
-    {
-      key: '2',
-      label: intl.formatMessage({
-        defaultMessage: 'Import/Export',
-      }),
-      value: 'import',
-      icon: 'Download',
-    },
-    {
-      key: '3',
-      label: intl.formatMessage({
-        defaultMessage: 'Consumption',
-      }),
-      value: 'consumption',
-      icon: 'Plug',
-    },
-    {
-      key: '4',
-      label: intl.formatMessage({
-        defaultMessage: 'Own consumption',
-      }),
-      value: 'own_consumption',
-      icon: 'Lightbulb',
-    },
-  ]
-
-  // ? Double check that
-  const invertersOptions: MultiSelectOption[] = inverters ? inverters.map((inverter, idx) => ({
-    value: inverter,
-    children: (
-      <div>
-        <Typography variant="body" weight="medium">
-          {intl.formatMessage({
-            defaultMessage: 'Inverter',
-          })} {idx} {inverter.name ? `– ${inverter.name}` : ''}
-        </Typography>
-        <Typography variant="label"> {intl.formatMessage({
-          defaultMessage: 'SN',
-          description: 'Context: Shortcut from Serial Number'
-        })}: {inverter.serial_number}</Typography>
-      </div>
-    ),
-  })) : []
-
-  // console.log(invertersOptions)
-  // *
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       className={clsxm('w-[400px]', className)}
     >
       <DialogHeader>
@@ -191,7 +120,7 @@ export const MeterFormDialog = ({
         <SvgIcon
           name="Close"
           className="ml-auto h-4 hover:cursor-pointer"
-          onClick={onClose}
+          onClick={handleClose}
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
@@ -247,6 +176,7 @@ export const MeterFormDialog = ({
                 placeholder={intl.formatMessage({
                   defaultMessage: 'Select'
                 })}
+                wrapperClassName='z-10'
               >
 
                 {inverters && inverters.map((inverter, idx) => (
@@ -274,53 +204,53 @@ export const MeterFormDialog = ({
           }
           {
             showFields.fifth && (
-              <ToggleField
-                name='auxiliary'
-                label={intl.formatMessage({
-                  defaultMessage: 'Auxiliary meter'
-                })}
-              />
+              <>
+                <div className='flex h-20 min-w-[340px] bg-gray-100 justify-center items-center rounded-md'>
+                  <ToggleField
+                    name='auxiliary'
+                    label={intl.formatMessage({
+                      defaultMessage: 'Auxiliary meter'
+                    })}
+                  />
+                </div>
+                <FileField name="file" valueMapper={fileValueMapper} className="w-[340px]">
+                  <div className="flex items-center gap-4">
+                    <SvgIcon name="Camera" className="w-8 text-green-400" />
+                    <div>
+                      <Typography>
+                        {intl.formatMessage({
+                          defaultMessage: 'Take photo by camera',
+                          description:
+                            'Context: Take photo by camera or click here to upload',
+                        })}
+                      </Typography>
+                      <Typography>
+                        {intl.formatMessage({
+                          defaultMessage: 'or',
+                          description:
+                            'Context: Take photo by camera or click here to upload',
+                        })}{' '}
+                        <span className="text-green-400 underline">
+                          {intl.formatMessage({
+                            defaultMessage: 'click here to upload',
+                            description:
+                              'Context: Take photo by camera or click here to upload',
+                          })}
+                        </span>
+                      </Typography>
+                    </div>
+                  </div>
+                </FileField>
+              </>
             )
           }
           {
             showFields.sixth && (
-              <FileField name="file" valueMapper={fileValueMapper}>
-                <div className="flex items-center gap-4">
-                  <SvgIcon name="Camera" className="w-8 text-green-400" />
-                  <div>
-                    <Typography>
-                      {intl.formatMessage({
-                        defaultMessage: 'Take photo by camera',
-                        description:
-                          'Context: Take photo by camera or click here to upload',
-                      })}
-                    </Typography>
-                    <Typography>
-                      {intl.formatMessage({
-                        defaultMessage: 'or',
-                        description:
-                          'Context: Take photo by camera or click here to upload',
-                      })}{' '}
-                      <span className="text-green-400 underline">
-                        {intl.formatMessage({
-                          defaultMessage: 'click here to upload',
-                          description:
-                            'Context: Take photo by camera or click here to upload',
-                        })}
-                      </span>
-                    </Typography>
-                  </div>
-                </div>
-              </FileField>
-            )
-          }
-          {
-            showFields.seventh && (
               <div className="mt-3 flex gap-5">
                 <Button
                   variant="additional-gray"
                   className="w-full"
-                  onChange={onClose}
+                  onClick={handleClose}
                 >
                   {intl.formatMessage({ defaultMessage: 'Cancel' })}
                 </Button>

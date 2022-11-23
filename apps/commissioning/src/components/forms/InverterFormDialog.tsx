@@ -65,6 +65,11 @@ export const InverterFormDialog = ({
 
   const { handleSubmit, reset, formState, control } = method;
 
+  const handleClose = () => {
+    onClose();
+    reset();
+  }
+
   useEffect(() => {
     if (defaultValues) {
       reset(defaultValues);
@@ -99,7 +104,7 @@ export const InverterFormDialog = ({
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       className={clsxm('w-[400px]', className)}
     >
       <DialogHeader>
@@ -107,7 +112,7 @@ export const InverterFormDialog = ({
         <SvgIcon
           name="Close"
           className="ml-auto h-4 hover:cursor-pointer"
-          onClick={onClose}
+          onClick={handleClose}
         />
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
@@ -181,7 +186,7 @@ export const InverterFormDialog = ({
               <Button
                 variant="additional-gray"
                 className="w-full"
-                onChange={onClose}
+                onClick={handleClose}
               >
                 {intl.formatMessage({ defaultMessage: 'Cancel' })}
               </Button>

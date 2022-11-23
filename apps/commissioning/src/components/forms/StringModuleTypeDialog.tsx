@@ -145,7 +145,7 @@ export const StringModuleTypeDialog = <
                   defaultMessage: 'Cable cross section',
                 })}
                 placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                wrapperClassName="z-30"
+                wrapperClassName="w-full"
               />
             </div>
           </div>
