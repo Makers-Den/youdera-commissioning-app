@@ -19,7 +19,7 @@ const SelectTask: React.FC = () => {
           />
         </BoxHeader>
         <BoxContent className="flex space-x-4">
-          <Link href={routes.electrician.selectProject} passHref legacyBehavior>
+          <Link href={routes.electrician.selectProject} passHref legacyBehavior prefetch>
             <CardLink
               title={intl.formatMessage({ defaultMessage: 'Commissioning' })}
               icon={<SvgIcon name="Commissioning" />}
