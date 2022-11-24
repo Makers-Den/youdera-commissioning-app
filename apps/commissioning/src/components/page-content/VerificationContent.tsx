@@ -182,7 +182,7 @@ export const VerificationContent = memo(({
         type: 'button',
         onClick: async () => {
           try {
-            await commissionSiteMutation.mutateAsync();
+            await commissionSiteMutation.mutateAsync({});
             router.push(routes.electrician.completed(siteId));
             toast.success(intl.formatMessage({
               defaultMessage: 'Site commissioned.'
