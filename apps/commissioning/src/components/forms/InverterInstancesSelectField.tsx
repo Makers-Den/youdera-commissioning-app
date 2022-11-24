@@ -25,9 +25,9 @@ export function InverterInstancesSelectField({
     >
       {(inverterQuery.data || []).map(value => {
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        const { name, model_name, serial_number } = value;
+        const { name, model_name, serial_number, id } = value;
         return (
-          <SelectOption value={{ ...value, label: `${name} - ${model_name}` }}>
+          <SelectOption value={{ name, id, label: `${name} - ${model_name}` }}>
             {() => (
               <>
                 <Typography variant="body" weight="medium">

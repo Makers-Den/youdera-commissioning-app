@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Inverter } from '@src/api/youdera/apiTypes';
 import { useMeterTypeOptions } from '@src/hooks/useMeterTypeOptions';
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -21,7 +21,8 @@ import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
 
 import { Field } from './Field';
-import { FileField, FileFieldProps } from './FileField';
+import { FileFieldProps } from './FileField';
+import { FilesField } from './FilesField';
 import { Form } from './Form';
 import { MeterModelSelectFields } from './MeterModelSelectFields';
 import { MultiSelectField } from './MultiSelectField';
@@ -36,7 +37,11 @@ const validation = z.object({
   }),
   manufacturer: z.object({ key: z.string(), label: z.string() }),
   model: z.object({
-    key: z.string(),
+    id: z.number(),
+    manufacturer_name: z.string(),
+    manufacturer_id: z.number(),
+    name: z.string(),
+    autoSerialnumber: z.boolean(),
     label: z.string(),
     dependentKey: z.string(),
   }),
@@ -48,7 +53,7 @@ const validation = z.object({
     }),
   ),
   auxiliary: z.boolean(),
-  file: z.any(),
+  files: z.array(z.any()),
 });
 
 export type FormValues = z.infer<typeof validation>;
@@ -79,8 +84,22 @@ export const MeterFormDialog = ({
   const intl = useIntl();
   const meterTypeOptions = useMeterTypeOptions();
 
+  const resolver = useMemo(
+    () =>
+      validation.refine(
+        values => values.model.autoSerialnumber && values.serialNumber,
+        {
+          path: ['serialNumber'],
+          message: intl.formatMessage({
+            defaultMessage: 'Serial number is required',
+          }),
+        },
+      ),
+    [intl],
+  );
+
   const method = useForm({
-    resolver: zodResolver(validation),
+    resolver: zodResolver(resolver),
   });
 
   const { handleSubmit, reset, formState, watch } = method;
@@ -100,7 +119,7 @@ export const MeterFormDialog = ({
     'model',
     'serialNumber',
     'connectedInverters',
-    'file',
+    'files',
   ]);
 
   const showFields = {
@@ -230,8 +249,8 @@ export const MeterFormDialog = ({
                   })}
                 />
               </div>
-              <FileField
-                name="file"
+              <FilesField
+                name="files"
                 valueMapper={fileValueMapper}
                 className="w-[340px]"
               >
@@ -261,7 +280,7 @@ export const MeterFormDialog = ({
                     </Typography>
                   </div>
                 </div>
-              </FileField>
+              </FilesField>
             </>
           )}
           {showFields.sixth && (

@@ -11,9 +11,11 @@ import {
 
 export type BatteryModelsSelectFieldProps = {};
 
-type BatteryModelOption = Omit<BatteryModel, 'data'> & {
+type BatteryModelOption = Pick<
+  BatteryModel,
+  'name' | 'id' | 'manufacturer_id' | 'manufacturer_name'
+> & {
   autoSerialnumber: boolean;
-  acCoupled: boolean;
 };
 
 type DependentProps = DependentSelectsFieldsProps<
@@ -32,7 +34,7 @@ export function BatteryModelsSelectField() {
         modelOptions: DependentProps['dependentOptions'];
       }>(
         (prevVal, curVal) => {
-          const { manufacturer_name, manufacturer_id, name } = curVal;
+          const { manufacturer_name, manufacturer_id, name, data, id } = curVal;
           const manId = manufacturer_id.toString();
 
           const manufacturerOptions = [...prevVal.manufacturerOptions];
@@ -44,7 +46,6 @@ export function BatteryModelsSelectField() {
             });
           }
 
-          const { data, ...restData } = curVal;
           return {
             manufacturerOptions,
             modelOptions: [
@@ -52,9 +53,11 @@ export function BatteryModelsSelectField() {
               {
                 children: () => name,
                 value: {
-                  ...restData,
+                  id,
+                  manufacturer_name,
+                  manufacturer_id,
+                  name,
                   autoSerialnumber: data.auto_serialnumber,
-                  acCoupled: data.ac_coupled,
                   dependentKey: manId,
                   label: name,
                 },

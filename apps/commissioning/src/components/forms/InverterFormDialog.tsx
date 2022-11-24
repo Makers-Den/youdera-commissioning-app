@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -26,7 +26,11 @@ import { SelectFallback } from '../SelectFallback';
 const validation = z.object({
   manufacturer: z.object({ key: z.string(), label: z.string() }),
   model: z.object({
-    key: z.string(),
+    id: z.number(),
+    manufacturer_name: z.string(),
+    manufacturer_id: z.number(),
+    name: z.string(),
+    autoSerialnumber: z.boolean(),
     label: z.string(),
     dependentKey: z.string(),
   }),
@@ -59,8 +63,22 @@ export const InverterFormDialog = ({
 }: InverterFormDialogProps) => {
   const intl = useIntl();
 
+  const resolver = useMemo(
+    () =>
+      validation.refine(
+        values => values.model.autoSerialnumber && values.serialNumber,
+        {
+          path: ['serialNumber'],
+          message: intl.formatMessage({
+            defaultMessage: 'Serial number is required',
+          }),
+        },
+      ),
+    [intl],
+  );
+
   const method = useForm({
-    resolver: zodResolver(validation),
+    resolver: zodResolver(resolver),
   });
 
   const { handleSubmit, reset, formState, control } = method;
@@ -68,7 +86,7 @@ export const InverterFormDialog = ({
   const handleClose = () => {
     onClose();
     reset();
-  }
+  };
 
   useEffect(() => {
     if (defaultValues) {
@@ -94,11 +112,13 @@ export const InverterFormDialog = ({
     control,
   });
 
+  const isSerialNumber = (model && !model.autoSerialnumber) || !!serialNumber;
+
   const showFields = {
     first: true,
-    second: !!model,
-    third: !!model && !!serialNumber,
-    fourth: !!model && !!serialNumber && !!file,
+    second: model && !model.autoSerialnumber,
+    third: !!model && isSerialNumber,
+    fourth: !!model && isSerialNumber && !!file,
   };
 
   return (

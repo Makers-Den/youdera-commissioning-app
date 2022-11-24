@@ -11,7 +11,10 @@ import {
 
 export type InverterModelSelectFieldsProps = {};
 
-type InverterModelOption = Omit<InverterModel, 'data'> & {
+type InverterModelOption = Pick<
+  InverterModel,
+  'name' | 'id' | 'manufacturer_id' | 'manufacturer_name'
+> & {
   autoSerialnumber: boolean;
 };
 
@@ -31,7 +34,7 @@ export function InverterModelSelectFields() {
         modelOptions: DependentProps['dependentOptions'];
       }>(
         (prevVal, curVal) => {
-          const { manufacturer_name, manufacturer_id, name } = curVal;
+          const { manufacturer_name, manufacturer_id, name, data, id } = curVal;
           const manId = manufacturer_id.toString();
 
           const manufacturerOptions = [...prevVal.manufacturerOptions];
@@ -42,7 +45,6 @@ export function InverterModelSelectFields() {
               label: manufacturer_name,
             });
           }
-          const { data, ...restData } = curVal;
 
           return {
             manufacturerOptions,
@@ -51,10 +53,13 @@ export function InverterModelSelectFields() {
               {
                 children: () => name,
                 value: {
-                  ...restData,
+                  manufacturer_name,
+                  manufacturer_id,
+                  name,
                   autoSerialnumber: data.auto_serialnumber,
                   dependentKey: manId,
                   label: name,
+                  id,
                 },
               },
             ],

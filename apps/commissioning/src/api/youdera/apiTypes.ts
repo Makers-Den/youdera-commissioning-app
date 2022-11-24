@@ -74,8 +74,8 @@ export interface DeleteFileFromStringRequest {
 }
 
 export interface DeleteFileFromMeterRequest {
-  meterId: number,
-  fileId: number
+  meterId: number;
+  fileId: number;
 }
 
 export interface ApiFile {
@@ -140,8 +140,8 @@ export type Meter = {
 
   factor: number;
 
-  manufacturer: string;
-  model: string;
+  manufacturer: number;
+  model: number;
   manufacturer_name: string;
   model_name: string;
 
@@ -195,6 +195,7 @@ export type Battery = {
   created_at: string;
   updated_at: string;
   files?: ApiFile[];
+  inverter?: Inverter;
 
   /** maps to some JSON column in db */
   datapoints?: Datapoint[];
@@ -352,7 +353,7 @@ export interface CreateStringRequestBody {
 export interface CreateBatteryRequest {
   manufacturer: string;
   model: string;
-  serial_number: string;
+  serial_number?: string;
   cmodel: number;
   site: number;
   inverter_id: number;
@@ -362,7 +363,7 @@ export interface UpdateBatteryRequest {
   id: Battery['id'];
   manufacturer: string;
   model: string;
-  serial_number: string;
+  serial_number?: string;
   cmodel: number;
   site: number;
   inverter_id: number;

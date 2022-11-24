@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
@@ -28,11 +28,19 @@ const validation = z.object({
   manufacturer: z.object({ key: z.string(), label: z.string() }),
   model: z.object({
     id: z.number(),
+    manufacturer_name: z.string(),
+    manufacturer_id: z.number(),
+    name: z.string(),
+    autoSerialnumber: z.boolean(),
     label: z.string(),
     dependentKey: z.string(),
   }),
-  serialNumber: z.string(),
-  inverter: z.object({ id: z.number(), label: z.string() }),
+  serialNumber: z.string().optional(),
+  inverter: z.object({
+    id: z.number(),
+    label: z.string(),
+    name: z.any(),
+  }),
   files: z.array(z.any()).nonempty(),
 });
 
@@ -63,8 +71,22 @@ export const BatteryFormDialog = ({
 }: BatteryFormDialogProps) => {
   const intl = useIntl();
 
+  const resolver = useMemo(
+    () =>
+      validation.refine(
+        values => values.model.autoSerialnumber && values.serialNumber,
+        {
+          path: ['serialNumber'],
+          message: intl.formatMessage({
+            defaultMessage: 'Serial number is required',
+          }),
+        },
+      ),
+    [intl],
+  );
+
   const method = useForm({
-    resolver: zodResolver(validation),
+    resolver: zodResolver(resolver),
     defaultValues,
   });
 
@@ -73,7 +95,7 @@ export const BatteryFormDialog = ({
   const handleClose = () => {
     onClose();
     reset();
-  }
+  };
 
   useEffect(() => {
     if (defaultValues) {
@@ -88,12 +110,14 @@ export const BatteryFormDialog = ({
     'files',
   ]);
 
+  const isSerialNumber = (model && !model.autoSerialnumber) || !!serialNumber;
+
   const showFields = {
     first: true,
-    second: !!model,
-    third: !!model && !!serialNumber,
-    fourth: !!model && !!serialNumber && !!inverter,
-    fifth: !!model && !!serialNumber && !!inverter && !!file,
+    second: model && !model.autoSerialnumber,
+    third: model && isSerialNumber,
+    fourth: !!model && isSerialNumber && !!inverter,
+    fifth: !!model && isSerialNumber && !!inverter && !!file,
   };
 
   return (
