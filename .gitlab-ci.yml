@@ -36,8 +36,5 @@ install:
       - apps/commissioning/cypress/videos/**/*.mp4
       - apps/commissioning/cypress/screenshots/**/*.png
     expire_in: 3 days
-
-test_en:
-  extends: .test
   script:
     - yarn workspace commissioning ci-cd
