@@ -88,6 +88,7 @@ const Login = () => {
             value={email}
             icon="Envelope"
             className="w-64"
+            name="email"
           />
           <Input
             label={intl.formatMessage({ defaultMessage: 'Password' })}
@@ -99,7 +100,13 @@ const Login = () => {
             className="w-64"
             validity={areCredentialsValid}
           />
-          {areCredentialsValid && <Label className='text-red-400'>{intl.formatMessage({ defaultMessage: 'Email or password incorrect.' })}</Label>}
+          {areCredentialsValid && (
+            <Label className="text-red-400">
+              {intl.formatMessage({
+                defaultMessage: 'Email or password incorrect.',
+              })}
+            </Label>
+          )}
         </div>
 
         <div className="gap flex items-center justify-between">
