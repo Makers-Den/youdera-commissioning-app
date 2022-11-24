@@ -20,7 +20,7 @@ export function SelectMainModuleContent({
   const intl = useIntl();
   const [searchInput, setSearchInput] = useState('');
   const [selectedManufacturer, setSelectedManufacturer] = useState<
-    SelectOption | undefined
+    { key: string; label: string } | undefined
   >();
 
   const modulesQuery = useModulesQuery();
@@ -57,7 +57,7 @@ export function SelectMainModuleContent({
     [modulesQuery.data, searchInput, selectedManufacturer, onModuleClick],
   );
 
-  const manufacturerOptions: SelectOption[] = useMemo(
+  const manufacturerOptions = useMemo(
     () =>
       (modulesQuery.data || [])
         .map(({ manufacturer_id, manufacturer_name }) => ({
@@ -97,8 +97,11 @@ export function SelectMainModuleContent({
           placeholder={intl.formatMessage({ defaultMessage: 'Manufacturer' })}
           onChange={setSelectedManufacturer}
           value={selectedManufacturer}
-          options={manufacturerOptions}
-        />
+        >
+          {manufacturerOptions.map(value => (
+            <SelectOption value={value}>{() => value.label}</SelectOption>
+          ))}
+        </Select>
       </BoxContent>
       <Divider className="my-5" />
       <BoxContent>

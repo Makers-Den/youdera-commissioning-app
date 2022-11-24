@@ -1,26 +1,42 @@
 import { useEffect, useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { SelectOption, SelectProps } from 'ui/select/Select';
+import {
+  SelectOption,
+  SelectOptionProps,
+  SelectProps,
+  SelectValue,
+} from 'ui/select/Select';
 import clsxm from 'ui/utils/clsxm';
 
 import { SelectField } from './SelectField';
 
-export type DependentOption = SelectOption & { dependentKey: string };
+export interface DependentValue extends SelectValue {
+  dependentKey: string;
+}
 
-export type DependentSelectsFieldsOutsideParentProps = {
+export type DependentSelectsFieldsOutsideParentProps<
+  Value extends { key: string },
+  DepValue extends DependentValue,
+> = {
   name: string;
-  dependentOptions: DependentOption[];
-  dependentSelectProps: Omit<SelectProps, 'onChange' | 'validity' | 'options'>;
+  dependentOptions: SelectOptionProps<DepValue>[];
+  dependentSelectProps: Omit<
+    SelectProps<DepValue>,
+    'onChange' | 'validity' | 'options' | 'children'
+  >;
   dependentName: string;
-  value: any;
+  value: Value;
 };
 
-export function DependentSelectsField({
+export function DependentSelectsField<
+  Value extends { key: string },
+  DepValue extends DependentValue,
+>({
   value,
   dependentSelectProps,
   dependentOptions,
   dependentName,
-}: DependentSelectsFieldsOutsideParentProps) {
+}: DependentSelectsFieldsOutsideParentProps<Value, DepValue>) {
   const { setValue, formState } = useFormContext();
   const dependentValue = useWatch({
     name: dependentName,
@@ -34,7 +50,10 @@ export function DependentSelectsField({
   }, [value?.key, dependentValue?.dependentKey, dependentName, setValue]);
 
   const filteredOptions = useMemo(
-    () => dependentOptions.filter(option => option.dependentKey === value?.key),
+    () =>
+      dependentOptions.filter(
+        option => option.value.dependentKey === value?.key,
+      ),
     [dependentOptions, value?.key],
   );
 
@@ -42,8 +61,11 @@ export function DependentSelectsField({
     <SelectField
       wrapperClassName={clsxm(!value && 'hidden')}
       name={dependentName}
-      options={filteredOptions}
       {...dependentSelectProps}
-    />
+    >
+      {filteredOptions.map(props => (
+        <SelectOption {...props} />
+      ))}
+    </SelectField>
   );
 }

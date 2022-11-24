@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { MeterModel } from '@src/api/youdera/apiTypes';
 import { useMeterModelsQuery } from '@src/api/youdera/hooks/meters/hooks';
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
@@ -10,6 +11,10 @@ import {
 
 export type MeterModelSelectFieldsProps = {};
 
+type DependentProps = DependentSelectsFieldsProps<
+  MeterModel & { label: string; dependentKey: string }
+>;
+
 export function MeterModelSelectFields() {
   const intl = useIntl();
 
@@ -17,11 +22,11 @@ export function MeterModelSelectFields() {
   const { manufacturerOptions, modelOptions } = useMemo(
     () =>
       (meterModelsQuery.data || []).reduce<{
-        manufacturerOptions: DependentSelectsFieldsProps['options'];
-        modelOptions: DependentSelectsFieldsProps['dependentOptions'];
+        manufacturerOptions: DependentProps['options'];
+        modelOptions: DependentProps['dependentOptions'];
       }>(
         (prevVal, curVal) => {
-          const { manufacturer_name, manufacturer_id, name, id } = curVal;
+          const { manufacturer_name, manufacturer_id, name } = curVal;
           const manId = manufacturer_id.toString();
 
           const manufacturerOptions = [...prevVal.manufacturerOptions];
@@ -37,9 +42,8 @@ export function MeterModelSelectFields() {
             modelOptions: [
               ...prevVal.modelOptions,
               {
-                key: id.toString(),
-                label: name,
-                dependentKey: manId,
+                children: () => name,
+                value: { ...curVal, dependentKey: manId, label: name },
               },
             ],
           };

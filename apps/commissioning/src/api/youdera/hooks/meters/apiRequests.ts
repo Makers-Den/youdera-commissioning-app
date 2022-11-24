@@ -29,7 +29,7 @@ export type CreateMeterArgs = {
   type: string;
   site: number;
   manufacturer: string;
-  model: string;
+  model: number;
   is_auxiliary: boolean;
 };
 
@@ -67,7 +67,7 @@ export interface AddFileToMeterArgs extends AddFileToInverterRequest {
 export const addFileToMeter = async ({
   meterId,
   file,
-  setUploadProgress
+  setUploadProgress,
 }: AddFileToMeterArgs) => {
   const formData = new FormData();
   formData.append('file', file);
@@ -96,7 +96,7 @@ export const addFileToMeter = async ({
 
 export const deleteFileFromString = async ({
   meterId,
-  fileId
+  fileId,
 }: DeleteFileFromMeterRequest) => {
   const response = await youderaApiInstance.delete(
     `/strings/${meterId}/files/${fileId}/`,

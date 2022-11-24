@@ -2,7 +2,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Module } from '@src/api/youdera/apiTypes';
 import { useModulesQuery } from '@src/api/youdera/hooks/modules/hooks';
 import React, { useEffect } from 'react';
-import { DeepPartial, FieldValues, useForm, UseFormRegister } from 'react-hook-form';
+import {
+  DeepPartial,
+  FieldValues,
+  useForm,
+  UseFormRegister,
+} from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import {
@@ -13,6 +18,7 @@ import {
   DialogTitle,
 } from 'ui/dialogs/Dialog';
 import { NumberInput } from 'ui/inputs/NumberInput';
+import { SelectOption } from 'ui/select/Select';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import clsxm from 'ui/utils/clsxm';
 import { z, ZodObject, ZodTypeAny } from 'zod';
@@ -36,7 +42,7 @@ export type StringModuleTypeDialogProps<
   onSubmit: (values: z.infer<ResolverType>, resetForm: () => void) => void;
   resolver: ResolverType;
   modifiedStringId?: number;
-  defaultValues?: DeepPartial<z.infer<ResolverType>>
+  defaultValues?: DeepPartial<z.infer<ResolverType>>;
 };
 
 export const StringModuleTypeDialog = <
@@ -48,7 +54,7 @@ export const StringModuleTypeDialog = <
   onSubmit,
   resolver,
   modifiedStringId,
-  defaultValues
+  defaultValues,
 }: StringModuleTypeDialogProps<ResolverType>) => {
   const intl = useIntl();
 
@@ -70,7 +76,7 @@ export const StringModuleTypeDialog = <
 
   const method = useForm({
     resolver: zodResolver(resolver),
-    defaultValues
+    defaultValues,
   });
 
   const { handleSubmit, reset, formState } = method;
@@ -92,11 +98,11 @@ export const StringModuleTypeDialog = <
           title={
             modifiedStringId
               ? intl.formatMessage({
-                defaultMessage: 'Modify String',
-              })
+                  defaultMessage: 'Modify String',
+                })
               : intl.formatMessage({
-                defaultMessage: 'Add String',
-              })
+                  defaultMessage: 'Add String',
+                })
           }
         />
         <SvgIcon
@@ -113,10 +119,15 @@ export const StringModuleTypeDialog = <
         >
           <SelectField
             name="moduleType"
-            options={moduleOptions}
             label={intl.formatMessage({ defaultMessage: 'Module type' })}
             placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-          />
+          >
+            {moduleOptions.map(value => (
+              <SelectOption key={value.key} value={value}>
+                {() => value.label}
+              </SelectOption>
+            ))}
+          </SelectField>
 
           <div className="flex items-center justify-center gap-5">
             <div className="flex flex-1 gap-5">
@@ -140,13 +151,18 @@ export const StringModuleTypeDialog = <
               </Field>
               <SelectField
                 name="cableCrossSection"
-                options={cableCrossSectionOptions}
                 label={intl.formatMessage({
                   defaultMessage: 'Cable cross section',
                 })}
                 placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                wrapperClassName="w-full"
-              />
+                wrapperClassName="z-30"
+              >
+                {cableCrossSectionOptions.map(value => (
+                  <SelectOption key={value.key} value={value}>
+                    {() => value.label}
+                  </SelectOption>
+                ))}{' '}
+              </SelectField>
             </div>
           </div>
 
