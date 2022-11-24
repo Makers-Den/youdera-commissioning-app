@@ -342,7 +342,7 @@ export function DevicesContent({
         model: values.model.id,
         number: values.serialNumber,
         is_auxiliary: values.auxiliary,
-        // factor: values.factor, //TODO when indirect flag in model is set to true user has to provide that.
+        ...(values.factor && { factor: values.factor }), //TODO when indirect flag in model is set to true user has to provide that.
       });
 
       // TODO uncomment when backend is ready
@@ -686,10 +686,10 @@ export function DevicesContent({
 
         inverter: currentDevice.inverter
           ? {
-              id: currentDevice.inverter.id,
-              label: currentDevice.inverter.name,
-              name: currentDevice.inverter.name,
-            }
+            id: currentDevice.inverter.id,
+            label: currentDevice.inverter.name,
+            name: currentDevice.inverter.name,
+          }
           : undefined,
       };
     }
@@ -774,12 +774,12 @@ export function DevicesContent({
         description={
           currentDevice?.deviceType === 'Inverter'
             ? intl.formatMessage({
-                defaultMessage:
-                  'Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well.',
-              })
+              defaultMessage:
+                'Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well.',
+            })
             : intl.formatMessage({
-                defaultMessage: 'Are you sure to delete this device?',
-              })
+              defaultMessage: 'Are you sure to delete this device?',
+            })
         }
         onCancel={handleDeleteCancel}
         onDelete={confirmDeleteHandler}
@@ -890,15 +890,15 @@ export function DevicesContent({
             const commsParams: CommsParams & { id: number } =
               commType === 'fixed_ip'
                 ? {
-                    id: currentDevice.id,
-                    ip: ipAddress,
-                    slave_id: Number(slaveId),
-                  }
+                  id: currentDevice.id,
+                  ip: ipAddress,
+                  slave_id: Number(slaveId),
+                }
                 : {
-                    id: currentDevice.id,
-                    dhcp: true,
-                    slave_id: Number(slaveId),
-                  };
+                  id: currentDevice.id,
+                  dhcp: true,
+                  slave_id: Number(slaveId),
+                };
 
             try {
               const testResult = await testDeviceCommsMutation.mutateAsync(

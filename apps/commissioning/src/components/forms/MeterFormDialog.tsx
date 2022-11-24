@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from 'ui/dialogs/Dialog';
 import { Input } from 'ui/inputs/Input';
+import { NumberInput } from 'ui/inputs/NumberInput';
 import { MultiSelectOption } from 'ui/select/MultiSelect';
 import { SelectOption } from 'ui/select/Select';
 import { IconName, SvgIcon } from 'ui/svg-icons/SvgIcon';
@@ -41,10 +42,14 @@ const validation = z.object({
     manufacturer_name: z.string(),
     manufacturer_id: z.number(),
     name: z.string(),
-    autoSerialnumber: z.boolean(),
+    data: z.object({
+      indirect: z.boolean().or(z.undefined()),
+      autoSerialNumber: z.boolean().or(z.undefined())
+    }).or(z.array(z.any())),
     label: z.string(),
     dependentKey: z.string(),
   }),
+  factor: z.number().or(z.undefined()),
   serialNumber: z.string(),
   connectedInverters: z.array(
     z.object({
@@ -87,7 +92,7 @@ export const MeterFormDialog = ({
   const resolver = useMemo(
     () =>
       validation.refine(
-        values => values.model.autoSerialnumber && values.serialNumber,
+        values => values.model.data.autoSerialNumber && values.serialNumber,
         {
           path: ['serialNumber'],
           message: intl.formatMessage({
@@ -102,7 +107,7 @@ export const MeterFormDialog = ({
     resolver: zodResolver(resolver),
   });
 
-  const { handleSubmit, reset, formState, watch } = method;
+  const { handleSubmit, reset, formState, watch, getValues } = method;
   const handleClose = () => {
     onClose();
     reset();
@@ -114,9 +119,10 @@ export const MeterFormDialog = ({
     }
   }, [defaultValues, reset]);
 
-  const [meterType, model, serialNumber, connectedInverters, file] = watch([
+  const [meterType, model, factor, serialNumber, connectedInverters, file] = watch([
     'meterType',
     'model',
+    'factor',
     'serialNumber',
     'connectedInverters',
     'files',
@@ -125,7 +131,7 @@ export const MeterFormDialog = ({
   const showFields = {
     first: true,
     second: !!meterType,
-    third: !!meterType && !!model,
+    third: !!meterType && !!model && (!model.data?.indirect || !!factor),
     fourth: !!meterType && !!model && !!serialNumber,
     fifth: !!meterType && !!model && !!serialNumber && !!connectedInverters,
     sixth:
@@ -135,7 +141,7 @@ export const MeterFormDialog = ({
       !!connectedInverters &&
       !!file,
   };
-
+  console.log(getValues())
   return (
     <Dialog
       open={open}
@@ -180,6 +186,23 @@ export const MeterFormDialog = ({
               <MeterModelSelectFields />
             </Suspense>
           )}
+          {model?.data?.indirect &&
+            <Field name="factor">
+              {(register, fieldState) => (
+                <NumberInput
+                  label={intl.formatMessage({
+                    defaultMessage: 'Factor',
+                  })}
+                  min={1}
+                  className="w-full"
+                  {...register('factor', {
+                    setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
+                  })}
+                  validity={fieldState.invalid ? 'invalid' : undefined}
+                />
+              )}
+            </Field>
+          }
           {showFields.third && (
             <Field name="serialNumber">
               {(register, fieldState) => (
