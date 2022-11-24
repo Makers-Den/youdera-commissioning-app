@@ -1,0 +1,40 @@
+stages:
+  - build
+  - test
+
+variables:
+  NEXT_PUBLIC_YOUDERA_API_BASE: https://dev.youdera.com/api
+  NEXT_PUBLIC_YOUDERA_AUTH_METHOD: JWT
+
+cache:
+  - key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - apps/commissioning/.next
+  - key:
+      files:
+        - yarn.lock
+    paths:
+      - apps/commissioning/.yarn
+      - apps/commissioning/node_modules
+      - apps/commissioning/cache/Cypress
+
+install:
+  image: cypress/base:16.5.0
+  stage: build
+  script:
+    - yarn workspace commissioning install --frozen-lockfile
+    - yarn workspace commissioning build
+
+.test:
+  image: cypress/base:16.5.0
+  stage: test
+  before_script:
+    - yarn workspace commissioning cypress verify
+  artifacts:
+    when: always
+    paths:
+      - apps/commissioning/cypress/videos/**/*.mp4
+      - apps/commissioning/cypress/screenshots/**/*.png
+    expire_in: 3 days
+  script:
+    - yarn workspace commissioning ci-cd

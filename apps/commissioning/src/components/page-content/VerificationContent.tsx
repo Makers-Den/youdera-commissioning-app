@@ -10,7 +10,7 @@ import { reportApiError } from '@src/utils/errorUtils';
 import { routes } from '@src/utils/routes';
 import { every } from 'lodash';
 import { useRouter } from 'next/router';
-import { memo , useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button, ButtonProps } from 'ui/buttons/Button';
@@ -76,7 +76,7 @@ const ContactProjectManagerDialog = ({
                   try {
                     const phone =
                       await contactSiteProjectManagerMutation.mutateAsync();
-                    setPhoneNumber(phone);
+                    setPhoneNumber(phone as string);
                   } catch (err) {
                     // eslint-disable-next-line no-console
                     console.error('Failed contacting pm', err);
@@ -122,94 +122,104 @@ export type VerificationContentProps = {
 
 type NextButtonStatus = 'none' | 'contact_pm' | 'finish';
 
-export const VerificationContent = memo(({
-  siteId,
-  setNextButtonProps,
-}: VerificationContentProps) => {
-  const intl = useIntl();
-  const router = useRouter();
-  const { userInfoQuery } = useAuth();
-  const userRole = userInfoQuery.data?.role as Role;
+export const VerificationContent = memo(
+  ({ siteId, setNextButtonProps }: VerificationContentProps) => {
+    const intl = useIntl();
+    const router = useRouter();
+    const { userInfoQuery } = useAuth();
+    const userRole = userInfoQuery.data?.role as Role;
 
-  const { siteQuery } = useSiteQuery(siteId);
-  const site = siteQuery.data as Site;
-  const contactDialog = useDisclosure();
-  const devices = useExtractDevices(site);
-  const commissionSiteMutation = useCommissionSiteMutation(siteId);
-  const toast = useToast();
-  
-  const nextButtonStatus: NextButtonStatus = useMemo(() => {
-    const latestVerificationStatuses = devices.map(
-      d => d.verificationTestStatus,
-    );
-    if (
-      every(latestVerificationStatuses, status => status === 'success') ||
-      userRole === 'admin'
-    ) {
-      return 'finish';
-    }
+    const { siteQuery } = useSiteQuery(siteId);
+    const site = siteQuery.data as Site;
+    const contactDialog = useDisclosure();
+    const devices = useExtractDevices(site);
+    const commissionSiteMutation = useCommissionSiteMutation(siteId);
+    const toast = useToast();
 
-    if (
-      every(
-        latestVerificationStatuses,
-        status => status === 'success' || status === 'warning',
-      )
-    ) {
-      return 'contact_pm';
-    }
+    const nextButtonStatus: NextButtonStatus = useMemo(() => {
+      const latestVerificationStatuses = devices.map(
+        d => d.verificationTestStatus,
+      );
+      if (
+        every(latestVerificationStatuses, status => status === 'success') ||
+        userRole === 'admin'
+      ) {
+        return 'finish';
+      }
 
-    return 'none';
-  }, [devices, userRole]);
+      if (
+        every(
+          latestVerificationStatuses,
+          status => status === 'success' || status === 'warning',
+        )
+      ) {
+        return 'contact_pm';
+      }
 
-  useEffect(() => {
-    if (nextButtonStatus === 'none') {
-      setNextButtonProps(null);
-    } else if (nextButtonStatus === 'contact_pm') {
-      setNextButtonProps({
-        content: intl.formatMessage({
-          defaultMessage: 'Contact project manager',
-        }),
-        variant: 'main-green',
-        type: 'button',
-        onClick: contactDialog.onOpen,
-      });
-    } else if (nextButtonStatus === 'finish') {
-      setNextButtonProps({
-        content: intl.formatMessage({
-          defaultMessage: 'Finish',
-        }),
-        variant: 'main-green',
-        type: 'button',
-        onClick: async () => {
-          try {
-            await commissionSiteMutation.mutateAsync({});
-            router.push(routes.electrician.completed(siteId));
-            toast.success(intl.formatMessage({
-              defaultMessage: 'Site commissioned.'
-            }));
-          } catch (err) {
-            reportApiError(toast, err);
-          }
-        },
-      });
-    }
-  }, [intl, contactDialog.onOpen, setNextButtonProps, nextButtonStatus, router, siteId, commissionSiteMutation, toast]);
+      return 'none';
+    }, [devices, userRole]);
 
-  return (
-    <LargeBox>
-      <BoxHeader>
-        <BoxTitle
-          title={intl.formatMessage({ defaultMessage: 'Test and Verify' })}
+    useEffect(() => {
+      if (nextButtonStatus === 'none') {
+        setNextButtonProps(null);
+      } else if (nextButtonStatus === 'contact_pm') {
+        setNextButtonProps({
+          content: intl.formatMessage({
+            defaultMessage: 'Contact project manager',
+          }),
+          variant: 'main-green',
+          type: 'button',
+          onClick: contactDialog.onOpen,
+        });
+      } else if (nextButtonStatus === 'finish') {
+        setNextButtonProps({
+          content: intl.formatMessage({
+            defaultMessage: 'Finish',
+          }),
+          variant: 'main-green',
+          type: 'button',
+          onClick: async () => {
+            try {
+              await commissionSiteMutation.mutateAsync({});
+              router.push(routes.electrician.completed(siteId));
+              toast.success(
+                intl.formatMessage({
+                  defaultMessage: 'Site commissioned.',
+                }),
+              );
+            } catch (err) {
+              reportApiError(toast, err);
+            }
+          },
+        });
+      }
+    }, [
+      intl,
+      contactDialog.onOpen,
+      setNextButtonProps,
+      nextButtonStatus,
+      router,
+      siteId,
+      commissionSiteMutation,
+      toast,
+    ]);
+
+    return (
+      <LargeBox>
+        <BoxHeader>
+          <BoxTitle
+            title={intl.formatMessage({ defaultMessage: 'Test and Verify' })}
+          />
+        </BoxHeader>
+        <BoxContent>
+          <VerificationList siteId={site.id} devices={devices} />
+        </BoxContent>
+        <ContactProjectManagerDialog
+          isOpen={contactDialog.isOpen}
+          onClose={contactDialog.onClose}
+          siteId={siteId}
         />
-      </BoxHeader>
-      <BoxContent>
-        <VerificationList siteId={site.id} devices={devices} />
-      </BoxContent>
-      <ContactProjectManagerDialog
-        isOpen={contactDialog.isOpen}
-        onClose={contactDialog.onClose}
-        siteId={siteId}
-      />
-    </LargeBox>
-  );
-});
+      </LargeBox>
+    );
+  },
+);
