@@ -16,11 +16,13 @@ import {
   useStringsQuery,
 } from '@src/api/youdera/hooks/strings/hooks';
 import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
+import { reportApiError } from '@src/utils/errorUtils';
 import { Suspense, useMemo, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Box, BoxContent, BoxHeader, BoxTitle } from 'ui/box/Box';
 import { Button } from 'ui/buttons/Button';
 import { useDisclosure } from 'ui/dialogs/useDisclosure';
+import { Toast, useToast } from 'ui/toast/Toast';
 import { z } from 'zod';
 
 import { ActionsDialog } from '../dialogs/ActionsDialog';
@@ -86,6 +88,7 @@ export interface StringContentProps {
 
 export function StringsContent({ roofId, siteId }: StringContentProps) {
   const intl = useIntl();
+  const toast = useToast();
   useZodErrorMap();
 
   const [selectedString, setSelectedString] = useState<String>();
@@ -142,19 +145,43 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
 
   const stringModuleTypeSubmitHandler: StringModuleTypeDialogProps<
     typeof stringModuleTypeValidation
-  >['onSubmit'] = (
+  >['onSubmit'] = async (
     { moduleType, numberOfModules, cableCrossSection },
     resetForm,
+    modifiedStringId
   ) => {
-      moduleTypeFormData.current = {
-        moduleType,
-        numberOfModules,
-        cableCrossSection,
-      };
-      moduleTypeSelectionDialog.onClose();
-      resetForm();
-      inverterSelectionDialog.onOpen();
+      try {
+        if (!modifiedStringId) {
+          moduleTypeFormData.current = {
+            moduleType,
+            numberOfModules,
+            cableCrossSection,
+          };
+          moduleTypeSelectionDialog.onClose();
+          resetForm();
+          inverterSelectionDialog.onOpen();
+        }
+        else {
+          await updateStringMutation.mutateAsync({
+            id: modifiedStringId,
+            module: moduleType.key,
+            count: numberOfModules,
+            cable_cross_section: Number(cableCrossSection.key)
+          });
+          moduleTypeSelectionDialog.onClose();
+          resetForm();
+          toast.success(
+            intl.formatMessage({
+              defaultMessage: 'String modified successfully!',
+            }),
+          );
+        }
+      }
+      catch (err) {
+        reportApiError(toast, err)
+      }
     };
+
   const stringRequest = async (
     modifiedStringId: number | undefined,
     file: ApiFile | File,
@@ -184,6 +211,23 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
       }
     }
   };
+
+  const displayToast = (modifiedStringId: number | undefined) => {
+    if (modifiedStringId) {
+      toast.success(
+        intl.formatMessage({
+          defaultMessage: 'Inverter/MPP changed successfully!',
+        }),
+      );
+    } else {
+      toast.success(
+        intl.formatMessage({
+          defaultMessage: 'String added successfully!',
+        }),
+      );
+    }
+  }
+
   const stringExistingInverterSubmitHandler: StringInverterDialogProps<
     typeof stringInverterValidation,
     typeof stringNewInverterValidation
@@ -206,11 +250,11 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
 
         await stringRequest(modifiedStringId, file, stringRequestData);
 
-        resetForm();
+        displayToast(modifiedStringId)
         inverterSelectionDialog.onClose();
+        resetForm();
       } catch (err) {
-        // eslint-disable-next-line no-console
-        console.log(err);
+        reportApiError(toast, err)
       }
     };
 
@@ -242,11 +286,12 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
         };
 
         await stringRequest(modifiedStringId, file, stringRequestData);
-        resetForm();
+
+        displayToast(modifiedStringId)
         inverterSelectionDialog.onClose();
+        resetForm();
       } catch (err) {
-        // eslint-disable-next-line no-console
-        console.log(err);
+        reportApiError(toast, err)
       }
     };
 
@@ -255,10 +300,14 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
       try {
         await deleteStringMutation.mutateAsync(selectedString.id);
         setSelectedString(undefined);
+        toast.success(
+          intl.formatMessage({
+            defaultMessage: 'String deleted successfully!',
+          }),
+        );
         deletionDialog.onClose();
       } catch (err) {
-        // eslint-disable-next-line no-console
-        console.log(err);
+        reportApiError(toast, err)
       }
     }
   };
@@ -406,6 +455,7 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
           defaultMessage: 'Are you sure to delete module field?',
         })}
       />
+      <Toast />
     </>
   );
 }
