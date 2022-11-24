@@ -16,21 +16,17 @@ cache:
     paths:
       - apps/commissioning/.yarn
       - apps/commissioning/node_modules
-      - apps/commissioning/ache/Cypress
-
-services:
-  - postgres:11.10
-  - redis:6.2.4
+      - apps/commissioning/cache/Cypress
 
 install:
-  image: cypress/base:14.17.0
+  image: cypress/base:16.5.0
   stage: build
   script:
     - yarn workspace commissioning install --frozen-lockfile
     - yarn workspace commissioning build
 
 .test:
-  image: cypress/base:14.17.0
+  image: cypress/base:16.5.0
   stage: test
   before_script:
     - yarn workspace commissioning cypress verify
