@@ -12,7 +12,8 @@
     "compile:i18n": "formatjs compile-folder --ast --format simple content/locales content/compiled-locales",
     "i18n": "npm run extract:i18n && npm run compile:i18n",
     "cypress:open": "cypress open",
-    "test:e2e": "start-server-and-test dev 3000 cypress:open"
+    "test:e2e": "start-server-and-test dev 3000 cypress:open",
+    "ci-cd": "start-server-and-test start http-get://localhost:3000 cypress run"
   },
   "dependencies": {
     "@hookform/error-message": "^2.0.0",
