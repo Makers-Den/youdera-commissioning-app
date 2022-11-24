@@ -118,7 +118,7 @@ export const useFileUploader = ({
     (name: string, type: string, url: string) => {
       dispatch({
         type: ActionType.addNewFileUrl,
-        payload: { url, type, name },
+        payload: { url, type, name, thumbnailUrl: url },
       });
     },
     [],

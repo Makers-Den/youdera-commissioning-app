@@ -275,14 +275,14 @@ export const StringInverterDialog = <
               inverterValue={watchInverter}
               inverterInputsOptions={inverterInputsOptions}
             />
-          ) : (
-            <NewInverterSelectField
-              inverterValue={watchInverter}
-              inverterManufacturerOptions={inverterManufacturersOptions}
-              inverterModelOptions={inverterModelsOptions}
-              inverterInputsOptions={inverterNewInputsOptions}
-            />
-          )}
+          ) : null
+          // <NewInverterSelectField
+          //   inverterValue={watchInverter}
+          //   inverterManufacturerOptions={inverterManufacturersOptions}
+          //   inverterModelOptions={inverterModelsOptions}
+          //   inverterInputsOptions={inverterNewInputsOptions}
+          // />
+          }
           {(watchInput || watchNewInput) && (
             <FileField
               className="w-full"
