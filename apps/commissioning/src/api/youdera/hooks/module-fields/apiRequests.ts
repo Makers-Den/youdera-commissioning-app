@@ -10,7 +10,7 @@ import {
 export const createModuleField = async (body: CreateModuleRequestBody) => {
   const response = await youderaApiInstance.post(`/roofs`, body);
 
-  return response.data.data.roofs;
+  return response.data.data;
 };
 
 export const deleteModuleField = async (moduleFieldId: ModuleField['id']) => {
