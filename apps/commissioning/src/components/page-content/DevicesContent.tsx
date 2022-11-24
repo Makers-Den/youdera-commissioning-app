@@ -2,7 +2,6 @@ import {
   ApiFile,
   CommsParams,
   CommsTestResult,
-  MeterModel,
   Site,
 } from '@src/api/youdera/apiTypes';
 import {
@@ -17,7 +16,6 @@ import {
 } from '@src/api/youdera/hooks/inverters/hooks';
 import {
   useMeterCommsTestMutation,
-  useMeterModelsQuery,
   useMeterMutations,
   useUpdateMeterCommsMutation,
 } from '@src/api/youdera/hooks/meters/hooks';
@@ -56,7 +54,6 @@ import {
   InverterFormDialogProps,
 } from '../forms/InverterFormDialog';
 import {
-  FormValues,
   MeterFormDialog,
   MeterFormDialogProps,
 } from '../forms/MeterFormDialog';
@@ -211,10 +208,6 @@ export function DevicesContent({
     deleteFileToMeterMutation,
   } = useMeterMutations(siteId);
 
-  // ! Backend is not producing the names of the model and manufacturer at the moment, hence I used this query
-  const meterModelsQuery = useMeterModelsQuery();
-  const meterModels = meterModelsQuery.data as MeterModel[];
-
   const confirmDeleteHandler = async () => {
     if (currentDevice) {
       try {
@@ -256,7 +249,7 @@ export function DevicesContent({
       const inverter = await createInverterMutation.mutateAsync({
         serial_number: values.serialNumber,
         site: siteId,
-        cmodel: parseInt(values.model.key, 10),
+        cmodel: values.model.id,
       });
 
       // eslint-disable-next-line no-restricted-syntax
@@ -294,7 +287,7 @@ export function DevicesContent({
           id: currentDevice?.id,
           serial_number: values.serialNumber,
           site: siteId,
-          cmodel: parseInt(values.model.key, 10),
+          cmodel: values.model.id,
         });
 
         const filesToAdd = values.files
@@ -346,7 +339,7 @@ export function DevicesContent({
         site: siteId,
         type: values.meterType.key,
         manufacturer: values.manufacturer.key,
-        model: values.model.key,
+        model: values.model.id,
         number: values.serialNumber,
         is_auxiliary: values.auxiliary,
         // factor: values.factor, //TODO when indirect flag in model is set to true user has to provide that.
@@ -355,13 +348,17 @@ export function DevicesContent({
       // TODO uncomment when backend is ready
       // await updateMeterMutation.mutateAsync({
       //   id: meter.id,
-      //   inverters: values.connectedInverters.map((inverter) => Number(inverter.key) ) 
+      //   inverters: values.connectedInverters.map((inverter) => Number(inverter.key) )
       // });
 
-      await addFileToMeterMutation.mutateAsync({
-        meterId: meter.id,
-        file: values.file,
-      });
+      // eslint-disable-next-line no-restricted-syntax
+      for (const file of values.files) {
+        // eslint-disable-next-line no-await-in-loop
+        await addFileToMeterMutation.mutateAsync({
+          file,
+          meterId: meter.id,
+        });
+      }
       commsMethodDialog.onOpen();
       toast.success(
         intl.formatMessage({
@@ -383,26 +380,40 @@ export function DevicesContent({
       return;
     }
     try {
-      await updateMeterMutation.mutateAsync({
+      const meter = await updateMeterMutation.mutateAsync({
         id: currentDevice?.id,
         type: values.meterType.key,
-        manufacturer: values.manufacturer.key,
-        model: values.model.key,
+        manufacturer: parseInt(values.manufacturer.key, 10),
+        model: values.model.id,
         number: values.serialNumber,
         is_auxiliary: values.auxiliary,
         // factor: 1, when indirect flag in model is set to true user has to provide that.
       });
 
-      if (values.file instanceof File) {
-        await deleteFileToMeterMutation.mutateAsync({
-          meterId: currentDevice?.id,
-          fileId: Number(values.file),
-        });
-        await addFileToMeterMutation.mutateAsync({
-          meterId: currentDevice?.id,
-          file: values.file,
-        });
-      }
+      const filesToAdd = values.files
+        .filter(file => file instanceof File)
+        .map(file =>
+          addFileToMeterMutation.mutateAsync({
+            file,
+            meterId: meter.id,
+          }),
+        );
+      const filesToRemove = (currentDevice.files || [])
+        .filter(({ id }) => {
+          const findFile = values.files.find(
+            file => !(file instanceof File) && file.id === id,
+          );
+
+          return !findFile;
+        })
+        .map(({ id }) =>
+          deleteFileToMeterMutation.mutateAsync({
+            fileId: parseInt(id, 10),
+            meterId: meter.id,
+          }),
+        );
+
+      await Promise.all([...filesToAdd, ...filesToRemove]);
       updateMeterDialog.onClose();
 
       toast.success(
@@ -426,10 +437,10 @@ export function DevicesContent({
     try {
       const battery = await createBatteryMutation.mutateAsync({
         serial_number: values.serialNumber,
-        cmodel: parseInt(values.model.key, 10),
+        cmodel: values.model.id,
         manufacturer: values.manufacturer.label,
         model: values.manufacturer.label,
-        inverter_id: parseInt(values.inverter.key, 10),
+        inverter_id: values.inverter.id,
       });
 
       // eslint-disable-next-line no-restricted-syntax
@@ -465,10 +476,10 @@ export function DevicesContent({
       const battery = await updateBatteryMutation.mutateAsync({
         id: currentDevice.id,
         serial_number: values.serialNumber,
-        cmodel: parseInt(values.model.key, 10),
+        cmodel: values.model.id,
         manufacturer: values.manufacturer.label,
         model: values.manufacturer.label,
-        inverter_id: parseInt(values.inverter.key, 10),
+        inverter_id: values.inverter.id,
       });
 
       const filesToAdd = values.files
@@ -643,7 +654,11 @@ export function DevicesContent({
           label: currentDevice.manufacturer_name,
         },
         model: {
-          key: currentDevice.model.toString(),
+          id: currentDevice.model,
+          name: currentDevice.model_name,
+          manufacturer_name: currentDevice.manufacturer_name,
+          manufacturer_id: currentDevice.manufacturer,
+          autoSerialnumber: !!currentDevice.serial_number,
           label: currentDevice.model_name,
           dependentKey: currentDevice.manufacturer.toString(),
         },
@@ -658,17 +673,24 @@ export function DevicesContent({
           label: currentDevice.manufacturer_name,
         },
         model: {
-          key: currentDevice.model.toString(),
+          id: currentDevice.model,
+          name: currentDevice.model_name,
+          manufacturer_name: currentDevice.manufacturer_name,
+          manufacturer_id: currentDevice.manufacturer,
+          autoSerialnumber: !!currentDevice.serial_number,
           label: currentDevice.model_name,
           dependentKey: currentDevice.manufacturer.toString(),
         },
         serialNumber: currentDevice.serial_number,
         files: currentDevice.files,
-        //TODO inverter data
-        // inverter: {
-        //   key: currentDevice.inverter.toString(),
-        //   label: currentDevice.inverter_name,
-        // },
+
+        inverter: currentDevice.inverter
+          ? {
+              id: currentDevice.inverter.id,
+              label: currentDevice.inverter.name,
+              name: currentDevice.inverter.name,
+            }
+          : undefined,
       };
     }
     if (currentDevice?.deviceType === 'Meter') {
@@ -677,40 +699,32 @@ export function DevicesContent({
           option => option.key === currentDevice.type,
         )[0],
         manufacturer: {
-          key: currentDevice.manufacturer,
-          label:
-            currentDevice.manufacturer_name ??
-            meterModels.filter(
-              _model => _model.id.toString() === currentDevice.model,
-            )[0].manufacturer_name, // ! Backend is not producing the names at the moment, so I had to fetch manufcaturers and filter them by the key
+          key: currentDevice.manufacturer.toString(),
+          label: currentDevice.manufacturer_name,
         },
         model: {
-          key: currentDevice.model,
-          label:
-            currentDevice.model_name ??
-            meterModels.filter(
-              _model => _model.id.toString() === currentDevice.model,
-            )[0].name, // ! Backend is not producing the names at the moment, so I had to fetch models and filter them by the key
+          id: currentDevice.model,
+          name: currentDevice.model_name,
+          manufacturer_name: currentDevice.manufacturer_name,
+          manufacturer_id: currentDevice.manufacturer,
+          autoSerialnumber: !!currentDevice.serial_number,
+          label: currentDevice.model_name,
           dependentKey: currentDevice.manufacturer.toString(),
         },
         serialNumber: currentDevice.number,
         auxiliary: !!currentDevice.is_auxiliary,
-        file: {
-          url: currentDevice.files?.[0].url_thumb,
-          type: 'image',
-          name: currentDevice.files?.[0].name,
-        },
-        connectedInverters: [] // ! Temporary value
+        files: currentDevice.files,
+        connectedInverters: [], // ! Temporary value
         //TODO add connectedInverters data - waiting for backend
         // connectedInverters: {
         //   key: currentDevice.inverter.toString(),
         //   label: currentDevice.inverter_name,
         // },
-      } as Partial<FormValues>;
+      };
     }
 
     return undefined;
-  }, [currentDevice, meterTypeOptions, meterModels]);
+  }, [currentDevice, meterTypeOptions]);
 
   return (
     <>
@@ -760,12 +774,12 @@ export function DevicesContent({
         description={
           currentDevice?.deviceType === 'Inverter'
             ? intl.formatMessage({
-              defaultMessage:
-                'Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well.',
-            })
+                defaultMessage:
+                  'Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well.',
+              })
             : intl.formatMessage({
-              defaultMessage: 'Are you sure to delete this device?',
-            })
+                defaultMessage: 'Are you sure to delete this device?',
+              })
         }
         onCancel={handleDeleteCancel}
         onDelete={confirmDeleteHandler}
@@ -876,15 +890,15 @@ export function DevicesContent({
             const commsParams: CommsParams & { id: number } =
               commType === 'fixed_ip'
                 ? {
-                  id: currentDevice.id,
-                  ip: ipAddress,
-                  slave_id: Number(slaveId),
-                }
+                    id: currentDevice.id,
+                    ip: ipAddress,
+                    slave_id: Number(slaveId),
+                  }
                 : {
-                  id: currentDevice.id,
-                  dhcp: true,
-                  slave_id: Number(slaveId),
-                };
+                    id: currentDevice.id,
+                    dhcp: true,
+                    slave_id: Number(slaveId),
+                  };
 
             try {
               const testResult = await testDeviceCommsMutation.mutateAsync(

@@ -22,7 +22,6 @@ import clsxm from 'ui/utils/clsxm';
 import { z, ZodObject, ZodTypeAny } from 'zod';
 
 import { AutocompleteSelectField } from './AutocompleteField';
-import { DependentOption } from './DependentThreeSelectsFields';
 import { ExistingInverterSelectField } from './ExistingInverterSelectField';
 import { FileField } from './FileField';
 import { Form } from './Form';
@@ -41,7 +40,7 @@ type RawFormShapeNewInverter = {
 };
 export type InverterDefaultValuesProps = {
   inverter: AutocompleteSelectOption;
-  input: DependentOption;
+  input: any;
   file: ApiFile;
   manufacturer: undefined;
   model: undefined;
@@ -79,6 +78,8 @@ const fileValueMapper = (file: ApiFile | File) => ({
   name: file.name,
   type: file.type,
   url: file instanceof File ? URL.createObjectURL(file) : file.url,
+  thumbnailUrl:
+    file instanceof File ? URL.createObjectURL(file) : file.url_thumb,
 });
 export const StringInverterDialog = <
   ResolverTypeExistingInverter extends ZodObject<RawFormShapeExistingInverter>,
@@ -111,7 +112,6 @@ export const StringInverterDialog = <
   const inverterModels = inverterModelsQuery.data as InverterModel[];
   const invertersQuery = useInvertersQuery(siteId);
   const inverters = invertersQuery.data as Inverter[];
-
 
   // * Intersection input
   const inverterOptions: AutocompleteSelectOption[] | [] = useMemo(
@@ -152,7 +152,7 @@ export const StringInverterDialog = <
     if (watchInverter) setIsWithNewInverter(watchInverter.key === '-1');
   }, [watchInverter]);
 
-  const inverterInputsOptions: DependentOption[] = useMemo(() => {
+  const inverterInputsOptions = useMemo(() => {
     if (!watchInverter?.key || watchInverter?.key === '-1') return [];
 
     const selectedInverter = inverters.filter(
@@ -160,55 +160,57 @@ export const StringInverterDialog = <
     )[0];
 
     return selectedInverter.mpp_trackers.map((input, idx) => ({
-      key: input.id.toString(),
-      label: (idx + 1).toString(),
-      icon: 'Chip',
-      value: input.id,
-      dependentKey: (watchInverter as DependentOption)?.key ?? '',
+      value: {
+        key: input.id.toString(),
+        label: (idx + 1).toString(),
+        value: input.id,
+        dependentKey: watchInverter?.key ?? '',
+      },
+      icon: 'Chip' as IconName,
+      children: () => (idx + 1).toString(),
     }));
   }, [watchInverter, inverters]);
 
   // * Form with creation of new inverter
-  const inverterManufacturersOptions: DependentOption[] =
-    useMemo(() => {
-      const result: DependentOption[] = [];
-      const map = new Map();
-      inverterModels.forEach(model => {
-        if (!map.has(model.manufacturer_id)) {
-          map.set(model.manufacturer_id, true);
-          result.push({
-            key: model.manufacturer_id.toString(),
-            label: model.manufacturer_name,
-            value: model.manufacturer_id,
-            dependentKey: (watchInverter as AutocompleteSelectOption)?.key ?? '',
-          });
-        }
-      });
-      return result;
-    }, [inverterModels, watchInverter]);
+  const inverterManufacturersOptions = useMemo(() => {
+    const result: unknown[] = [];
+    const map = new Map();
+    inverterModels.forEach(model => {
+      if (!map.has(model.manufacturer_id)) {
+        map.set(model.manufacturer_id, true);
+        result.push({
+          key: model.manufacturer_id.toString(),
+          label: model.manufacturer_name,
+          value: model.manufacturer_id,
+          dependentKey: (watchInverter as AutocompleteSelectOption)?.key ?? '',
+        });
+      }
+    });
+    return result;
+  }, [inverterModels, watchInverter]);
 
-  const inverterModelsOptions: DependentOption[] = useMemo(() => {
+  const inverterModelsOptions = useMemo(() => {
     if (!watchManufacturer || !inverterModels) return [];
     return inverterModels
       .filter(
-        model =>
-          model.manufacturer_id.toString() ===
-          (watchManufacturer as DependentOption).key,
+        //@ts-ignore
+        model => model.manufacturer_id.toString() === watchManufacturer.key,
       )
       .map(model => ({
         key: model.id.toString(),
         label: model.name,
         value: model.id,
         icon: 'Table',
-        dependentKey: (watchManufacturer as DependentOption).key,
+        //@ts-ignore
+        dependentKey: watchManufacturer.key,
       }));
   }, [inverterModels, watchManufacturer]);
 
-  const inverterNewInputsOptions: DependentOption[] = useMemo(() => {
+  const inverterNewInputsOptions = useMemo(() => {
     if (!watchModel || !inverterModels) return [];
     const numberOfInputs = inverterModels.filter(
-      model =>
-        model.id.toString() === (watchModel as DependentOption).key,
+      //@ts-ignore
+      model => model.id.toString() === watchModel.key,
     )[0]?.data.inputs;
     return Array(numberOfInputs)
       .fill(0)
@@ -217,7 +219,8 @@ export const StringInverterDialog = <
         label: (idx + 1).toString(),
         icon: 'Chip',
         value: idx.toString(),
-        dependentKey: (watchModel as DependentOption).key,
+        //@ts-ignore
+        dependentKey: watchModel.key,
       }));
   }, [inverterModels, watchModel]);
   // *

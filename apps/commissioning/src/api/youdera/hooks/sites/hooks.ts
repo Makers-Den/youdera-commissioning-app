@@ -53,8 +53,11 @@ export const useCommissionSiteMutation = (siteId: number) => {
   
   return useMutation(
     useCallback(
-      () => youderaApiInstance
-        .post<ProjectManagerContactInfo>(`sites/${siteId}/commission`)
+      (payload: { roofer_done?: boolean } = {}) => youderaApiInstance
+        .post<ProjectManagerContactInfo>(
+          `sites/${siteId}/commission`,
+          Object.keys(payload).length > 0 ? payload : undefined
+        )
         .then(res => res.data.phone),
         [siteId]
       ),

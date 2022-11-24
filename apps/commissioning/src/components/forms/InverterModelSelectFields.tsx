@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import { InverterModel } from '@src/api/youdera/apiTypes';
 import { useInverterModelsQuery } from '@src/api/youdera/hooks/inverters/hooks';
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
@@ -10,6 +11,17 @@ import {
 
 export type InverterModelSelectFieldsProps = {};
 
+type InverterModelOption = Pick<
+  InverterModel,
+  'name' | 'id' | 'manufacturer_id' | 'manufacturer_name'
+> & {
+  autoSerialnumber: boolean;
+};
+
+type DependentProps = DependentSelectsFieldsProps<
+  InverterModelOption & { label: string; dependentKey: string }
+>;
+
 export function InverterModelSelectFields() {
   const intl = useIntl();
 
@@ -18,11 +30,11 @@ export function InverterModelSelectFields() {
   const { manufacturerOptions, modelOptions } = useMemo(
     () =>
       (inverterModelsQuery.data || []).reduce<{
-        manufacturerOptions: DependentSelectsFieldsProps['options'];
-        modelOptions: DependentSelectsFieldsProps['dependentOptions'];
+        manufacturerOptions: DependentProps['options'];
+        modelOptions: DependentProps['dependentOptions'];
       }>(
         (prevVal, curVal) => {
-          const { manufacturer_name, manufacturer_id, name, id } = curVal;
+          const { manufacturer_name, manufacturer_id, name, data, id } = curVal;
           const manId = manufacturer_id.toString();
 
           const manufacturerOptions = [...prevVal.manufacturerOptions];
@@ -33,14 +45,22 @@ export function InverterModelSelectFields() {
               label: manufacturer_name,
             });
           }
+
           return {
             manufacturerOptions,
             modelOptions: [
               ...prevVal.modelOptions,
               {
-                key: id.toString(),
-                label: name,
-                dependentKey: manId,
+                children: () => name,
+                value: {
+                  manufacturer_name,
+                  manufacturer_id,
+                  name,
+                  autoSerialnumber: data.auto_serialnumber,
+                  dependentKey: manId,
+                  label: name,
+                  id,
+                },
               },
             ],
           };
@@ -74,6 +94,7 @@ export function InverterModelSelectFields() {
         placeholder: intl.formatMessage({
           defaultMessage: 'Select',
         }),
+        compareValueBy: 'id',
       }}
       dependentName="model"
     />

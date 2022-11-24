@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Inverter } from '@src/api/youdera/apiTypes';
 import { useMeterTypeOptions } from '@src/hooks/useMeterTypeOptions';
-import React, { Suspense, useEffect } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
+import React, { Suspense, useEffect, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import {
@@ -13,14 +13,16 @@ import {
   DialogTitle,
 } from 'ui/dialogs/Dialog';
 import { Input } from 'ui/inputs/Input';
-import { MultiSelectOption } from 'ui/select/MultiSelect'
-import { SvgIcon } from 'ui/svg-icons/SvgIcon';
+import { MultiSelectOption } from 'ui/select/MultiSelect';
+import { SelectOption } from 'ui/select/Select';
+import { IconName, SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
 
 import { Field } from './Field';
-import { FileField, FileFieldProps } from './FileField';
+import { FileFieldProps } from './FileField';
+import { FilesField } from './FilesField';
 import { Form } from './Form';
 import { MeterModelSelectFields } from './MeterModelSelectFields';
 import { MultiSelectField } from './MultiSelectField';
@@ -35,17 +37,23 @@ const validation = z.object({
   }),
   manufacturer: z.object({ key: z.string(), label: z.string() }),
   model: z.object({
-    key: z.string(),
+    id: z.number(),
+    manufacturer_name: z.string(),
+    manufacturer_id: z.number(),
+    name: z.string(),
+    autoSerialnumber: z.boolean(),
     label: z.string(),
     dependentKey: z.string(),
   }),
   serialNumber: z.string(),
-  connectedInverters: z.array(z.object({
-    key: z.string(),
-    label: z.string(),
-  })),
+  connectedInverters: z.array(
+    z.object({
+      key: z.string(),
+      label: z.string(),
+    }),
+  ),
   auxiliary: z.boolean(),
-  file: z.any(),
+  files: z.array(z.any()),
 });
 
 export type FormValues = z.infer<typeof validation>;
@@ -74,17 +82,31 @@ export const MeterFormDialog = ({
   fileValueMapper,
 }: MeterFormDialogProps) => {
   const intl = useIntl();
-  const meterTypeOptions = useMeterTypeOptions()
+  const meterTypeOptions = useMeterTypeOptions();
+
+  const resolver = useMemo(
+    () =>
+      validation.refine(
+        values => values.model.autoSerialnumber && values.serialNumber,
+        {
+          path: ['serialNumber'],
+          message: intl.formatMessage({
+            defaultMessage: 'Serial number is required',
+          }),
+        },
+      ),
+    [intl],
+  );
 
   const method = useForm({
-    resolver: zodResolver(validation),
+    resolver: zodResolver(resolver),
   });
 
   const { handleSubmit, reset, formState, watch } = method;
   const handleClose = () => {
     onClose();
     reset();
-  }
+  };
 
   useEffect(() => {
     if (defaultValues) {
@@ -97,7 +119,7 @@ export const MeterFormDialog = ({
     'model',
     'serialNumber',
     'connectedInverters',
-    'file',
+    'files',
   ]);
 
   const showFields = {
@@ -106,7 +128,12 @@ export const MeterFormDialog = ({
     third: !!meterType && !!model,
     fourth: !!meterType && !!model && !!serialNumber,
     fifth: !!meterType && !!model && !!serialNumber && !!connectedInverters,
-    sixth: !!meterType && !!model && !!serialNumber && !!connectedInverters && !!file
+    sixth:
+      !!meterType &&
+      !!model &&
+      !!serialNumber &&
+      !!connectedInverters &&
+      !!file,
   };
 
   return (
@@ -134,15 +161,19 @@ export const MeterFormDialog = ({
           {showFields.first && (
             <SelectField
               name="meterType"
-              options={meterTypeOptions}
               label={intl.formatMessage({
                 defaultMessage: 'Meter type',
               })}
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select',
               })}
-            />
-
+            >
+              {meterTypeOptions.map(value => (
+                <SelectOption icon={value.icon as IconName} value={value}>
+                  {() => value.label}
+                </SelectOption>
+              ))}
+            </SelectField>
           )}
           {showFields.second && (
             <Suspense fallback="loading">
@@ -166,105 +197,111 @@ export const MeterFormDialog = ({
               )}
             </Field>
           )}
-          {showFields.fourth &&
-            (
-              <MultiSelectField
-                name='connectedInverters'
-                label={intl.formatMessage({
-                  defaultMessage: 'Connected inverters'
-                })}
-                placeholder={intl.formatMessage({
-                  defaultMessage: 'Select'
-                })}
-                wrapperClassName='z-10'
-              >
-
-                {inverters && inverters.map((inverter, idx) => (
-                  <MultiSelectOption value={{
-                    key: inverter.id.toString(),
-                    label: inverter.name ?? 'Inverter',
-                  }}
+          {showFields.fourth && (
+            <MultiSelectField
+              name="connectedInverters"
+              label={intl.formatMessage({
+                defaultMessage: 'Connected inverters',
+              })}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'Select',
+              })}
+              wrapperClassName="z-10"
+            >
+              {inverters &&
+                inverters.map((inverter, idx) => (
+                  <MultiSelectOption
+                    value={{
+                      key: inverter.id.toString(),
+                      label: inverter.name ?? 'Inverter',
+                      ...inverter,
+                    }}
                   >
                     {() => (
                       <div>
                         <Typography variant="body" weight="medium">
                           {intl.formatMessage({
                             defaultMessage: 'Inverter',
-                          })} {idx} {inverter.name ? `– ${inverter.name}` : ''}
+                          })}{' '}
+                          {idx} {inverter.name ? `– ${inverter.name}` : ''}
                         </Typography>
-                        <Typography variant="label"> {intl.formatMessage({
-                          defaultMessage: 'SN',
-                          description: 'Context: Shortcut from Serial Number'
-                        })}: {inverter.serial_number}</Typography>
-                      </div>)}
+                        <Typography variant="label">
+                          {' '}
+                          {intl.formatMessage({
+                            defaultMessage: 'SN',
+                            description: 'Context: Shortcut from Serial Number',
+                          })}
+                          : {inverter.serial_number}
+                        </Typography>
+                      </div>
+                    )}
                   </MultiSelectOption>
                 ))}
-              </MultiSelectField>
-            )
-          }
-          {
-            showFields.fifth && (
-              <>
-                <div className='flex h-20 min-w-[340px] bg-gray-100 justify-center items-center rounded-md'>
-                  <ToggleField
-                    name='auxiliary'
-                    label={intl.formatMessage({
-                      defaultMessage: 'Auxiliary meter'
-                    })}
-                  />
-                </div>
-                <FileField name="file" valueMapper={fileValueMapper} className="w-[340px]">
-                  <div className="flex items-center gap-4">
-                    <SvgIcon name="Camera" className="w-8 text-green-400" />
-                    <div>
-                      <Typography>
+            </MultiSelectField>
+          )}
+          {showFields.fifth && (
+            <>
+              <div className="flex h-20 min-w-[340px] items-center justify-center rounded-md bg-gray-100">
+                <ToggleField
+                  name="auxiliary"
+                  label={intl.formatMessage({
+                    defaultMessage: 'Auxiliary meter',
+                  })}
+                />
+              </div>
+              <FilesField
+                name="files"
+                valueMapper={fileValueMapper}
+                className="w-[340px]"
+              >
+                <div className="flex items-center gap-4">
+                  <SvgIcon name="Camera" className="w-8 text-green-400" />
+                  <div>
+                    <Typography>
+                      {intl.formatMessage({
+                        defaultMessage: 'Take photo by camera',
+                        description:
+                          'Context: Take photo by camera or click here to upload',
+                      })}
+                    </Typography>
+                    <Typography>
+                      {intl.formatMessage({
+                        defaultMessage: 'or',
+                        description:
+                          'Context: Take photo by camera or click here to upload',
+                      })}{' '}
+                      <span className="text-green-400 underline">
                         {intl.formatMessage({
-                          defaultMessage: 'Take photo by camera',
+                          defaultMessage: 'click here to upload',
                           description:
                             'Context: Take photo by camera or click here to upload',
                         })}
-                      </Typography>
-                      <Typography>
-                        {intl.formatMessage({
-                          defaultMessage: 'or',
-                          description:
-                            'Context: Take photo by camera or click here to upload',
-                        })}{' '}
-                        <span className="text-green-400 underline">
-                          {intl.formatMessage({
-                            defaultMessage: 'click here to upload',
-                            description:
-                              'Context: Take photo by camera or click here to upload',
-                          })}
-                        </span>
-                      </Typography>
-                    </div>
+                      </span>
+                    </Typography>
                   </div>
-                </FileField>
-              </>
-            )
-          }
-          {
-            showFields.sixth && (
-              <div className="mt-3 flex gap-5">
-                <Button
-                  variant="additional-gray"
-                  className="w-full"
-                  onClick={handleClose}
-                >
-                  {intl.formatMessage({ defaultMessage: 'Cancel' })}
-                </Button>
-                <Button
-                  isLoading={formState.isSubmitting}
-                  type="submit"
-                  variant="main-green"
-                  className="w-full"
-                >
-                  {submitButtonTitle}
-                </Button>
-              </div>
-            )
-          }
+                </div>
+              </FilesField>
+            </>
+          )}
+          {showFields.sixth && (
+            <div className="mt-3 flex gap-5">
+              <Button
+                variant="additional-gray"
+                className="w-full"
+                onClick={handleClose}
+              >
+                {intl.formatMessage({ defaultMessage: 'Cancel' })}
+              </Button>
+              <Button
+                isLoading={formState.isSubmitting}
+                type="submit"
+                variant="main-green"
+                className="w-full"
+              >
+                {submitButtonTitle}
+              </Button>
+            </div>
+          )}
         </Form>
       </DialogContent>
     </Dialog>

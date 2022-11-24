@@ -1,29 +1,47 @@
 import { useEffect, useMemo } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { SelectOption, SelectProps } from 'ui/select/Select';
+import {
+  SelectOption,
+  SelectOptionProps,
+  SelectProps,
+  SelectValue,
+} from 'ui/select/Select';
 import clsxm from 'ui/utils/clsxm';
 
 import { SelectField } from './SelectField';
 
-export type DependentOption = SelectOption & { dependentKey: string };
-export type DependentField = {
-  options: DependentOption[];
-  selectProps: Omit<SelectProps, 'onChange' | 'validity' | 'options'>;
-  name: string;
+export interface DependentValue extends SelectValue {
+  dependentKey: string;
 }
-export type DependentThreeSelectsFieldsProps = {
-  value: any;
-  dependentField1: DependentField
-  dependentField2: DependentField
-  dependentField3: DependentField
+
+export type DependentField<Value extends DependentValue> = {
+  options: SelectOptionProps<Value>[];
+  selectProps: Omit<SelectProps<Value>, 'onChange' | 'validity' | 'children'>;
+  name: string;
+};
+export type DependentThreeSelectsFieldsProps<
+  Value extends { key: string },
+  DepValue1 extends DependentValue,
+  DepValue2 extends DependentValue,
+  DepValue3 extends DependentValue,
+> = {
+  value: Value;
+  dependentField1: DependentField<DepValue1>;
+  dependentField2: DependentField<DepValue2>;
+  dependentField3: DependentField<DepValue3>;
 };
 
-export function DependentThreeSelectsFields({
+export function DependentThreeSelectsFields<
+  Value extends { key: string },
+  DepValue1 extends DependentValue,
+  DepValue2 extends DependentValue,
+  DepValue3 extends DependentValue,
+>({
   value,
   dependentField1,
   dependentField2,
   dependentField3,
-}: DependentThreeSelectsFieldsProps) {
+}: DependentThreeSelectsFieldsProps<Value, DepValue1, DepValue2, DepValue3>) {
   const { setValue, formState } = useFormContext();
 
   const dependentValue1 = useWatch({
@@ -44,10 +62,18 @@ export function DependentThreeSelectsFields({
     if (value?.key !== dependentValue1?.dependentKey) {
       setValue(dependentField1.name, null);
     }
-  }, [value?.key, dependentValue1?.dependentKey, dependentField1.name, setValue]);
+  }, [
+    value?.key,
+    dependentValue1?.dependentKey,
+    dependentField1.name,
+    setValue,
+  ]);
 
   const filteredOptions1 = useMemo(
-    () => dependentField1.options.filter(option => option.dependentKey === value?.key),
+    () =>
+      dependentField1.options.filter(
+        option => option.value.dependentKey === value?.key,
+      ),
     [dependentField1.options, value?.key],
   );
 
@@ -56,10 +82,18 @@ export function DependentThreeSelectsFields({
     if (dependentValue1?.key !== dependentValue2?.dependentKey) {
       setValue(dependentField2.name, null);
     }
-  }, [dependentValue1?.key, dependentValue2?.dependentKey, dependentField2.name, setValue]);
+  }, [
+    dependentValue1?.key,
+    dependentValue2?.dependentKey,
+    dependentField2.name,
+    setValue,
+  ]);
 
   const filteredOptions2 = useMemo(
-    () => dependentField2.options.filter(option => option.dependentKey === dependentValue1?.key),
+    () =>
+      dependentField2.options.filter(
+        option => option.value.dependentKey === dependentValue1?.key,
+      ),
     [dependentField2.options, dependentValue1?.key],
   );
 
@@ -68,10 +102,18 @@ export function DependentThreeSelectsFields({
     if (dependentValue2?.key !== dependentValue3?.dependentKey) {
       setValue(dependentField3.name, null);
     }
-  }, [dependentValue2?.key, dependentValue3?.dependentKey, dependentField3.name, setValue]);
+  }, [
+    dependentValue2?.key,
+    dependentValue3?.dependentKey,
+    dependentField3.name,
+    setValue,
+  ]);
 
   const filteredOptions3 = useMemo(
-    () => dependentField3.options.filter(option => option.dependentKey === dependentValue2?.key),
+    () =>
+      dependentField3.options.filter(
+        option => option.value.dependentKey === dependentValue2?.key,
+      ),
     [dependentField3.options, dependentValue2?.key],
   );
 
@@ -80,23 +122,34 @@ export function DependentThreeSelectsFields({
       <SelectField
         wrapperClassName={clsxm(!value && 'hidden')}
         name={dependentField1.name}
-        options={filteredOptions1}
         {...dependentField1.selectProps}
-      />
+      >
+        {filteredOptions1.map(props => (
+          <SelectOption {...props} />
+        ))}
+      </SelectField>
 
       <SelectField
         wrapperClassName={clsxm((!value || !dependentValue1) && 'hidden')}
         name={dependentField2.name}
-        options={filteredOptions2}
         {...dependentField2.selectProps}
-      />
+      >
+        {filteredOptions2.map(props => (
+          <SelectOption {...props} />
+        ))}
+      </SelectField>
 
       <SelectField
-        wrapperClassName={clsxm((!value || !dependentValue1 || !dependentValue2) && 'hidden')}
+        wrapperClassName={clsxm(
+          (!value || !dependentValue1 || !dependentValue2) && 'hidden',
+        )}
         name={dependentField3.name}
-        options={filteredOptions3}
         {...dependentField3.selectProps}
-      />
+      >
+        {filteredOptions3.map(props => (
+          <SelectOption {...props} />
+        ))}
+      </SelectField>
     </>
   );
 }

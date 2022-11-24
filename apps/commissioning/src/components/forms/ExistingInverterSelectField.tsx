@@ -1,11 +1,24 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { useIntl } from 'react-intl';
 
-import { DependentOption, DependentSelectsField } from './DependentSelectsField';
+import {
+  DependentSelectsField,
+  DependentSelectsFieldsOutsideParentProps,
+} from './DependentSelectsField';
 
 export type ExistingInverterSelectFieldProps = {
   inverterValue: any;
-  inverterInputsOptions: DependentOption[];
+  inverterInputsOptions: DependentSelectsFieldsOutsideParentProps<
+    {
+      key: string;
+    },
+    {
+      key: string;
+      label: string;
+      value: string;
+      dependentKey: string;
+    }
+  >['dependentOptions'];
 };
 
 export const ExistingInverterSelectField = ({

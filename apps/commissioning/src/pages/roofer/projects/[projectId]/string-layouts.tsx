@@ -1,4 +1,5 @@
 import { Role } from '@src/api/youdera/apiTypes';
+import { useAuth } from '@src/api/youdera/hooks/auth/hooks';
 import { useCommissionSiteMutation } from '@src/api/youdera/hooks/sites/hooks';
 import { ConfimationDialog } from '@src/components/dialogs/ConfimationDialog';
 import { LargeBoxSkeleton } from '@src/components/LargeBoxSkeleton';
@@ -23,6 +24,7 @@ const StringLayoutsPage = ({
   const commissionSiteMutation = useCommissionSiteMutation(project.id);
   const toast = useToast();
   const continueDialog = useDisclosure();
+  const { userInfoQuery } = useAuth();
 
   const navCrossClickHandler = () => {
     router.push(routes.roofer.selectTask);
@@ -38,7 +40,11 @@ const StringLayoutsPage = ({
 
   const continueClickHandler = async () => {
       try {
-        await commissionSiteMutation.mutateAsync();
+        await commissionSiteMutation.mutateAsync(
+          userInfoQuery.data?.role === 'admin'
+          ? { roofer_done: true } 
+          : {}
+        );
         router.push(routes.roofer.complete(project.id));
         toast.success(intl.formatMessage({
           defaultMessage: 'Site commissioned.'

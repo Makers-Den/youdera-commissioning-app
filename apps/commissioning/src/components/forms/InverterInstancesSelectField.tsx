@@ -1,5 +1,4 @@
 import { useInvertersQuery } from '@src/api/youdera/hooks/inverters/hooks';
-import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { SelectOption } from 'ui/select/Select';
 import { Typography } from 'ui/typography/Typography';
@@ -17,33 +16,29 @@ export function InverterInstancesSelectField({
 
   const inverterQuery = useInvertersQuery(siteId);
 
-  const options: SelectOption[] = useMemo(
-    () =>
-      (inverterQuery.data || []).map(
-        ({ id, name, model_name, serial_number }) => ({
-          key: id.toString(),
-          selectedLabel: model_name,
-          label: model_name || (
-            //TODO somthing is up with react nodes as a options
-            <>
-              <Typography variant="body" weight="medium">
-                {name} - {model_name}
-              </Typography>
-              <Typography variant="label">SN: {serial_number}</Typography>
-            </>
-          ),
-        }),
-      ),
-
-    [inverterQuery.data],
-  );
-
   return (
     <SelectField
       name="inverter"
       placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
       label={intl.formatMessage({ defaultMessage: 'Inverter' })}
-      options={options}
-    />
+      compareValueBy="id"
+    >
+      {(inverterQuery.data || []).map(value => {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        const { name, model_name, serial_number, id } = value;
+        return (
+          <SelectOption value={{ name, id, label: `${name} - ${model_name}` }}>
+            {() => (
+              <>
+                <Typography variant="body" weight="medium">
+                  {name} - {model_name}
+                </Typography>
+                <Typography variant="label">SN: {serial_number}</Typography>
+              </>
+            )}
+          </SelectOption>
+        );
+      })}
+    </SelectField>
   );
 }

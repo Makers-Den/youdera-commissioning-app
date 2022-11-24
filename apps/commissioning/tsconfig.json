@@ -1,6 +1,7 @@
 {
   "extends": "tsconfig/nextjs.json",
   "compilerOptions": {
+    "types": ["cypress"],
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"],
