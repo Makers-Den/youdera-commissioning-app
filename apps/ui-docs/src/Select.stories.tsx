@@ -23,6 +23,7 @@ function createOptions() {
       <SelectOption
         value={{
           label: `T-${i}00`,
+          icon: 'Battery',
         }}
       >
         {() => `T-${i}00`}

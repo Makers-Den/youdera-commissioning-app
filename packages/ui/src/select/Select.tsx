@@ -8,6 +8,7 @@ import { validityStyle } from '../utils/constants';
 
 export interface SelectValue {
   label: string;
+  icon?: IconName;
 }
 export type SelectOptionProps<T extends SelectValue> = {
   value: T;
@@ -110,7 +111,12 @@ const SelectInner = <T extends SelectValue>(
               validity && validityStyle[validity].input,
             )}
           >
-            <Typography variant="body" weight="medium">
+            <Typography className="flex" variant="body" weight="medium">
+              {value?.icon && (
+                <span className="mr-3 flex w-4 items-center justify-center">
+                  <SvgIcon name={value?.icon} className="h-[14px]" />
+                </span>
+              )}
               {value?.label || placeholder}
             </Typography>
             <SvgIcon

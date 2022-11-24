@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
+import { IconName } from 'ui/svg-icons/SvgIcon';
 
 export const useMeterTypeOptions = () => {
   const intl = useIntl();
@@ -10,28 +11,28 @@ export const useMeterTypeOptions = () => {
         label: intl.formatMessage({
           defaultMessage: 'Generation',
         }),
-        icon: 'Industry',
+        icon: 'Industry' as IconName,
       },
       {
         key: 'import-export',
         label: intl.formatMessage({
           defaultMessage: 'Import/Export',
         }),
-        icon: 'Download',
+        icon: 'Download' as IconName,
       },
       {
         key: 'consumption',
         label: intl.formatMessage({
           defaultMessage: 'Consumption',
         }),
-        icon: 'Plug',
+        icon: 'Plug' as IconName,
       },
       {
         key: 'own-consumption',
         label: intl.formatMessage({
           defaultMessage: 'Own consumption',
         }),
-        icon: 'Lightbulb',
+        icon: 'Lightbulb' as IconName,
       },
     ],
     [intl],
