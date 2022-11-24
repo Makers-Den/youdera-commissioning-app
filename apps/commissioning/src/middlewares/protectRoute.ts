@@ -1,7 +1,8 @@
+import { initBearerTokenInterceptorOnServerSide } from '@src/api/youdera/api-instances/youdera';
 import { Role } from '@src/api/youdera/apiTypes';
 import { CookiesKeys } from '@src/api/youdera/enums/cookiesKeys';
 import { getUserInfo } from '@src/api/youdera/hooks/auth/apiRequests';
-import { addYouderaAuthInterceptors } from '@src/utils/server/addYouderaAuthInterceptors';
+import { routes } from '@src/utils/routes';
 import { getCookie } from 'cookies-next';
 import { GetServerSidePropsContext } from 'next';
 
@@ -21,13 +22,13 @@ export const protectRoute = <
     if (!checkToken) {
       return {
         redirect: {
-          destination: '/login',
+          destination: routes.login,
           permanent: false,
         },
       };
     }
 
-    addYouderaAuthInterceptors(context);
+    initBearerTokenInterceptorOnServerSide(context);
 
     try {
       const currentUser = await getUserInfo();
@@ -39,7 +40,7 @@ export const protectRoute = <
     } catch {
       return {
         redirect: {
-          destination: '/login',
+          destination: routes.login,
           permanent: false,
         },
       };
@@ -47,7 +48,7 @@ export const protectRoute = <
 
     return {
       redirect: {
-        destination: '/login',
+        destination: routes.login,
         permanent: false,
       },
     };
