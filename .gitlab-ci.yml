@@ -33,8 +33,8 @@ install:
   artifacts:
     when: always
     paths:
-      - apps/commissioning/cypress/videos
-      - apps/commissioning/cypress/screenshots
+      - apps/commissioning/cypress/videos/**/*.mp4
+      - apps/commissioning/cypress/screenshots/**/*.png
     expire_in: 3 days
 
 test_en:
