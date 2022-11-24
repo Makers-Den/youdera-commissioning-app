@@ -280,7 +280,7 @@ export const StringInverterDialog = <
               inverterInputsOptions={inverterNewInputsOptions}
             />
           )}
-          {(watchInput || watchNewInput) && (
+          {((watchInverter.key !== "-1" && watchInput) || (watchInverter.key === "-1" && watchNewInput)) && (
             <FileField
               className="w-full"
               label={intl.formatMessage({
@@ -317,8 +317,8 @@ export const StringInverterDialog = <
               </div>
             </FileField>
           )}
-          {((watchInverter && watchInput && watchFile) ||
-            (watchInverter && watchNewInput && watchFile)) && (
+          {((watchInverter.key !== "-1" && watchInput && watchFile) ||
+            (watchInverter.key === "-1" && watchNewInput && watchFile)) && (
               <div className="mt-3 flex gap-5">
                 <Button
                   variant="additional-gray"
