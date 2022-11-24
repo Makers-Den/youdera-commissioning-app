@@ -33,7 +33,7 @@ export type StringModuleTypeDialogProps<
   open: DialogProps['open'];
   onClose: (resetForm: () => void) => void;
   className?: string;
-  onSubmit: (values: z.infer<ResolverType>, resetForm: () => void) => void;
+  onSubmit: (values: z.infer<ResolverType>, resetForm: () => void, modifiedStringId?: number | undefined) => void;
   resolver: ResolverType;
   modifiedStringId?: number;
   defaultValues?: DeepPartial<z.infer<ResolverType>>
@@ -107,7 +107,7 @@ export const StringModuleTypeDialog = <
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
         <Form
-          onSubmit={handleSubmit(values => onSubmit(values, reset))}
+          onSubmit={handleSubmit(values => onSubmit(values, reset, modifiedStringId))}
           className="flex flex-col gap-5"
           {...method}
         >
