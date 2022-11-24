@@ -142,6 +142,7 @@ export type Meter = {
 
   manufacturer: number;
   model: number;
+  cmodel: number;
   manufacturer_name: string;
   model_name: string;
 

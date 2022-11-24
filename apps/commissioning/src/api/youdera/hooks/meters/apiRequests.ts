@@ -29,7 +29,7 @@ export type CreateMeterArgs = {
   type: string;
   site: number;
   manufacturer: string;
-  model: number;
+  cmodel: number;
   is_auxiliary: boolean;
 };
 

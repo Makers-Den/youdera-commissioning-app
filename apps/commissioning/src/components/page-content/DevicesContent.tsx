@@ -339,7 +339,7 @@ export function DevicesContent({
         site: siteId,
         type: values.meterType.key,
         manufacturer: values.manufacturer.key,
-        model: values.model.id,
+        cmodel: values.model.id,
         number: values.serialNumber,
         is_auxiliary: values.auxiliary,
         ...(values.factor && { factor: values.factor }), //TODO when indirect flag in model is set to true user has to provide that.
@@ -384,10 +384,10 @@ export function DevicesContent({
         id: currentDevice?.id,
         type: values.meterType.key,
         manufacturer: parseInt(values.manufacturer.key, 10),
-        model: values.model.id,
+        cmodel: values.model.id,
         number: values.serialNumber,
         is_auxiliary: values.auxiliary,
-        // factor: 1, when indirect flag in model is set to true user has to provide that.
+        ...(values.factor && { factor: values.factor }),
       });
 
       const filesToAdd = values.files
@@ -693,6 +693,7 @@ export function DevicesContent({
           : undefined,
       };
     }
+    console.log(currentDevice)
     if (currentDevice?.deviceType === 'Meter') {
       return {
         meterType: meterTypeOptions.filter(
@@ -707,6 +708,7 @@ export function DevicesContent({
           name: currentDevice.model_name,
           manufacturer_name: currentDevice.manufacturer_name,
           manufacturer_id: currentDevice.manufacturer,
+          indirect: true,
           autoSerialnumber: !!currentDevice.serial_number,
           label: currentDevice.model_name,
           dependentKey: currentDevice.manufacturer.toString(),

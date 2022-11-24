@@ -42,15 +42,13 @@ const validation = z.object({
     manufacturer_name: z.string(),
     manufacturer_id: z.number(),
     name: z.string(),
-    data: z.object({
-      indirect: z.boolean().or(z.undefined()),
-      autoSerialNumber: z.boolean().or(z.undefined())
-    }).or(z.array(z.any())),
+    autoSerialnumber: z.boolean(),
+    indirect: z.boolean(),
     label: z.string(),
     dependentKey: z.string(),
   }),
   factor: z.number().or(z.undefined()),
-  serialNumber: z.string(),
+  serialNumber: z.string().or(z.undefined()),
   connectedInverters: z.array(
     z.object({
       key: z.string(),
@@ -92,7 +90,7 @@ export const MeterFormDialog = ({
   const resolver = useMemo(
     () =>
       validation.refine(
-        values => values.model.data.autoSerialNumber && values.serialNumber,
+        values => values.model.autoSerialnumber || values.serialNumber,
         {
           path: ['serialNumber'],
           message: intl.formatMessage({
@@ -108,6 +106,7 @@ export const MeterFormDialog = ({
   });
 
   const { handleSubmit, reset, formState, watch, getValues } = method;
+  console.log(getValues())
   const handleClose = () => {
     onClose();
     reset();
@@ -119,29 +118,47 @@ export const MeterFormDialog = ({
     }
   }, [defaultValues, reset]);
 
-  const [meterType, model, factor, serialNumber, connectedInverters, file] = watch([
-    'meterType',
-    'model',
-    'factor',
-    'serialNumber',
-    'connectedInverters',
-    'files',
-  ]);
+  const [meterType, model, factor, serialNumber, connectedInverters, file] =
+    watch([
+      'meterType',
+      'model',
+      'factor',
+      'serialNumber',
+      'connectedInverters',
+      'files',
+    ]);
+
+  const isSerialNumber = (!model?.autoSerialnumber || (!!serialNumber && serialNumber !== ''));
+  const isFactor = (!model?.indirect || !!factor)
 
   const showFields = {
     first: true,
     second: !!meterType,
-    third: !!meterType && !!model && (!model.data?.indirect || !!factor),
-    fourth: !!meterType && !!model && !!serialNumber,
-    fifth: !!meterType && !!model && !!serialNumber && !!connectedInverters,
+    third: !!model?.indirect,
+    fourth:
+      !!meterType &&
+      !!model &&
+      !model.autoSerialNumber &&
+      isFactor,
+    fifth:
+      !!meterType &&
+      !!model &&
+      isFactor &&
+      isSerialNumber,
     sixth:
+      !!meterType &&
+      !!model &&
+      !!serialNumber &&
+      !!connectedInverters &&
+      isFactor &&
+      isSerialNumber,
+    seventh:
       !!meterType &&
       !!model &&
       !!serialNumber &&
       !!connectedInverters &&
       !!file,
   };
-  console.log(getValues())
   return (
     <Dialog
       open={open}
@@ -186,7 +203,7 @@ export const MeterFormDialog = ({
               <MeterModelSelectFields />
             </Suspense>
           )}
-          {model?.data?.indirect &&
+          {showFields.third && (
             <Field name="factor">
               {(register, fieldState) => (
                 <NumberInput
@@ -202,8 +219,8 @@ export const MeterFormDialog = ({
                 />
               )}
             </Field>
-          }
-          {showFields.third && (
+          )}
+          {showFields.fourth && (
             <Field name="serialNumber">
               {(register, fieldState) => (
                 <Input
@@ -220,7 +237,7 @@ export const MeterFormDialog = ({
               )}
             </Field>
           )}
-          {showFields.fourth && (
+          {showFields.fifth && (
             <MultiSelectField
               name="connectedInverters"
               label={intl.formatMessage({
@@ -262,7 +279,7 @@ export const MeterFormDialog = ({
                 ))}
             </MultiSelectField>
           )}
-          {showFields.fifth && (
+          {showFields.sixth && (
             <>
               <div className="flex h-20 min-w-[340px] items-center justify-center rounded-md bg-gray-100">
                 <ToggleField
@@ -306,7 +323,7 @@ export const MeterFormDialog = ({
               </FilesField>
             </>
           )}
-          {showFields.sixth && (
+          {showFields.seventh && (
             <div className="mt-3 flex gap-5">
               <Button
                 variant="additional-gray"
