@@ -1,4 +1,5 @@
 import { initBearerTokenInterceptorOnClientSide } from '@src/api/youdera/api-instances/youdera';
+import { useLocalizedZodMessages } from '@src/hooks/useLocalizedZodMessages';
 import {
   Hydrate,
   QueryClient,
@@ -48,6 +49,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }, [shortLocale]);
 
   const router = useRouter()
+
+  // This will fetch intl and localize all the generic error messages.
+  // Schema specific messages need to be defined together with schema.
+  useLocalizedZodMessages();
 
   useEffect(() => {
     const handleStart = (_url: string) => {
