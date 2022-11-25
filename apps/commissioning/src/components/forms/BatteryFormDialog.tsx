@@ -71,7 +71,7 @@ export const BatteryFormDialog = ({
 }: BatteryFormDialogProps) => {
   const intl = useIntl();
 
-  const resolver = useMemo(
+  const refinedValidation = useMemo(
     () =>
       validation.refine(
         values => values.model.autoSerialnumber || values.serialNumber,
@@ -86,13 +86,11 @@ export const BatteryFormDialog = ({
   );
 
   const method = useForm({
-    resolver: zodResolver(resolver),
+    resolver: zodResolver(refinedValidation),
     defaultValues,
   });
 
-  const { handleSubmit, reset, formState, watch, getValues } = method;
-  console.log(formState.errors)
-  // console.log('values!!!!! ', getValues())
+  const { handleSubmit, reset, formState, watch } = method;
 
   const handleClose = () => {
     onClose();

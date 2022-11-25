@@ -87,7 +87,7 @@ export const MeterFormDialog = ({
   const intl = useIntl();
   const meterTypeOptions = useMeterTypeOptions();
 
-  const resolver = useMemo(
+  const refinedValidation = useMemo(
     () =>
       validation.refine(
         values => values.model.autoSerialnumber || values.serialNumber,
@@ -102,7 +102,7 @@ export const MeterFormDialog = ({
   );
 
   const method = useForm({
-    resolver: zodResolver(resolver),
+    resolver: zodResolver(refinedValidation),
   });
 
   const { handleSubmit, reset, formState, watch } = method;

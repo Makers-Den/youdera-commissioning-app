@@ -63,7 +63,7 @@ export const InverterFormDialog = ({
 }: InverterFormDialogProps) => {
   const intl = useIntl();
 
-  const resolver = useMemo(
+  const refinedValidation = useMemo(
     () =>
       validation.refine(
         values => values.model.autoSerialnumber || values.serialNumber,
@@ -78,7 +78,7 @@ export const InverterFormDialog = ({
   );
 
   const method = useForm({
-    resolver: zodResolver(resolver),
+    resolver: zodResolver(refinedValidation),
   });
 
   const { handleSubmit, reset, formState, control } = method;
