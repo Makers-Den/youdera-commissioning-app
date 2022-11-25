@@ -1,29 +1,30 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteCookie, getCookie } from 'cookies-next';
-import { useEffect } from 'react';
+import { deleteCookie } from 'cookies-next';
+import { useCallback } from 'react';
 
 import {
+  deleteUserAvatar,
   forgotPassword,
   getUserInfo,
   login,
   logOut,
   resetPassword,
+  updateUserAvatar,
 } from './apiRequests';
 import { youderaApiInstance } from '../../api-instances/youdera';
+import { DataResponse, UserInfo } from '../../apiTypes';
 import { CookiesKeys } from '../../enums/cookiesKeys';
 import { QueryKeys } from '../../enums/queryKeys';
 
-export const useCurrentUserQuery = () =>
+export const useSuspensfulCurrentUserQuery = () =>
   useQuery([QueryKeys.userInfo], getUserInfo, {
-    enabled: false,
+    suspense: true,
   });
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
 
-  const userInfoQuery = useQuery([QueryKeys.userInfo], getUserInfo, {
-    enabled: false,
-  });
+  const userInfoQuery = useQuery([QueryKeys.userInfo], getUserInfo);
 
   const loginMutation = useMutation(login, {
     onSuccess: () => {
@@ -42,27 +43,6 @@ export const useAuth = () => {
 
   const resetPasswordMutation = useMutation(resetPassword);
 
-  useEffect(() => {
-    const checkToken = getCookie(CookiesKeys.accessToken);
-    if (checkToken) {
-      youderaApiInstance.interceptors.request.clear();
-      youderaApiInstance.interceptors.request.use(config => {
-        const accessToken = getCookie(CookiesKeys.accessToken);
-
-        return {
-          ...config,
-          headers: {
-            ...config.headers,
-            authorization: `Bearer ${accessToken}`,
-          },
-        };
-      });
-      userInfoQuery.refetch();
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return {
     userInfoQuery,
     isAuthenticated: !!userInfoQuery.data,
@@ -71,4 +51,60 @@ export const useAuth = () => {
     forgotPasswordMutation,
     resetPasswordMutation,
   };
+};
+
+type UpdateUserDetailsPayload = {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export const useUpdateUserDetailsMutation = () =>
+  useMutation(
+    useCallback(
+      ({ firstName, lastName, email }: UpdateUserDetailsPayload) =>
+        youderaApiInstance.put<DataResponse<UserInfo>>('/profile', {
+          first_name: firstName,
+          last_name: lastName,
+          email,
+        }).then(r => r.data.data),
+      []
+    )
+  );
+
+  type UpdateUserPasswordPayload = {
+    oldPassword: string;
+    newPassword: string;
+  }
+
+export const useUpdateUserPasswordMutation = () =>
+  useMutation(
+    useCallback(
+      ({ oldPassword, newPassword }: UpdateUserPasswordPayload) =>
+        youderaApiInstance.put('/users/changePassword', {
+          oldPassword,
+          newPassword
+        }),
+      []
+    )
+  );
+
+export const useUpdateUserAvatarMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(updateUserAvatar, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.userInfo]);
+    },
+  });
+};
+
+export const useDeleteUserAvatarMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteUserAvatar, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.userInfo]);
+    },
+  });
 };

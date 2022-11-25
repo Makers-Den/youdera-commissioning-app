@@ -3,6 +3,7 @@ import { useAuth } from '@src/api/youdera/hooks/auth/hooks';
 import { Field } from '@src/components/forms/Field';
 import { Form } from '@src/components/forms/Form';
 import { LEGAL_NOTICE_URL, PRIVACY_POLICY_URL } from '@src/lib/constants';
+import { routes } from '@src/utils/routes';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -89,7 +90,7 @@ const ForgotPassword = () => {
           >
             {intl.formatMessage({ defaultMessage: 'Reset password' })}
           </Button>
-          <Link href="/login" passHref>
+          <Link href={routes.login} passHref>
             <Button variant="additional-gray" className="w-64">
               {intl.formatMessage({ defaultMessage: 'Back to login' })}
             </Button>

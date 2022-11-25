@@ -1,3 +1,4 @@
+import { initBearerTokenInterceptorOnClientSide } from '@src/api/youdera/api-instances/youdera';
 import {
   Hydrate,
   QueryClient,
@@ -6,13 +7,22 @@ import {
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { FunctionComponent, useMemo } from 'react';
+import NProgress from 'nprogress'
+import React, { FunctionComponent, useEffect, useMemo } from 'react';
 import { IntlProvider } from 'react-intl';
 
+import 'nprogress/nprogress.css'
 import '../styles/globals.css';
 
 import German from '../../content/compiled-locales/de.json';
 import English from '../../content/compiled-locales/en.json';
+
+
+if (typeof window !== "undefined") {
+  if (process.env.NEXT_PUBLIC_YOUDERA_AUTH_METHOD !== 'SESSION') {
+    initBearerTokenInterceptorOnClientSide();
+  }
+}
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   // There's some weird type error with @react/types 18+ and NextJs
@@ -36,6 +46,28 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         return English;
     }
   }, [shortLocale]);
+
+  const router = useRouter()
+
+  useEffect(() => {
+    const handleStart = (_url: string) => {
+      NProgress.start()
+    }
+
+    const handleStop = () => {
+      NProgress.done()
+    }
+
+    router.events.on('routeChangeStart', handleStart)
+    router.events.on('routeChangeComplete', handleStop)
+    router.events.on('routeChangeError', handleStop)
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart)
+      router.events.off('routeChangeComplete', handleStop)
+      router.events.off('routeChangeError', handleStop)
+    }
+  }, [router])
 
   return (
     <>

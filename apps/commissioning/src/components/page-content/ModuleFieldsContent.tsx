@@ -52,7 +52,7 @@ const rowPrefix: Partial<Record<keyof ModuleField, string>> = {
 };
 
 export type ModuleFieldsContentProps = {
-  projectId: string;
+  projectId: number;
 };
 
 export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
