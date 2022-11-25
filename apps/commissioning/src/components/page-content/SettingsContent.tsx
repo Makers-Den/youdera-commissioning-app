@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserInfo } from "@src/api/youdera/apiTypes";
-import { updateUserAvatar } from "@src/api/youdera/hooks/auth/apiRequests";
 import { useDeleteUserAvatarMutation, useUpdateUserAvatarMutation, useUpdateUserDetailsMutation, useUpdateUserPasswordMutation } from "@src/api/youdera/hooks/auth/hooks";
 import { reportApiError } from "@src/utils/errorUtils";
 import { useCallback, useEffect, useState } from "react";
