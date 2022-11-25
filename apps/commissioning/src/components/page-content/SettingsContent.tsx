@@ -3,9 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserInfo } from "@src/api/youdera/apiTypes";
 import { useDeleteUserAvatarMutation, useUpdateUserAvatarMutation, useUpdateUserDetailsMutation, useUpdateUserPasswordMutation } from "@src/api/youdera/hooks/auth/hooks";
 import { reportApiError } from "@src/utils/errorUtils";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useIntl } from "react-intl";
+import { IntlShape, useIntl } from "react-intl";
 import { Box, BoxContent, BoxHeader, BoxTitle } from "ui/box/Box";
 import { Button } from "ui/buttons/Button";
 import { FileUploader } from "ui/file-inputs/FileUploader";
@@ -25,18 +25,24 @@ type SettingsSectionProps = {
   userInfo: UserInfo;
   className?: string;
 }
-
-const detailsValidation = z
+const buildDetailsSchema = (intl?: IntlShape) => z
   .object({
     firstName: z.string().min(1),
     lastName: z.string().min(1),
-    email: z.string().regex(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, "Invalid email")
+    email:
+      z.string()
+        .regex(
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, 
+          intl?.formatMessage({ defaultMessage: "Invalid email" }) || 'no message'
+        )
   });
-
-type DetailsFormValues = z.infer<typeof detailsValidation>;
 
 const GeneralDetails = ({ userInfo, className }: SettingsSectionProps) => {
   const intl = useIntl();
+  const detailsValidation = useMemo(() => buildDetailsSchema(intl), [intl]);
+  type DetailsFormValues = z.infer<typeof detailsValidation>;
+
+
   const [defaultValues, setDefaultValues] = useState<DetailsFormValues>({
     firstName: userInfo.first_name,
     lastName: userInfo.last_name,
@@ -136,7 +142,7 @@ const GeneralDetails = ({ userInfo, className }: SettingsSectionProps) => {
   );
 }
 
-const passwordValidation = z
+const buildPasswordSchema = (intl?: IntlShape) => z
   .object({
     oldPassword: z.string().min(6),
     newPassword: z.string().min(6),
@@ -146,12 +152,12 @@ const passwordValidation = z
       ctx.addIssue({
         path: ['confirmNewPassword'],
         code: 'custom',
-        message: 'The passwords did not match'
+        message: intl?.formatMessage({
+          defaultMessage: 'The passwords did not match',
+        }) || 'message missing'
       });
     }
   });
-
-type PasswordFormValues = z.infer<typeof passwordValidation>;
 
 const ChangePassword = ({ className }: SettingsSectionProps) => {
   const intl = useIntl();
@@ -163,6 +169,8 @@ const ChangePassword = ({ className }: SettingsSectionProps) => {
 
   const toast = useToast();
 
+  const passwordValidation = useMemo(() => buildPasswordSchema(intl), [intl]);
+
   const formProps = useForm({
     resolver: zodResolver(passwordValidation),
     defaultValues,
@@ -172,7 +180,7 @@ const ChangePassword = ({ className }: SettingsSectionProps) => {
 
   const updateUserPasswordMutation = useUpdateUserPasswordMutation();
 
-  const onSubmit = useCallback(async ({ newPassword, oldPassword }: PasswordFormValues) => {
+  const onSubmit = useCallback(async ({ newPassword, oldPassword }: z.infer<typeof passwordValidation>) => {
     try {
       await updateUserPasswordMutation.mutateAsync({ newPassword, oldPassword });
       toast.success(intl.formatMessage({

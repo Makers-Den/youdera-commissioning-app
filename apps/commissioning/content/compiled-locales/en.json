@@ -83,6 +83,12 @@
       "value": "Select task"
     }
   ],
+  "0ppFAH": [
+    {
+      "type": 0,
+      "value": "The passwords did not match"
+    }
+  ],
   "1Whlh9": [
     {
       "type": 0,
@@ -303,6 +309,12 @@
     {
       "type": 0,
       "value": "Are you sure to delete module field?"
+    }
+  ],
+  "ByuOj8": [
+    {
+      "type": 0,
+      "value": "Invalid email"
     }
   ],
   "C7zbxT": [
