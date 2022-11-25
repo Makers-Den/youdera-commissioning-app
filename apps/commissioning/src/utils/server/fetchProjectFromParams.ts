@@ -1,5 +1,10 @@
+import { Site } from '@src/api/youdera/apiTypes';
 import { getSite } from '@src/api/youdera/hooks/sites/apiRequests';
 import { GetServerSidePropsContext } from 'next';
+
+export type SiteProps = {
+  project: Site;
+}
 
 export const fetchProjectFromParams = async (
   context: GetServerSidePropsContext,

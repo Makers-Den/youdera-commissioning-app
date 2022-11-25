@@ -7,9 +7,11 @@ import {
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { FunctionComponent, useMemo } from 'react';
+import NProgress from 'nprogress'
+import React, { FunctionComponent, useEffect, useMemo } from 'react';
 import { IntlProvider } from 'react-intl';
 
+import 'nprogress/nprogress.css'
 import '../styles/globals.css';
 
 import German from '../../content/compiled-locales/de.json';
@@ -44,6 +46,28 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         return English;
     }
   }, [shortLocale]);
+
+  const router = useRouter()
+
+  useEffect(() => {
+    const handleStart = (_url: string) => {
+      NProgress.start()
+    }
+
+    const handleStop = () => {
+      NProgress.done()
+    }
+
+    router.events.on('routeChangeStart', handleStart)
+    router.events.on('routeChangeComplete', handleStop)
+    router.events.on('routeChangeError', handleStop)
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart)
+      router.events.off('routeChangeComplete', handleStop)
+      router.events.off('routeChangeError', handleStop)
+    }
+  }, [router])
 
   return (
     <>

@@ -4,7 +4,7 @@ import { VerificationContent } from '@src/components/page-content/VerificationCo
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { routes } from '@src/utils/routes';
-import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
+import { fetchProjectFromParams, SiteProps } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { Suspense, useState } from 'react';
@@ -58,7 +58,7 @@ const VerificationPage = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps = protectRoute([
+export const getServerSideProps: GetServerSideProps<SiteProps> = protectRoute([
   Role.electrician,
   Role.admin,
 ]).then(fetchProjectFromParams);
