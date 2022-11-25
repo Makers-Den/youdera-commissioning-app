@@ -28,7 +28,7 @@ export const updateModuleField = async ({
   return response.data;
 };
 
-export const getModuleFieldsForProject = async (projectId: string) => {
+export const getModuleFieldsForProject = async (projectId: number) => {
   const response = await youderaApiInstance.get<
     DataResponse<SiteWithModuleFields>
   >(`/sites/${projectId}?with[]=roofs`);

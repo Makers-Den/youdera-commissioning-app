@@ -9,16 +9,16 @@ import {
 import { CreateModuleRequestBody } from '../../apiTypes';
 import { QueryKeys } from '../../enums/queryKeys';
 
-export const useModuleFieldsQuery = (projectId: string) =>
+export const useModuleFieldsQuery = (projectId: number) =>
   useQuery(
     [QueryKeys.moduleFields, projectId],
-    ({ queryKey }) => getModuleFieldsForProject(queryKey[1] as string),
+    ({ queryKey }) => getModuleFieldsForProject(queryKey[1] as number),
     {
       suspense: true,
     },
   );
 
-export const useModuleFieldsMutations = (projectId: string) => {
+export const useModuleFieldsMutations = (projectId: number) => {
   const queryClient = useQueryClient();
 
   const createModuleFieldsMutation = useMutation(
