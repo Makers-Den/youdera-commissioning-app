@@ -1,5 +1,7 @@
 import { useAuth } from '@src/api/youdera/hooks/auth/hooks';
 import { LEGAL_NOTICE_URL, PRIVACY_POLICY_URL } from '@src/lib/constants';
+import { routes } from '@src/utils/routes';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useMemo } from 'react';
 import { useIntl } from 'react-intl';
@@ -35,7 +37,7 @@ export function AuthenticatedLayout({
 
   const logOut = async () => {
     await logOutMutation.mutateAsync();
-    router.push('/login');
+    router.push(routes.login);
   };
 
   const user: ProfileDropdownProps['user'] | undefined = useMemo(
@@ -55,10 +57,12 @@ export function AuthenticatedLayout({
     {
       key: 'set',
       children: (
-        <Typography className="flex py-1 text-sm font-medium">
-          <SvgIcon name="Settings" className="mr-3 w-5 text-orange-400" />
-          {intl.formatMessage({ defaultMessage: 'Settings' })}
-        </Typography>
+        <Link  href={routes.settings} passHref>
+          <a href={routes.settings} className="flex py-1 text-sm font-medium">
+            <SvgIcon name="Settings" className="mr-3 w-5 text-orange-400" />
+            {intl.formatMessage({ defaultMessage: 'Settings' })}
+          </a>
+        </Link>
       ),
     },
     {

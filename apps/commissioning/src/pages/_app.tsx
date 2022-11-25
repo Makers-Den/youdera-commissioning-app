@@ -1,3 +1,4 @@
+import { initBearerTokenInterceptorOnClientSide } from '@src/api/youdera/api-instances/youdera';
 import {
   Hydrate,
   QueryClient,
@@ -13,6 +14,13 @@ import '../styles/globals.css';
 
 import German from '../../content/compiled-locales/de.json';
 import English from '../../content/compiled-locales/en.json';
+
+
+if (typeof window !== "undefined") {
+  if (process.env.NEXT_PUBLIC_YOUDERA_AUTH_METHOD !== 'SESSION') {
+    initBearerTokenInterceptorOnClientSide();
+  }
+}
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   // There's some weird type error with @react/types 18+ and NextJs

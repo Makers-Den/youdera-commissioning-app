@@ -1,6 +1,9 @@
 import { Role } from '@src/api/youdera/apiTypes';
 
 export const routes = {
+  settings: '/settings',
+  login: '/login',
+  
   electrician: {
     selectTask: '/electrician/select-task',
     selectProject: '/electrician/select-project',
