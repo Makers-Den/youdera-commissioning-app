@@ -3,11 +3,13 @@ import { deleteCookie } from 'cookies-next';
 import { useCallback } from 'react';
 
 import {
+  deleteUserAvatar,
   forgotPassword,
   getUserInfo,
   login,
   logOut,
   resetPassword,
+  updateUserAvatar,
 } from './apiRequests';
 import { youderaApiInstance } from '../../api-instances/youdera';
 import { DataResponse, UserInfo } from '../../apiTypes';
@@ -75,7 +77,7 @@ export const useUpdateUserDetailsMutation = () =>
     newPassword: string;
   }
 
-  export const useUpdateUserPasswordMutation = () =>
+export const useUpdateUserPasswordMutation = () =>
   useMutation(
     useCallback(
       ({ oldPassword, newPassword }: UpdateUserPasswordPayload) =>
@@ -86,3 +88,23 @@ export const useUpdateUserDetailsMutation = () =>
       []
     )
   );
+
+export const useUpdateUserAvatarMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(updateUserAvatar, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.userInfo]);
+    },
+  });
+};
+
+export const useDeleteUserAvatarMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteUserAvatar, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QueryKeys.userInfo]);
+    },
+  });
+};
