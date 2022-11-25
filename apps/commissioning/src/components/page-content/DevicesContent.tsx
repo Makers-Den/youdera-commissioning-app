@@ -848,6 +848,7 @@ export function DevicesContent({
         submitButtonTitle={intl.formatMessage({
           defaultMessage: 'Update Device',
         })}
+        //@ts-ignore
         defaultValues={defaultValues}
         fileValueMapper={fileValueMapper}
         inverters={site.inverters}
