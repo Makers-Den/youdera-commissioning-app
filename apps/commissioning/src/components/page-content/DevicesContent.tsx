@@ -1,21 +1,27 @@
 import {
   ApiFile,
+  BatteryModel,
   CommsParams,
   CommsTestResult,
+  InverterModel,
+  MeterModel,
   Site,
 } from '@src/api/youdera/apiTypes';
 import {
   useBatteryCommsTestMutation,
+  useBatteryModelsQuery,
   useBatteryMutations,
   useUpdateBatteryCommsMutation,
 } from '@src/api/youdera/hooks/batteries/hooks';
 import {
   useInverterCommsTestMutation,
+  useInverterModelsQuery,
   useInverterMutations,
   useUpdateInverterCommsMutation,
 } from '@src/api/youdera/hooks/inverters/hooks';
 import {
   useMeterCommsTestMutation,
+  useMeterModelsQuery,
   useMeterMutations,
   useUpdateMeterCommsMutation,
 } from '@src/api/youdera/hooks/meters/hooks';
@@ -208,6 +214,14 @@ export function DevicesContent({
     deleteFileToMeterMutation,
   } = useMeterMutations(siteId);
 
+  const inverterModelsQuery = useInverterModelsQuery();
+  const inverterModels = inverterModelsQuery.data as InverterModel[];
+  const meterModelsQuery = useMeterModelsQuery()
+  const meterModels = meterModelsQuery.data as MeterModel[];
+  const batteryModelsQuery = useBatteryModelsQuery()
+  const batteryModels = batteryModelsQuery.data as BatteryModel[];
+
+
   const confirmDeleteHandler = async () => {
     if (currentDevice) {
       try {
@@ -340,9 +354,9 @@ export function DevicesContent({
         type: values.meterType.key,
         manufacturer: values.manufacturer.key,
         cmodel: values.model.id,
-        number: values.serialNumber,
         is_auxiliary: values.auxiliary,
-        ...(values.factor && { factor: values.factor }), //TODO when indirect flag in model is set to true user has to provide that.
+        ...(values.factor && { factor: values.factor }),
+        ...(values.serialNumber && { number: values.serialNumber }),
       });
 
       // TODO uncomment when backend is ready
@@ -645,7 +659,7 @@ export function DevicesContent({
     router,
     siteId,
   ]);
-
+  console.log(currentDevice)
   const defaultValues = useMemo(() => {
     if (currentDevice?.deviceType === 'Inverter') {
       return {
@@ -658,7 +672,7 @@ export function DevicesContent({
           name: currentDevice.model_name,
           manufacturer_name: currentDevice.manufacturer_name,
           manufacturer_id: currentDevice.manufacturer,
-          autoSerialnumber: !!currentDevice.serial_number,
+          autoSerialnumber: !!inverterModels.filter(inverterModel => inverterModel.id === currentDevice.model)[0].data?.auto_serialnumber,
           label: currentDevice.model_name,
           dependentKey: currentDevice.manufacturer.toString(),
         },
@@ -677,7 +691,7 @@ export function DevicesContent({
           name: currentDevice.model_name,
           manufacturer_name: currentDevice.manufacturer_name,
           manufacturer_id: currentDevice.manufacturer,
-          autoSerialnumber: !!currentDevice.serial_number,
+          autoSerialnumber: !!batteryModels.filter(batteryModel => batteryModel.id === currentDevice.model)[0].data?.auto_serialnumber,
           label: currentDevice.model_name,
           dependentKey: currentDevice.manufacturer.toString(),
         },
@@ -693,8 +707,8 @@ export function DevicesContent({
           : undefined,
       };
     }
-    console.log(currentDevice)
     if (currentDevice?.deviceType === 'Meter') {
+      const meterModel = meterModels.filter(meterModel => meterModel.id === currentDevice.model)[0]
       return {
         meterType: meterTypeOptions.filter(
           option => option.key === currentDevice.type,
@@ -708,11 +722,12 @@ export function DevicesContent({
           name: currentDevice.model_name,
           manufacturer_name: currentDevice.manufacturer_name,
           manufacturer_id: currentDevice.manufacturer,
-          indirect: true,
-          autoSerialnumber: !!currentDevice.serial_number,
+          autoSerialnumber: !!meterModel?.data?.auto_serialnumber,
+          indirect: !!meterModel?.data?.indirect,
           label: currentDevice.model_name,
           dependentKey: currentDevice.manufacturer.toString(),
         },
+        factor: currentDevice.factor,
         serialNumber: currentDevice.number,
         auxiliary: !!currentDevice.is_auxiliary,
         files: currentDevice.files,

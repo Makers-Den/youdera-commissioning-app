@@ -31,7 +31,7 @@ const validation = z.object({
     manufacturer_name: z.string(),
     manufacturer_id: z.number(),
     name: z.string(),
-    autoSerialnumber: z.boolean(),
+    autoSerialnumber: z.boolean().optional(),
     label: z.string(),
     dependentKey: z.string(),
   }),
@@ -74,7 +74,7 @@ export const BatteryFormDialog = ({
   const resolver = useMemo(
     () =>
       validation.refine(
-        values => values.model.autoSerialnumber && values.serialNumber,
+        values => values.model.autoSerialnumber || values.serialNumber,
         {
           path: ['serialNumber'],
           message: intl.formatMessage({
@@ -90,7 +90,9 @@ export const BatteryFormDialog = ({
     defaultValues,
   });
 
-  const { handleSubmit, reset, formState, watch } = method;
+  const { handleSubmit, reset, formState, watch, getValues } = method;
+  console.log(formState.errors)
+  // console.log('values!!!!! ', getValues())
 
   const handleClose = () => {
     onClose();
@@ -110,7 +112,8 @@ export const BatteryFormDialog = ({
     'files',
   ]);
 
-  const isSerialNumber = (model && !model.autoSerialnumber) || !!serialNumber;
+  const isSerialNumber = (model && model.autoSerialnumber) || !!serialNumber;
+
 
   const showFields = {
     first: true,
@@ -164,7 +167,9 @@ export const BatteryFormDialog = ({
                     defaultMessage: 'S/N',
                   })}
                   className="w-full"
-                  {...register('serialNumber')}
+                  {...register('serialNumber', {
+                    shouldUnregister: true
+                  })}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />
               )}

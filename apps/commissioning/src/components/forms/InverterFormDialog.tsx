@@ -30,11 +30,11 @@ const validation = z.object({
     manufacturer_name: z.string(),
     manufacturer_id: z.number(),
     name: z.string(),
-    autoSerialnumber: z.boolean(),
+    autoSerialnumber: z.boolean().optional(),
     label: z.string(),
     dependentKey: z.string(),
   }),
-  serialNumber: z.string(),
+  serialNumber: z.string().optional(),
   files: z.array(z.any()).nonempty(),
 });
 
@@ -66,7 +66,7 @@ export const InverterFormDialog = ({
   const resolver = useMemo(
     () =>
       validation.refine(
-        values => values.model.autoSerialnumber && values.serialNumber,
+        values => values.model.autoSerialnumber || values.serialNumber,
         {
           path: ['serialNumber'],
           message: intl.formatMessage({
@@ -112,7 +112,7 @@ export const InverterFormDialog = ({
     control,
   });
 
-  const isSerialNumber = (model && !model.autoSerialnumber) || !!serialNumber;
+  const isSerialNumber = (model && model.autoSerialnumber) || !!serialNumber;
 
   const showFields = {
     first: true,
@@ -165,7 +165,9 @@ export const InverterFormDialog = ({
                     defaultMessage: 'S/N',
                   })}
                   className="w-full"
-                  {...register('serialNumber')}
+                  {...register('serialNumber', {
+                    shouldUnregister: true
+                  })}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />
               )}

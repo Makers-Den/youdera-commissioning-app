@@ -83,6 +83,7 @@ export function MeterModelSelectFields() {
         noOptionsString: intl.formatMessage({
           defaultMessage: 'Nothing found.',
         }),
+        className: 'z-30'
       }}
       name="manufacturer"
       dependentOptions={modelOptions}
@@ -93,6 +94,7 @@ export function MeterModelSelectFields() {
         placeholder: intl.formatMessage({
           defaultMessage: 'Select',
         }),
+        wrapperClassName: 'z-20'
       }}
       dependentName="model"
     />

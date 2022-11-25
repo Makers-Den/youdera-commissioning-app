@@ -24,7 +24,7 @@ export const getMeter = async (id: number): Promise<Meter> => {
 };
 
 export type CreateMeterArgs = {
-  number: string;
+  number?: string;
   factor?: number;
   type: string;
   site: number;

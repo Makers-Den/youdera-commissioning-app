@@ -47,7 +47,7 @@ const validation = z.object({
     label: z.string(),
     dependentKey: z.string(),
   }),
-  factor: z.number().or(z.undefined()),
+  factor: z.number().optional(),
   serialNumber: z.string().or(z.undefined()),
   connectedInverters: z.array(
     z.object({
@@ -105,8 +105,7 @@ export const MeterFormDialog = ({
     resolver: zodResolver(resolver),
   });
 
-  const { handleSubmit, reset, formState, watch, getValues } = method;
-  console.log(getValues())
+  const { handleSubmit, reset, formState, watch } = method;
   const handleClose = () => {
     onClose();
     reset();
@@ -114,7 +113,9 @@ export const MeterFormDialog = ({
 
   useEffect(() => {
     if (defaultValues) {
-      reset(defaultValues);
+      reset({ auxiliary: false, ...defaultValues });
+    } else {
+      reset({ auxiliary: false })
     }
   }, [defaultValues, reset]);
 
@@ -128,18 +129,17 @@ export const MeterFormDialog = ({
       'files',
     ]);
 
-  const isSerialNumber = (!model?.autoSerialnumber || (!!serialNumber && serialNumber !== ''));
-  const isFactor = (!model?.indirect || !!factor)
-
+  const isSerialNumber = (!!model?.autoSerialnumber || !!serialNumber);
+  const isFactor = (!!model?.indirect || !!factor)
   const showFields = {
     first: true,
     second: !!meterType,
-    third: !!model?.indirect,
+    third: !!model && !model?.indirect, //factor
     fourth:
       !!meterType &&
       !!model &&
-      !model.autoSerialNumber &&
-      isFactor,
+      !model?.autoSerialnumber &&
+      isFactor, //serialnumber
     fifth:
       !!meterType &&
       !!model &&
@@ -148,14 +148,14 @@ export const MeterFormDialog = ({
     sixth:
       !!meterType &&
       !!model &&
-      !!serialNumber &&
       !!connectedInverters &&
       isFactor &&
       isSerialNumber,
     seventh:
       !!meterType &&
       !!model &&
-      !!serialNumber &&
+      isFactor &&
+      isSerialNumber &&
       !!connectedInverters &&
       !!file,
   };
@@ -190,6 +190,7 @@ export const MeterFormDialog = ({
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select',
               })}
+              wrapperClassName='z-40'
             >
               {meterTypeOptions.map(value => (
                 <SelectOption icon={value.icon as IconName} value={value}>
@@ -214,6 +215,7 @@ export const MeterFormDialog = ({
                   className="w-full"
                   {...register('factor', {
                     setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
+                    shouldUnregister: true
                   })}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />
@@ -231,7 +233,9 @@ export const MeterFormDialog = ({
                     defaultMessage: 'S/N',
                   })}
                   className="w-full"
-                  {...register('serialNumber')}
+                  {...register('serialNumber', {
+                    shouldUnregister: true
+                  })}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />
               )}
