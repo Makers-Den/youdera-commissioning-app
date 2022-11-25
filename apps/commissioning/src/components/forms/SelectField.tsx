@@ -12,7 +12,6 @@ export function SelectField<Value extends SelectValue>({
   ...props
 }: SelectFieldProps<Value>) {
   const control = useController({ name });
-
   return (
     <Field name={name}>
       {(_, fieldState) => (
