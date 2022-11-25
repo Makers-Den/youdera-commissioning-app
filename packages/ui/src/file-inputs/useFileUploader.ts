@@ -86,17 +86,19 @@ const reducer = (state: State, { type, payload }: Action): State => {
   }
 };
 
+export type UploadFileFn = (
+  event: FormEvent<HTMLInputElement>,
+  setUploadPercentageProgress: (percentage: number) => void,
+  setUploadedFileUrl: (url: string) => void,
+  setErrorMessage: (message: string) => void,
+) => unknown;
+
 export type UseFileUploaderArgs = {
-  uploadFile: (
-    event: FormEvent<HTMLInputElement>,
-    setUploadPercentageProgress: (percentage: number) => void,
-    setUploadedFileUrl: (url: string) => void,
-    setErrorMessage: (message: string) => void,
-  ) => unknown;
+  uploadFile: UploadFileFn;
   initialState?: UploadedFile[];
 };
 
-type ReturnType = {
+type UseFileUploaderResults = {
   fileUploaderProps: Pick<
     FileUploaderProps,
     'status' | 'errorMessage' | 'onChange' | 'uploadProgressPercentage'
@@ -108,7 +110,7 @@ type ReturnType = {
 export const useFileUploader = ({
   uploadFile,
   initialState,
-}: UseFileUploaderArgs): ReturnType => {
+}: UseFileUploaderArgs): UseFileUploaderResults => {
   const [state, dispatch] = useReducer(reducer, {
     status: UploadStatus.idle,
     uploadedFilesUrls: initialState || [],
