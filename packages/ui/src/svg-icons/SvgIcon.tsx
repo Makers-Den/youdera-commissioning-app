@@ -4,6 +4,7 @@ import {
   FaCheck,
   FaDownload,
   FaEnvelope,
+  FaGlobe,
   FaIndustry,
   FaLightbulb,
   FaMicrochip,
@@ -11,7 +12,7 @@ import {
   FaPlug,
   FaTable,
   FaTimes,
-  FaUnlockAlt
+  FaUnlockAlt,
 } from 'react-icons/fa';
 
 import { Battery } from './icons/Battery';
@@ -88,6 +89,7 @@ const iconMap = {
   Download: FaDownload,
   Plug: FaPlug,
   Lightbulb: FaLightbulb,
+  Globe: FaGlobe,
 };
 
 export type IconName = keyof typeof iconMap;

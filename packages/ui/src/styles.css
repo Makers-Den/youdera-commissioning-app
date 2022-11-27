@@ -19,10 +19,24 @@ body {
   border-spacing: 0 10px;
 }
 
-@layer base {
+.scrollbar::-webkit-scrollbar {
+  width: 3px;
+}
 
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
+.scrollbar::-webkit-scrollbar-track {
+  border-radius: 2px;
+  background-color: theme('colors.gray.300');
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  height: 30px;
+  background-color: theme('colors.gray.600');
+}
+
+@layer base {
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
     opacity: 0;
     cursor: pointer;
     z-index: 10;
@@ -30,7 +44,7 @@ body {
 }
 
 .is-loading::before {
-  content: "";
+  content: '';
   position: absolute;
   display: block;
   top: calc(50% - 14px);
@@ -44,12 +58,13 @@ body {
 }
 
 @keyframes is-loading {
-  0%, 100% {
-      transform: scale(0.1);
+  0%,
+  100% {
+    transform: scale(0.1);
   }
   50% {
-      /* border-width: $border-size*0.2; */
-      border-width: 2px;
-      transform: scale(1.1);
+    /* border-width: $border-size*0.2; */
+    border-width: 2px;
+    transform: scale(1.1);
   }
-} 
+}

@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { UserInfo } from "@src/api/youdera/apiTypes";
 import { useDeleteUserAvatarMutation, useUpdateUserAvatarMutation, useUpdateUserDetailsMutation, useUpdateUserPasswordMutation } from "@src/api/youdera/hooks/auth/hooks";
 import { reportApiError } from "@src/utils/errorUtils";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback,useEffect, useState  } from "react";
 import { useForm } from "react-hook-form";
 import { IntlShape, useIntl } from "react-intl";
 import { Box, BoxContent, BoxHeader, BoxTitle } from "ui/box/Box";
