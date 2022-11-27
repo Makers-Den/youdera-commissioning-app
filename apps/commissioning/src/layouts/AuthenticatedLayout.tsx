@@ -40,6 +40,12 @@ export function AuthenticatedLayout({
     router.push(routes.login);
   };
 
+  const onLocaleChange = (nextLocale: string) => {
+    const { pathname, asPath, query } = router;
+    // change just the locale and maintain all other route information including href's query
+    router.push({ pathname, query }, asPath, { locale: nextLocale });
+  };
+
   const user: ProfileDropdownProps['user'] | undefined = useMemo(
     () =>
       userInfoQuery.data
@@ -57,7 +63,7 @@ export function AuthenticatedLayout({
     {
       key: 'set',
       children: (
-        <Link  href={routes.settings} passHref>
+        <Link href={routes.settings} passHref>
           <a href={routes.settings} className="flex py-1 text-sm font-medium">
             <SvgIcon name="Settings" className="mr-3 w-5 text-orange-400" />
             {intl.formatMessage({ defaultMessage: 'Settings' })}
@@ -89,6 +95,12 @@ export function AuthenticatedLayout({
     header: navHeader,
     profileItems,
     user,
+    languageSelectProps: {
+      value: router.locale || '',
+      options: router.locales || [],
+      onChange: onLocaleChange,
+      title: intl.formatMessage({ defaultMessage: 'Select language' }),
+    },
   };
 
   const computedFooterProps = footerProps || {
