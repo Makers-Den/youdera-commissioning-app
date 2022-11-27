@@ -59,13 +59,13 @@ export enum ApiFileType {
 }
 
 export interface AddFileToSiteRequest {
-  siteId: string;
+  siteId: number;
   file: File;
   type: ApiFileType;
 }
 
 export interface DeleteFileFromSiteRequest {
-  siteId: string;
+  siteId: number;
   documentId: string;
 }
 export interface DeleteFileFromStringRequest {
@@ -142,6 +142,7 @@ export type Meter = {
 
   manufacturer: number;
   model: number;
+  cmodel: number;
   manufacturer_name: string;
   model_name: string;
 
@@ -426,7 +427,7 @@ export interface CreateModuleRequestBody {
   orientation: number;
   inclination: number;
   specific_yield: number;
-  site: string;
+  site: number;
 }
 
 export interface UpdateModuleRequestBody {

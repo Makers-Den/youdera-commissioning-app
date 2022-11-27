@@ -12,7 +12,7 @@ import { DeletionDialog } from '../dialogs/DeletionDialog';
 import { ImagesUploadBox, ImagesUploadBoxProps } from '../ImagesUploadBox';
 
 export type StringLayoutsContentProps = {
-  projectId: string;
+  projectId: number;
 };
 
 export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {

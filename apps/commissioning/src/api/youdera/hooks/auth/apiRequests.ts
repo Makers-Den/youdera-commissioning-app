@@ -1,7 +1,7 @@
 import { getCookie, setCookie } from 'cookies-next';
 
 import { youderaApiInstance } from '../../api-instances/youdera';
-import { LoginJWTResponse, UserInfo } from '../../apiTypes';
+import { DataResponse, LoginJWTResponse, UserInfo } from '../../apiTypes';
 import { CookiesKeys } from '../../enums/cookiesKeys';
 
 const loginJWT = async ({
@@ -96,3 +96,40 @@ export const resetPassword = async (body: ResetPasswordReqBody) => {
   });
   return response.data;
 };
+
+
+export interface UpdateUserAvatarArgs {
+  image: File;
+  setUploadProgress?: (percentage: number) => void;
+}
+
+export const updateUserAvatar = async ({
+  image,
+  setUploadProgress,
+}: UpdateUserAvatarArgs) => {
+  const formData = new FormData();
+  formData.append('image', image);
+  formData.append('type', 'image');
+
+  const response = await youderaApiInstance.post<DataResponse<{ link: string }>>(
+    `/profile/avatar`,
+    formData,
+    {
+      headers: {
+        'Content-type': 'multipart/form-data',
+      },
+      onUploadProgress(progressEvent) {
+        if (progressEvent.total) {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total,
+          );
+          setUploadProgress?.(percentCompleted);
+        }
+      },
+    },
+  );
+
+  return response.data.data;
+};
+
+export const deleteUserAvatar = () => youderaApiInstance.delete(`/profile/avatar`);

@@ -5,7 +5,7 @@ import { ModuleFieldsContent } from '@src/components/page-content/ModuleFieldsCo
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { routes } from '@src/utils/routes';
-import { fetchProjectFromParams } from '@src/utils/server/fetchProjectFromParams';
+import { fetchProjectFromParams, SiteProps } from '@src/utils/server/fetchProjectFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import React, { Suspense } from 'react';
@@ -85,7 +85,7 @@ const ModuleFieldsPage = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps = protectRoute([
+export const getServerSideProps: GetServerSideProps<SiteProps> = protectRoute([
   Role.roofer,
   Role.admin,
 ]).then(fetchProjectFromParams);

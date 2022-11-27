@@ -9,14 +9,14 @@ import {
 import { DeleteFileFromSiteRequest } from '../../apiTypes';
 import { QueryKeys } from '../../enums/queryKeys';
 
-export const useFilesQuery = (projectId: string) =>
+export const useFilesQuery = (projectId: number) =>
   useQuery(
     [QueryKeys.files, projectId],
     ({ queryKey }) => getSiteFiles(queryKey[1] as string),
     { suspense: true },
   );
 
-export const useFilesMutations = (projectId: string) => {
+export const useFilesMutations = (projectId: number) => {
   const queryClient = useQueryClient();
 
   const addFileToSiteMutation = useMutation(

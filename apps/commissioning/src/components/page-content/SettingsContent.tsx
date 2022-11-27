@@ -1,17 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserInfo } from "@src/api/youdera/apiTypes";
-import { useUpdateUserDetailsMutation, useUpdateUserPasswordMutation } from "@src/api/youdera/hooks/auth/hooks";
+import { useDeleteUserAvatarMutation, useUpdateUserAvatarMutation, useUpdateUserDetailsMutation, useUpdateUserPasswordMutation } from "@src/api/youdera/hooks/auth/hooks";
 import { reportApiError } from "@src/utils/errorUtils";
 import { useCallback,useEffect, useState  } from "react";
 import { useForm } from "react-hook-form";
-import { useIntl } from "react-intl";
+import { IntlShape, useIntl } from "react-intl";
 import { Box, BoxContent, BoxHeader, BoxTitle } from "ui/box/Box";
 import { Button } from "ui/buttons/Button";
+import { FileUploader } from "ui/file-inputs/FileUploader";
+import { UploadFileFn, useFileUploader } from "ui/file-inputs/useFileUploader";
 import { RoundImage } from "ui/image/RoundImage";
 import { Input } from "ui/inputs/Input";
 import { Profile } from "ui/svg-icons/icons/Profile";
+import { SvgIcon } from "ui/svg-icons/SvgIcon";
 import { Toast, useToast } from "ui/toast/Toast";
+import { Typography } from "ui/typography/Typography";
 import { z } from 'zod';
 
 import { Field } from "../forms/Field";
@@ -21,18 +25,24 @@ type SettingsSectionProps = {
   userInfo: UserInfo;
   className?: string;
 }
-
-const detailsValidation = z
+const buildDetailsSchema = (intl?: IntlShape) => z
   .object({
     firstName: z.string().min(1),
     lastName: z.string().min(1),
-    email: z.string().regex(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, "Invalid email")
+    email:
+      z.string()
+        .regex(
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/, 
+          intl?.formatMessage({ defaultMessage: "Invalid email" }) || 'no message'
+        )
   });
-
-type DetailsFormValues = z.infer<typeof detailsValidation>;
 
 const GeneralDetails = ({ userInfo, className }: SettingsSectionProps) => {
   const intl = useIntl();
+  const detailsValidation = useMemo(() => buildDetailsSchema(intl), [intl]);
+  type DetailsFormValues = z.infer<typeof detailsValidation>;
+
+
   const [defaultValues, setDefaultValues] = useState<DetailsFormValues>({
     firstName: userInfo.first_name,
     lastName: userInfo.last_name,
@@ -45,7 +55,7 @@ const GeneralDetails = ({ userInfo, className }: SettingsSectionProps) => {
     resolver: zodResolver(detailsValidation),
     defaultValues,
   });
-  
+
   const { handleSubmit, reset } = formProps;
   useEffect(() => {
     reset(defaultValues);
@@ -132,7 +142,7 @@ const GeneralDetails = ({ userInfo, className }: SettingsSectionProps) => {
   );
 }
 
-const passwordValidation = z
+const buildPasswordSchema = (intl?: IntlShape) => z
   .object({
     oldPassword: z.string().min(6),
     newPassword: z.string().min(6),
@@ -142,12 +152,12 @@ const passwordValidation = z
       ctx.addIssue({
         path: ['confirmNewPassword'],
         code: 'custom',
-        message: 'The passwords did not match'
+        message: intl?.formatMessage({
+          defaultMessage: 'The passwords did not match',
+        }) || 'message missing'
       });
     }
   });
-
-type PasswordFormValues = z.infer<typeof passwordValidation>;
 
 const ChangePassword = ({ className }: SettingsSectionProps) => {
   const intl = useIntl();
@@ -159,16 +169,18 @@ const ChangePassword = ({ className }: SettingsSectionProps) => {
 
   const toast = useToast();
 
+  const passwordValidation = useMemo(() => buildPasswordSchema(intl), [intl]);
+
   const formProps = useForm({
     resolver: zodResolver(passwordValidation),
     defaultValues,
   });
-  
+
   const { handleSubmit, reset } = formProps;
 
   const updateUserPasswordMutation = useUpdateUserPasswordMutation();
 
-  const onSubmit = useCallback(async ({ newPassword, oldPassword }: PasswordFormValues) => {
+  const onSubmit = useCallback(async ({ newPassword, oldPassword }: z.infer<typeof passwordValidation>) => {
     try {
       await updateUserPasswordMutation.mutateAsync({ newPassword, oldPassword });
       toast.success(intl.formatMessage({
@@ -237,9 +249,44 @@ const ChangePassword = ({ className }: SettingsSectionProps) => {
   );
 }
 
+function isPlaceholderImage(imgSrc: string) {
+  return imgSrc.endsWith("youdera-logo.svg");
+}
+
 export const ChangeAvatar = ({ userInfo, className }: SettingsSectionProps) => {
   const intl = useIntl();
-  const imgSrc = userInfo.image;
+  const toast = useToast();
+  const imgSrc = (userInfo.avatar && !isPlaceholderImage(userInfo.avatar))
+    ? userInfo.avatar
+    : undefined;
+
+  const updateUserAvatarMutation = useUpdateUserAvatarMutation();
+  const deleteUserAvatarMutation = useDeleteUserAvatarMutation();
+
+  const uploadFile: UploadFileFn = useCallback(async (
+    event,
+    setUploadPercentageProgress,
+    setUploadedUrl,
+  ) => {
+    const file = event.currentTarget.files![0];
+    try {
+      const response = await updateUserAvatarMutation.mutateAsync({
+        image: file,
+        setUploadProgress: setUploadPercentageProgress,
+      });
+
+      setUploadedUrl(response.link);
+      toast.success(
+        intl.formatMessage({
+          defaultMessage: 'Avatar updated.',
+        }),
+      );
+    } catch (err) {
+      reportApiError(toast, err);
+    }
+  }, [intl, toast, updateUserAvatarMutation]);
+
+  const { fileUploaderProps } = useFileUploader({ uploadFile })
 
   return (
     <Box className={className}>
@@ -249,10 +296,53 @@ export const ChangeAvatar = ({ userInfo, className }: SettingsSectionProps) => {
         />
       </BoxHeader>
       <BoxContent className="flex space-x-4">
-        {imgSrc && (
-          <RoundImage src={imgSrc} alt="avatar" wrapperClassName="w-9" />
-        )}
-        {!imgSrc && <Profile className="w-9" />}
+        <div className="w-24 h-20 relative">
+
+          {imgSrc && (
+            <>
+              <RoundImage src={imgSrc} alt="avatar" wrapperClassName="w-20 h-20 border" />
+              <SvgIcon
+                className="cursor-pointer absolute top-0 right-0"
+                name="Trashbin"
+                onClick={async () => {
+                  try {
+                    await deleteUserAvatarMutation.mutateAsync();
+                    toast.success(intl.formatMessage({ defaultMessage: 'Removed avatar.' }));
+                  } catch (err) {
+                    reportApiError(toast, err);
+                  }
+                }}
+              />
+            </>
+          )}
+          {!imgSrc && <Profile className="w-20 h-20" />}
+        </div>
+        <FileUploader
+          wrapperClassname="w-full flex-1" className="w-full"
+          accept="image/*"
+          {...fileUploaderProps}
+        >
+          <div className="flex flex-1 w-full items-center justify-start gap-4">
+            <SvgIcon name="Camera" className="w-8 text-green-400" />
+            <div>
+              <Typography>
+                {intl.formatMessage({
+                  defaultMessage: 'To replace your avatar take a photo with your camera',
+                })}
+              </Typography>
+              <Typography>
+                {intl.formatMessage({
+                  defaultMessage: 'or',
+                })}{' '}
+                <span className="text-green-400 underline">
+                  {intl.formatMessage({
+                    defaultMessage: 'click here to upload an image',
+                  })}
+                </span>
+              </Typography>
+            </div>
+          </div>
+        </FileUploader>
       </BoxContent>
     </Box>
   );
@@ -264,10 +354,8 @@ export const SettingsContent = ({ userInfo }: { userInfo: UserInfo }) => (
       <GeneralDetails userInfo={userInfo} className="flex-1" />
       <ChangePassword userInfo={userInfo} className="flex-1" />
     </div>
-    {/* TODO
-    <ChangeAvatar userInfo={userInfo} />
-    */}
+    <ChangeAvatar userInfo={userInfo} className="w-full" />
     <Toast />
   </div>
 );
-  
+

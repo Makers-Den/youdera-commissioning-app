@@ -19,10 +19,11 @@ export type Device = (
   | (Inverter & { deviceType: 'Inverter' })
   | (Battery & { deviceType: 'Battery' })
   | (Meter & {
-      deviceType: 'Meter';
-      /** copy of `number` for Meter. Inverter and Battery already have this field */
-      serial_number: string;
-    })
+    deviceType: 'Meter';
+    /** copy of `number` for Meter. Inverter and Battery already have this field */
+    serial_number: string;
+    factor: number;
+  })
 ) & {
   imageUrl: string;
   verificationTestStatus?: VerificationTestStatus;

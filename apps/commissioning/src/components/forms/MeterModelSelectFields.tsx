@@ -11,8 +11,16 @@ import {
 
 export type MeterModelSelectFieldsProps = {};
 
+type MeterModelOption = Pick<
+  MeterModel,
+  'name' | 'id' | 'manufacturer_id' | 'manufacturer_name'
+> & {
+  indirect: boolean;
+  autoSerialnumber: boolean;
+};
+
 type DependentProps = DependentSelectsFieldsProps<
-  MeterModel & { label: string; dependentKey: string }
+  MeterModelOption & { label: string; dependentKey: string }
 >;
 
 export function MeterModelSelectFields() {
@@ -26,7 +34,7 @@ export function MeterModelSelectFields() {
         modelOptions: DependentProps['dependentOptions'];
       }>(
         (prevVal, curVal) => {
-          const { manufacturer_name, manufacturer_id, name } = curVal;
+          const { manufacturer_name, manufacturer_id, data, name, id } = curVal;
           const manId = manufacturer_id.toString();
 
           const manufacturerOptions = [...prevVal.manufacturerOptions];
@@ -43,7 +51,16 @@ export function MeterModelSelectFields() {
               ...prevVal.modelOptions,
               {
                 children: () => name,
-                value: { ...curVal, dependentKey: manId, label: name },
+                value: {
+                  id,
+                  manufacturer_name,
+                  manufacturer_id,
+                  name,
+                  autoSerialnumber: !!data.auto_serialnumber,
+                  indirect: !!data.indirect,
+                  dependentKey: manId,
+                  label: name,
+                },
               },
             ],
           };
@@ -66,6 +83,7 @@ export function MeterModelSelectFields() {
         noOptionsString: intl.formatMessage({
           defaultMessage: 'Nothing found.',
         }),
+        className: 'z-30'
       }}
       name="manufacturer"
       dependentOptions={modelOptions}
@@ -76,6 +94,7 @@ export function MeterModelSelectFields() {
         placeholder: intl.formatMessage({
           defaultMessage: 'Select',
         }),
+        wrapperClassName: 'z-20'
       }}
       dependentName="model"
     />

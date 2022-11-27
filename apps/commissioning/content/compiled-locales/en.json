@@ -53,6 +53,12 @@
       "value": "Test and Verify"
     }
   ],
+  "/FRtaa": [
+    {
+      "type": 0,
+      "value": "String modified successfully!"
+    }
+  ],
   "/o7hHw": [
     {
       "type": 0,
@@ -75,6 +81,12 @@
     {
       "type": 0,
       "value": "Select task"
+    }
+  ],
+  "0ppFAH": [
+    {
+      "type": 0,
+      "value": "The passwords did not match"
     }
   ],
   "1Whlh9": [
@@ -131,10 +143,22 @@
       "value": "Are you sure?"
     }
   ],
+  "32nOfg": [
+    {
+      "type": 0,
+      "value": "Profile details saved."
+    }
+  ],
   "47FYwb": [
     {
       "type": 0,
       "value": "Cancel"
+    }
+  ],
+  "4HHNkF": [
+    {
+      "type": 0,
+      "value": "Change avatar"
     }
   ],
   "4HmxyS": [
@@ -159,6 +183,12 @@
     {
       "type": 0,
       "value": "Select method"
+    }
+  ],
+  "4pZN3b": [
+    {
+      "type": 0,
+      "value": "Site commissioned."
     }
   ],
   "4yNzxR": [
@@ -215,6 +245,12 @@
       "value": "Test Communication"
     }
   ],
+  "8aeS1B": [
+    {
+      "type": 0,
+      "value": "String added successfully!"
+    }
+  ],
   "9+Ddtu": [
     {
       "type": 0,
@@ -231,6 +267,18 @@
     {
       "type": 0,
       "value": "Inclination"
+    }
+  ],
+  "9WncsL": [
+    {
+      "type": 0,
+      "value": "Meter type"
+    }
+  ],
+  "9ZEXpd": [
+    {
+      "type": 0,
+      "value": "Connected inverters"
     }
   ],
   "A6sL8J": [
@@ -263,16 +311,34 @@
       "value": "Are you sure to delete module field?"
     }
   ],
+  "ByuOj8": [
+    {
+      "type": 0,
+      "value": "Invalid email"
+    }
+  ],
   "C7zbxT": [
     {
       "type": 0,
       "value": "404 - Page not found"
     }
   ],
+  "C9v8pH": [
+    {
+      "type": 0,
+      "value": "Saved communication parameters."
+    }
+  ],
   "CkBSOc": [
     {
       "type": 0,
       "value": "No unattached gateways"
+    }
+  ],
+  "D3idYv": [
+    {
+      "type": 0,
+      "value": "Settings"
     }
   ],
   "D7h26G": [
@@ -307,6 +373,12 @@
       "value": "Add Battery"
     }
   ],
+  "EYg2dM": [
+    {
+      "type": 0,
+      "value": "Consumption"
+    }
+  ],
   "EZfuT3": [
     {
       "type": 0,
@@ -317,6 +389,18 @@
     {
       "type": 0,
       "value": "Update Inverter"
+    }
+  ],
+  "G3yUc5": [
+    {
+      "type": 0,
+      "value": "Import/Export"
+    }
+  ],
+  "GJC/n/": [
+    {
+      "type": 0,
+      "value": "Own consumption"
     }
   ],
   "GtVtRN": [
@@ -379,6 +463,12 @@
       "value": "Add String"
     }
   ],
+  "L4nXIc": [
+    {
+      "type": 0,
+      "value": "Change password"
+    }
+  ],
   "L6MHcS": [
     {
       "type": 0,
@@ -401,6 +491,12 @@
     {
       "type": 0,
       "value": "ADD DEVICE"
+    }
+  ],
+  "NIynnB": [
+    {
+      "type": 0,
+      "value": "Current password"
     }
   ],
   "Ntjkqd": [
@@ -427,10 +523,28 @@
       "value": "Select main module type"
     }
   ],
+  "QKNlAr": [
+    {
+      "type": 0,
+      "value": "Meter updated successfully!"
+    }
+  ],
+  "QbbQzV": [
+    {
+      "type": 0,
+      "value": "John"
+    }
+  ],
   "R1av2T": [
     {
       "type": 0,
       "value": "Are you sure to delete this device?"
+    }
+  ],
+  "S3/GeQ": [
+    {
+      "type": 0,
+      "value": "john.doe@example.org"
     }
   ],
   "SO2mnn": [
@@ -449,6 +563,12 @@
     {
       "type": 0,
       "value": "Required"
+    }
+  ],
+  "Sg0yEX": [
+    {
+      "type": 0,
+      "value": "SN"
     }
   ],
   "SkNVv8": [
@@ -523,10 +643,22 @@
       "value": "Are you sure that all roofs and strings have been set up completely?"
     }
   ],
+  "Vng/AB": [
+    {
+      "type": 0,
+      "value": "Doe"
+    }
+  ],
   "VzzYJk": [
     {
       "type": 0,
       "value": "Create"
+    }
+  ],
+  "WRw7IG": [
+    {
+      "type": 0,
+      "value": "To replace your avatar take a photo with your camera"
     }
   ],
   "Wikrxi": [
@@ -559,6 +691,12 @@
       "value": "Gateway serial number"
     }
   ],
+  "XfQPV0": [
+    {
+      "type": 0,
+      "value": "Generation"
+    }
+  ],
   "Y18Iuk": [
     {
       "type": 0,
@@ -583,10 +721,22 @@
       "value": "Power"
     }
   ],
+  "YY/bym": [
+    {
+      "type": 0,
+      "value": "Auxiliary meter"
+    }
+  ],
   "Yy/yDL": [
     {
       "type": 0,
       "value": "Reset password"
+    }
+  ],
+  "ZRnbTz": [
+    {
+      "type": 0,
+      "value": "Meter added successfully!"
     }
   ],
   "ZZH0Bm": [
@@ -673,10 +823,22 @@
       "value": "Strings"
     }
   ],
+  "fTHhSB": [
+    {
+      "type": 0,
+      "value": "New password"
+    }
+  ],
   "fU7I5j": [
     {
       "type": 0,
       "value": "Run Test"
+    }
+  ],
+  "gasSuw": [
+    {
+      "type": 0,
+      "value": "click here to upload an image"
     }
   ],
   "hAkMuw": [
@@ -689,6 +851,12 @@
     {
       "type": 0,
       "value": "Project setup was finished"
+    }
+  ],
+  "hziisK": [
+    {
+      "type": 0,
+      "value": "Repeat new password"
     }
   ],
   "it6Lig": [
@@ -721,6 +889,12 @@
       "value": "Select"
     }
   ],
+  "kZP0ep": [
+    {
+      "type": 0,
+      "value": "Password updated."
+    }
+  ],
   "kd9+Gn": [
     {
       "type": 0,
@@ -739,6 +913,12 @@
       "value": "ok"
     }
   ],
+  "nnD0hl": [
+    {
+      "type": 0,
+      "value": "Avatar updated."
+    }
+  ],
   "nwjxtz": [
     {
       "type": 0,
@@ -751,10 +931,16 @@
       "value": "Change gateway"
     }
   ],
-  "ot42Mx": [
+  "pONqz8": [
     {
       "type": 0,
-      "value": "Inverter Mode"
+      "value": "First name"
+    }
+  ],
+  "pX93Sq": [
+    {
+      "type": 0,
+      "value": "String deleted successfully!"
     }
   ],
   "ptgUiM": [
@@ -767,6 +953,12 @@
     {
       "type": 0,
       "value": "No test execution"
+    }
+  ],
+  "qHg6W3": [
+    {
+      "type": 0,
+      "value": "Removed avatar."
     }
   ],
   "r/oW2Z": [
@@ -791,6 +983,12 @@
     {
       "type": 0,
       "value": "Model"
+    }
+  ],
+  "rkIjo/": [
+    {
+      "type": 0,
+      "value": "Passwords don't match"
     }
   ],
   "rm1EPz": [
@@ -823,10 +1021,22 @@
       "value": "Are you sure to delete the image?"
     }
   ],
+  "s7JEXl": [
+    {
+      "type": 0,
+      "value": "Email or password incorrect."
+    }
+  ],
   "sFENBY": [
     {
       "type": 0,
       "value": "Select project"
+    }
+  ],
+  "sLJqfO": [
+    {
+      "type": 0,
+      "value": "Inverter/MPP changed successfully!"
     }
   ],
   "sV2v5L": [
@@ -841,10 +1051,28 @@
       "value": "Email"
     }
   ],
+  "txUL0F": [
+    {
+      "type": 0,
+      "value": "Last name"
+    }
+  ],
   "tzMNF3": [
     {
       "type": 0,
       "value": "Status"
+    }
+  ],
+  "uJo8uM": [
+    {
+      "type": 0,
+      "value": "General details"
+    }
+  ],
+  "ur5eTL": [
+    {
+      "type": 0,
+      "value": "Update Meter"
     }
   ],
   "vx0nkZ": [
@@ -857,6 +1085,12 @@
     {
       "type": 0,
       "value": "Actions"
+    }
+  ],
+  "wcyR04": [
+    {
+      "type": 0,
+      "value": "Gateway attached successfully."
     }
   ],
   "wpH0GN": [
@@ -899,6 +1133,12 @@
     {
       "type": 0,
       "value": "Check it"
+    }
+  ],
+  "zh7h/t": [
+    {
+      "type": 0,
+      "value": "Serial number is required"
     }
   ],
   "zj2AzZ": [
