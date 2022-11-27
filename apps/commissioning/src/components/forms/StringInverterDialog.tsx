@@ -25,7 +25,6 @@ import { AutocompleteSelectField } from './AutocompleteField';
 import { ExistingInverterSelectField } from './ExistingInverterSelectField';
 import { FileField } from './FileField';
 import { Form } from './Form';
-import { NewInverterSelectField } from './NewInverterSelectField';
 
 type RawFormShapeExistingInverter = {
   inverter: ZodTypeAny;
