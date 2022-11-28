@@ -8,8 +8,6 @@
   ],
   "scripts": {
     "build": "turbo run build",
-    "build:commissioning": "turbo run build --filter=commissioning..",
-    "build:ui-docs": "turbo run build --filter=ui-docs..",
     "dev": "turbo run dev --parallel",
     "test": "turbo run test",
     "lint": "turbo run lint",
