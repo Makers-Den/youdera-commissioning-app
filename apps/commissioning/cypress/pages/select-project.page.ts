@@ -5,12 +5,12 @@ class SelectTask extends AbstractPage {
   navbar: NavbarComponent
   constructor() {
     super()
-    this.assertPageContent('Select task')
+    this.assertPageContent('Select project')
     this.navbar = new NavbarComponent()
   }
 
   selectComissioning() {
-    this.getCy('commissioning').click()
+    this.getCy('commissioning')
     return
   }
 }

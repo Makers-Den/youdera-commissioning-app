@@ -23,6 +23,7 @@ const SelectTask: React.FC = () => {
             <CardLink
               title={intl.formatMessage({ defaultMessage: 'Commissioning' })}
               icon={<SvgIcon name="Commissioning" />}
+              data-cy='commissioning'
             />
           </Link>
           <CardLink
@@ -30,12 +31,14 @@ const SelectTask: React.FC = () => {
             href="http://google.com"
             icon={<SvgIcon name="DeviceSwap" />}
             disabled
+            data-cy='device-swap'
           />
           <CardLink
             title={intl.formatMessage({ defaultMessage: 'Extenstion' })}
             href="http://google.com"
             icon={<SvgIcon name="Extention" />}
             disabled
+            data-cy='extenstion'
           />
         </BoxContent>
       </Box>

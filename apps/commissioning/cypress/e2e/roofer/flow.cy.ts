@@ -2,12 +2,19 @@
 
 import LoginPage from '../../pages/login.page';
 
-describe('roofer flow', () => {
-  it("roofer's settings", () => {
+describe('roofer', () => {
+  // it("roofer's settings", () => {
+  //   new LoginPage()
+  //     .visit()
+  //     .login({ email: 'roo@fer.com', password: 'roofer123' })
+  //     .navbar.openUserSettings()
+  //     .form.editGeneralDetails()
+  // })
+
+  it("flow", () => {
     new LoginPage()
       .visit()
       .login({ email: 'roo@fer.com', password: 'roofer123' })
-      .navbar.openUserSettings()
-      .form
+      .selectComissioning()
   })
 });

@@ -16,6 +16,7 @@
     "ci-cd": "start-server-and-test start http-get://localhost:3000 cypress run"
   },
   "dependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@hookform/error-message": "^2.0.0",
     "@hookform/resolvers": "^2.9.10",
     "@sentry/nextjs": "^7.21.1",
