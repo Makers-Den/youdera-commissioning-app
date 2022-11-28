@@ -5,6 +5,7 @@ stages:
 variables:
   NEXT_PUBLIC_YOUDERA_API_BASE: https://dev.youdera.com/api
   NEXT_PUBLIC_YOUDERA_AUTH_METHOD: JWT
+  NEXT_PUBLIC_ENABLE_SENTRY: false
 
 cache:
   - key: ${CI_COMMIT_REF_SLUG}
