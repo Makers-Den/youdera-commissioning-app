@@ -65,7 +65,6 @@ export function DependentSelectsFields<Value extends DependentValue>({
       ),
     [dependentOptions, value?.key],
   );
-
   return (
     <>
       <AutocompleteSelectField

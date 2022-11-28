@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from 'ui/dialogs/Dialog';
 import { Input } from 'ui/inputs/Input';
+import { NumberInput } from 'ui/inputs/NumberInput';
 import { MultiSelectOption } from 'ui/select/MultiSelect';
 import { SelectOption } from 'ui/select/Select';
 import { IconName, SvgIcon } from 'ui/svg-icons/SvgIcon';
@@ -42,10 +43,12 @@ const validation = z.object({
     manufacturer_id: z.number(),
     name: z.string(),
     autoSerialnumber: z.boolean(),
+    indirect: z.boolean(),
     label: z.string(),
     dependentKey: z.string(),
   }),
-  serialNumber: z.string(),
+  factor: z.number().optional(),
+  serialNumber: z.string().or(z.undefined()),
   connectedInverters: z.array(
     z.object({
       key: z.string(),
@@ -84,10 +87,10 @@ export const MeterFormDialog = ({
   const intl = useIntl();
   const meterTypeOptions = useMeterTypeOptions();
 
-  const resolver = useMemo(
+  const refinedValidation = useMemo(
     () =>
       validation.refine(
-        values => values.model.autoSerialnumber && values.serialNumber,
+        values => values.model.autoSerialnumber || values.serialNumber,
         {
           path: ['serialNumber'],
           message: intl.formatMessage({
@@ -99,7 +102,7 @@ export const MeterFormDialog = ({
   );
 
   const method = useForm({
-    resolver: zodResolver(resolver),
+    resolver: zodResolver(refinedValidation),
   });
 
   const { handleSubmit, reset, formState, watch } = method;
@@ -110,32 +113,52 @@ export const MeterFormDialog = ({
 
   useEffect(() => {
     if (defaultValues) {
-      reset(defaultValues);
+      reset({ auxiliary: false, ...defaultValues });
+    } else {
+      reset({ auxiliary: false })
     }
   }, [defaultValues, reset]);
 
-  const [meterType, model, serialNumber, connectedInverters, file] = watch([
-    'meterType',
-    'model',
-    'serialNumber',
-    'connectedInverters',
-    'files',
-  ]);
+  const [meterType, model, factor, serialNumber, connectedInverters, file] =
+    watch([
+      'meterType',
+      'model',
+      'factor',
+      'serialNumber',
+      'connectedInverters',
+      'files',
+    ]);
 
+  const isSerialNumber = (!!model?.autoSerialnumber || !!serialNumber);
+  const isFactor = (!!model?.indirect || !!factor)
   const showFields = {
     first: true,
     second: !!meterType,
-    third: !!meterType && !!model,
-    fourth: !!meterType && !!model && !!serialNumber,
-    fifth: !!meterType && !!model && !!serialNumber && !!connectedInverters,
+    third: !!model && !model?.indirect, //factor
+    fourth:
+      !!meterType &&
+      !!model &&
+      !model?.autoSerialnumber &&
+      isFactor, //serialnumber
+    fifth:
+      !!meterType &&
+      !!model &&
+      isFactor &&
+      isSerialNumber,
     sixth:
       !!meterType &&
       !!model &&
-      !!serialNumber &&
+      !!connectedInverters &&
+      isFactor &&
+      isSerialNumber,
+    seventh:
+      !!meterType &&
+      !!model &&
+      isFactor &&
+      isSerialNumber &&
       !!connectedInverters &&
       !!file,
   };
-
   return (
     <Dialog
       open={open}
@@ -167,6 +190,7 @@ export const MeterFormDialog = ({
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select',
               })}
+              wrapperClassName='z-40'
             >
               {meterTypeOptions.map(value => (
                 <SelectOption icon={value.icon as IconName} value={value}>
@@ -181,6 +205,24 @@ export const MeterFormDialog = ({
             </Suspense>
           )}
           {showFields.third && (
+            <Field name="factor">
+              {(register, fieldState) => (
+                <NumberInput
+                  label={intl.formatMessage({
+                    defaultMessage: 'Factor',
+                  })}
+                  min={1}
+                  className="w-full"
+                  {...register('factor', {
+                    setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
+                    shouldUnregister: true
+                  })}
+                  validity={fieldState.invalid ? 'invalid' : undefined}
+                />
+              )}
+            </Field>
+          )}
+          {showFields.fourth && (
             <Field name="serialNumber">
               {(register, fieldState) => (
                 <Input
@@ -191,13 +233,15 @@ export const MeterFormDialog = ({
                     defaultMessage: 'S/N',
                   })}
                   className="w-full"
-                  {...register('serialNumber')}
+                  {...register('serialNumber', {
+                    shouldUnregister: true
+                  })}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />
               )}
             </Field>
           )}
-          {showFields.fourth && (
+          {showFields.fifth && (
             <MultiSelectField
               name="connectedInverters"
               label={intl.formatMessage({
@@ -239,7 +283,7 @@ export const MeterFormDialog = ({
                 ))}
             </MultiSelectField>
           )}
-          {showFields.fifth && (
+          {showFields.sixth && (
             <>
               <div className="flex h-20 min-w-[340px] items-center justify-center rounded-md bg-gray-100">
                 <ToggleField
@@ -283,7 +327,7 @@ export const MeterFormDialog = ({
               </FilesField>
             </>
           )}
-          {showFields.sixth && (
+          {showFields.seventh && (
             <div className="mt-3 flex gap-5">
               <Button
                 variant="additional-gray"

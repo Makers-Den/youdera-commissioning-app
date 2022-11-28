@@ -1,4 +1,5 @@
 import { initBearerTokenInterceptorOnClientSide } from '@src/api/youdera/api-instances/youdera';
+import { useLocalizedZodMessages } from '@src/hooks/useLocalizedZodMessages';
 import {
   Hydrate,
   QueryClient,
@@ -8,7 +9,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import NProgress from 'nprogress'
-import React, { FunctionComponent, useEffect, useMemo } from 'react';
+import React, { FunctionComponent, ReactNode, useEffect, useMemo } from 'react';
 import { IntlProvider } from 'react-intl';
 
 import 'nprogress/nprogress.css'
@@ -23,6 +24,14 @@ if (typeof window !== "undefined") {
     initBearerTokenInterceptorOnClientSide();
   }
 }
+
+const WithLocalizedZod = ({ children }: { children?: ReactNode }) => {
+  // This will fetch intl and localize all the generic error messages.
+  // Schema specific messages need to be defined together with schema.
+  useLocalizedZodMessages();
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  return <>{children}</>;
+};
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   // There's some weird type error with @react/types 18+ and NextJs
@@ -82,13 +91,16 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
             messages={messages}
             onError={() => null}
           >
-            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-            <FixedComponent {...pageProps} />
+            <WithLocalizedZod>
+              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+              <FixedComponent {...pageProps} />
+            </WithLocalizedZod>
           </IntlProvider>
         </Hydrate>
       </QueryClientProvider>
     </>
   );
 };
+
 
 export default MyApp;

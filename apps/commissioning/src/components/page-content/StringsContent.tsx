@@ -15,7 +15,6 @@ import {
   useStringsMutations,
   useStringsQuery,
 } from '@src/api/youdera/hooks/strings/hooks';
-import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
 import { reportApiError } from '@src/utils/errorUtils';
 import { Suspense, useMemo, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -89,7 +88,6 @@ export interface StringContentProps {
 export function StringsContent({ roofId, siteId }: StringContentProps) {
   const intl = useIntl();
   const toast = useToast();
-  useZodErrorMap();
 
   const [selectedString, setSelectedString] = useState<String>();
   const stringsOnRoofQuery = useStringsQuery(roofId);

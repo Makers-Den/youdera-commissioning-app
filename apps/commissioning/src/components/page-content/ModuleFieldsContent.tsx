@@ -3,7 +3,6 @@ import {
   useModuleFieldsMutations,
   useModuleFieldsQuery,
 } from '@src/api/youdera/hooks/module-fields/hooks';
-import { useZodErrorMap } from '@src/hooks/useZodErrorMap';
 import { routes } from '@src/utils/routes';
 import { useRouter } from 'next/router';
 import { useMemo, useRef } from 'react';
@@ -58,7 +57,6 @@ export type ModuleFieldsContentProps = {
 export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
   const intl = useIntl();
   const router = useRouter();
-  useZodErrorMap();
 
   const toast = useToast();
 
