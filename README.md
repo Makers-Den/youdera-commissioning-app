@@ -45,6 +45,17 @@ yarn install
 yarn run build
 ```
 
+Build a single app
+
+```
+turbo run build --filter=commissioning...
+```
+
+or via yarn workspace commands
+```
+yarn workspace commissioning build
+```
+
 ## Develop
 
 To develop all apps and packages, run the following command:
