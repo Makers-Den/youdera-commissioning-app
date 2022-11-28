@@ -7,11 +7,12 @@ import clsxm from '../utils/clsxm';
 type CheckboxProps = {
   isChecked: boolean;
   label?: string;
+  dataCy?: string;
   onClick: () => void;
 } & React.ComponentPropsWithRef<'input'>;
 
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ label, isChecked, onClick, ...rest }, ref) => (
+  ({ label, isChecked, onClick, dataCy, ...rest }, ref) => (
     <div className="flex items-center">
       <label className="flex relative items-center hover:cursor-pointer">
         <input
@@ -25,6 +26,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           <span
             aria-hidden="true"
             className={clsxm("w-4 h-4 rounded-sm border-2 border-gray-800", rest.disabled && 'border-gray-500')}
+            data-cy={dataCy}
           />
         ) : (
           <span className="bg-green-400 w-4 h-4 rounded-sm">
@@ -32,6 +34,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               name="Check"
               aria-hidden="true"
               className="fill-white absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 w-3 h-3 "
+              data-cy={dataCy}
             />
           </span>
         )}

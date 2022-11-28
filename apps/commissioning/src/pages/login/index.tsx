@@ -89,6 +89,7 @@ const Login = () => {
             icon="Envelope"
             className="w-64"
             name="email"
+            data-cy="email"
           />
           <Input
             label={intl.formatMessage({ defaultMessage: 'Password' })}
@@ -99,6 +100,7 @@ const Login = () => {
             type="password"
             className="w-64"
             validity={areCredentialsValid}
+            data-cy="password"
           />
           {areCredentialsValid && (
             <Label className="text-red-400">
@@ -115,6 +117,7 @@ const Login = () => {
             onClick={handleChangeRememberUser}
             isChecked={rememberUser}
             disabled={!!areCredentialsValid}
+            dataCy="remember"
           />
           <Link href="/forgot-password" passHref>
             <Label
@@ -132,6 +135,7 @@ const Login = () => {
           disabled={!!areCredentialsValid}
           isLoading={loginMutation.isLoading}
           type="submit"
+          data-cy="login"
         >
           {intl.formatMessage({ defaultMessage: 'Login' })}
         </Button>
