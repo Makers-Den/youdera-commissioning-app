@@ -2,6 +2,7 @@
 import { Inverter } from '@src/api/youdera/apiTypes';
 import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
+import { AutocompleteSelectOption } from 'ui/select/AutocompleteSelect';
 import { IconName } from 'ui/svg-icons/SvgIcon';
 
 import {
@@ -9,7 +10,7 @@ import {
 } from './DependentSelectsField';
 
 export type StringInputSelectFieldProps = {
-  inverterValue: any;
+  inverterValue: AutocompleteSelectOption;
   inverters: Inverter[];
 };
 

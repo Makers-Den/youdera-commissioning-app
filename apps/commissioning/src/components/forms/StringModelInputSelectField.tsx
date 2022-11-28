@@ -5,19 +5,25 @@ import { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { AutocompleteSelectOption } from 'ui/select/AutocompleteSelect';
 import { SelectOptionProps } from 'ui/select/Select';
+import { IconName } from 'ui/svg-icons/SvgIcon';
 
 import { DependentThreeSelectsFields } from './DependentThreeSelectsFields';
 
-export type StringModelInputSelectFieldProps = {
-  inverterValue: any;
-  manufacturerValue: any;
-  modelValue: any;
-
-};
-type Options = SelectOptionProps<{
+type Option<T = undefined> = SelectOptionProps<{
+  key: string;
   dependentKey: string;
   label: string;
-}>[];
+  icon?: IconName
+  value?: T
+}>;
+
+
+export type StringModelInputSelectFieldProps = {
+  inverterValue: AutocompleteSelectOption;
+  manufacturerValue: AutocompleteSelectOption | undefined;
+  modelValue: AutocompleteSelectOption | undefined;
+
+};
 
 export const StringModelInputSelectField = ({
   inverterValue,
@@ -31,7 +37,7 @@ export const StringModelInputSelectField = ({
 
   // * Options
   const inverterManufacturerOptions = useMemo(() => {
-    const result: unknown[] = [];
+    const result: Option<number>[] = [];
     const map = new Map();
     inverterModels.forEach(model => {
       if (!map.has(model.manufacturer_id)) {
@@ -42,12 +48,12 @@ export const StringModelInputSelectField = ({
             key: model.manufacturer_id.toString(),
             label: model.manufacturer_name,
             value: model.manufacturer_id,
-            dependentKey: (inverterValue as AutocompleteSelectOption)?.key ?? '',
+            dependentKey: inverterValue?.key ?? '',
           }
         });
       }
     });
-    return result as Options;
+    return result;
   }, [inverterModels, inverterValue]);
 
   const inverterModelOptions = useMemo(() => {
@@ -66,7 +72,7 @@ export const StringModelInputSelectField = ({
           dependentKey: manufacturerValue.key,
         }
 
-      }));
+      })) as Option<number>[];
   }, [inverterModels, manufacturerValue]);
 
   const inverterInputOptions = useMemo(() => {
@@ -85,7 +91,7 @@ export const StringModelInputSelectField = ({
           value: idx.toString(),
           dependentKey: modelValue.key,
         }
-      }));
+      })) as Option<string>[];
   }, [inverterModels, modelValue]);
   // *
 
@@ -106,7 +112,7 @@ export const StringModelInputSelectField = ({
       }}
       dependentField2={{
         name: 'model',
-        options: inverterModelOptions as Options,
+        options: inverterModelOptions,
         selectProps: {
           label: intl.formatMessage({
             defaultMessage: 'Model',
@@ -118,7 +124,7 @@ export const StringModelInputSelectField = ({
       }}
       dependentField3={{
         name: 'newInput',
-        options: inverterInputOptions as Options,
+        options: inverterInputOptions,
         selectProps: {
           label: intl.formatMessage({
             defaultMessage: 'Input',

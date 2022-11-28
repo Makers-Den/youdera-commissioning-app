@@ -127,25 +127,24 @@ export const StringInverterDialog = <
           icon: 'Table',
         })),
       ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [inverters],
+    [inverters, intl],
   );
 
-  const watchInverter = useWatch({
+  const watchedInverter = useWatch({
     control,
     name: 'inverter',
-    defaultValue: formState.defaultValues?.inverter as any,
+    defaultValue: formState.defaultValues?.inverter as AutocompleteSelectOption,
   });
-  const watchInput = watch('input');
+  const watchedInput = watch('input');
 
-  const watchManufacturer = watch('manufacturer');
-  const watchModel = watch('model');
-  const watchNewInput = watch('newInput');
-  const watchFile = watch('file');
+  const watchedManufacturer = watch('manufacturer');
+  const watchedModel = watch('model');
+  const watchedNewInput = watch('newInput');
+  const watchedFile = watch('file');
 
   useEffect(() => {
-    if (watchInverter) setIsWithNewInverter(watchInverter.key === '-1');
-  }, [watchInverter]);
+    if (watchedInverter) setIsWithNewInverter(watchedInverter.key === '-1');
+  }, [watchedInverter]);
 
   return (
     <Dialog
@@ -192,20 +191,20 @@ export const StringInverterDialog = <
             })}
             options={inverterOptions}
           />
-          {watchInverter?.key !== '-1' ? (
+          {watchedInverter?.key !== '-1' ? (
             <StringInputSelectField
-              inverterValue={watchInverter}
+              inverterValue={watchedInverter}
               inverters={inverters}
             />
           ) : (
             <StringModelInputSelectField
-              inverterValue={watchInverter}
-              manufacturerValue={watchManufacturer}
-              modelValue={watchModel}
+              inverterValue={watchedInverter}
+              manufacturerValue={watchedManufacturer}
+              modelValue={watchedModel}
             />
           )}
-          {((watchInverter?.key !== '-1' && watchInput) ||
-            (watchInverter?.key === '-1' && watchNewInput)) && (
+          {((watchedInverter?.key !== '-1' && watchedInput) ||
+            (watchedInverter?.key === '-1' && watchedNewInput)) && (
               <FileField
                 className="w-full"
                 label={intl.formatMessage({
@@ -242,8 +241,8 @@ export const StringInverterDialog = <
                 </div>
               </FileField>
             )}
-          {((watchInverter?.key !== '-1' && watchInput && watchFile) ||
-            (watchInverter?.key === '-1' && watchNewInput && watchFile)) && (
+          {((watchedInverter?.key !== '-1' && watchedInput && watchedFile) ||
+            (watchedInverter?.key === '-1' && watchedNewInput && watchedFile)) && (
               <div className="mt-3 flex gap-5">
                 <Button
                   variant="additional-gray"

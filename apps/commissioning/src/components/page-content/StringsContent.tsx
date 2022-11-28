@@ -211,7 +211,6 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
       }
     }
   };
-
   const displayToast = (modifiedStringId: number | undefined) => {
     if (modifiedStringId) {
       toast.success(
@@ -239,12 +238,12 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
       if (!stringsOnRoofQuery.data) return;
       try {
         const stringRequestData = {
-          count: moduleTypeFormData.current!.numberOfModules,
+          count: moduleTypeFormData.current?.numberOfModules || selectedString!.count,
           roof: stringsOnRoofQuery.data.id,
-          module: moduleTypeFormData.current!.moduleType.key,
+          module: moduleTypeFormData.current?.moduleType.key || selectedString!.module.toString(),
           cable_cross_section: Number(
-            moduleTypeFormData.current!.cableCrossSection.key,
-          ),
+            moduleTypeFormData.current?.cableCrossSection.key,
+          ) || selectedString!.cable_cross_section,
           mpp_tracker: Number(input.key),
         };
 
@@ -276,12 +275,12 @@ export function StringsContent({ roofId, siteId }: StringContentProps) {
         const inverterDetails = await getInverterDetails(inverter.id);
 
         const stringRequestData = {
-          count: moduleTypeFormData.current!.numberOfModules,
+          count: moduleTypeFormData.current?.numberOfModules || selectedString!.count,
           roof: stringsOnRoofQuery.data.id,
-          module: moduleTypeFormData.current!.moduleType.key,
+          module: moduleTypeFormData.current?.moduleType.key || selectedString!.module.toString(),
           cable_cross_section: Number(
-            moduleTypeFormData.current!.cableCrossSection.key,
-          ),
+            moduleTypeFormData.current?.cableCrossSection.key,
+          ) || selectedString!.cable_cross_section,
           mpp_tracker: Number(inverterDetails.mpp_trackers[newInput.value].id),
         };
 
