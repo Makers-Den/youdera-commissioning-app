@@ -1,7 +1,8 @@
 import AbstractPage from "./abstract.page"
 import NavbarComponent from "./navbar.component"
+import SelectModulePage from "./select-module.page"
 
-class SelectTask extends AbstractPage {
+class SelectProjectPage extends AbstractPage {
   navbar: NavbarComponent
   constructor() {
     super()
@@ -9,10 +10,10 @@ class SelectTask extends AbstractPage {
     this.navbar = new NavbarComponent()
   }
 
-  selectComissioning() {
-    this.getCy('commissioning')
-    return
+  selectProject() {
+    this.getCy('project-0').click()
+    return new SelectModulePage()
   }
 }
 
-export default SelectTask
+export default SelectProjectPage

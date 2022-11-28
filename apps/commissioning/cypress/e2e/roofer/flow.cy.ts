@@ -16,5 +16,8 @@ describe('roofer', () => {
       .visit()
       .login({ email: 'roo@fer.com', password: 'roofer123' })
       .selectComissioning()
+      .selectProject()
+      .selectModule()
+      .next().confirm()
   })
 });

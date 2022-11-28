@@ -19,10 +19,10 @@ export type ProjectListProps = {
 export function ProjectList({ projects }: ProjectListProps) {
   return (
     <List>
-      {projects.map(({ id, name, street, href }) => (
+      {projects.map(({ id, name, street, href }, idx) => (
         <ListItem variant="primary" key={id}>
           <Link href={href} legacyBehavior>
-            <a className="flex cursor-pointer gap-5">
+            <a className="flex cursor-pointer gap-5" data-cy={`project-${idx}`}>
               <div className="flex aspect-square w-11 items-center justify-center rounded-full bg-green-300">
                 <SvgIcon name="Suitcase" className="w-5 text-white" />
               </div>

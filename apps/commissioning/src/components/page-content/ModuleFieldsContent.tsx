@@ -93,42 +93,8 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
     { specificYield, name, azimut, slantAngle },
     resetForm,
   ) => {
-    try {
-      const moduleField = await createModuleFieldsMutation.mutateAsync({
-        specific_yield: specificYield,
-        name,
-        orientation: azimut,
-        inclination: slantAngle,
-      });
-      toast.success(
-        intl.formatMessage({
-          defaultMessage: 'Module field added successfully!',
-        }),
-      );
-      createDialog.onClose();
-      resetForm();
-      router.push(
-        routes.roofer.moduleFieldStrings(
-          Number(projectId),
-          Number(moduleField.id),
-        ),
-      );
-    } catch (err) {
-      //@ts-ignore
-      toast.error(err.message);
-    }
-  };
-
-  const updateSubmitHandler: ModuleFieldFormDialogProps<
-    typeof updateModuleValidation
-  >['onSubmit'] = async (
-    { name, slantAngle, specificYield, azimut },
-    resetForm,
-  ) => {
-    if (currentModule.current) {
       try {
-        await updateModuleFieldsMutation.mutateAsync({
-          id: currentModule.current.id,
+        const moduleField = await createModuleFieldsMutation.mutateAsync({
           specific_yield: specificYield,
           name,
           orientation: azimut,
@@ -136,20 +102,54 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
         });
         toast.success(
           intl.formatMessage({
-            defaultMessage: 'Module field updated successfully!',
+            defaultMessage: 'Module field added successfully!',
           }),
         );
-        updateDialog.onClose();
-        setCurrentModule(null);
+        createDialog.onClose();
         resetForm();
+        router.push(
+          routes.roofer.moduleFieldStrings(
+            Number(projectId),
+            Number(moduleField.id),
+          ),
+        );
       } catch (err) {
         //@ts-ignore
         toast.error(err.message);
-        // eslint-disable-next-line no-console
-        console.error(err);
       }
-    }
-  };
+    };
+
+  const updateSubmitHandler: ModuleFieldFormDialogProps<
+    typeof updateModuleValidation
+  >['onSubmit'] = async (
+    { name, slantAngle, specificYield, azimut },
+    resetForm,
+  ) => {
+      if (currentModule.current) {
+        try {
+          await updateModuleFieldsMutation.mutateAsync({
+            id: currentModule.current.id,
+            specific_yield: specificYield,
+            name,
+            orientation: azimut,
+            inclination: slantAngle,
+          });
+          toast.success(
+            intl.formatMessage({
+              defaultMessage: 'Module field updated successfully!',
+            }),
+          );
+          updateDialog.onClose();
+          setCurrentModule(null);
+          resetForm();
+        } catch (err) {
+          //@ts-ignore
+          toast.error(err.message);
+          // eslint-disable-next-line no-console
+          console.error(err);
+        }
+      }
+    };
 
   const confirmDeleteHandler = async () => {
     if (currentModule.current) {
@@ -239,11 +239,12 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
               </Tr>
             </Thead>
             <Tbody>
-              {moduleFieldsQuery.data?.map(module => (
+              {moduleFieldsQuery.data?.map((module, idx) => (
                 <Tr
                   className="cursor-pointer"
                   key={module.id}
                   onClick={rowClickHandler(module)}
+                  data-cy={`field-${idx}`}
                 >
                   {rowKeys.map(key => (
                     <Td key={`${module.id}-${key}`}>

@@ -20,8 +20,8 @@ export function MainModuleTypeList({ modules }: MainModuleTypeListProps) {
 
   return (
     <List>
-      {modules.map(({ id, name, manufacturerName, wattpeak, onClick }) => (
-        <ListItem variant='primary' key={id}>
+      {modules.map(({ id, name, manufacturerName, wattpeak, onClick }, idx) => (
+        <ListItem variant="primary" key={id} data-cy={`module-${idx}`}>
           <button
             className="flex w-full cursor-pointer gap-5"
             onClick={() => onClick(id)}

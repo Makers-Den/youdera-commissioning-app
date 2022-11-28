@@ -1,5 +1,6 @@
-import { User } from "../builders/user.builder"
+// import { User } from "../builders/user.builder"
 import AbstractPage from "./abstract.page"
+import SelectTaskPage from "./select-task.page"
 import SelectTask from "./select-task.page"
 // import HomePage from "./home.page"
 
@@ -15,7 +16,7 @@ class LoginPage extends AbstractPage {
     this.getCy("remember").click()
     this.getCy("login").click()
 
-    return new SelectTask()
+    return new SelectTaskPage()
   }
 
   // headlessLogin(user: User) {
