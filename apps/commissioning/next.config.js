@@ -17,8 +17,8 @@ module.exports = withSentryConfig(
     output: 'standalone',
     reactStrictMode: true,
     i18n: {
-      locales: ['en-GB', 'de-DE'],
-      defaultLocale: 'en-GB',
+      locales: ['en', 'de'],
+      defaultLocale: 'en',
     },
     sentry: {
       // Use `hidden-source-map` rather than `source-map` as the Webpack `devtool`
