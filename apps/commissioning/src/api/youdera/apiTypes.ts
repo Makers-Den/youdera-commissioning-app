@@ -367,7 +367,7 @@ export interface UpdateBatteryRequest {
   serial_number?: string;
   cmodel: number;
   site: number;
-  inverter_id: number;
+  inverter: number;
 }
 
 export interface AddFileToBatteryRequest {

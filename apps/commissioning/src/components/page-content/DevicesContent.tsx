@@ -492,7 +492,7 @@ export function DevicesContent({
         cmodel: values.model.id,
         manufacturer: values.manufacturer.label,
         model: values.manufacturer.label,
-        inverter_id: values.inverter.id,
+        inverter: values.inverter.id,
       });
 
       const filesToAdd = values.files
