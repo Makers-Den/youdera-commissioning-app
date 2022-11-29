@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { youderaApiInstance } from '../../api-instances/youdera';
 import { DataResponse, Site } from '../../apiTypes';
 

@@ -260,7 +260,7 @@ export const MeterFormDialog = ({
               wrapperClassName="z-10"
             >
               {inverters &&
-                inverters.map((inverter, idx) => (
+                inverters.map((inverter) => (
                   <MultiSelectOption
                     value={{
                       key: inverter.id.toString(),
