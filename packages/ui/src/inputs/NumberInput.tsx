@@ -55,6 +55,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             validity && validityStyle[validity].input,
           )}
           {...rest}
+          data-cy={label?.toLowerCase().replace(' ', '-') || "number-input"}
         />
 
         <div className="suffix pointer-events-none absolute top-[9px] w-full pl-3">

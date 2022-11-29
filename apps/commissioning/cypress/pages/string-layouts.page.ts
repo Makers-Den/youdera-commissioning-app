@@ -16,22 +16,39 @@ class StringLayoutPage extends AbstractPage {
     this.getCy('upload')
       .first()
       .selectFile({ contents: 'cypress/fixtures/test.png' }, { force: true });
+    this.getCy('string-item-0').should('be.visible')
+    this.getCy('toast').first().should('contain', 'File uploaded successfully');
+
+    this.getCy('upload')
+      .first()
+      .selectFile({ contents: 'cypress/fixtures/test.png' }, { force: true });
+    this.getCy('string-item-1').should('be.visible')
+    this.getCy('toast').first().should('contain', 'File uploaded successfully');
+
     this.getCy('upload')
       .last()
       .selectFile({ contents: 'cypress/fixtures/test.png' }, { force: true });
+    this.getCy('additional-item-0').should('be.visible')
     this.getCy('toast').first().should('contain', 'File uploaded successfully');
-    this.getCy('toast').last().should('contain', 'File uploaded successfully');
+
+    this.getCy('upload')
+      .last()
+      .selectFile({ contents: 'cypress/fixtures/test.png' }, { force: true });
+    this.getCy('additional-item-1').should('be.visible')
+
+    this.getCy('toast').first().should('contain', 'File uploaded successfully');
 
     const confirmationDialog = new ConfirmationDialog<StringLayoutPage>(StringLayoutPage, () => {
       this.getCy('toast').should('contain', 'File deleted successfully!');
+      this.getCy('toast').should('not.exist');
       this.getCy('close-dialog').click();
     })
 
-    this.getCy('uploaded-item-0').last().click({ force: true });
+    this.getCy('string-item-1').click();
     this.getCy('delete').click();
     confirmationDialog.confirm()
 
-    this.getCy('uploaded-item-0').first().click({ force: true });
+    this.getCy('additional-item-1').click({ force: true });
     this.getCy('delete').click();
     confirmationDialog.confirm()
 

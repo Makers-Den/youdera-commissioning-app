@@ -113,7 +113,6 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
           isGalleryOpen={stringLayoutGallery.isOpen}
           onGalleryClose={stringLayoutGallery.onClose}
           onGalleryOpen={stringLayoutGallery.onOpen}
-          data-cy='aaaa'
         />
         <ImagesUploadBox
           title={intl.formatMessage({ defaultMessage: 'Additional pictures' })}

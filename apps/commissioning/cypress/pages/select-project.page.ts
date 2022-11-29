@@ -11,7 +11,7 @@ class SelectProjectPage extends AbstractPage {
   }
 
   selectProject() {
-    this.getCy('project-0').click()
+    this.getCy('project').last().click()
     return new SelectModulePage()
   }
 }

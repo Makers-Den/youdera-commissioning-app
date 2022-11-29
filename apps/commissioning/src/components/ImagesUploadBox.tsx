@@ -48,7 +48,6 @@ export function ImagesUploadBox({
     setCurrentImageIndex(index);
     onGalleryOpen();
   };
-
   return (
     <>
       <LargeBox>
@@ -63,7 +62,7 @@ export function ImagesUploadBox({
                 key={name}
                 className="w-28 cursor-pointer overflow-hidden"
                 onClick={listClickHandler(index)}
-                data-cy={`uploaded-item-${index}`}
+                data-cy={`${title.split(" ")[0].toLowerCase()}-item-${index}`}
               >
                 <SquareImage src={thumbnailUrl} alt={name} />
               </ListItem>

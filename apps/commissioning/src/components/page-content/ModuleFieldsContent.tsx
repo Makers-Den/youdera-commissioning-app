@@ -225,7 +225,7 @@ export function ModuleFieldsContent({ projectId }: ModuleFieldsContentProps) {
           <BoxTitle
             title={intl.formatMessage({ defaultMessage: 'Module Fields' })}
           />
-          <Button className="ml-auto w-[200px]" onClick={createDialog.onOpen}>
+          <Button className="ml-auto w-[200px]" onClick={createDialog.onOpen} data-cy='add-module-field-btn'>
             + {intl.formatMessage({ defaultMessage: 'Add module field' })}
           </Button>
         </BoxHeader>
