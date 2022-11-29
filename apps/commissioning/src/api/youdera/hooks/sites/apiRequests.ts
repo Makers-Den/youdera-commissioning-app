@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { youderaApiInstance } from '../../api-instances/youdera';
 import { DataResponse, Site } from '../../apiTypes';
 
@@ -35,6 +36,7 @@ export const getSite = async (siteId: number) => {
       `&with[]=meters.testlogs` +
       `&with[]=meters.files` +
       `&with[]=meters.datapoints` +
+      `&with[]=meters.inverters` +
       `&with[]=inverters` +
       `&with[]=inverters.testlogs` +
       `&with[]=inverters.mpp_trackers` +

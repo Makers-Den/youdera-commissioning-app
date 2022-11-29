@@ -163,8 +163,7 @@ export type Meter = {
 
   files?: ApiFile[];
 
-  /** For now let it be of type number[] */
-  inverters?: number[];
+  inverters?: Inverter[];
   /** maps to some JSON column in db */
   datapoints?: Datapoint[];
 };

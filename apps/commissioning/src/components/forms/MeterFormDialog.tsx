@@ -264,23 +264,20 @@ export const MeterFormDialog = ({
                   <MultiSelectOption
                     value={{
                       key: inverter.id.toString(),
-                      label: inverter.name ?? 'Inverter',
+                      label: inverter.name || `Inverter ${inverter.id}`,
                       ...inverter,
                     }}
                   >
                     {() => (
                       <div>
                         <Typography variant="body" weight="medium">
-                          {intl.formatMessage({
-                            defaultMessage: 'Inverter',
-                          })}{' '}
-                          {idx} {inverter.name ? `– ${inverter.name}` : ''}
+                          {inverter.name || `Inverter ${inverter.id}`}
                         </Typography>
                         <Typography variant="label">
                           {' '}
                           {intl.formatMessage({
                             defaultMessage: 'SN',
-                            description: 'Context: Shortcut from Serial Number',
+                            description: 'Context: Abbreviation of Serial Number in inverter selection dropdown',
                           })}
                           : {inverter.serial_number}
                         </Typography>

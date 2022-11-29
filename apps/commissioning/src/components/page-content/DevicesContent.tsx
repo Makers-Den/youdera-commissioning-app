@@ -725,12 +725,10 @@ export function DevicesContent({
         serialNumber: currentDevice.number,
         auxiliary: !!currentDevice.is_auxiliary,
         files: currentDevice.files,
-        connectedInverters: [], // ! Temporary value
-        //TODO add connectedInverters data - waiting for backend
-        // connectedInverters: {
-        //   key: currentDevice.inverter.toString(),
-        //   label: currentDevice.inverter_name,
-        // },
+        connectedInverters: currentDevice.inverters?.map(inverter => ({
+           key: inverter.id.toString(),
+           label: inverter.name || `Inverter ${inverter.id}`,
+        })) || [],
       };
     }
 
