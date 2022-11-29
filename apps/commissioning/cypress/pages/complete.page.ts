@@ -12,7 +12,7 @@ class CompletePage extends AbstractPage {
   }
 
   goToMainMenu() {
-    this.getCy('commissioning').click()
+    this.getCy('main-menu-button').click()
     return new SelectTaskPage()
   }
 }

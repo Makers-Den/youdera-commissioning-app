@@ -23,5 +23,6 @@ describe('roofer', () => {
       .uploadStringLayout()
       .next()
       .confirm()
+      .goToMainMenu()
   })
 });
