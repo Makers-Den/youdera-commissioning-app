@@ -1,3 +1,5 @@
+import { omit } from 'lodash';
+
 import { youderaApiInstance } from '../../api-instances/youdera';
 import {
   ApiFile,
@@ -43,15 +45,17 @@ export const createMeter = async (body: CreateMeterArgs): Promise<Meter> => {
 
 export type UpdateMeterRequestBody = {
   id: number;
-} & Partial<Meter>;
+  inverters?: number[];
+} & Partial<Omit<Meter, 'inverters'>>;
 
 export const updateMeter = async ({
   id,
   ...meter
 }: UpdateMeterRequestBody): Promise<Meter> => {
+  const body = omit(meter, 'manufacturer');
   const response = await youderaApiInstance.patch<CreateDataResponse<Meter>>(
     `/meters/${id}`,
-    meter,
+    body,
   );
   return response.data.data;
 };
