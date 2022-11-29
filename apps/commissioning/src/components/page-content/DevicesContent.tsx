@@ -216,11 +216,10 @@ export function DevicesContent({
 
   const inverterModelsQuery = useInverterModelsQuery();
   const inverterModels = inverterModelsQuery.data as InverterModel[];
-  const meterModelsQuery = useMeterModelsQuery()
+  const meterModelsQuery = useMeterModelsQuery();
   const meterModels = meterModelsQuery.data as MeterModel[];
-  const batteryModelsQuery = useBatteryModelsQuery()
+  const batteryModelsQuery = useBatteryModelsQuery();
   const batteryModels = batteryModelsQuery.data as BatteryModel[];
-
 
   const confirmDeleteHandler = async () => {
     if (currentDevice) {
@@ -454,7 +453,7 @@ export function DevicesContent({
         cmodel: values.model.id,
         manufacturer: values.manufacturer.label,
         model: values.manufacturer.label,
-        inverter_id: values.inverter.id,
+        inverter: values.inverter.id,
       });
 
       // eslint-disable-next-line no-restricted-syntax
@@ -659,7 +658,7 @@ export function DevicesContent({
     router,
     siteId,
   ]);
-  console.log(currentDevice)
+  console.log(currentDevice);
   const defaultValues = useMemo(() => {
     if (currentDevice?.deviceType === 'Inverter') {
       return {
@@ -672,7 +671,9 @@ export function DevicesContent({
           name: currentDevice.model_name,
           manufacturer_name: currentDevice.manufacturer_name,
           manufacturer_id: currentDevice.manufacturer,
-          autoSerialnumber: !!inverterModels.filter(inverterModel => inverterModel.id === currentDevice.model)[0].data?.auto_serialnumber,
+          autoSerialnumber: !!inverterModels.filter(
+            inverterModel => inverterModel.id === currentDevice.model,
+          )[0].data?.auto_serialnumber,
           label: currentDevice.model_name,
           dependentKey: currentDevice.manufacturer.toString(),
         },
@@ -691,7 +692,9 @@ export function DevicesContent({
           name: currentDevice.model_name,
           manufacturer_name: currentDevice.manufacturer_name,
           manufacturer_id: currentDevice.manufacturer,
-          autoSerialnumber: !!batteryModels.filter(batteryModel => batteryModel.id === currentDevice.model)[0].data?.auto_serialnumber,
+          autoSerialnumber: !!batteryModels.filter(
+            batteryModel => batteryModel.id === currentDevice.model,
+          )[0].data?.auto_serialnumber,
           label: currentDevice.model_name,
           dependentKey: currentDevice.manufacturer.toString(),
         },
@@ -700,15 +703,17 @@ export function DevicesContent({
 
         inverter: currentDevice.inverter
           ? {
-            id: currentDevice.inverter.id,
-            label: currentDevice.inverter.name,
-            name: currentDevice.inverter.name,
-          }
+              id: currentDevice.inverter.id,
+              label: currentDevice.inverter.name,
+              name: currentDevice.inverter.name,
+            }
           : undefined,
       };
     }
     if (currentDevice?.deviceType === 'Meter') {
-      const meterModel = meterModels.filter(meterModel => meterModel.id === currentDevice.model)[0]
+      const meterModel = meterModels.filter(
+        meterModel => meterModel.id === currentDevice.model,
+      )[0];
       return {
         meterType: meterTypeOptions.filter(
           option => option.key === currentDevice.type,
@@ -791,12 +796,12 @@ export function DevicesContent({
         description={
           currentDevice?.deviceType === 'Inverter'
             ? intl.formatMessage({
-              defaultMessage:
-                'Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well.',
-            })
+                defaultMessage:
+                  'Are you sure to delete this inverter? All connected strings, batteries and meters will be deleted as well.',
+              })
             : intl.formatMessage({
-              defaultMessage: 'Are you sure to delete this device?',
-            })
+                defaultMessage: 'Are you sure to delete this device?',
+              })
         }
         onCancel={handleDeleteCancel}
         onDelete={confirmDeleteHandler}
@@ -908,15 +913,15 @@ export function DevicesContent({
             const commsParams: CommsParams & { id: number } =
               commType === 'fixed_ip'
                 ? {
-                  id: currentDevice.id,
-                  ip: ipAddress,
-                  slave_id: Number(slaveId),
-                }
+                    id: currentDevice.id,
+                    ip: ipAddress,
+                    slave_id: Number(slaveId),
+                  }
                 : {
-                  id: currentDevice.id,
-                  dhcp: true,
-                  slave_id: Number(slaveId),
-                };
+                    id: currentDevice.id,
+                    dhcp: true,
+                    slave_id: Number(slaveId),
+                  };
 
             try {
               const testResult = await testDeviceCommsMutation.mutateAsync(
