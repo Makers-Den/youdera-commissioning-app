@@ -3,19 +3,22 @@ import LoginPage from './login.page';
 import SettingsPage from './settings.page';
 
 class ConfirmationDialog<T> extends AbstractPage {
-  pageToRedirect: T;
+  pageToRedirect: new () => T;
+  afterConfirmationAction: () => void;
 
-  constructor(pageToRedirect) {
+  constructor(pageToRedirect, afterConfirmationAction = () => undefined) {
     super();
-    this.pageToRedirect = new pageToRedirect() // ! WIP
+    this.pageToRedirect = pageToRedirect
+    this.afterConfirmationAction = afterConfirmationAction
   }
   confirm() {
     this.getCy('confirmation-confirm-button').click()
-    return this.pageToRedirect
+    this.afterConfirmationAction()
+    return new this.pageToRedirect()
   }
   decline() {
-    this.getCy('')
-    return this.pageToRedirect
+    this.getCy('confirmation-decline-button')
+    return new this.pageToRedirect()
   }
 }
 

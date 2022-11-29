@@ -5,6 +5,7 @@ import StringLayoutPage from "./string-layouts.page"
 
 class ModuleFieldsPage extends AbstractPage {
   navbar: NavbarComponent
+
   constructor() {
     super()
     this.assertPageContent('Module Fields')
@@ -16,16 +17,19 @@ class ModuleFieldsPage extends AbstractPage {
     this.getCy('module-0').click()
     return this
   }
+
   modifyStrings() {
     //TODO
     this.getCy('module-0').click()
     return
   }
+
   deleteModuleField() {
     //TODO
     this.getCy('module-0').click()
     return this
   }
+
   //
   next() {
     this.getCy('footer-button-1').click()

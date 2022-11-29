@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import AbstractPage from './abstract.page';
 import LoginPage from './login.page';
 import SettingsPage from './settings.page';

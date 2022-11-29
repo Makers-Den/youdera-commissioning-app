@@ -109,6 +109,7 @@ export const Gallery = <Id extends string | number>({
                   'absolute top-5 right-5 h-[24px] w-[24px]',
                 )}
                 onClick={onClose}
+                data-cy='close-dialog'
               />
               <div
                 className="flex items-center justify-center"
@@ -133,6 +134,7 @@ export const Gallery = <Id extends string | number>({
                     name="Trashbin"
                     onClick={() => onDelete(currentImage.id)}
                     className="absolute top-5 right-5 cursor-pointer text-gray-600"
+                    data-cy='delete'
                   />
                 )}
               </div>

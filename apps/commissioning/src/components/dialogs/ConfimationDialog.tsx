@@ -51,7 +51,7 @@ export function ConfimationDialog({
             variant="additional-gray"
             onClick={onCancel}
             className="w-[160px]"
-            data-cy='confirmation-cancel-button'
+            data-cy='confirmation-decline-button'
           >
             {intl.formatMessage({ defaultMessage: 'Cancel' })}
           </Button>

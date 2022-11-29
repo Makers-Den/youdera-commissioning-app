@@ -11,13 +11,17 @@ describe('roofer', () => {
   //     .form.editGeneralDetails()
   // })
 
-  it("flow", () => {
+  it("basic flow", () => {
     new LoginPage()
       .visit()
       .login({ email: 'roo@fer.com', password: 'roofer123' })
       .selectComissioning()
       .selectProject()
       .selectModule()
-      .next().confirm()
+      .next()
+      .confirm()
+      .uploadStringLayout()
+      .next()
+      .confirm()
   })
 });

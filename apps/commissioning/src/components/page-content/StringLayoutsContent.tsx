@@ -33,33 +33,33 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
 
   const uploadFile =
     (type: ApiFileType): ImagesUploadBoxProps['uploadFile'] =>
-    async (
-      event,
-      setUploadPercentageProgress,
-      setUploadedUrl,
-      setErrorMessage,
-    ) => {
-      const file = event.currentTarget.files![0];
-      try {
-        const response = await addFileToSiteMutation.mutateAsync({
-          file,
-          type,
-          setUploadProgress: setUploadPercentageProgress,
-        });
-        setUploadedUrl(response.url);
-        toast.success(
-          intl.formatMessage({
-            defaultMessage: 'File uploaded successfully!',
-          }),
-        );
-      } catch (err) {
-        //@ts-ignore
-        toast.error(err.message);
-        // eslint-disable-next-line no-console
-        console.error(err);
-        setErrorMessage('There was an issue');
-      }
-    };
+      async (
+        event,
+        setUploadPercentageProgress,
+        setUploadedUrl,
+        setErrorMessage,
+      ) => {
+        const file = event.currentTarget.files![0];
+        try {
+          const response = await addFileToSiteMutation.mutateAsync({
+            file,
+            type,
+            setUploadProgress: setUploadPercentageProgress,
+          });
+          setUploadedUrl(response.url);
+          toast.success(
+            intl.formatMessage({
+              defaultMessage: 'File uploaded successfully!',
+            }),
+          );
+        } catch (err) {
+          //@ts-ignore
+          toast.error(err.message);
+          // eslint-disable-next-line no-console
+          console.error(err);
+          setErrorMessage('There was an issue');
+        }
+      };
 
   const onDelete: ImagesUploadBoxProps['onDelete'] = id => {
     fileIdToDelete.current = id;
@@ -113,6 +113,7 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
           isGalleryOpen={stringLayoutGallery.isOpen}
           onGalleryClose={stringLayoutGallery.onClose}
           onGalleryOpen={stringLayoutGallery.onOpen}
+          data-cy='aaaa'
         />
         <ImagesUploadBox
           title={intl.formatMessage({ defaultMessage: 'Additional pictures' })}
@@ -130,6 +131,7 @@ export function StringLayoutsContent({ projectId }: StringLayoutsContentProps) {
           isGalleryOpen={additionalPicturesGallery.isOpen}
           onGalleryClose={additionalPicturesGallery.onClose}
           onGalleryOpen={additionalPicturesGallery.onOpen}
+          data-cy='additional-upload'
         />
       </div>
       <DeletionDialog
