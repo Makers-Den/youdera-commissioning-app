@@ -20,6 +20,7 @@ import { IconName, SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
+import { SelectFallback } from '../SelectFallback';
 
 import { Field } from './Field';
 import { FileFieldProps } from './FileField';
@@ -200,7 +201,13 @@ export const MeterFormDialog = ({
             </SelectField>
           )}
           {showFields.second && (
-            <Suspense fallback="loading">
+            <Suspense
+              fallback={
+                <SelectFallback
+                  label={intl.formatMessage({ defaultMessage: 'Manufacturer' })}
+                />
+              }
+            >
               <MeterModelSelectFields />
             </Suspense>
           )}
