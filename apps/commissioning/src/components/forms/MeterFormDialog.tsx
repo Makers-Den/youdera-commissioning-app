@@ -20,7 +20,6 @@ import { IconName, SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
-import { SelectFallback } from '../SelectFallback';
 
 import { Field } from './Field';
 import { FileFieldProps } from './FileField';
@@ -30,6 +29,7 @@ import { MeterModelSelectFields } from './MeterModelSelectFields';
 import { MultiSelectField } from './MultiSelectField';
 import { SelectField } from './SelectField';
 import { ToggleField } from './ToggleField';
+import { SelectFallback } from '../SelectFallback';
 
 const validation = z.object({
   meterType: z.object({

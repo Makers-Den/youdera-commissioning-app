@@ -239,10 +239,7 @@ export function DevicesContent({
           }),
         );
       } catch (err) {
-        //@ts-ignore
-        toast.error(err.message);
-        // eslint-disable-next-line no-console
-        console.error(err);
+        reportApiError(toast, err);
       }
     }
   };
@@ -336,10 +333,7 @@ export function DevicesContent({
         );
         setCurrentDevice(null);
       } catch (err) {
-        //@ts-ignore
-        toast.error(err.message);
-        // eslint-disable-next-line no-console
-        console.error(err);
+        reportApiError(toast, err);
       }
     };
 
@@ -383,8 +377,7 @@ export function DevicesContent({
       reset();
       addMeterDialog.onClose();
     } catch (err) {
-      //@ts-ignore
-      toast.error(err.message);
+      reportApiError(toast, err);
     }
   };
 
@@ -396,6 +389,7 @@ export function DevicesContent({
       const meter = await updateMeterMutation.mutateAsync({
         id: currentDevice?.id,
         type: values.meterType.key,
+        // TODO: I think this should be a number but the API validates is as string
         manufacturer: values.manufacturer.key,
         cmodel: values.model.id,
         number: values.serialNumber,
@@ -437,10 +431,7 @@ export function DevicesContent({
       setCurrentDevice(null);
       addMeterDialog.onClose();
     } catch (err) {
-      //@ts-ignore
-      toast.error(err.message);
-      // eslint-disable-next-line no-console
-      console.error(err);
+      reportApiError(toast, err);
     }
   };
 
@@ -477,8 +468,7 @@ export function DevicesContent({
       reset();
       addBatteryDialog.onClose();
     } catch (err) {
-      //@ts-ignore
-      toast.error(err.message);
+      reportApiError(toast, err);
     }
   };
 
@@ -530,8 +520,7 @@ export function DevicesContent({
       setCurrentDevice(null);
       updateBatteryDialog.onClose();
     } catch (err) {
-      //@ts-ignore
-      toast.error(err.message);
+      reportApiError(toast, err);
     }
   };
 
@@ -747,7 +736,7 @@ export function DevicesContent({
     }
 
     return undefined;
-  }, [currentDevice, meterTypeOptions]);
+  }, [currentDevice, meterTypeOptions, batteryModels, inverterModels, meterModels]);
 
   return (
     <>
@@ -830,6 +819,7 @@ export function DevicesContent({
         submitButtonTitle={intl.formatMessage({
           defaultMessage: 'Update Device',
         })}
+        // @ts-ignore can remove once other TODOs in file are resolves
         defaultValues={defaultValues}
         fileValueMapper={fileValueMapper}
       />
@@ -879,6 +869,7 @@ export function DevicesContent({
           defaultMessage: 'Update Device',
         })}
         siteId={siteId}
+        // @ts-ignore can remove once other TODOs in file are resolves
         defaultValues={defaultValues}
         fileValueMapper={fileValueMapper}
       />

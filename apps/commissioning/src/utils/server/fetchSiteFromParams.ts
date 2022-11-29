@@ -1,5 +1,5 @@
 import { Site } from '@src/api/youdera/apiTypes';
-import { getMinimalSite, getSite } from '@src/api/youdera/hooks/sites/apiRequests';
+import { getMinimalSite } from '@src/api/youdera/hooks/sites/apiRequests';
 import { GetServerSidePropsContext } from 'next';
 
 export type SiteProps = {
