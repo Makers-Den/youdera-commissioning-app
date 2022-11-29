@@ -4,7 +4,7 @@ import { VerificationContent } from '@src/components/page-content/VerificationCo
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { routes } from '@src/utils/routes';
-import { fetchProjectFromParams, SiteProps } from '@src/utils/server/fetchProjectFromParams';
+import { fetchSiteFromParams, SiteProps } from '@src/utils/server/fetchSiteFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { Suspense, useState } from 'react';
@@ -12,7 +12,7 @@ import { useIntl } from 'react-intl';
 import { ButtonProps } from 'ui/buttons/Button';
 
 const VerificationPage = ({
-  project: site,
+  site,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const intl = useIntl();
   const router = useRouter();
@@ -61,6 +61,6 @@ const VerificationPage = ({
 export const getServerSideProps: GetServerSideProps<SiteProps> = protectRoute([
   Role.electrician,
   Role.admin,
-]).then(fetchProjectFromParams);
+]).then(fetchSiteFromParams);
 
 export default VerificationPage;

@@ -5,14 +5,14 @@ import { SelectGatewayContent } from '@src/components/page-content/SelectGateway
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { routes } from '@src/utils/routes';
-import { fetchProjectFromParams, SiteProps } from '@src/utils/server/fetchProjectFromParams';
+import { fetchSiteFromParams, SiteProps } from '@src/utils/server/fetchSiteFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { Suspense } from 'react';
 import { useIntl } from 'react-intl';
 
 const SelectGatewayPage = ({
-  project,
+  site,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const intl = useIntl();
   const router = useRouter();
@@ -26,20 +26,20 @@ const SelectGatewayPage = ({
   };
 
   const onGatewaySelected = () => {
-    router.push(routes.electrician.devices(project.id));
+    router.push(routes.electrician.devices(site.id));
   };
 
   const gatewaysQuery = useGatewaysQuery({ suspense: false });
 
   const nextIsEnabled = (gatewaysQuery.data || []).reduce(
-    (acc, gateway) => gateway.site_id === project.id || acc,
+    (acc, gateway) => gateway.site_id === site.id || acc,
     false,
   );
 
   return (
     <AuthenticatedLayout
       navVariant="primary"
-      navHeader={project.name}
+      navHeader={site.name}
       onNavCrossClick={navCrossClickHandler}
       footerProps={{
         buttons: [
@@ -66,7 +66,7 @@ const SelectGatewayPage = ({
       <Suspense fallback={<LargeBoxSkeleton />}>
         <SelectGatewayContent
           onGatewaySelected={onGatewaySelected}
-          siteId={project.id}
+          siteId={site.id}
         />
       </Suspense>
     </AuthenticatedLayout>
@@ -76,6 +76,6 @@ const SelectGatewayPage = ({
 export const getServerSideProps: GetServerSideProps<SiteProps> = protectRoute([
   Role.electrician,
   Role.admin,
-]).then(fetchProjectFromParams);
+]).then(fetchSiteFromParams);
 
 export default SelectGatewayPage;

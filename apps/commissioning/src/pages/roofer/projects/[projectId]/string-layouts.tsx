@@ -8,7 +8,7 @@ import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { reportApiError } from '@src/utils/errorUtils';
 import { routes } from '@src/utils/routes';
-import { fetchProjectFromParams, SiteProps } from '@src/utils/server/fetchProjectFromParams';
+import { fetchSiteFromParams, SiteProps } from '@src/utils/server/fetchSiteFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { Suspense } from 'react';
@@ -17,11 +17,11 @@ import { useDisclosure } from 'ui/dialogs/useDisclosure';
 import { useToast } from 'ui/toast/Toast';
 
 const StringLayoutsPage = ({
-  project,
+  site,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const intl = useIntl();
   const router = useRouter();
-  const commissionSiteMutation = useCommissionSiteMutation(project.id);
+  const commissionSiteMutation = useCommissionSiteMutation(site.id);
   const toast = useToast();
   const continueDialog = useDisclosure();
   const { userInfoQuery } = useAuth();
@@ -31,7 +31,7 @@ const StringLayoutsPage = ({
   };
 
   const backClickHandler = () => {
-    router.push(routes.roofer.moduleFields(project.id));
+    router.push(routes.roofer.moduleFields(site.id));
   };
 
   const nextClickHandler = () => {
@@ -45,7 +45,7 @@ const StringLayoutsPage = ({
           ? { roofer_done: true } 
           : {}
         );
-        router.push(routes.roofer.complete(project.id));
+        router.push(routes.roofer.complete(site.id));
         toast.success(intl.formatMessage({
           defaultMessage: 'Site commissioned.'
         }));
@@ -58,7 +58,7 @@ const StringLayoutsPage = ({
     <>
       <AuthenticatedLayout
         navVariant="primary"
-        navHeader={project.name}
+        navHeader={site.name}
         onNavCrossClick={navCrossClickHandler}
         footerProps={{
           buttons: [
@@ -82,7 +82,7 @@ const StringLayoutsPage = ({
         }}
       >
         <Suspense fallback={<LargeBoxSkeleton />}>
-          <StringLayoutsContent projectId={project.id} />
+          <StringLayoutsContent projectId={site.id} />
         </Suspense>
       </AuthenticatedLayout>
       <ConfimationDialog
@@ -107,6 +107,6 @@ const StringLayoutsPage = ({
 export const getServerSideProps: GetServerSideProps<SiteProps> = protectRoute([
   Role.roofer,
   Role.admin,
-]).then(fetchProjectFromParams);
+]).then(fetchSiteFromParams);
 
 export default StringLayoutsPage;
