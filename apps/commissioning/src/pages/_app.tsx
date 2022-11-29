@@ -1,4 +1,4 @@
-import { initBearerTokenInterceptorOnClientSide } from '@src/api/youdera/api-instances/youdera';
+import { hasSecureLoginMethod, initBearerTokenInterceptorOnClientSide } from '@src/api/youdera/api-instances/youdera';
 import { useLocalizedZodMessages } from '@src/hooks/useLocalizedZodMessages';
 import {
   Hydrate,
@@ -20,7 +20,7 @@ import English from '../../content/compiled-locales/en.json';
 
 
 if (typeof window !== "undefined") {
-  if (process.env.NEXT_PUBLIC_YOUDERA_AUTH_METHOD !== 'SESSION') {
+  if (!hasSecureLoginMethod) {
     initBearerTokenInterceptorOnClientSide();
   }
 }
