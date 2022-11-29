@@ -4,9 +4,12 @@ import { GetServerSidePropsContext } from 'next';
 
 import { CookiesKeys } from '../enums/cookiesKeys';
 
+/** Should be true if we're in production, false in dev/staging */
+export const hasSecureLoginMethod = process.env.NEXT_PUBLIC_YOUDERA_AUTH_METHOD === 'SECURE';
+
 export const youderaApiInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_YOUDERA_API_BASE,
-  withCredentials: process.env.NEXT_PUBLIC_YOUDERA_AUTH_METHOD === 'SESSION',
+  withCredentials: hasSecureLoginMethod,
   headers: { Accept: 'application/json' },
 });
 
