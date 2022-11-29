@@ -352,11 +352,10 @@ export function DevicesContent({
         ...(values.serialNumber && { number: values.serialNumber }),
       });
 
-      // TODO uncomment when backend is ready
-      // await updateMeterMutation.mutateAsync({
-      //   id: meter.id,
-      //   inverters: values.connectedInverters.map((inverter) => Number(inverter.key) )
-      // });
+      await updateMeterMutation.mutateAsync({
+         id: meter.id,
+         inverters: values.connectedInverters.map((inverter) => Number(inverter.key) )
+      });
 
       // eslint-disable-next-line no-restricted-syntax
       for (const file of values.files) {

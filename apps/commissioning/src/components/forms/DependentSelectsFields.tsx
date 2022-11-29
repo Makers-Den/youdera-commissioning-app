@@ -79,7 +79,7 @@ export function DependentSelectsFields<Value extends DependentValue>({
         name={dependentName}
       >
         {filteredOptions.map(props => (
-          <SelectOption {...props} />
+          <SelectOption key={props.value.label} {...props} />
         ))}
       </SelectField>
     </>
