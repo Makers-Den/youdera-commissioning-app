@@ -98,11 +98,11 @@ export const StringModuleTypeDialog = <
           title={
             modifiedStringId
               ? intl.formatMessage({
-                  defaultMessage: 'Modify String',
-                })
+                defaultMessage: 'Modify String',
+              })
               : intl.formatMessage({
-                  defaultMessage: 'Add String',
-                })
+                defaultMessage: 'Add String',
+              })
           }
         />
         <SvgIcon
@@ -155,7 +155,7 @@ export const StringModuleTypeDialog = <
                   defaultMessage: 'Cable cross section',
                 })}
                 placeholder={intl.formatMessage({ defaultMessage: 'Select' })}
-                wrapperClassName="z-30"
+                wrapperClassName="w-full"
               >
                 {cableCrossSectionOptions.map(value => (
                   <SelectOption key={value.key} value={value}>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import {
   SelectOption,
@@ -69,14 +69,6 @@ export function DependentThreeSelectsFields<
     setValue,
   ]);
 
-  const filteredOptions1 = useMemo(
-    () =>
-      dependentField1.options.filter(
-        option => option.value.dependentKey === value?.key,
-      ),
-    [dependentField1.options, value?.key],
-  );
-
   // * 2
   useEffect(() => {
     if (dependentValue1?.key !== dependentValue2?.dependentKey) {
@@ -88,14 +80,6 @@ export function DependentThreeSelectsFields<
     dependentField2.name,
     setValue,
   ]);
-
-  const filteredOptions2 = useMemo(
-    () =>
-      dependentField2.options.filter(
-        option => option.value.dependentKey === dependentValue1?.key,
-      ),
-    [dependentField2.options, dependentValue1?.key],
-  );
 
   // * 3
   useEffect(() => {
@@ -109,14 +93,6 @@ export function DependentThreeSelectsFields<
     setValue,
   ]);
 
-  const filteredOptions3 = useMemo(
-    () =>
-      dependentField3.options.filter(
-        option => option.value.dependentKey === dependentValue2?.key,
-      ),
-    [dependentField3.options, dependentValue2?.key],
-  );
-
   return (
     <>
       <SelectField
@@ -124,7 +100,7 @@ export function DependentThreeSelectsFields<
         name={dependentField1.name}
         {...dependentField1.selectProps}
       >
-        {filteredOptions1.map(props => (
+        {dependentField1.options.map(props => (
           <SelectOption {...props} />
         ))}
       </SelectField>
@@ -134,7 +110,7 @@ export function DependentThreeSelectsFields<
         name={dependentField2.name}
         {...dependentField2.selectProps}
       >
-        {filteredOptions2.map(props => (
+        {dependentField2.options.map(props => (
           <SelectOption {...props} />
         ))}
       </SelectField>
@@ -146,7 +122,7 @@ export function DependentThreeSelectsFields<
         name={dependentField3.name}
         {...dependentField3.selectProps}
       >
-        {filteredOptions3.map(props => (
+        {dependentField3.options.map(props => (
           <SelectOption {...props} />
         ))}
       </SelectField>
