@@ -140,7 +140,8 @@ export type Meter = {
 
   factor: number;
 
-  manufacturer: number;
+  // TODO: this should likely be a number, but Manu has some incorrect validations in the API
+  manufacturer: string;
   model: number;
   cmodel: number;
   manufacturer_name: string;
@@ -352,12 +353,13 @@ export interface CreateStringRequestBody {
 }
 
 export interface CreateBatteryRequest {
+  // string? shouldn't this be number as it's supposed to be referring to an id?
   manufacturer: string;
   model: string;
   serial_number?: string;
   cmodel: number;
   site: number;
-  inverter_id: number;
+  inverter: number;
 }
 
 export interface UpdateBatteryRequest {
@@ -367,7 +369,7 @@ export interface UpdateBatteryRequest {
   serial_number?: string;
   cmodel: number;
   site: number;
-  inverter_id: number;
+  inverter: number;
 }
 
 export interface AddFileToBatteryRequest {

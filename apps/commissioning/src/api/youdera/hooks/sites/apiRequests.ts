@@ -8,7 +8,21 @@ export const getUncommissionedSites = async () => {
   return response.data.data;
 };
 
-export const getSite = async (siteId: string) => {
+/**
+ * This fetches the site with no extra data.
+ */
+ export const getMinimalSite = async (siteId: number) => {
+  const response = await youderaApiInstance.get<DataResponse<Site>>(
+    `/sites/${siteId}`);
+
+  return response.data.data;
+};
+
+
+/**
+ * This fetches the site with all possible data
+ */
+export const getSite = async (siteId: number) => {
   const response = await youderaApiInstance.get<DataResponse<Site>>(
     `/sites/${siteId}` +
       `?with[]=files` +

@@ -3,7 +3,7 @@ import { SuccessPageContent } from '@src/components/page-content/SuccessPageCont
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { routes } from '@src/utils/routes';
-import { fetchProjectFromParams, SiteProps } from '@src/utils/server/fetchProjectFromParams';
+import { fetchSiteFromParams, SiteProps } from '@src/utils/server/fetchSiteFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -11,7 +11,7 @@ import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 
 const CompleteProjectPage = ({
-  project,
+  site,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const intl = useIntl();
   const router = useRouter();
@@ -23,7 +23,7 @@ const CompleteProjectPage = ({
   return (
     <AuthenticatedLayout
       navVariant="primary"
-      navHeader={project.name}
+      navHeader={site.name}
       onNavCrossClick={backToMainMenu}
     >
       <SuccessPageContent
@@ -46,6 +46,6 @@ const CompleteProjectPage = ({
 export const getServerSideProps: GetServerSideProps<SiteProps> = protectRoute([
   Role.electrician,
   Role.admin,
-]).then(fetchProjectFromParams);
+]).then(fetchSiteFromParams);
 
 export default CompleteProjectPage;

@@ -4,7 +4,7 @@ import { DevicesContent } from '@src/components/page-content/DevicesContent';
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { routes } from '@src/utils/routes';
-import { fetchProjectFromParams, SiteProps } from '@src/utils/server/fetchProjectFromParams';
+import { fetchSiteFromParams, SiteProps } from '@src/utils/server/fetchSiteFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { Suspense, useState } from 'react';
@@ -12,7 +12,7 @@ import { useIntl } from 'react-intl';
 import { ButtonProps } from 'ui/buttons/Button';
 
 const DevicesPage = ({
-  project,
+  site,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const intl = useIntl();
   const router = useRouter();
@@ -22,7 +22,7 @@ const DevicesPage = ({
   };
 
   const backClickHandler = () => {
-    router.push(routes.electrician.selectGateway(project.id));
+    router.push(routes.electrician.selectGateway(site.id));
   };
 
   const [nextButtonProps, setNextButtonProps] = useState<
@@ -32,7 +32,7 @@ const DevicesPage = ({
   return (
     <AuthenticatedLayout
       navVariant="primary"
-      navHeader={project.name}
+      navHeader={site.name}
       onNavCrossClick={navCrossClickHandler}
       footerProps={{
         buttons: [
@@ -50,7 +50,7 @@ const DevicesPage = ({
     >
       <Suspense fallback={<LargeBoxSkeleton />}>
         <DevicesContent
-          siteId={project.id}
+          siteId={site.id}
           setNextButtonProps={setNextButtonProps}
         />
       </Suspense>
@@ -61,6 +61,6 @@ const DevicesPage = ({
 export const getServerSideProps: GetServerSideProps<SiteProps> = protectRoute([
   Role.electrician,
   Role.admin,
-]).then(fetchProjectFromParams);
+]).then(fetchSiteFromParams);
 
 export default DevicesPage;

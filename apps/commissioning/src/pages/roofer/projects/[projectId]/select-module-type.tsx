@@ -8,14 +8,14 @@ import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { useMainModuleStore } from '@src/stores/useMainModuleStore';
 import { routes } from '@src/utils/routes';
-import { fetchProjectFromParams, SiteProps } from '@src/utils/server/fetchProjectFromParams';
+import { fetchSiteFromParams, SiteProps } from '@src/utils/server/fetchSiteFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import React, { Suspense } from 'react';
 import { useIntl } from 'react-intl';
 
 const SelectMainModuleTypePage = ({
-  project,
+  site,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const intl = useIntl();
   const router = useRouter();
@@ -33,13 +33,13 @@ const SelectMainModuleTypePage = ({
   const moduleClickHandler: SelectMainModuleContentProps['onModuleClick'] =
     module => {
       setMainModule(module);
-      router.push(routes.roofer.moduleFields(project.id));
+      router.push(routes.roofer.moduleFields(site.id));
     };
 
   return (
     <AuthenticatedLayout
       navVariant="primary"
-      navHeader={project.name}
+      navHeader={site.name}
       onNavCrossClick={navCrossClickHandler}
       footerProps={{
         buttons: [
@@ -64,6 +64,6 @@ const SelectMainModuleTypePage = ({
 export const getServerSideProps: GetServerSideProps<SiteProps> = protectRoute([
   Role.roofer,
   Role.admin,
-]).then(fetchProjectFromParams);
+]).then(fetchSiteFromParams);
 
 export default SelectMainModuleTypePage;

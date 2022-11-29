@@ -5,7 +5,7 @@ import { ModuleFieldsContent } from '@src/components/page-content/ModuleFieldsCo
 import { AuthenticatedLayout } from '@src/layouts/AuthenticatedLayout';
 import { protectRoute } from '@src/middlewares/protectRoute';
 import { routes } from '@src/utils/routes';
-import { fetchProjectFromParams, SiteProps } from '@src/utils/server/fetchProjectFromParams';
+import { fetchSiteFromParams, SiteProps } from '@src/utils/server/fetchSiteFromParams';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import React, { Suspense } from 'react';
@@ -13,7 +13,7 @@ import { useIntl } from 'react-intl';
 import { useDisclosure } from 'ui/dialogs/useDisclosure';
 
 const ModuleFieldsPage = ({
-  project,
+  site,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const intl = useIntl();
   const router = useRouter();
@@ -21,7 +21,7 @@ const ModuleFieldsPage = ({
   const continueDialog = useDisclosure();
 
   const continueClickHandler = () => {
-    router.push(routes.roofer.stringLayouts(project.id));
+    router.push(routes.roofer.stringLayouts(site.id));
   };
 
   const navCrossClickHandler = () => {
@@ -29,7 +29,7 @@ const ModuleFieldsPage = ({
   };
 
   const backClickHandler = () => {
-    router.push(routes.roofer.selectModuleType(project.id));
+    router.push(routes.roofer.selectModuleType(site.id));
   };
 
   const nextClickHandler = () => {
@@ -40,7 +40,7 @@ const ModuleFieldsPage = ({
     <>
       <AuthenticatedLayout
         navVariant="primary"
-        navHeader={project.name}
+        navHeader={site.name}
         onNavCrossClick={navCrossClickHandler}
         footerProps={{
           buttons: [
@@ -64,7 +64,7 @@ const ModuleFieldsPage = ({
         }}
       >
         <Suspense fallback={<LargeBoxSkeleton />}>
-          <ModuleFieldsContent projectId={project.id} />
+          <ModuleFieldsContent projectId={site.id} />
         </Suspense>
       </AuthenticatedLayout>
       <ConfimationDialog
@@ -88,6 +88,6 @@ const ModuleFieldsPage = ({
 export const getServerSideProps: GetServerSideProps<SiteProps> = protectRoute([
   Role.roofer,
   Role.admin,
-]).then(fetchProjectFromParams);
+]).then(fetchSiteFromParams);
 
 export default ModuleFieldsPage;

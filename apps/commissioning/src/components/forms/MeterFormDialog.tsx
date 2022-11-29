@@ -29,6 +29,7 @@ import { MeterModelSelectFields } from './MeterModelSelectFields';
 import { MultiSelectField } from './MultiSelectField';
 import { SelectField } from './SelectField';
 import { ToggleField } from './ToggleField';
+import { SelectFallback } from '../SelectFallback';
 
 const validation = z.object({
   meterType: z.object({
@@ -200,7 +201,13 @@ export const MeterFormDialog = ({
             </SelectField>
           )}
           {showFields.second && (
-            <Suspense fallback="loading">
+            <Suspense
+              fallback={
+                <SelectFallback
+                  label={intl.formatMessage({ defaultMessage: 'Manufacturer' })}
+                />
+              }
+            >
               <MeterModelSelectFields />
             </Suspense>
           )}

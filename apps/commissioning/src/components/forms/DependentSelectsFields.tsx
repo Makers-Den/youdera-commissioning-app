@@ -74,9 +74,9 @@ export function DependentSelectsFields<Value extends DependentValue>({
       />
 
       <SelectField
-        wrapperClassName={clsxm(!value && 'hidden')}
-        name={dependentName}
         {...dependentSelectProps}
+        wrapperClassName={clsxm(!value && 'hidden', dependentSelectProps.wrapperClassName)}
+        name={dependentName}
       >
         {filteredOptions.map(props => (
           <SelectOption {...props} />

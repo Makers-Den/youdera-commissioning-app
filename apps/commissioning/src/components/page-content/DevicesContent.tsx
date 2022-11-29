@@ -216,11 +216,10 @@ export function DevicesContent({
 
   const inverterModelsQuery = useInverterModelsQuery();
   const inverterModels = inverterModelsQuery.data as InverterModel[];
-  const meterModelsQuery = useMeterModelsQuery()
+  const meterModelsQuery = useMeterModelsQuery();
   const meterModels = meterModelsQuery.data as MeterModel[];
-  const batteryModelsQuery = useBatteryModelsQuery()
+  const batteryModelsQuery = useBatteryModelsQuery();
   const batteryModels = batteryModelsQuery.data as BatteryModel[];
-
 
   const confirmDeleteHandler = async () => {
     if (currentDevice) {
@@ -240,10 +239,7 @@ export function DevicesContent({
           }),
         );
       } catch (err) {
-        //@ts-ignore
-        toast.error(err.message);
-        // eslint-disable-next-line no-console
-        console.error(err);
+        reportApiError(toast, err);
       }
     }
   };
@@ -337,10 +333,7 @@ export function DevicesContent({
         );
         setCurrentDevice(null);
       } catch (err) {
-        //@ts-ignore
-        toast.error(err.message);
-        // eslint-disable-next-line no-console
-        console.error(err);
+        reportApiError(toast, err);
       }
     };
 
@@ -382,10 +375,9 @@ export function DevicesContent({
 
       setCurrentDevice(toDevice(meter, 'Meter'));
       reset();
-      addInverterDialog.onClose();
+      addMeterDialog.onClose();
     } catch (err) {
-      //@ts-ignore
-      toast.error(err.message);
+      reportApiError(toast, err);
     }
   };
 
@@ -397,7 +389,8 @@ export function DevicesContent({
       const meter = await updateMeterMutation.mutateAsync({
         id: currentDevice?.id,
         type: values.meterType.key,
-        manufacturer: parseInt(values.manufacturer.key, 10),
+        // TODO: I think this should be a number but the API validates is as string
+        manufacturer: values.manufacturer.key,
         cmodel: values.model.id,
         number: values.serialNumber,
         is_auxiliary: values.auxiliary,
@@ -436,11 +429,9 @@ export function DevicesContent({
         }),
       );
       setCurrentDevice(null);
+      addMeterDialog.onClose();
     } catch (err) {
-      //@ts-ignore
-      toast.error(err.message);
-      // eslint-disable-next-line no-console
-      console.error(err);
+      reportApiError(toast, err);
     }
   };
 
@@ -454,7 +445,7 @@ export function DevicesContent({
         cmodel: values.model.id,
         manufacturer: values.manufacturer.label,
         model: values.manufacturer.label,
-        inverter_id: values.inverter.id,
+        inverter: values.inverter.id,
       });
 
       // eslint-disable-next-line no-restricted-syntax
@@ -477,8 +468,7 @@ export function DevicesContent({
       reset();
       addBatteryDialog.onClose();
     } catch (err) {
-      //@ts-ignore
-      toast.error(err.message);
+      reportApiError(toast, err);
     }
   };
 
@@ -493,7 +483,7 @@ export function DevicesContent({
         cmodel: values.model.id,
         manufacturer: values.manufacturer.label,
         model: values.manufacturer.label,
-        inverter_id: values.inverter.id,
+        inverter: values.inverter.id,
       });
 
       const filesToAdd = values.files
@@ -530,8 +520,7 @@ export function DevicesContent({
       setCurrentDevice(null);
       updateBatteryDialog.onClose();
     } catch (err) {
-      //@ts-ignore
-      toast.error(err.message);
+      reportApiError(toast, err);
     }
   };
 
@@ -659,7 +648,7 @@ export function DevicesContent({
     router,
     siteId,
   ]);
-  console.log(currentDevice)
+
   const defaultValues = useMemo(() => {
     if (currentDevice?.deviceType === 'Inverter') {
       return {
@@ -672,7 +661,9 @@ export function DevicesContent({
           name: currentDevice.model_name,
           manufacturer_name: currentDevice.manufacturer_name,
           manufacturer_id: currentDevice.manufacturer,
-          autoSerialnumber: !!inverterModels.filter(inverterModel => inverterModel.id === currentDevice.model)[0].data?.auto_serialnumber,
+          autoSerialnumber: !!inverterModels.filter(
+            inverterModel => inverterModel.id === currentDevice.model,
+          )[0].data?.auto_serialnumber,
           label: currentDevice.model_name,
           dependentKey: currentDevice.manufacturer.toString(),
         },
@@ -691,7 +682,9 @@ export function DevicesContent({
           name: currentDevice.model_name,
           manufacturer_name: currentDevice.manufacturer_name,
           manufacturer_id: currentDevice.manufacturer,
-          autoSerialnumber: !!batteryModels.filter(batteryModel => batteryModel.id === currentDevice.model)[0].data?.auto_serialnumber,
+          autoSerialnumber: !!batteryModels.filter(
+            batteryModel => batteryModel.id === currentDevice.model,
+          )[0].data?.auto_serialnumber,
           label: currentDevice.model_name,
           dependentKey: currentDevice.manufacturer.toString(),
         },
@@ -708,7 +701,9 @@ export function DevicesContent({
       };
     }
     if (currentDevice?.deviceType === 'Meter') {
-      const meterModel = meterModels.filter(meterModel => meterModel.id === currentDevice.model)[0]
+      const meterModel = meterModels.filter(
+        meterModel => meterModel.id === currentDevice.model,
+      )[0];
       return {
         meterType: meterTypeOptions.filter(
           option => option.key === currentDevice.type,
@@ -741,7 +736,7 @@ export function DevicesContent({
     }
 
     return undefined;
-  }, [currentDevice, meterTypeOptions]);
+  }, [currentDevice, meterTypeOptions, batteryModels, inverterModels, meterModels]);
 
   return (
     <>
@@ -824,6 +819,7 @@ export function DevicesContent({
         submitButtonTitle={intl.formatMessage({
           defaultMessage: 'Update Device',
         })}
+        // @ts-ignore can remove once other TODOs in file are resolves
         defaultValues={defaultValues}
         fileValueMapper={fileValueMapper}
       />
@@ -873,6 +869,7 @@ export function DevicesContent({
           defaultMessage: 'Update Device',
         })}
         siteId={siteId}
+        // @ts-ignore can remove once other TODOs in file are resolves
         defaultValues={defaultValues}
         fileValueMapper={fileValueMapper}
       />

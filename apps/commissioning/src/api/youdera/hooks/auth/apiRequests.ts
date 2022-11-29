@@ -1,10 +1,15 @@
 import { getCookie, setCookie } from 'cookies-next';
 
-import { youderaApiInstance } from '../../api-instances/youdera';
+import { hasSecureLoginMethod, youderaApiInstance } from '../../api-instances/youdera';
 import { DataResponse, LoginJWTResponse, UserInfo } from '../../apiTypes';
 import { CookiesKeys } from '../../enums/cookiesKeys';
 
-const loginJWT = async ({
+/**
+ * This is used in dev and staging. 
+ * It doesn't require the backend to be hosted under the same domain as the frontend.
+ * It is less secure and shouldn't be used in production.
+ */
+const loginWithBearerToken = async ({
   email,
   password,
   remember,
@@ -39,7 +44,11 @@ const loginJWT = async ({
   return data;
 };
 
-const loginSession = async ({
+/**
+ * This requires the frontend is served from the backend domain.
+ * This is used in production.
+ */
+const loginWithSecureCookie = async ({
   email,
   password,
   remember,
@@ -60,12 +69,18 @@ const loginSession = async ({
 };
 
 export const login =
-  process.env.NEXT_PUBLIC_YOUDERA_AUTH_METHOD === 'SESSION'
-    ? loginSession
-    : loginJWT;
+  hasSecureLoginMethod
+    ? loginWithSecureCookie
+    : loginWithBearerToken;
 
 export const logOut = async () => {
   const response = await youderaApiInstance.get(`/auth/logout`);
+
+  if (!hasSecureLoginMethod) {
+    // clears out the bearer token interceptor
+    youderaApiInstance.interceptors.request.clear();
+  }
+
   return response.data;
 };
 

@@ -8,8 +8,8 @@ import { QueryKeys } from '../../enums/queryKeys';
 
 export const useSiteQuery = (siteId: number) => {
   const siteQuery = useQuery(
-    [QueryKeys.editedSite, siteId],
-    ({ queryKey }) => getSite(String(queryKey[1])),
+    [QueryKeys.editedSite, siteId] as [string, number],
+    ({ queryKey }) => getSite(queryKey[1]),
     {
       suspense: true,
     },
