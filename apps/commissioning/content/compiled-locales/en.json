@@ -149,6 +149,20 @@
       "value": "Profile details saved."
     }
   ],
+  "3YHY1g": [
+    {
+      "type": 0,
+      "value": "Invalid input: must end with \""
+    },
+    {
+      "type": 1,
+      "value": "endsWith"
+    },
+    {
+      "type": 0,
+      "value": "\""
+    }
+  ],
   "47FYwb": [
     {
       "type": 0,
@@ -183,6 +197,12 @@
     {
       "type": 0,
       "value": "Select method"
+    }
+  ],
+  "4ljGnv": [
+    {
+      "type": 0,
+      "value": "Invalid function arguments"
     }
   ],
   "4pZN3b": [
@@ -221,10 +241,22 @@
       "value": "or"
     }
   ],
+  "7nPRan": [
+    {
+      "type": 0,
+      "value": "Intersection results could not be merged"
+    }
+  ],
   "7tSUe8": [
     {
       "type": 0,
       "value": "Back to login"
+    }
+  ],
+  "89T/ze": [
+    {
+      "type": 0,
+      "value": "Invalid"
     }
   ],
   "8HimVK": [
@@ -249,6 +281,16 @@
     {
       "type": 0,
       "value": "String added successfully!"
+    }
+  ],
+  "8mR7CD": [
+    {
+      "type": 0,
+      "value": "Date must be greater than or equal to "
+    },
+    {
+      "type": 1,
+      "value": "minimum"
     }
   ],
   "9+Ddtu": [
@@ -285,6 +327,20 @@
     {
       "type": 0,
       "value": "Remember me"
+    }
+  ],
+  "AKVl7z": [
+    {
+      "type": 0,
+      "value": "Array must contain at most "
+    },
+    {
+      "type": 1,
+      "value": "maximum"
+    },
+    {
+      "type": 0,
+      "value": " element(s)"
     }
   ],
   "AaPpPg": [
@@ -341,18 +397,24 @@
       "value": "Settings"
     }
   ],
-  "D7h26G": [
+  "DIkDGN": [
     {
       "type": 0,
-      "value": "Field must contain at least "
+      "value": "Invalid "
     },
     {
       "type": 1,
-      "value": "minimum"
-    },
+      "value": "validation"
+    }
+  ],
+  "DME+Ji": [
     {
       "type": 0,
-      "value": " character(s)"
+      "value": "Unrecognized key(s) in object: "
+    },
+    {
+      "type": 1,
+      "value": "keys"
     }
   ],
   "DpO/xz": [
@@ -413,6 +475,12 @@
     {
       "type": 0,
       "value": "Name"
+    }
+  ],
+  "HP3V8w": [
+    {
+      "type": 0,
+      "value": "Invalid input"
     }
   ],
   "HgyEar": [
@@ -481,6 +549,20 @@
       "value": "Module field updated successfully!"
     }
   ],
+  "Lvb0Gd": [
+    {
+      "type": 0,
+      "value": "String must contain at least "
+    },
+    {
+      "type": 1,
+      "value": "minimum"
+    },
+    {
+      "type": 0,
+      "value": " character(s)"
+    }
+  ],
   "M6phHD": [
     {
       "type": 0,
@@ -533,6 +615,24 @@
     {
       "type": 0,
       "value": "Meter updated successfully!"
+    }
+  ],
+  "QVi7nV": [
+    {
+      "type": 0,
+      "value": "Expected "
+    },
+    {
+      "type": 1,
+      "value": "expected"
+    },
+    {
+      "type": 0,
+      "value": ", received "
+    },
+    {
+      "type": 1,
+      "value": "received"
     }
   ],
   "QbbQzV": [
@@ -593,6 +693,30 @@
     {
       "type": 0,
       "value": "What you want to do with list element?"
+    }
+  ],
+  "T3V0e0": [
+    {
+      "type": 0,
+      "value": "Invalid input: must start with \""
+    },
+    {
+      "type": 1,
+      "value": "startsWith"
+    },
+    {
+      "type": 0,
+      "value": "\""
+    }
+  ],
+  "TsA+Yh": [
+    {
+      "type": 0,
+      "value": "Invalid discriminator value. Expected "
+    },
+    {
+      "type": 1,
+      "value": "values"
     }
   ],
   "U78NhE": [
@@ -817,6 +941,20 @@
       "value": "Change inverter/mpp"
     }
   ],
+  "eA9EYr": [
+    {
+      "type": 0,
+      "value": "Invalid enum value. Expected "
+    },
+    {
+      "type": 1,
+      "value": "values"
+    },
+    {
+      "type": 0,
+      "value": ", received {received}"
+    }
+  ],
   "eMFtwD": [
     {
       "type": 0,
@@ -877,6 +1015,16 @@
       "value": "Module field deleted successfully!"
     }
   ],
+  "jFaPx3": [
+    {
+      "type": 0,
+      "value": "Date must be smaller than or equal to "
+    },
+    {
+      "type": 1,
+      "value": "maximum"
+    }
+  ],
   "jvo0vs": [
     {
       "type": 0,
@@ -925,6 +1073,16 @@
       "value": "Avatar updated."
     }
   ],
+  "nuk1F7": [
+    {
+      "type": 0,
+      "value": "Number must be less than or equal to "
+    },
+    {
+      "type": 1,
+      "value": "maximum"
+    }
+  ],
   "nwjxtz": [
     {
       "type": 0,
@@ -953,6 +1111,32 @@
     {
       "type": 0,
       "value": "Add new inverter"
+    }
+  ],
+  "pzVVcE": [
+    {
+      "type": 0,
+      "value": "Number must be greater than or equal to "
+    },
+    {
+      "type": 1,
+      "value": "minimum"
+    }
+  ],
+  "q+nzR4": [
+    {
+      "type": 0,
+      "value": "Number must be a multiple of "
+    },
+    {
+      "type": 1,
+      "value": "multipleOf"
+    }
+  ],
+  "q2N2gD": [
+    {
+      "type": 0,
+      "value": "Invalid function return type"
     }
   ],
   "q9YVVF": [
@@ -1051,10 +1235,30 @@
       "value": "Instructions"
     }
   ],
+  "sd16bL": [
+    {
+      "type": 0,
+      "value": "String must contain at most "
+    },
+    {
+      "type": 1,
+      "value": "maximum"
+    },
+    {
+      "type": 0,
+      "value": " characters"
+    }
+  ],
   "sy+pv5": [
     {
       "type": 0,
       "value": "Email"
+    }
+  ],
+  "t+3/Tz": [
+    {
+      "type": 0,
+      "value": "Invalid date"
     }
   ],
   "txUL0F": [
@@ -1123,6 +1327,20 @@
       "value": "Test time"
     }
   ],
+  "xjjFWX": [
+    {
+      "type": 0,
+      "value": "Array must contain at least "
+    },
+    {
+      "type": 1,
+      "value": "minimum"
+    },
+    {
+      "type": 0,
+      "value": " element(s)"
+    }
+  ],
   "xl27nc": [
     {
       "type": 0,
@@ -1133,6 +1351,16 @@
     {
       "type": 0,
       "value": "Search"
+    }
+  ],
+  "zUC21n": [
+    {
+      "type": 0,
+      "value": "Invalid literal value, expected "
+    },
+    {
+      "type": 1,
+      "value": "values"
     }
   ],
   "zYpFao": [
