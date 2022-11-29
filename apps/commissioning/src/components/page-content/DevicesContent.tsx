@@ -42,6 +42,7 @@ import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { Toast, useToast } from 'ui/toast/Toast';
 import { Typography } from 'ui/typography/Typography';
 
+import { useDeviceDefaultValues } from './hooks/useDeviceDefaultValues';
 import { DeviceList } from '../DeviceList';
 import { ActionsDialog } from '../dialogs/ActionsDialog';
 import { ConfimationDialog } from '../dialogs/ConfimationDialog';
@@ -648,92 +649,13 @@ export function DevicesContent({
     siteId,
   ]);
 
-  const defaultValues = useMemo(() => {
-    if (currentDevice?.deviceType === 'Inverter') {
-      return {
-        manufacturer: {
-          key: currentDevice.manufacturer.toString(),
-          label: currentDevice.manufacturer_name,
-        },
-        model: {
-          id: currentDevice.model,
-          name: currentDevice.model_name,
-          manufacturer_name: currentDevice.manufacturer_name,
-          manufacturer_id: currentDevice.manufacturer,
-          autoSerialnumber: !!inverterModels.filter(
-            inverterModel => inverterModel.id === currentDevice.model,
-          )[0].data?.auto_serialnumber,
-          label: currentDevice.model_name,
-          dependentKey: currentDevice.manufacturer.toString(),
-        },
-        serialNumber: currentDevice.serial_number,
-        files: currentDevice.files,
-      };
-    }
-    if (currentDevice?.deviceType === 'Battery') {
-      return {
-        manufacturer: {
-          key: currentDevice.manufacturer.toString(),
-          label: currentDevice.manufacturer_name,
-        },
-        model: {
-          id: currentDevice.model,
-          name: currentDevice.model_name,
-          manufacturer_name: currentDevice.manufacturer_name,
-          manufacturer_id: currentDevice.manufacturer,
-          autoSerialnumber: !!batteryModels.filter(
-            batteryModel => batteryModel.id === currentDevice.model,
-          )[0].data?.auto_serialnumber,
-          label: currentDevice.model_name,
-          dependentKey: currentDevice.manufacturer.toString(),
-        },
-        serialNumber: currentDevice.serial_number,
-        files: currentDevice.files,
-
-        inverter: currentDevice.inverter
-          ? {
-            id: currentDevice.inverter.id,
-            label: currentDevice.inverter.name,
-            name: currentDevice.inverter.name,
-          }
-          : undefined,
-      };
-    }
-    if (currentDevice?.deviceType === 'Meter') {
-      const meterModel = meterModels.filter(
-        meterModel => meterModel.id === currentDevice.model,
-      )[0];
-      return {
-        meterType: meterTypeOptions.filter(
-          option => option.key === currentDevice.type,
-        )[0],
-        manufacturer: {
-          key: currentDevice.manufacturer.toString(),
-          label: currentDevice.manufacturer_name,
-        },
-        model: {
-          id: currentDevice.model,
-          name: currentDevice.model_name,
-          manufacturer_name: currentDevice.manufacturer_name,
-          manufacturer_id: currentDevice.manufacturer,
-          autoSerialnumber: !!meterModel?.data?.auto_serialnumber,
-          indirect: !!meterModel?.data?.indirect,
-          label: currentDevice.model_name,
-          dependentKey: currentDevice.manufacturer.toString(),
-        },
-        factor: currentDevice.factor,
-        serialNumber: currentDevice.number,
-        auxiliary: !!currentDevice.is_auxiliary,
-        files: currentDevice.files,
-        connectedInverters: currentDevice.inverters?.map(inverter => ({
-           key: inverter.id.toString(),
-           label: inverter.name || `Inverter ${inverter.id}`,
-        })) || [],
-      };
-    }
-
-    return undefined;
-  }, [currentDevice, meterTypeOptions, batteryModels, inverterModels, meterModels]);
+  const defaultValues = useDeviceDefaultValues(
+    currentDevice,
+    meterTypeOptions,
+    batteryModels,
+    inverterModels,
+    meterModels
+  );
 
   return (
     <>
