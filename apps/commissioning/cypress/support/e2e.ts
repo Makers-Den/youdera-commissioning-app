@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { LoginJWTResponse } from '../../src/api/youdera/apiTypes'
+import { testKey } from '../fixtures/backend-keys';
 before(async () => {
 
   const response = await axios.post<LoginJWTResponse>(
@@ -21,7 +22,7 @@ before(async () => {
 
   await axios.post('https://dev.youdera.com/api/cypress',
     {
-      k: "ImcRh1pav5ckyQC4137weR5btQs1y3l"
+      k: testKey
     },
     {
       headers: {

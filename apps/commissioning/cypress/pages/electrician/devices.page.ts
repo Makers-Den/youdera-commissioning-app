@@ -4,6 +4,7 @@ import ConfirmationDialog from "../confirmation-dialog.component"
 import ModuleFieldsPage from "../roofer/module-fields.page"
 import NavbarComponent from "../navbar.component"
 import TestPage from "./test.page"
+import { testKey } from "../../fixtures/backend-keys"
 
 class DevicesPage extends AbstractPage {
   navbar: NavbarComponent
@@ -82,7 +83,7 @@ class DevicesPage extends AbstractPage {
     this.getCy('submit-btn').click()
     cy.intercept('POST', `https://dev.youdera.com/api/${deviceType}/*/communication/test`, (req) => {
       req.body = {
-        k: "ImcRh1pav5ckyQC4137weR5btQs1y3l"
+        k: testKey
       }
     }).as(`${deviceType}-communication-test`)
     cy.wait(`@${deviceType}-communication-test`)
