@@ -96,7 +96,7 @@ class DevicesPage extends AbstractPage {
 
   next() {
     this.getCy('footer-button-1').click()
-    return new ConfirmationDialog<TestPage>(TestPage)
+    return new TestPage()
   }
 }
 

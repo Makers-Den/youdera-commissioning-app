@@ -28,5 +28,10 @@ describe('electrician', () => {
       .addBattery()
       .testCommunication('batteries')
       .next()
+      .testAndVerifyAllDevices()
+      .finish()
+      .goToMainMenu()
+      .navbar.logout()
+      .checkIfLogout()
   });
 });

@@ -162,6 +162,7 @@ function VerificationGuideDialog({
               onClose();
             }}
             isLoading={executeDeviceVerificationMutation.isLoading}
+            data-cy='confirmation-confirm-button'
           >
             {intl.formatMessage({ defaultMessage: 'Execute' })}
           </Button>
@@ -174,9 +175,11 @@ function VerificationGuideDialog({
 function DeviceVerification({
   siteId,
   device,
+  dataCy
 }: {
   siteId: number;
   device: Device;
+  dataCy: string;
 }) {
   const intl = useIntl();
 
@@ -191,6 +194,7 @@ function DeviceVerification({
           'mb-2 rounded border py-5',
           statusStyles[status].container,
         )}
+        data-cy={dataCy}
       >
         {/* Clickable general device info row */}
         <div
@@ -274,6 +278,7 @@ function DeviceVerification({
                 variant="main-green"
                 size="sm"
                 onClick={guideShown.onOpen}
+                data-cy={`${dataCy}-test-btn`}
               >
                 {intl.formatMessage({ defaultMessage: 'Run Test' })}
               </Button>
@@ -346,11 +351,12 @@ export function VerificationList({ siteId, devices }: VerificationListProps) {
         <div />
         <div />
       </div>
-      {devices.map(device => (
+      {devices.map((device, idx) => (
         <DeviceVerification
           key={`${device.deviceType}-${device.id}`}
           siteId={siteId}
           device={device}
+          dataCy={`device-${idx}`}
         />
       ))}
     </div>
