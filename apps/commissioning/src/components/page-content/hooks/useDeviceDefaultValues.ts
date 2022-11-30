@@ -1,26 +1,31 @@
-import { BatteryModel, InverterModel, MeterModel } from "@src/api/youdera/apiTypes";
-import { Device } from "@src/utils/devices";
-import { useMemo } from "react";
-import { IconName } from "ui/svg-icons/SvgIcon";
+import {
+  BatteryModel,
+  InverterModel,
+  MeterModel,
+} from '@src/api/youdera/apiTypes';
+import { Device } from '@src/utils/devices';
+import { useMemo } from 'react';
+import { IconName } from 'ui/svg-icons/SvgIcon';
 
 /**
  * Creates the default values for device forms
- * 
- * @param currentDevice 
- * @param meterTypeOptions 
- * @param batteryModels 
- * @param inverterModels 
- * @param meterModels 
- * 
+ *
+ * @param currentDevice
+ * @param meterTypeOptions
+ * @param batteryModels
+ * @param inverterModels
+ * @param meterModels
+ *
  * @returns defaultValues
  */
 export const useDeviceDefaultValues = (
   currentDevice: Device | null,
-  meterTypeOptions: ({ key: string, label: string, icon: IconName } )[],
+  meterTypeOptions: { key: string; label: string; icon: IconName }[],
   batteryModels: BatteryModel[],
   inverterModels: InverterModel[],
   meterModels: MeterModel[],
-) => useMemo(() => {
+) =>
+  useMemo(() => {
     if (currentDevice?.deviceType === 'Inverter') {
       return {
         manufacturer: {
@@ -65,7 +70,7 @@ export const useDeviceDefaultValues = (
         inverter: currentDevice.inverter
           ? {
             id: currentDevice.inverter.id,
-            label: currentDevice.inverter.name,
+            label: `${currentDevice.inverter.name} - ${currentDevice.inverter.model_name}`,
             name: currentDevice.inverter.name,
           }
           : undefined,
@@ -97,12 +102,19 @@ export const useDeviceDefaultValues = (
         serialNumber: currentDevice.number,
         auxiliary: !!currentDevice.is_auxiliary,
         files: currentDevice.files,
-        connectedInverters: currentDevice.inverters?.map(inverter => ({
-           key: inverter.id.toString(),
-           label: inverter.name || `Inverter ${inverter.id}`,
-        })) || [],
+        connectedInverters:
+          currentDevice.inverters?.map(inverter => ({
+            key: inverter.id.toString(),
+            label: inverter.name || `Inverter ${inverter.id}`,
+          })) || [],
       };
     }
 
     return undefined;
-  }, [currentDevice, meterTypeOptions, batteryModels, inverterModels, meterModels]);
+  }, [
+    currentDevice,
+    meterTypeOptions,
+    batteryModels,
+    inverterModels,
+    meterModels,
+  ]);
