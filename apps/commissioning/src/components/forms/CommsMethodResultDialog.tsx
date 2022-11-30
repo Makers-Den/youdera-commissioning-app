@@ -67,7 +67,7 @@ export const CommsMethodResultDialog = ({
           <Button variant="additional-gray" onClick={onBack}>
             {intl.formatMessage({ defaultMessage: 'Back' })}
           </Button>
-          <Button variant="main-green" className="flex-1" onClick={onConfirm}>
+          <Button variant="main-green" className="flex-1" onClick={onConfirm} data-cy='submit-btn'>
             {intl.formatMessage({ defaultMessage: 'Complete' })}
           </Button>
         </div>

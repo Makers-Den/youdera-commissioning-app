@@ -22,7 +22,7 @@ export function GatewayList({
 
   return (
     <List>
-      {gateways.map(gateway => (
+      {gateways.map((gateway) => (
         <ListItem
           variant="primary"
           key={gateway.id}
@@ -34,6 +34,7 @@ export function GatewayList({
             role="button"
             className={clsxm('flex cursor-pointer gap-5')}
             onClick={() => onSelectGateway(gateway)}
+            data-cy='gateway'
           >
             <div className="flex aspect-square w-11 items-center justify-center rounded-full bg-green-300">
               <SvgIcon name="Gateway" className="w-10 text-white" />

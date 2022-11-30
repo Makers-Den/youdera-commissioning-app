@@ -23,6 +23,7 @@ export const MultiSelectOption = <T extends MultiSelectValue>({ value, children 
   <Listbox.Option
     className="cursor-pointer Multiselect-none py-2 pl-3 pr-4 flex justify-between items-center hover:bg-gray-100"
     value={value}
+    data-cy='multi-select-option'
   >
     {(args) => (
       <>
@@ -116,6 +117,7 @@ export function MultiSelect<Value extends MultiSelectValue>({
         defaultValue={defaultValue}
         multiple
         by="key"
+        data-cy={`${label?.toLowerCase().replace(' ', '-')}` || "multiselect"}
       >
         {({ open }) => (
           <div className={clsxm('relative mt-1', wrapperClassName)}>

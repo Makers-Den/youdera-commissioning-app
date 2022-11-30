@@ -23,6 +23,7 @@ const SelectTask: React.FC = () => {
             <CardLink
               title={intl.formatMessage({ defaultMessage: 'Commissioning' })}
               icon={<SvgIcon name="Commissioning" />}
+              data-cy='commissioning'
             />
           </Link>
           <CardLink

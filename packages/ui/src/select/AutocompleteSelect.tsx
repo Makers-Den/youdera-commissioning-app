@@ -90,6 +90,7 @@ export const AutocompleteSelect = React.forwardRef<
                       e.target.select();
                     }}
                     ref={ref}
+                    data-cy={label?.toLowerCase().replace(' ', '-') || "autocomplete-input"}
                     {...rest}
                   />
                 </Combobox.Button>
@@ -136,6 +137,7 @@ export const AutocompleteSelect = React.forwardRef<
                             active && 'bg-gray-100',
                           )
                         }
+                        data-cy={`${label?.toLowerCase().replace(' ', '-')}-option` || "autocomplete-option"}
                       >
                         {({ selected, active }) => (
                           <>
