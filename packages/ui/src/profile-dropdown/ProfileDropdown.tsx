@@ -30,7 +30,7 @@ export function ProfileDropdown({
     <Menu as="div" className="relative w-max">
       {({ open }) => (
         <>
-          <Menu.Button className="flex items-center space-x-3 pr-7 pl-1">
+          <Menu.Button className="flex items-center space-x-3 pr-7 pl-1" data-cy='profile-dropdown'>
             {imgSrc && (
               <RoundImage src={imgSrc} alt="avatar" wrapperClassName="w-9" />
             )}

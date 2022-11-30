@@ -34,7 +34,8 @@ export function FileInputWrapper({
       onClick={handleClick}
       className={className}
     >
-      <input ref={hiddenFileInput} type="file" id={id} hidden {...inputProps} />
+      <input ref={hiddenFileInput} type="file" id={id} hidden {...inputProps}
+        data-cy='upload' />
       {children}
     </label>
   );

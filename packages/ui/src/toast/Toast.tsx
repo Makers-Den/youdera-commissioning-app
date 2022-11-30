@@ -23,6 +23,7 @@ export const Toast = () => (
         leave="transition-all duration-150"
         leaveFrom="opacity-100 scale-100"
         leaveTo="opacity-0 scale-75"
+        data-cy="toast"
       >
         <Typography className="px-2 text-white">
           {resolveValue(t.message, t)}

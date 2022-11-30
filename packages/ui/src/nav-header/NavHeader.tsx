@@ -37,7 +37,10 @@ export const NavHeader: React.FC<NavHeaderProps> = ({
        * fixed to the top, so it pushes content down from below the NavHeader.
        */}
       <div className="mt-10 h-[98px]" />
-      <div className="fixed top-0 z-10 flex w-screen items-center justify-between bg-gray-50 p-7">
+      <div
+        className="fixed top-0 z-10 flex w-screen items-center justify-between bg-gray-50 p-7"
+        data-cy="navbar"
+      >
         {variant === 'logo' ? (
           logoSrc && (
             <Image

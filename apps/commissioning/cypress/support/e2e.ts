@@ -1,20 +1,32 @@
-// ***********************************************************
-// This example support/e2e.ts is processed and
-// loaded automatically before your test files.
-//
-// This is a great place to put global configuration and
-// behavior that modifies Cypress.
-//
-// You can change the location of this file or turn off
-// automatically serving support files with the
-// 'supportFile' configuration option.
-//
-// You can read more here:
-// https://on.cypress.io/configuration
-// ***********************************************************
+import axios from 'axios';
+import { LoginJWTResponse } from '../../src/api/youdera/apiTypes'
+before(async () => {
 
-// Import commands.js using ES2015 syntax:
-import './commands'
+  const response = await axios.post<LoginJWTResponse>(
+    `https://dev.youdera.com/api/login`,
+    {
+      email: 'roo@fer.com',
+      password: 'roofer123',
+      remember: false,
+    },
+    {
+      withCredentials: true,
+      headers: { Accept: 'application/json' },
+    }
+  );
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+  { console.log(response) }
+
+  const { data } = response;
+
+  await axios.post('https://dev.youdera.com/api/cypress',
+    {
+      k: "ImcRh1pav5ckyQC4137weR5btQs1y3l"
+    },
+    {
+      headers: {
+        authorization: `Bearer ${data.access_token}`
+      }
+    }
+  );
+});
