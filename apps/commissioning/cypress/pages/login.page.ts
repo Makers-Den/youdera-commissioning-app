@@ -1,8 +1,8 @@
 // import { User } from "../builders/user.builder"
+import { User } from "../fixtures/credentials"
 import AbstractPage from "./abstract.page"
 import SelectTaskPage from "./select-task.page"
 import SelectTask from "./select-task.page"
-// import HomePage from "./home.page"
 
 class LoginPage extends AbstractPage {
   visit() {
@@ -18,38 +18,6 @@ class LoginPage extends AbstractPage {
 
     return new SelectTaskPage()
   }
-
-  // headlessLogin(user: User) {
-  //   const { email, password } = user
-
-  //   this.getCy("main").should("contain", "LOGIN")
-
-  //   cy.getCookie("pink-ad-tool_sAntiCsrfToken").then((cookie) => {
-  //     const cookieValue = cookie ? cookie.value : null
-  //     const headers = cookieValue
-  //       ? {
-  //         "anti-csrf": cookieValue,
-  //       }
-  //       : null
-
-  //     // @ts-ignore
-  //     cy.request({
-  //       method: "POST",
-  //       url: `/api/rpc/login`,
-  //       body: {
-  //         params: {
-  //           email,
-  //           password,
-  //         },
-  //       },
-  //       headers,
-  //     })
-  //   })
-
-  //   cy.visit("/")
-
-  //   return new HomePage()
-  // }
 
   checkIfLogout() {
     this.checkPathname("/login")

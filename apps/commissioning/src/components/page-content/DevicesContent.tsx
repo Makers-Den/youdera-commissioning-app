@@ -354,8 +354,8 @@ export function DevicesContent({
       });
 
       await updateMeterMutation.mutateAsync({
-         id: meter.id,
-         inverters: values.connectedInverters.map((inverter) => Number(inverter.key) )
+        id: meter.id,
+        inverters: values.connectedInverters.map((inverter) => Number(inverter.key))
       });
 
       // eslint-disable-next-line no-restricted-syntax
@@ -583,7 +583,7 @@ export function DevicesContent({
     {
       key: 'inverter',
       children: (
-        <button type="button" onClick={addInverterDialog.onOpen}>
+        <button type="button" onClick={addInverterDialog.onOpen} data-cy='add-inverter-btn'>
           <Typography className="flex font-medium">
             <SvgIcon name="InverterRect" className="mr-3 w-5" />
             {intl.formatMessage({ defaultMessage: 'Add Inverter' })}
@@ -599,6 +599,7 @@ export function DevicesContent({
           disabled={!siteHasInverters}
           className="disabled:opacity-30"
           onClick={handleAddMeter}
+          data-cy='add-meter-btn'
         >
           <Typography className="flex font-medium">
             <SvgIcon name="MeterRect" className="mr-3 w-5" />
@@ -615,6 +616,7 @@ export function DevicesContent({
           disabled={!siteHasInverters}
           className="disabled:opacity-30"
           onClick={handleAddBattery}
+          data-cy='add-battery-btn'
         >
           <Typography className="flex font-medium">
             <SvgIcon name="BatteryRect" className="mr-3 w-5" />
@@ -667,7 +669,7 @@ export function DevicesContent({
             items={items}
             buttonProps={{
               children: intl.formatMessage({ defaultMessage: 'ADD DEVICE' }),
-              className: 'w-44',
+              className: 'w-44'
             }}
           />
         </BoxHeader>

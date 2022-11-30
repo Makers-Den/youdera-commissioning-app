@@ -28,13 +28,13 @@ export const SelectOption = <T extends SelectValue>({
   <Listbox.Option
     className="flex cursor-pointer select-none items-center justify-between py-2 pl-3 pr-4 hover:bg-gray-100"
     value={value}
+    data-cy='select-option'
   >
     {args => (
       <>
         <span
-          className={`flex items-center truncate ${
-            args.selected ? 'font-medium' : 'font-normal'
-          }`}
+          className={`flex items-center truncate ${args.selected ? 'font-medium' : 'font-normal'
+            }`}
         >
           {icon && (
             <span className="mr-3 flex w-4 items-center justify-center">
@@ -94,6 +94,7 @@ const SelectInner = <T extends SelectValue>(
       defaultValue={defaultValue}
       ref={ref}
       by={compareValueBy}
+      data-cy={label?.toLowerCase().replace(' ', '-') || "select"}
       {...rest}
     >
       {({ open, value }) => (
