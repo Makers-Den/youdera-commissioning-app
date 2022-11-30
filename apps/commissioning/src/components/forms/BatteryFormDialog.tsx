@@ -229,6 +229,7 @@ export const BatteryFormDialog = ({
                 type="submit"
                 variant="main-green"
                 className="w-full"
+                data-cy='submit-btn'
               >
                 {submitButtonTitle}
               </Button>

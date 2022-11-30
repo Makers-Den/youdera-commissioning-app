@@ -1,8 +1,8 @@
-import AbstractPage from './abstract.page';
-import CompletePage from './complete.page';
-import ConfirmationDialog from './confirmation-dialog.component';
-import NavbarComponent from './navbar.component';
-import SelectProjectPage from './select-project.page';
+import AbstractPage from '../abstract.page';
+import CompletePage from '../complete.page';
+import ConfirmationDialog from '../confirmation-dialog.component';
+import NavbarComponent from '../navbar.component';
+import SelectProjectPage from '../select-project.page';
 
 class StringLayoutPage extends AbstractPage {
   navbar: NavbarComponent;

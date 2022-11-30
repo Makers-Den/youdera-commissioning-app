@@ -1,7 +1,7 @@
-import { getRandomName, getRandomNumber } from '../utils/generateRandomData';
-import AbstractPage from './abstract.page';
-import ConfirmationDialog from './confirmation-dialog.component';
-import NavbarComponent from './navbar.component';
+import { getRandomName, getRandomNumber } from '../../utils/generateRandomData';
+import AbstractPage from '../abstract.page';
+import ConfirmationDialog from '../confirmation-dialog.component';
+import NavbarComponent from '../navbar.component';
 import StringLayoutPage from './string-layouts.page';
 
 class ModuleFieldsPage extends AbstractPage {

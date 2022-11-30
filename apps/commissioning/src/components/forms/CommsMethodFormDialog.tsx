@@ -212,6 +212,7 @@ export const CommsMethodFormDialog = ({
               type="submit"
               variant="main-green"
               className="flex-1"
+              data-cy='submit-btn'
             >
               {intl.formatMessage({ defaultMessage: 'Test Communication' })}
             </Button>

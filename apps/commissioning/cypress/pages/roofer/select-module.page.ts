@@ -1,6 +1,6 @@
-import AbstractPage from "./abstract.page"
+import AbstractPage from "../abstract.page"
 import ModuleFieldsPage from "./module-fields.page"
-import NavbarComponent from "./navbar.component"
+import NavbarComponent from "../navbar.component"
 
 class SelectModulePage extends AbstractPage {
   navbar: NavbarComponent

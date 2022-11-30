@@ -17,7 +17,7 @@ const CompleteProjectPage = ({
   const router = useRouter();
 
   const backToMainMenu = () => {
-    router.push(routes.electrician.selectProject);
+    router.push(routes.electrician.selectTask);
   };
 
   return (
@@ -35,6 +35,7 @@ const CompleteProjectPage = ({
           variant="additional-gray"
           className="mt-5"
           onClick={backToMainMenu}
+          data-cy='main-menu-button'
         >
           {intl.formatMessage({ defaultMessage: 'MAIN MENU' })}
         </Button>

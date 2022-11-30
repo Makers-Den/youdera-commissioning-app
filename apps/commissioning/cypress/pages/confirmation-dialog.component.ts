@@ -6,7 +6,7 @@ class ConfirmationDialog<T> extends AbstractPage {
   pageToRedirect: new () => T;
   afterConfirmationAction: () => void;
 
-  constructor(pageToRedirect, afterConfirmationAction = () => undefined) {
+  constructor(pageToRedirect = undefined, afterConfirmationAction = () => undefined) {
     super();
     this.pageToRedirect = pageToRedirect
     this.afterConfirmationAction = afterConfirmationAction
@@ -14,7 +14,7 @@ class ConfirmationDialog<T> extends AbstractPage {
   confirm() {
     this.getCy('confirmation-confirm-button').click()
     this.afterConfirmationAction()
-    return new this.pageToRedirect()
+    if (this.pageToRedirect) return new this.pageToRedirect()
   }
   decline() {
     this.getCy('confirmation-decline-button')

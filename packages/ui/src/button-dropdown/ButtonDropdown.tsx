@@ -26,7 +26,7 @@ export function ButtonDropdown({
       {({ open }) => (
         <>
           <Menu.Button as="div">
-            <Button {...restButtonProps}>
+            <Button {...restButtonProps} data-cy="dropdown-btn">
               {children}
               <SvgIcon
                 name="ChevronDown"
