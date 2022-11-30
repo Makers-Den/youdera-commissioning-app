@@ -1,7 +1,7 @@
 import AbstractPage from "./abstract.page"
 import SelectGatewayPage from "./electrician/select-gateway.page"
 import NavbarComponent from "./navbar.component"
-import SelectModulePage from "./select-module.page"
+import SelectModulePage from "./roofer/select-module.page"
 
 class SelectProjectPage extends AbstractPage {
   navbar: NavbarComponent

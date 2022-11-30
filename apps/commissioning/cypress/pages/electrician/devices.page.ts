@@ -1,7 +1,7 @@
 import { getRandomNumber } from "../../utils/generateRandomData"
 import AbstractPage from "../abstract.page"
 import ConfirmationDialog from "../confirmation-dialog.component"
-import ModuleFieldsPage from "../module-fields.page"
+import ModuleFieldsPage from "../roofer/module-fields.page"
 import NavbarComponent from "../navbar.component"
 import TestPage from "./test.page"
 
