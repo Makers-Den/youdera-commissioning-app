@@ -2,8 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  font-family: 'Roboto', sans-serif;
-}
-
 @import 'ui/styles.css';

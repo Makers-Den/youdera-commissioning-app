@@ -103,7 +103,7 @@ const Login = () => {
             data-cy="password"
           />
           {areCredentialsValid && (
-            <Label className="text-red-400">
+            <Label className="text-danger-400">
               {intl.formatMessage({
                 defaultMessage: 'Email or password incorrect.',
               })}
@@ -123,7 +123,7 @@ const Login = () => {
             <Label
               className={clsxm(
                 'ml-8 font-medium underline hover:cursor-pointer',
-                areCredentialsValid && 'text-red-400',
+                areCredentialsValid && 'text-danger-400',
               )}
             >
               {intl.formatMessage({ defaultMessage: 'Forgot password?' })}
