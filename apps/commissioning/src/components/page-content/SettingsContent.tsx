@@ -371,7 +371,7 @@ export const ChangeAvatar = ({ userInfo, className }: SettingsSectionProps) => {
           {...fileUploaderProps}
         >
           <div className="flex w-full flex-1 items-center justify-start gap-4">
-            <SvgIcon name="Camera" className="w-8 text-green-400" />
+            <SvgIcon name="Camera" className="text-brand-two-400 w-8" />
             <div>
               <Typography>
                 {intl.formatMessage({
@@ -383,7 +383,7 @@ export const ChangeAvatar = ({ userInfo, className }: SettingsSectionProps) => {
                 {intl.formatMessage({
                   defaultMessage: 'or',
                 })}{' '}
-                <span className="text-green-400 underline">
+                <span className="text-brand-two-400 underline">
                   {intl.formatMessage({
                     defaultMessage: 'click here to upload an image',
                   })}

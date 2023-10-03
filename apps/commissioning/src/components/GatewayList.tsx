@@ -22,21 +22,21 @@ export function GatewayList({
 
   return (
     <List>
-      {gateways.map((gateway) => (
+      {gateways.map(gateway => (
         <ListItem
           variant="primary"
           key={gateway.id}
           className={clsxm(
-            gateway.site_id === siteId && 'border-2 border-green-400',
+            gateway.site_id === siteId && 'border-brand-two-400 border-2',
           )}
         >
           <div
             role="button"
             className={clsxm('flex cursor-pointer gap-5')}
             onClick={() => onSelectGateway(gateway)}
-            data-cy='gateway'
+            data-cy="gateway"
           >
-            <div className="flex aspect-square w-11 items-center justify-center rounded-full bg-green-300">
+            <div className="bg-brand-two-300 flex aspect-square w-11 items-center justify-center rounded-full">
               <SvgIcon name="Gateway" className="w-10 text-white" />
             </div>
             <div>
@@ -51,7 +51,7 @@ export function GatewayList({
               <div className="flex flex-1 items-center justify-end">
                 <Typography
                   weight="medium"
-                  className="uppercase text-green-400"
+                  className="text-brand-two-400 uppercase"
                 >
                   {intl.formatMessage({ defaultMessage: 'Attached' })}
                 </Typography>

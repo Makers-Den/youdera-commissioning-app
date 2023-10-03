@@ -14,7 +14,7 @@ type CheckboxProps = {
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   ({ label, isChecked, onClick, dataCy, ...rest }, ref) => (
     <div className="flex items-center">
-      <label className="flex relative items-center hover:cursor-pointer">
+      <label className="relative flex items-center hover:cursor-pointer">
         <input
           ref={ref}
           type="checkbox"
@@ -25,15 +25,18 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         {isChecked ? (
           <span
             aria-hidden="true"
-            className={clsxm("w-4 h-4 rounded-sm border-2 border-gray-800", rest.disabled && 'border-gray-500')}
+            className={clsxm(
+              'h-4 w-4 rounded-sm border-2 border-gray-800',
+              rest.disabled && 'border-gray-500',
+            )}
             data-cy={dataCy}
           />
         ) : (
-          <span className="bg-green-400 w-4 h-4 rounded-sm">
+          <span className="bg-brand-two-400 h-4 w-4 rounded-sm">
             <SvgIcon
               name="Check"
               aria-hidden="true"
-              className="fill-white absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 w-3 h-3 "
+              className="absolute top-1/2 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 fill-white "
               data-cy={dataCy}
             />
           </span>
@@ -41,7 +44,14 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       </label>
 
       {label && (
-        <Label className={clsxm("ml-2 font-medium", rest.disabled && 'text-gray-500')}>{label}</Label>
+        <Label
+          className={clsxm(
+            'ml-2 font-medium',
+            rest.disabled && 'text-gray-500',
+          )}
+        >
+          {label}
+        </Label>
       )}
     </div>
   ),

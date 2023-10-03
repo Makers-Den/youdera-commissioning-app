@@ -56,7 +56,7 @@ export function FileUploader({
         weight="bold"
         className="flex items-center gap-2"
       >
-        <SvgIcon name="Problem" className="w-4 text-red-400" />
+        <SvgIcon name="Problem" className="text-danger-400 w-4" />
         {errorMessage}
       </Typography>
     );
@@ -70,11 +70,11 @@ export function FileUploader({
           'relative flex items-center justify-center p-4',
           'rounded-md bg-gray-100',
           status === UploadStatus.success &&
-            'border border-dashed border-green-400',
+            'border-brand-two-400 border border-dashed',
           status === UploadStatus.idle &&
-            'border border-dashed border-green-400',
+            'border-brand-two-400 border border-dashed',
           status === UploadStatus.error &&
-            'border border-dashed border-red-500 bg-red-100',
+            'border-danger-500 bg-danger-100 border border-dashed',
           className,
         )}
       >

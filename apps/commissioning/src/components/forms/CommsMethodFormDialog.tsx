@@ -174,7 +174,7 @@ export const CommsMethodFormDialog = ({
                     errors={formState.errors}
                     name="ipAddress"
                     render={({ message }) => (
-                      <Label className="text-red-400">{message}</Label>
+                      <Label className="text-danger-400">{message}</Label>
                     )}
                   />
                 </div>
@@ -212,7 +212,7 @@ export const CommsMethodFormDialog = ({
               type="submit"
               variant="main-green"
               className="flex-1"
-              data-cy='submit-btn'
+              data-cy="submit-btn"
             >
               {intl.formatMessage({ defaultMessage: 'Test Communication' })}
             </Button>

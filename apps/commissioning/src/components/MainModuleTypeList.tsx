@@ -27,7 +27,7 @@ export function MainModuleTypeList({ modules }: MainModuleTypeListProps) {
             onClick={() => onClick(id)}
             type="button"
           >
-            <div className="flex aspect-square w-11 items-center justify-center rounded-full bg-green-300">
+            <div className="bg-brand-two-300 flex aspect-square w-11 items-center justify-center rounded-full">
               <SvgIcon name="SolarPanel" className="w-6 text-white" />
             </div>
             <div>

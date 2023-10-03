@@ -109,7 +109,7 @@ export const Gallery = <Id extends string | number>({
                   'absolute top-5 right-5 h-[24px] w-[24px]',
                 )}
                 onClick={onClose}
-                data-cy='close-dialog'
+                data-cy="close-dialog"
               />
               <div
                 className="flex items-center justify-center"
@@ -134,7 +134,7 @@ export const Gallery = <Id extends string | number>({
                     name="Trashbin"
                     onClick={() => onDelete(currentImage.id)}
                     className="absolute top-5 right-5 cursor-pointer text-gray-600"
-                    data-cy='delete'
+                    data-cy="delete"
                   />
                 )}
               </div>
@@ -152,7 +152,7 @@ export const Gallery = <Id extends string | number>({
                       'h-[112px] w-[112px] rounded object-cover',
                       'cursor-pointer',
                       currentImageIndex === index
-                        ? 'border-2 border-orange-400'
+                        ? 'border-brand-one-400 border-2'
                         : 'opacity-50',
                     )}
                     src={img.thumbnailUrl}

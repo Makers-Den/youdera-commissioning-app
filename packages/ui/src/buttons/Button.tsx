@@ -16,20 +16,20 @@ export const buttonVariantStyles: {
   [key in keyof typeof ButtonVariant]: string[];
 } = {
   'main-orange': [
-    'bg-orange-400 text-white',
-    'border border-orange-400',
+    'bg-brand-one-400 text-white',
+    'border border-brand-one-400',
     'filter',
     'data-[size=md]:drop-shadow-medium',
     'data-[loading=false]:hover:drop-shadow-small',
-    'data-[loading=false]:enabled:active:bg-orange-600',
+    'data-[loading=false]:enabled:active:bg-brand-one-600',
   ],
   'main-green': [
-    'bg-green-400 text-white',
-    'border border-green-400',
+    'bg-brand-two-400 text-white',
+    'border border-brand-two-400',
     'filter',
     'data-[size=md]:drop-shadow-medium',
     'data-[loading=false]:hover:drop-shadow-small',
-    'data-[loading=false]:enabled:active:bg-green-600',
+    'data-[loading=false]:enabled:active:bg-brand-two-600',
   ],
   'main-gray': [
     'bg-gray-600 text-white',
@@ -51,24 +51,24 @@ export const buttonVariantStyles: {
     'data-[loading=false]:enabled:active:bg-gray-700 data-[loading=false]:active:text-white data-[loading=false]:active:border-gray-700',
   ],
   danger: [
-    'bg-red-400 text-white',
-    'border border-red-400',
+    'bg-danger-400 text-white',
+    'border border-danger-400',
     'filter drop-shadow-medium',
     'data-[loading=false]:hover:drop-shadow-small',
-    'data-[loading=false]:enabled:active:bg-red-600 data-[loading=false]:active:border-red-600',
+    'data-[loading=false]:enabled:active:bg-danger-600 data-[loading=false]:active:border-danger-600',
   ],
 };
 
 export enum ButtonSize {
   'sm',
-  'md'
-};
+  'md',
+}
 
 export const buttonSizeStyles: {
   [key in keyof typeof ButtonSize]: string[];
 } = {
-  'sm': ['text-xs leading-[10px] mb-[-1px] px-4 h-[28px]'],
-  'md': ['text-sm px-4 h-[40px]']
+  sm: ['text-xs leading-[10px] mb-[-1px] px-4 h-[28px]'],
+  md: ['text-sm px-4 h-[40px]'],
 };
 
 export type ButtonProps = {
@@ -103,22 +103,22 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-size={size}
         className={clsxm(
           'inline-flex items-center justify-center rounded',
-          'tracking-[1px] font-black',
-          'focus:outline-none focus-visible:ring focus-visible:ring-primary-500',
+          'font-black tracking-[1px]',
+          'focus-visible:ring-primary-500 focus:outline-none focus-visible:ring',
           'transition-colors duration-150',
           'transition-[filter] will-change-[filter]',
           'antialiased',
           buttonSizeStyles[size],
           buttonVariantStyles[variant],
-          'disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:border-0 disabled:drop-shadow-none',
+          'disabled:cursor-not-allowed disabled:border-0 disabled:bg-gray-300 disabled:text-gray-500 disabled:drop-shadow-none',
           isLoading &&
-          `relative text-transparent text transition-none hover:text-transparent cursor-wait is-loading`,
+            `text is-loading relative cursor-wait text-transparent transition-none hover:text-transparent`,
           className,
         )}
         {...rest}
       >
         <div className="flex items-center uppercase">
-          {icon && <SvgIcon name={icon} className='h-6' />}
+          {icon && <SvgIcon name={icon} className="h-6" />}
           {icon && children && <div className="pr-2" />}
           {children}
         </div>

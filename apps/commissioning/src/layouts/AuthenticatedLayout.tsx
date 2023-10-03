@@ -50,11 +50,11 @@ export function AuthenticatedLayout({
     () =>
       userInfoQuery.data
         ? {
-          imgSrc: userInfoQuery.data?.avatar,
-          firstName: userInfoQuery.data?.first_name,
-          lastName: userInfoQuery.data?.last_name,
-          role: userInfoQuery.data?.role,
-        }
+            imgSrc: userInfoQuery.data?.avatar,
+            firstName: userInfoQuery.data?.first_name,
+            lastName: userInfoQuery.data?.last_name,
+            role: userInfoQuery.data?.role,
+          }
         : undefined,
     [userInfoQuery.data],
   );
@@ -64,8 +64,12 @@ export function AuthenticatedLayout({
       key: 'set',
       children: (
         <Link href={routes.settings} passHref>
-          <a href={routes.settings} data-cy='settings' className="flex py-1 text-sm font-medium">
-            <SvgIcon name="Settings" className="mr-3 w-5 text-orange-400" />
+          <a
+            href={routes.settings}
+            data-cy="settings"
+            className="flex py-1 text-sm font-medium"
+          >
+            <SvgIcon name="Settings" className="text-brand-one-400 mr-3 w-5" />
             {intl.formatMessage({ defaultMessage: 'Settings' })}
           </a>
         </Link>
@@ -74,11 +78,11 @@ export function AuthenticatedLayout({
     {
       key: 'log',
       children: (
-        <button type="button" onClick={logOut} data-cy='logout'>
+        <button type="button" onClick={logOut} data-cy="logout">
           <Typography className="flex py-1 text-sm font-medium">
             <SvgIcon
               name="LogOut"
-              className="mr-3 w-5 text-orange-400"
+              className="text-brand-one-400 mr-3 w-5"
               color="rgb(245 126 2 / 1)"
             />
             {intl.formatMessage({ defaultMessage: 'Logout' })}

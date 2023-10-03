@@ -35,7 +35,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         <span>{isRequired && '*'}</span>
       </Label>
 
-      <div className="relative w-full mt-1">
+      <div className="relative mt-1 w-full">
         <input
           value={value}
           disabled={disabled}
@@ -48,14 +48,14 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
             'bg-gray-100 font-medium text-gray-800',
             'placeholder:font-normal',
             'border-[1px] border-gray-400',
-            'focus:outline-none focus-visible:border-orange-400',
+            'focus-visible:border-brand-one-400 focus:outline-none',
             'transition-colors duration-75',
             'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400',
             'disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
             validity && validityStyle[validity].input,
           )}
           {...rest}
-          data-cy={label?.toLowerCase().replace(' ', '-') || "number-input"}
+          data-cy={label?.toLowerCase().replace(' ', '-') || 'number-input'}
         />
 
         <div className="suffix pointer-events-none absolute top-[9px] w-full pl-3">
@@ -81,7 +81,7 @@ export const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         >
           <SvgIcon
             name="CaretUp"
-            className="mb-[4px] h-[6px] fill-inherit hover:fill-orange-400"
+            className="hover:fill-brand-one-400 mb-[4px] h-[6px] fill-inherit"
           />
           <SvgIcon name="CaretDown" className="h-[6px] fill-inherit" />
         </div>

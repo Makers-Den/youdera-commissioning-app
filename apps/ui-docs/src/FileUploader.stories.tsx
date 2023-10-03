@@ -21,12 +21,12 @@ const Template: ComponentStory<typeof FileUploader> = args => (
   <CenterWrapper>
     <FileUploader className="w-[280px]" {...args}>
       <div className="flex items-center gap-4">
-        <SvgIcon name="Camera" className="w-8 text-green-400" />
+        <SvgIcon name="Camera" className="text-brand-two-400 w-8" />
         <div>
           <Typography>Take photo by camera</Typography>
           <Typography>
             or{' '}
-            <span className="text-green-400 underline">
+            <span className="text-brand-two-400 underline">
               click here to upload
             </span>
           </Typography>
@@ -77,12 +77,12 @@ export const Overview = () => {
         {...fileUploaderProps}
       >
         <div className="flex items-center gap-4">
-          <SvgIcon name="Camera" className="w-8 text-green-400" />
+          <SvgIcon name="Camera" className="text-brand-two-400 w-8" />
           <div>
             <Typography>Take photo by camera</Typography>
             <Typography>
               or{' '}
-              <span className="text-green-400 underline">
+              <span className="text-brand-two-400 underline">
                 click here to upload
               </span>
             </Typography>
@@ -108,12 +108,12 @@ export const WithPreview = () => {
         allowMultipleFiles
       >
         <div className="flex items-center gap-4">
-          <SvgIcon name="Camera" className="w-8 text-green-400" />
+          <SvgIcon name="Camera" className="text-brand-two-400 w-8" />
           <div>
             <Typography>Take photo by camera</Typography>
             <Typography>
               or{' '}
-              <span className="text-green-400 underline">
+              <span className="text-brand-two-400 underline">
                 click here to upload
               </span>
             </Typography>

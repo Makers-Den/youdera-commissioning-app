@@ -1,14 +1,14 @@
 export const validityStyle = {
   valid: {
-    label: 'text-green-400',
-    icon: 'fill-green-400',
-    input: 'focus-visible:ring-0 border-green-400',
-    units: 'text-green-400'
+    label: 'text-brand-two-400',
+    icon: 'fill-brand-two-400',
+    input: 'focus-visible:ring-0 border-brand-two-400',
+    units: 'text-brand-two-400',
   },
   invalid: {
-    label: 'text-red-400',
-    icon: 'fill-red-400',
-    input: 'focus-visible:ring-0 border-red-400',
-    units: 'text-red-400'
+    label: 'text-danger-400',
+    icon: 'fill-danger-400',
+    input: 'focus-visible:ring-0 border-danger-400',
+    units: 'text-danger-400',
   },
 };
