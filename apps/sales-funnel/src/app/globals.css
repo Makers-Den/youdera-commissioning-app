@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import 'ui/styles.css';
+
+body {
+  @apply font-primary text-white;
+}
