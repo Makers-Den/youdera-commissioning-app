@@ -102,7 +102,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-loading={isLoading}
         data-size={size}
         className={clsxm(
-          'inline-flex items-center justify-center rounded',
+          'rounded-button inline-flex items-center justify-center',
           'font-black tracking-[1px]',
           'focus-visible:ring-primary-500 focus:outline-none focus-visible:ring',
           'transition-colors duration-150',

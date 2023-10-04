@@ -75,6 +75,10 @@ module.exports = {
         medium: '0px 3px 4px rgba(0, 0, 0, 0.25)',
         large: '0px 7px 15px rgba(40, 46, 124, 0.1)',
       },
+
+      borderRadius: {
+        button: '0.25rem',
+      },
     },
   },
   plugins: [],
