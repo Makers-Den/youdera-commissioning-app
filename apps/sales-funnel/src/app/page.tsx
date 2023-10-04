@@ -16,8 +16,10 @@ export default function Home() {
           <HandWithPhoneSvg className="mr-8" />
         </div>
         <div className="flex flex-col gap-4">
-          <Button>BOOK A CALL WITH SALES</Button>
-          <Button variant="additional-white">BACK</Button>
+          <Button className="font-medium">BOOK A CALL WITH SALES</Button>
+          <Button variant="additional-white" className="font-medium">
+            BACK
+          </Button>
         </div>
       </div>
     </MobileLayout>
