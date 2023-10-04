@@ -64,7 +64,7 @@ export function LanguageSelect({
                         'cursor-pointer select-none',
                         'py-1 px-2',
                         'rounded-md hover:bg-gray-100 hover:text-gray-700',
-                        value === language && 'bg-orange-400 text-white',
+                        value === language && 'bg-brand-one-400 text-white',
                       )}
                       value={language}
                       key={language}

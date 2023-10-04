@@ -21,7 +21,7 @@ export type DialogHeaderProps = {
 
 export const DialogHeader = ({ className, children }: DialogHeaderProps) => (
   <div className={clsxm('flex items-center pr-8', className)}>
-    <div className="relative mr-7 h-full min-h-[28px] w-1 rounded-r-full bg-orange-400" />
+    <div className="bg-brand-one-400 relative mr-7 h-full min-h-[28px] w-1 rounded-r-full" />
     {children}
   </div>
 );

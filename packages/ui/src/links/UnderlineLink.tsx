@@ -11,10 +11,10 @@ export const UnderlineLink = React.forwardRef<
     ref={ref}
     {...rest}
     className={clsxm(
-      'text-orange-400 font-normal',
+      'text-brand-one-400 font-normal',
       'animated-underline custom-link inline-flex items-center',
-      'focus:outline-none focus-visible:rounded focus-visible:ring focus-visible:ring-orange-400 focus-visible:ring-offset-2',
-      'border-b-[1.5px] border-orange-400 hover:border-black/0',
+      'focus-visible:ring-brand-one-400 focus:outline-none focus-visible:rounded focus-visible:ring focus-visible:ring-offset-2',
+      'border-brand-one-400 border-b-[1.5px] hover:border-black/0',
       className,
     )}
   >

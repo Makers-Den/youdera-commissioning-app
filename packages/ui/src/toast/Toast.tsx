@@ -14,8 +14,8 @@ export const Toast = () => (
         show={t.visible}
         className={clsxm(
           'drop-shadow-large z-50 flex  transform justify-between gap-4 rounded-md p-4',
-          t.type === 'success' && 'bg-green-400',
-          t.type === 'error' && 'bg-red-400',
+          t.type === 'success' && 'bg-brand-two-400',
+          t.type === 'error' && 'bg-danger-400',
         )}
         enter="transition-all duration-150"
         enterFrom="opacity-0 scale-50"

@@ -1,8 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ApiFile, Inverter } from '@src/api/youdera/apiTypes';
-import {
-  useInvertersQuery,
-} from '@src/api/youdera/hooks/inverters/hooks';
+import { useInvertersQuery } from '@src/api/youdera/hooks/inverters/hooks';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useIntl } from 'react-intl';
@@ -157,11 +155,11 @@ export const StringInverterDialog = <
           title={
             modifiedStringId
               ? intl.formatMessage({
-                defaultMessage: 'Modify String',
-              })
+                  defaultMessage: 'Modify String',
+                })
               : intl.formatMessage({
-                defaultMessage: 'Add String',
-              })
+                  defaultMessage: 'Add String',
+                })
           }
         />
         <SvgIcon
@@ -205,62 +203,64 @@ export const StringInverterDialog = <
           )}
           {((watchedInverter?.key !== '-1' && watchedInput) ||
             (watchedInverter?.key === '-1' && watchedNewInput)) && (
-              <FileField
-                className="w-full"
-                label={intl.formatMessage({
-                  defaultMessage: 'String test result',
-                })}
-                name="file"
-                valueMapper={fileValueMapper}
-              >
-                <div className="flex items-center gap-4">
-                  <SvgIcon name="Camera" className="w-8 text-green-400" />
-                  <div>
-                    <Typography>
+            <FileField
+              className="w-full"
+              label={intl.formatMessage({
+                defaultMessage: 'String test result',
+              })}
+              name="file"
+              valueMapper={fileValueMapper}
+            >
+              <div className="flex items-center gap-4">
+                <SvgIcon name="Camera" className="text-brand-two-400 w-8" />
+                <div>
+                  <Typography>
+                    {intl.formatMessage({
+                      defaultMessage: 'Take photo by camera',
+                      description:
+                        'Context: Take photo by camera or click here to upload',
+                    })}
+                  </Typography>
+                  <Typography>
+                    {intl.formatMessage({
+                      defaultMessage: 'or',
+                      description:
+                        'Context: Take photo by camera or click here to upload',
+                    })}{' '}
+                    <span className="text-brand-two-400 underline">
                       {intl.formatMessage({
-                        defaultMessage: 'Take photo by camera',
+                        defaultMessage: 'click here to upload',
                         description:
                           'Context: Take photo by camera or click here to upload',
                       })}
-                    </Typography>
-                    <Typography>
-                      {intl.formatMessage({
-                        defaultMessage: 'or',
-                        description:
-                          'Context: Take photo by camera or click here to upload',
-                      })}{' '}
-                      <span className="text-green-400 underline">
-                        {intl.formatMessage({
-                          defaultMessage: 'click here to upload',
-                          description:
-                            'Context: Take photo by camera or click here to upload',
-                        })}
-                      </span>
-                    </Typography>
-                  </div>
+                    </span>
+                  </Typography>
                 </div>
-              </FileField>
-            )}
-          {((watchedInverter?.key !== '-1' && watchedInput && watchedFile) ||
-            (watchedInverter?.key === '-1' && watchedNewInput && watchedFile)) && (
-              <div className="mt-3 flex gap-5">
-                <Button
-                  variant="additional-gray"
-                  className="w-full"
-                  onClick={() => onClose(reset)}
-                >
-                  {intl.formatMessage({ defaultMessage: 'Cancel' })}
-                </Button>
-                <Button
-                  variant="main-green"
-                  className="w-full"
-                  type="submit"
-                  isLoading={formState.isSubmitting}
-                >
-                  {intl.formatMessage({ defaultMessage: 'Ok' })}
-                </Button>
               </div>
-            )}
+            </FileField>
+          )}
+          {((watchedInverter?.key !== '-1' && watchedInput && watchedFile) ||
+            (watchedInverter?.key === '-1' &&
+              watchedNewInput &&
+              watchedFile)) && (
+            <div className="mt-3 flex gap-5">
+              <Button
+                variant="additional-gray"
+                className="w-full"
+                onClick={() => onClose(reset)}
+              >
+                {intl.formatMessage({ defaultMessage: 'Cancel' })}
+              </Button>
+              <Button
+                variant="main-green"
+                className="w-full"
+                type="submit"
+                isLoading={formState.isSubmitting}
+              >
+                {intl.formatMessage({ defaultMessage: 'Ok' })}
+              </Button>
+            </div>
+          )}
         </Form>
       </DialogContent>
     </Dialog>

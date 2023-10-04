@@ -166,7 +166,7 @@ export const InverterFormDialog = ({
                   })}
                   className="w-full"
                   {...register('serialNumber', {
-                    shouldUnregister: true
+                    shouldUnregister: true,
                   })}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />
@@ -176,7 +176,7 @@ export const InverterFormDialog = ({
           {showFields.third && (
             <FilesField name="files" valueMapper={fileValueMapper}>
               <div className="flex items-center gap-4">
-                <SvgIcon name="Camera" className="w-8 text-green-400" />
+                <SvgIcon name="Camera" className="text-brand-two-400 w-8" />
                 <div>
                   <Typography>
                     {intl.formatMessage({
@@ -191,7 +191,7 @@ export const InverterFormDialog = ({
                       description:
                         'Context: Take photo by camera or click here to upload',
                     })}{' '}
-                    <span className="text-green-400 underline">
+                    <span className="text-brand-two-400 underline">
                       {intl.formatMessage({
                         defaultMessage: 'click here to upload',
                         description:

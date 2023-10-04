@@ -53,20 +53,20 @@ const statusStyles: {
   [key in VerificationTestStatus | 'none']: VerificationListStyles;
 } = {
   success: {
-    container: 'bg-green-50 border-green-100',
-    name: 'text-green-400',
-    resultContainer: 'border-green-100',
-    result: 'bg-green-200 border-green-400',
-    latestLog: 'bg-green-200',
-    olderLog: 'border-green-200',
+    container: 'bg-brand-two-50 border-brand-two-100',
+    name: 'text-brand-two-400',
+    resultContainer: 'border-brand-two-100',
+    result: 'bg-brand-two-200 border-brand-two-400',
+    latestLog: 'bg-brand-two-200',
+    olderLog: 'border-brand-two-200',
   },
   failed: {
-    container: 'bg-red-50',
-    name: 'text-red-400',
-    resultContainer: 'border-red-100',
-    result: 'bg-red-100 border-red-100',
-    latestLog: 'bg-red-200',
-    olderLog: 'border-red-200',
+    container: 'bg-danger-50',
+    name: 'text-danger-400',
+    resultContainer: 'border-danger-100',
+    result: 'bg-danger-100 border-danger-100',
+    latestLog: 'bg-danger-200',
+    olderLog: 'border-danger-200',
   },
   warning: {
     container: 'bg-yellow-50',
@@ -162,7 +162,7 @@ function VerificationGuideDialog({
               onClose();
             }}
             isLoading={executeDeviceVerificationMutation.isLoading}
-            data-cy='confirmation-confirm-button'
+            data-cy="confirmation-confirm-button"
           >
             {intl.formatMessage({ defaultMessage: 'Execute' })}
           </Button>
@@ -175,7 +175,7 @@ function VerificationGuideDialog({
 function DeviceVerification({
   siteId,
   device,
-  dataCy
+  dataCy,
 }: {
   siteId: number;
   device: Device;

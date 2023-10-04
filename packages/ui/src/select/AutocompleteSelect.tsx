@@ -50,11 +50,11 @@ export const AutocompleteSelect = React.forwardRef<
       query === ''
         ? options
         : options.filter(option =>
-          option.label
-            .toLowerCase()
-            .replace(/\s+/g, '')
-            .includes(query.toLowerCase().replace(/\s+/g, '')),
-        );
+            option.label
+              .toLowerCase()
+              .replace(/\s+/g, '')
+              .includes(query.toLowerCase().replace(/\s+/g, '')),
+          );
 
     return (
       <div className={className}>
@@ -75,7 +75,7 @@ export const AutocompleteSelect = React.forwardRef<
                       'bg-gray-100 font-medium text-gray-800',
                       'placeholder:font-normal',
                       'border-[1px] border-gray-500',
-                      'focus:outline-none focus-visible:border-orange-400 focus-visible:bg-white',
+                      'focus-visible:border-brand-one-400 focus:outline-none focus-visible:bg-white',
                       'transition-colors duration-75',
                       'w-full',
                       'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
@@ -90,7 +90,10 @@ export const AutocompleteSelect = React.forwardRef<
                       e.target.select();
                     }}
                     ref={ref}
-                    data-cy={label?.toLowerCase().replace(' ', '-') || "autocomplete-input"}
+                    data-cy={
+                      label?.toLowerCase().replace(' ', '-') ||
+                      'autocomplete-input'
+                    }
                     {...rest}
                   />
                 </Combobox.Button>
@@ -137,13 +140,17 @@ export const AutocompleteSelect = React.forwardRef<
                             active && 'bg-gray-100',
                           )
                         }
-                        data-cy={`${label?.toLowerCase().replace(' ', '-')}-option` || "autocomplete-option"}
+                        data-cy={
+                          `${label?.toLowerCase().replace(' ', '-')}-option` ||
+                          'autocomplete-option'
+                        }
                       >
                         {({ selected, active }) => (
                           <>
                             <span
-                              className={`flex items-center truncate ${selected ? 'font-medium' : 'font-normal'
-                                }`}
+                              className={`flex items-center truncate ${
+                                selected ? 'font-medium' : 'font-normal'
+                              }`}
                             >
                               {option.icon && (
                                 <span className="mr-3 flex w-4 items-center justify-center">
@@ -157,12 +164,13 @@ export const AutocompleteSelect = React.forwardRef<
                             </span>
                             {selected && (
                               <span
-                                className={`flex items-center pl-3 ${active ? 'text-white' : 'text-teal-600'
-                                  }`}
+                                className={`flex items-center pl-3 ${
+                                  active ? 'text-white' : 'text-teal-600'
+                                }`}
                               >
                                 <SvgIcon
                                   name="Check"
-                                  className="w-4 text-green-400"
+                                  className="text-brand-two-400 w-4"
                                 />
                               </span>
                             )}

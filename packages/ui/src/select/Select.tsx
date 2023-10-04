@@ -28,13 +28,14 @@ export const SelectOption = <T extends SelectValue>({
   <Listbox.Option
     className="flex cursor-pointer select-none items-center justify-between py-2 pl-3 pr-4 hover:bg-gray-100"
     value={value}
-    data-cy='select-option'
+    data-cy="select-option"
   >
     {args => (
       <>
         <span
-          className={`flex items-center truncate ${args.selected ? 'font-medium' : 'font-normal'
-            }`}
+          className={`flex items-center truncate ${
+            args.selected ? 'font-medium' : 'font-normal'
+          }`}
         >
           {icon && (
             <span className="mr-3 flex w-4 items-center justify-center">
@@ -44,7 +45,7 @@ export const SelectOption = <T extends SelectValue>({
           <Typography variant="body">{children(args)}</Typography>
         </span>
         {args.selected && (
-          <SvgIcon name="Check" className="w-4 text-green-400" />
+          <SvgIcon name="Check" className="text-brand-two-400 w-4" />
         )}
       </>
     )}
@@ -94,7 +95,7 @@ const SelectInner = <T extends SelectValue>(
       defaultValue={defaultValue}
       ref={ref}
       by={compareValueBy}
-      data-cy={label?.toLowerCase().replace(' ', '-') || "select"}
+      data-cy={label?.toLowerCase().replace(' ', '-') || 'select'}
       {...rest}
     >
       {({ open, value }) => (
@@ -107,7 +108,7 @@ const SelectInner = <T extends SelectValue>(
               'flex items-center justify-between',
               'transition-all',
               open
-                ? 'border-orange-400 bg-white'
+                ? 'border-brand-one-400 bg-white'
                 : 'border-gray-500 bg-gray-100',
               validity && validityStyle[validity].input,
             )}

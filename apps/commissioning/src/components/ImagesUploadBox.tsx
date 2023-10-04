@@ -62,7 +62,7 @@ export function ImagesUploadBox({
                 key={name}
                 className="w-28 cursor-pointer overflow-hidden"
                 onClick={listClickHandler(index)}
-                data-cy={`${title.split(" ")[0].toLowerCase()}-item-${index}`}
+                data-cy={`${title.split(' ')[0].toLowerCase()}-item-${index}`}
               >
                 <SquareImage src={thumbnailUrl} alt={name} />
               </ListItem>
@@ -74,7 +74,7 @@ export function ImagesUploadBox({
             {...fileUploaderProps}
           >
             <div className="flex w-full items-center justify-center gap-4">
-              <SvgIcon name="Camera" className="w-8 text-green-400" />
+              <SvgIcon name="Camera" className="text-brand-two-400 w-8" />
               <div>
                 <Typography>
                   {intl.formatMessage({
@@ -85,7 +85,7 @@ export function ImagesUploadBox({
                   {intl.formatMessage({
                     defaultMessage: 'or',
                   })}{' '}
-                  <span className="text-green-400 underline">
+                  <span className="text-brand-two-400 underline">
                     {intl.formatMessage({
                       defaultMessage: 'click here to upload',
                     })}

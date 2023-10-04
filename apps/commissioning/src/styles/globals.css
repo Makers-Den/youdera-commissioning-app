@@ -2,4 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "ui/styles.css"
+@import 'ui/styles.css';

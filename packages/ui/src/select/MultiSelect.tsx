@@ -7,38 +7,39 @@ import clsxm from '../utils/clsxm';
 import { validityStyle } from '../utils/constants';
 
 export interface MultiSelectValue {
-  label: string,
-  key: string
+  label: string;
+  key: string;
 }
 export type MultiSelectOptionProps<T extends MultiSelectValue> = {
   value: T;
   children: (args: {
-    active: boolean,
-    selected: boolean,
-    disabled: boolean
+    active: boolean;
+    selected: boolean;
+    disabled: boolean;
   }) => ReactNode;
 };
 
-export const MultiSelectOption = <T extends MultiSelectValue>({ value, children }: MultiSelectOptionProps<T>) => (
+export const MultiSelectOption = <T extends MultiSelectValue>({
+  value,
+  children,
+}: MultiSelectOptionProps<T>) => (
   <Listbox.Option
-    className="cursor-pointer Multiselect-none py-2 pl-3 pr-4 flex justify-between items-center hover:bg-gray-100"
+    className="Multiselect-none flex cursor-pointer items-center justify-between py-2 pl-3 pr-4 hover:bg-gray-100"
     value={value}
-    data-cy='multi-select-option'
+    data-cy="multi-select-option"
   >
-    {(args) => (
+    {args => (
       <>
-        <Typography as='div' variant="body">{children(args)}</Typography>
+        <Typography as="div" variant="body">
+          {children(args)}
+        </Typography>
         {args.selected && (
-          <SvgIcon
-            name="Check"
-            className="w-4 text-green-400"
-          />
+          <SvgIcon name="Check" className="text-brand-two-400 w-4" />
         )}
       </>
     )}
   </Listbox.Option>
-)
-
+);
 
 type SelectedOptionsProps = {
   label: ReactNode;
@@ -47,13 +48,13 @@ type SelectedOptionsProps = {
 
 function SelectedOptions({ label, onDelete }: SelectedOptionsProps) {
   return (
-    <div className="bg-orange-400 rounded-md flex justify-between items-center py-1 px-2 text-white">
+    <div className="bg-brand-one-400 flex items-center justify-between rounded-md py-1 px-2 text-white">
       <Typography variant="label" className="text-inherit">
         {label}
       </Typography>
       <SvgIcon
         name="Cross"
-        className="w-2 cursor-pointer hover:text-gray-400 ml-2"
+        className="ml-2 w-2 cursor-pointer hover:text-gray-400"
         onClick={onDelete}
       />
     </div>
@@ -70,8 +71,8 @@ function SelectedOptionsCount({ count }: SelectedOptionsCountProps) {
     <div
       onClick={e => e.stopPropagation()}
       className={clsxm(
-        'aspect-square px-2 rounded-full flex items-center justify-center text-sm transition-all',
-        count > 0 ? 'bg-orange-400 text-white' : 'text-gray-800 bg-gray-300',
+        'flex aspect-square items-center justify-center rounded-full px-2 text-sm transition-all',
+        count > 0 ? 'bg-brand-one-400 text-white' : 'bg-gray-300 text-gray-800',
       )}
     >
       {count}
@@ -102,13 +103,13 @@ export function MultiSelect<Value extends MultiSelectValue>({
   isRequired,
   wrapperClassName,
   validity,
-  children
+  children,
 }: MultiSelectProps<Value>) {
   return (
     <div>
       <Typography variant="label">
         {label}
-        <span className="text-green-400">{isRequired && '*'}</span>
+        <span className="text-brand-two-400">{isRequired && '*'}</span>
       </Typography>
       <Listbox
         value={value}
@@ -117,41 +118,41 @@ export function MultiSelect<Value extends MultiSelectValue>({
         defaultValue={defaultValue}
         multiple
         by="key"
-        data-cy={`${label?.toLowerCase().replace(' ', '-')}` || "multiselect"}
+        data-cy={`${label?.toLowerCase().replace(' ', '-')}` || 'multiselect'}
       >
         {({ open }) => (
           <div className={clsxm('relative mt-1', wrapperClassName)}>
             <Listbox.Button
               className={clsxm(
                 'w-full py-2 pl-3 pr-4',
-                'rounded-md text-left drop-shadow-large border',
+                'drop-shadow-large rounded-md border text-left',
                 'cursor-pointer',
-                'flex justify-between items-center gap-2',
+                'flex items-center justify-between gap-2',
                 'transition-all',
                 open
-                  ? 'border-orange-400 bg-white'
-                  : 'bg-gray-100 border-gray-500',
+                  ? 'border-brand-one-400 bg-white'
+                  : 'border-gray-500 bg-gray-100',
                 validity && validityStyle[validity].input,
               )}
             >
               <Typography
                 variant="body"
-                className="flex gap-1 flex-wrap w-full"
+                className="flex w-full flex-wrap gap-1"
               >
                 {value?.length > 0
                   ? value.map(({ label, key }) => (
-                    <SelectedOptions
-                      key={key}
-                      label={label}
-                      onDelete={event => {
-                        event.stopPropagation();
-                        const filteredOptions = value.filter(
-                          val => val.key !== key,
-                        );
-                        onChange(filteredOptions);
-                      }}
-                    />
-                  ))
+                      <SelectedOptions
+                        key={key}
+                        label={label}
+                        onDelete={event => {
+                          event.stopPropagation();
+                          const filteredOptions = value.filter(
+                            val => val.key !== key,
+                          );
+                          onChange(filteredOptions);
+                        }}
+                      />
+                    ))
                   : placeholder}
               </Typography>
               <div className="flex">
@@ -159,10 +160,9 @@ export function MultiSelect<Value extends MultiSelectValue>({
                 <SvgIcon
                   name="ChevronDown"
                   className={clsxm(
-                    'w-3 ml-2 transition-all',
+                    'ml-2 w-3 transition-all',
                     open && 'rotate-180',
                     validity && validityStyle[validity].icon,
-
                   )}
                 />
               </div>
@@ -179,7 +179,7 @@ export function MultiSelect<Value extends MultiSelectValue>({
                 className={clsxm(
                   'absolute overflow-auto',
                   'mt-1 max-h-44 w-full py-3',
-                  'rounded-md bg-white drop-shadow-large',
+                  'drop-shadow-large rounded-md bg-white',
                 )}
               >
                 {children}

@@ -2,9 +2,8 @@
 @tailwind base;
 
 * {
-  font-family: 'Roboto';
+  @apply font-primary;
 }
-
 body {
   @apply text-gray-800;
 }

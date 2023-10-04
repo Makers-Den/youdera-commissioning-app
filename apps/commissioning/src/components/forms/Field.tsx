@@ -28,12 +28,11 @@ export const Field: FC<FieldProps> = ({ children, name }) => {
     <>
       {children(register, getFieldState(name))}
 
-
       <ErrorMessage
         errors={formState.errors}
         name={name}
         render={({ message }) => (
-          <Label className="text-red-400">{message}</Label>
+          <Label className="text-danger-400">{message}</Label>
         )}
       />
     </>

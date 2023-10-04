@@ -2,7 +2,13 @@ import React, { CSSProperties } from 'react';
 
 import clsxm from '../utils/clsxm';
 
-export type TypographyVariant = 'body' | 'bodySmall' | 'h1' | 'h2' | 'h3' | 'label';
+export type TypographyVariant =
+  | 'body'
+  | 'bodySmall'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'label';
 
 export type TypographyWeight = 'normal' | 'medium' | 'bold';
 
@@ -10,20 +16,20 @@ export interface TypographyProps {
   variant?: TypographyVariant;
   // You can make this more extensible if needed
   as?:
-  | 'p'
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'h4'
-  | 'h5'
-  | 'span'
-  | 'div'
-  | 'section'
-  | 'strong'
-  | 'ul'
-  | 'ol'
-  | 'li'
-  | 'label';
+    | 'p'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'span'
+    | 'div'
+    | 'section'
+    | 'strong'
+    | 'ul'
+    | 'ol'
+    | 'li'
+    | 'label';
   className?: string;
   children?: React.ReactNode;
   id?: string;
@@ -32,12 +38,12 @@ export interface TypographyProps {
 }
 
 export const variantToClasses: { [key in TypographyVariant]: string[] } = {
-  body: ['text-base', 'text-current', 'font-roboto'],
-  bodySmall: ['text-sm', 'text-current', 'font-roboto'],
-  h1: ['text-3xl', 'text-current', 'font-roboto'],
-  h2: ['text-2xl', 'text-current', 'font-roboto'],
-  h3: ['text-lg', 'text-current', 'font-roboto'],
-  label: ['text-[14px]', 'text-current', 'font-roboto'],
+  body: ['text-base', 'text-current', 'font-primary'],
+  bodySmall: ['text-sm', 'text-current', 'font-primary'],
+  h1: ['text-3xl', 'text-current', 'font-primary'],
+  h2: ['text-2xl', 'text-current', 'font-primary'],
+  h3: ['text-lg', 'text-current', 'font-primary'],
+  label: ['text-[14px]', 'text-current', 'font-primary'],
 };
 
 export const weightToClasses: { [key in TypographyWeight]: string[] } = {

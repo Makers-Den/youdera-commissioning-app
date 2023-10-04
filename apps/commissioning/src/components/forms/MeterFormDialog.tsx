@@ -116,7 +116,7 @@ export const MeterFormDialog = ({
     if (defaultValues) {
       reset({ auxiliary: false, ...defaultValues });
     } else {
-      reset({ auxiliary: false })
+      reset({ auxiliary: false });
     }
   }, [defaultValues, reset]);
 
@@ -130,22 +130,14 @@ export const MeterFormDialog = ({
       'files',
     ]);
 
-  const isSerialNumber = (!!model?.autoSerialnumber || !!serialNumber);
-  const isFactor = (!!model?.indirect || !!factor)
+  const isSerialNumber = !!model?.autoSerialnumber || !!serialNumber;
+  const isFactor = !!model?.indirect || !!factor;
   const showFields = {
     first: true,
     second: !!meterType,
     third: !!model && !model?.indirect, //factor
-    fourth:
-      !!meterType &&
-      !!model &&
-      !model?.autoSerialnumber &&
-      isFactor, //serialnumber
-    fifth:
-      !!meterType &&
-      !!model &&
-      isFactor &&
-      isSerialNumber,
+    fourth: !!meterType && !!model && !model?.autoSerialnumber && isFactor, //serialnumber
+    fifth: !!meterType && !!model && isFactor && isSerialNumber,
     sixth:
       !!meterType &&
       !!model &&
@@ -191,7 +183,7 @@ export const MeterFormDialog = ({
               placeholder={intl.formatMessage({
                 defaultMessage: 'Select',
               })}
-              wrapperClassName='z-40'
+              wrapperClassName="z-40"
             >
               {meterTypeOptions.map(value => (
                 <SelectOption icon={value.icon as IconName} value={value}>
@@ -222,7 +214,7 @@ export const MeterFormDialog = ({
                   className="w-full"
                   {...register('factor', {
                     setValueAs: v => (v === '' ? undefined : parseInt(v, 10)),
-                    shouldUnregister: true
+                    shouldUnregister: true,
                   })}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />
@@ -241,7 +233,7 @@ export const MeterFormDialog = ({
                   })}
                   className="w-full"
                   {...register('serialNumber', {
-                    shouldUnregister: true
+                    shouldUnregister: true,
                   })}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />
@@ -260,7 +252,7 @@ export const MeterFormDialog = ({
               wrapperClassName="z-10"
             >
               {inverters &&
-                inverters.map((inverter) => (
+                inverters.map(inverter => (
                   <MultiSelectOption
                     value={{
                       key: inverter.id.toString(),
@@ -277,7 +269,8 @@ export const MeterFormDialog = ({
                           {' '}
                           {intl.formatMessage({
                             defaultMessage: 'SN',
-                            description: 'Context: Abbreviation of Serial Number in inverter selection dropdown',
+                            description:
+                              'Context: Abbreviation of Serial Number in inverter selection dropdown',
                           })}
                           : {inverter.serial_number}
                         </Typography>
@@ -303,7 +296,7 @@ export const MeterFormDialog = ({
                 className="w-[340px]"
               >
                 <div className="flex items-center gap-4">
-                  <SvgIcon name="Camera" className="w-8 text-green-400" />
+                  <SvgIcon name="Camera" className="text-brand-two-400 w-8" />
                   <div>
                     <Typography>
                       {intl.formatMessage({
@@ -318,7 +311,7 @@ export const MeterFormDialog = ({
                         description:
                           'Context: Take photo by camera or click here to upload',
                       })}{' '}
-                      <span className="text-green-400 underline">
+                      <span className="text-brand-two-400 underline">
                         {intl.formatMessage({
                           defaultMessage: 'click here to upload',
                           description:
@@ -345,7 +338,7 @@ export const MeterFormDialog = ({
                 type="submit"
                 variant="main-green"
                 className="w-full"
-                data-cy='submit-btn'
+                data-cy="submit-btn"
               >
                 {submitButtonTitle}
               </Button>

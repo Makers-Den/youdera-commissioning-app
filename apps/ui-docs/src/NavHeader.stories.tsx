@@ -21,7 +21,8 @@ export default {
 type StoryType = ComponentStory<typeof NavHeader>;
 
 const user = {
-  imgSrc: 'https://v.wpimg.pl/MTkyNjg0YjUKGzhZSEtvIElDbAMOEmF2Hlt0SEgIfWQTVigDC1U_MRsWYA0VRT01HAlgGgsfLCQCVjhbSFQkJxsVLxNIVSA2Dh1hCFNSdGxbSXtHBgB6MkZNelwDHXUwD0BjWF4FdWcPSyoOAVEudhY',
+  imgSrc:
+    'https://v.wpimg.pl/MTkyNjg0YjUKGzhZSEtvIElDbAMOEmF2Hlt0SEgIfWQTVigDC1U_MRsWYA0VRT01HAlgGgsfLCQCVjhbSFQkJxsVLxNIVSA2Dh1hCFNSdGxbSXtHBgB6MkZNelwDHXUwD0BjWF4FdWcPSyoOAVEudhY',
   firstName: 'John',
   lastName: 'Rambo',
   role: 'Roofer',
@@ -31,8 +32,8 @@ const profileItems = [
   {
     key: 'set',
     children: (
-      <Typography className="flex text-sm py-1">
-        <SvgIcon name="Settings" className="text-orange-400 w-5 mr-3" />
+      <Typography className="flex py-1 text-sm">
+        <SvgIcon name="Settings" className="text-brand-one-400 mr-3 w-5" />
         Setting
       </Typography>
     ),
@@ -40,10 +41,10 @@ const profileItems = [
   {
     key: 'log',
     children: (
-      <Typography className="flex text-sm py-1">
+      <Typography className="flex py-1 text-sm">
         <SvgIcon
           name="LogOut"
-          className="text-orange-400 w-5 mr-3"
+          className="text-brand-one-400 mr-3 w-5"
           color="rgb(245 126 2 / 1)"
         />
         Logout
@@ -62,18 +63,14 @@ export const Overview = () => (
   <div className="flex flex-col items-start gap-2">
     <H3>Logo Variant</H3>
     <NavHeader
-      logoSrc='/logo.png'
+      logoSrc="/logo.png"
       variant="logo"
       profileItems={profileItems}
       user={user}
     />
-    <div className="w-screen border-t-[1px] mb-2" />
+    <div className="mb-2 w-screen border-t-[1px]" />
     <H3>Primary Variant</H3>
-    <NavHeader
-      header="Project 1"
-      profileItems={profileItems}
-      user={user}
-    />
+    <NavHeader header="Project 1" profileItems={profileItems} user={user} />
   </div>
 );
 

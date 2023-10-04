@@ -112,7 +112,6 @@ export const BatteryFormDialog = ({
 
   const isSerialNumber = (model && model.autoSerialnumber) || !!serialNumber;
 
-
   const showFields = {
     first: true,
     second: model && !model.autoSerialnumber,
@@ -166,7 +165,7 @@ export const BatteryFormDialog = ({
                   })}
                   className="w-full"
                   {...register('serialNumber', {
-                    shouldUnregister: true
+                    shouldUnregister: true,
                   })}
                   validity={fieldState.invalid ? 'invalid' : undefined}
                 />
@@ -188,7 +187,7 @@ export const BatteryFormDialog = ({
           {showFields.fourth && (
             <FilesField name="files" valueMapper={fileValueMapper}>
               <div className="flex items-center gap-4">
-                <SvgIcon name="Camera" className="w-8 text-green-400" />
+                <SvgIcon name="Camera" className="text-brand-two-400 w-8" />
                 <div>
                   <Typography>
                     {intl.formatMessage({
@@ -203,7 +202,7 @@ export const BatteryFormDialog = ({
                       description:
                         'Context: Take photo by camera or click here to upload',
                     })}{' '}
-                    <span className="text-green-400 underline">
+                    <span className="text-brand-two-400 underline">
                       {intl.formatMessage({
                         defaultMessage: 'click here to upload',
                         description:
@@ -229,7 +228,7 @@ export const BatteryFormDialog = ({
                 type="submit"
                 variant="main-green"
                 className="w-full"
-                data-cy='submit-btn'
+                data-cy="submit-btn"
               >
                 {submitButtonTitle}
               </Button>
