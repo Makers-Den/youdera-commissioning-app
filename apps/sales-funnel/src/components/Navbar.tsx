@@ -8,7 +8,7 @@ export const Navbar = () => (
       <LogoSvg />
       <div className="flex flex-col items-end">
         <NoteText>Savings</NoteText>
-        <NoteText>-€</NoteText>
+        <NoteText>- €</NoteText>
       </div>
     </div>
   </nav>

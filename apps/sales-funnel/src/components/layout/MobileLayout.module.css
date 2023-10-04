@@ -1,0 +1,9 @@
+.roundedClip {
+  clip-path: url('#roundedClip');
+}
+
+@media (min-width: 389px) {
+  .roundedClip {
+    clip-path: url('#roundedClipLarge');
+  }
+}
