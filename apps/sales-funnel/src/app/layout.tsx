@@ -1,3 +1,4 @@
+import { Navbar } from '@src/components/Navbar';
 import type { Metadata } from 'next';
 
 import './globals.css';
@@ -12,5 +13,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <html lang="en">{children}</html>;
+  return (
+    <html lang="en">
+      <body className="flex min-h-screen flex-col bg-white">
+        <Navbar />
+        {children}
+      </body>
+    </html>
+  );
 }

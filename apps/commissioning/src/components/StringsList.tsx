@@ -3,9 +3,10 @@ import { useIntl } from 'react-intl';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'ui/table/Table';
 
 export type StringListProps = {
+  // eslint-disable-next-line react/no-unused-prop-types
   roofId: number;
   onRowClick: (id: String) => void;
-  strings: String[]
+  strings: String[];
 };
 
 export function StringsList({ onRowClick, strings }: StringListProps) {
