@@ -1,5 +1,4 @@
 import { RadioGroup as Radio } from '@headlessui/react';
-import { useState } from 'react';
 import clsxm from 'ui/utils/clsxm';
 
 type Option = { name: string; value: string };
@@ -9,6 +8,8 @@ type RadioGroupProps = {
   label?: string;
   options: Option[];
   defaultOption?: Option;
+  onChange: (value: Option) => void;
+  selected: Option | undefined;
 };
 
 const RadioButton = ({ checked }: { checked: boolean }) => (
@@ -21,43 +22,44 @@ const RadioButton = ({ checked }: { checked: boolean }) => (
   />
 );
 
-export const RadioGroup: React.FC<RadioGroupProps> = ({ options, label }) => {
-  const [selected, setSelected] = useState();
-
-  return (
-    <div className="w-full px-4 py-16">
-      <div className="mx-auto w-full max-w-md">
-        <Radio value={selected} onChange={setSelected}>
-          <Radio.Label className="sr-only">{label}</Radio.Label>
-          <div className="space-y-2">
-            {options.map(option => (
-              <Radio.Option
-                key={option.name}
-                value={option.value}
-                className={({ checked }) =>
-                  clsxm(
-                    'relative flex cursor-pointer rounded-md border border-gray-600 px-5 py-4 focus:outline-none',
-                    checked && 'border-brand-one-400 border',
-                  )
-                }
-              >
-                {({ checked }) => (
-                  <div className="flex w-full items-center gap-3">
-                    <RadioButton checked={checked} />
-                    <div className="flex items-center">
-                      <div className="text-gray-1000 text-sm">
-                        <Radio.Label as="p" className="">
-                          {option.name}
-                        </Radio.Label>
-                      </div>
+export const RadioGroup: React.FC<RadioGroupProps> = ({
+  options,
+  label,
+  onChange,
+  selected,
+}) => (
+  <div className="w-full px-4 py-16">
+    <div className="mx-auto w-full max-w-md">
+      <Radio value={selected} onChange={(value: Option) => onChange(value)}>
+        <Radio.Label className="sr-only">{label}</Radio.Label>
+        <div className="space-y-2">
+          {options.map(option => (
+            <Radio.Option
+              key={option.name}
+              value={option.value}
+              className={({ checked }) =>
+                clsxm(
+                  'relative flex cursor-pointer rounded-md border border-gray-600 px-5 py-4 focus:outline-none',
+                  checked && 'border-brand-one-400 border',
+                )
+              }
+            >
+              {({ checked }) => (
+                <div className="flex w-full items-center gap-3">
+                  <RadioButton checked={checked} />
+                  <div className="flex items-center">
+                    <div className="text-gray-1000 text-sm">
+                      <Radio.Label as="p" className="">
+                        {option.name}
+                      </Radio.Label>
                     </div>
                   </div>
-                )}
-              </Radio.Option>
-            ))}
-          </div>
-        </Radio>
-      </div>
+                </div>
+              )}
+            </Radio.Option>
+          ))}
+        </div>
+      </Radio>
     </div>
-  );
-};
+  </div>
+);
