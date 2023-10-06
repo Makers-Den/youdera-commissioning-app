@@ -1,14 +1,15 @@
 'use client';
 
+import { BuildingType } from '@src/page-components/BuildingType';
 import { ContactSales } from '@src/page-components/ContactSales';
-import { Development } from '@src/page-components/Development';
 import { useFlowStore } from '@src/store/flow';
 
 export default function Home() {
   const { currentView } = useFlowStore();
   return (
     <>
-      {currentView === 'welcome' && <Development />}
+      {/* {currentView === 'buildingType' && <Development />} */}
+      {currentView === 'buildingType' && <BuildingType />}
       {currentView === 'contactSales' && <ContactSales />}
     </>
   );

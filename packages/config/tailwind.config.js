@@ -79,6 +79,10 @@ module.exports = {
       borderRadius: {
         button: '0.25rem',
       },
+
+      animation: {
+        'spin-slow': 'spin 45s linear infinite',
+      },
     },
   },
   plugins: [],

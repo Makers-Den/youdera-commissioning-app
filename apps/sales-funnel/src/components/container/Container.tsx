@@ -16,14 +16,14 @@ export const Container = ({
   leftSection?: ReactNode;
 }) => (
   <>
-    <main className="row-span-full grid h-full min-h-[calc(100vh-4rem)] grid-cols-1 bg-white md:grid-cols-2">
-      <div className="col-span-1 hidden h-full bg-red-400 md:flex">
+    <main className="min-h-[calc(100vh-4rem)] row-span-full grid h-full grid-cols-1 bg-white md:grid-cols-2">
+      <div className="relative col-span-1 hidden h-full bg-red-400 md:flex">
         {leftSection}
       </div>
-      <div className="col-span-1 flex w-full flex-col ">
+      <div className="relative col-span-1 flex w-full flex-col ">
         <div
           className={clsxm(
-            'bg-brand-one-400 p-4',
+            'bg-brand-one-400 p-4 md:px-24',
             clippedTitle && 'pb-6',
             clippedTitle && styles.roundedClip,
           )}

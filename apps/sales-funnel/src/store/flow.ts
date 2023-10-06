@@ -5,17 +5,17 @@ type View = { previous: string | null; next: string | null; data?: any };
 type Views = Record<string, View>;
 
 const views: Views = {
-  welcome: {
+  buildingType: {
     previous: null,
     next: 'addressInput',
   },
-  // This is added based on the selected option in welcome screen
+  // This is added based on the selected option in buildingType screen
   // contactSales: {
-  //   previous: welcome,
+  //   previous: buildingType,
   //   next: 'addressInput',
   // }
   addressInput: {
-    previous: 'welcome',
+    previous: 'buildingType',
     next: 'roofSummary',
   },
   roofSummary: {
@@ -64,7 +64,7 @@ type FlowState = {
 
 export const useFlowStore = create<FlowState>(set => ({
   views,
-  currentView: 'welcome',
+  currentView: 'buildingType',
   next: () =>
     set(state => {
       const nextView = views[state.currentView].next;

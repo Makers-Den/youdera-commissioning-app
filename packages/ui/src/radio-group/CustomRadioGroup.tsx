@@ -3,7 +3,7 @@ import { RadioGroup as Radio } from '@headlessui/react';
 import { NoteText } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
-type Option = { name: string; value: string; element?: React.ReactNode };
+export type Option = { name: string; value: string; element?: React.ReactNode };
 
 type RadioGroupProps = {
   className?: string;
@@ -35,15 +35,17 @@ export const CustomRadioGroup: React.FC<RadioGroupProps> = ({
               className={({ checked }) =>
                 clsxm(
                   'relative col-span-1 w-full  cursor-pointer rounded-md border border-gray-600 px-5 py-4 focus:outline-none',
-                  'text-gray-1000 flex flex-col items-center justify-center gap-2',
-                  checked && 'border-brand-one-400 border',
+                  'text-gray-1000 flex flex-col items-center justify-between gap-2',
+                  'transition-colors duration-300 ease-in-out [&>svg]:transition-colors [&>svg]:duration-300 [&>svg]:ease-in-out',
+                  checked &&
+                    'border-brand-one-400 [&>svg]:text-brand-one-400 border',
                   optionClassName,
                 )
               }
             >
               {option.element}
-              <Radio.Label as="p" className="text-sm">
-                <NoteText>{option.name}</NoteText>
+              <Radio.Label as="p">
+                <NoteText className="text-center">{option.name}</NoteText>
               </Radio.Label>
             </Radio.Option>
           ))}
