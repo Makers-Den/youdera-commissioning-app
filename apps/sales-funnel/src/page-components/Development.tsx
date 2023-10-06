@@ -11,7 +11,10 @@ const options = [
   { name: '2', value: '2' },
 ];
 export const Development = () => {
-  const [selected, setSelected] = React.useState(options[0]);
+  //CheckboxGroup
+  const [selected, setSelected] = React.useState([options[0]]);
+  //RadioGroup
+  // const [selected, setSelected] = React.useState(options[0]);
 
   return (
     <Container title="Development Page">
@@ -35,7 +38,11 @@ export const Development = () => {
         options={options}
         selected={selected}
         onChange={e => {
-          setSelected(e);
+          if (selected.find(item => item.value === e.value)) {
+            setSelected(selected.filter(item => item.value !== e.value));
+            return;
+          }
+          setSelected([...selected, e]);
         }}
       />
     </Container>

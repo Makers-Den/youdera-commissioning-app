@@ -11,7 +11,7 @@ type CheckboxGroupProps = {
   options: Option[];
   defaultOption?: Option;
   onChange: (value: Option) => void;
-  selected: Option | undefined;
+  selected: Option[] | undefined;
 };
 
 export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
@@ -29,7 +29,9 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
             key={option.name}
             option={option}
             label={option.name}
-            isChecked={selected?.value === option.value}
+            isChecked={
+              selected?.find(item => item.value === option.value) !== undefined
+            }
             onClick={() => onChange(option)}
           />
         ))}
