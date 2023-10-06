@@ -1,7 +1,7 @@
 import { RadioGroup as Radio } from '@headlessui/react';
-import clsxm from 'ui/utils/clsxm';
 
 import { BodyText } from '../typography/Typography';
+import clsxm from '../utils/clsxm';
 
 type Option = { name: string; value: string };
 
