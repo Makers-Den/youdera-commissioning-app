@@ -39,11 +39,10 @@ const options: RadioOption[] = [
 ];
 
 export const BuildingType = () => {
-  const { next } = useFlowStore();
-  const [selected, setSelected] = useState<RadioOption>();
+  const { next, setData } = useFlowStore();
 
-  const handleChange = () => {
-    setSelected(selected);
+  const handleChange = (buildingType: string) => {
+    setData({ buildingType });
     next();
   };
 
@@ -68,7 +67,6 @@ export const BuildingType = () => {
           <CustomRadioGroup
             label="Start by telling us what sort of building it is you intend to install solar panels on."
             options={options}
-            selected={selected}
             onChange={handleChange}
             className="grid-cols-2"
           />

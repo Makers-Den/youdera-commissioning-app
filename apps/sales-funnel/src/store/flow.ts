@@ -73,16 +73,28 @@ const views: Views = {
   // ? The enitre RequestOffer flow is in a modal, so I am not sure if we want it to be state, but if we do, we can add it here
 };
 
+const flowDataName = [
+  'buildingType', //BuildingType
+  'streetAddress', //AddressInput
+];
+type FlowDataNames = (typeof flowDataName)[number];
+type FlowData = Partial<Record<FlowDataNames, string>>;
+
 type FlowState = {
   next: () => void;
   back: () => void;
   currentView: ViewNames;
+  data: FlowData;
+  setData: (data: FlowData) => void;
   views: Views;
 };
 
 export const useFlowStore = create<FlowState>(set => ({
   views,
   currentView: 'buildingType',
+  data: {},
+  setData: (newData: FlowData) =>
+    set(state => ({ data: { ...state.data, ...newData } })),
   next: () =>
     set(state => {
       const nextView = views[state.currentView].next;

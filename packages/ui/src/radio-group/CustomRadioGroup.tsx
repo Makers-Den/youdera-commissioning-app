@@ -10,22 +10,19 @@ type RadioGroupProps = {
   optionClassName?: string;
   label?: string;
   options: Option[];
-  defaultOption?: Option;
-  onChange: (value: Option) => void;
-  selected: Option | undefined;
+  onChange: (value: string) => void;
 };
 
 export const CustomRadioGroup: React.FC<RadioGroupProps> = ({
   options,
   label,
   onChange,
-  selected,
   className,
   optionClassName,
 }) => (
   <div className="w-full max-w-md">
     {label && <BodyText className="text-gray-1000 mb-6">{label}</BodyText>}
-    <Radio value={selected} onChange={(value: Option) => onChange(value)}>
+    <Radio onChange={value => onChange(value)}>
       <Radio.Label className="sr-only">{label}</Radio.Label>
       <div className={clsxm('grid grid-cols-3 gap-4', className)}>
         {options.map(option => (
@@ -44,9 +41,7 @@ export const CustomRadioGroup: React.FC<RadioGroupProps> = ({
             }
           >
             {option.element}
-            <Radio.Label as="p">
-              <NoteText className="text-center">{option.name}</NoteText>
-            </Radio.Label>
+            <NoteText className="text-center">{option.name}</NoteText>
           </Radio.Option>
         ))}
       </div>
