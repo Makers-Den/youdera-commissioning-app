@@ -1,16 +1,18 @@
 import React, { ReactNode } from 'react';
-import { H1 } from 'ui/typography/Typography';
+import { H1, H2 } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 
 import styles from './Container.module.css';
 
 export const Container = ({
   title,
+  subTitle,
   children,
   clippedTitle,
   leftSection,
 }: {
   title: string;
+  subTitle?: string;
   children: ReactNode;
   clippedTitle?: boolean;
   leftSection?: ReactNode;
@@ -23,12 +25,19 @@ export const Container = ({
       <div className="relative col-span-1 flex w-full flex-col ">
         <div
           className={clsxm(
-            'bg-brand-one-400 p-4 md:px-24',
+            'bg-brand-one-400 p-4 text-white md:px-24',
             clippedTitle && 'pb-6',
             clippedTitle && styles.roundedClip,
           )}
         >
-          <H1 weight="medium">{title}</H1>
+          <H1 weight="medium" className="max-w-xs">
+            {title}
+          </H1>
+        </div>
+        <div className="-mt-3 w-full bg-gray-300 px-4 pb-6 pt-8 md:px-24">
+          <H2 weight="medium" className="max-w-xs">
+            {subTitle}
+          </H2>
         </div>
         {children}
       </div>

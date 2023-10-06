@@ -51,14 +51,15 @@ export const BuildingType = () => (
     }
     title="Get an offer for solar
   panels in 5 minutes"
+    subTitle="Estimate how much you can save by installing solar on your property."
   >
-    <div className="relative flex flex-1 flex-col justify-between overflow-hidden bg-white p-5">
-      <div className="z-10 flex flex-col items-center gap-20">
-        <BodyText className="text-black">
-          Start by telling us what sort of building it is you intend to install
-          solar panels on.
-        </BodyText>
-        <CustomRadioGroup options={options} className="grid-cols-2" />
+    <div className="relative flex flex-1 flex-col justify-between overflow-hidden bg-white p-5 md:px-24 md:py-7">
+      <div className="z-10 flex flex-col items-center gap-20 md:items-start">
+        <CustomRadioGroup
+          label={`Start by telling us what sort of building it is you intend to install solar panels on.`}
+          options={options}
+          className="grid-cols-2"
+        />
       </div>
       <SunSvg
         className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
