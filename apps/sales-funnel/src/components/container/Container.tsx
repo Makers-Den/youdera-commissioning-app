@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { H2 } from 'ui/typography/Typography';
+import { H1 } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 
 import styles from './Container.module.css';
@@ -28,9 +28,7 @@ export const Container = ({
             clippedTitle && styles.roundedClip,
           )}
         >
-          <H2 as="h1" weight="medium">
-            {title}
-          </H2>
+          <H1 weight="medium">{title}</H1>
         </div>
         {children}
       </div>

@@ -42,8 +42,8 @@ export const variantToClasses: { [key in TypographyVariant]: string[] } = {
   note: ['text-xs', 'text-current', 'font-primary'],
   body: ['text-base', 'text-current', 'font-primary'],
   bodySmall: ['text-sm', 'text-current', 'font-primary'],
-  h1: ['text-3xl', 'text-current', 'font-primary'],
-  h2: ['text-2xl', 'text-current', 'font-primary'],
+  h1: ['text-3xl md:text-2xl', 'text-current', 'font-primary'],
+  h2: ['text-2xl md:text-xl', 'text-current', 'font-primary'],
   h3: ['text-lg', 'text-current', 'font-primary'],
   label: ['text-[14px]', 'text-current', 'font-primary'],
 };
