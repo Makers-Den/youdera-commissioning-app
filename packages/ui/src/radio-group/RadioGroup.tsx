@@ -49,7 +49,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
               {({ checked }) => (
                 <div className="flex w-full items-center gap-3">
                   <RadioButton checked={checked} />
-                  <BodyText className="text-gray-1000 text-sm">
+                  <BodyText className="text-gray-1000">
                     {option.name}
                   </BodyText>
                 </div>

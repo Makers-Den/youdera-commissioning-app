@@ -1,9 +1,9 @@
 import { RadioGroup as Radio } from '@headlessui/react';
-import clsxm from 'ui/utils/clsxm';
 
 import { NoteText } from '../typography/Typography';
+import clsxm from '../utils/clsxm';
 
-type Option = { name: string; value: string; element: React.ReactNode };
+type Option = { name: string; value: string; element?: React.ReactNode };
 
 type RadioGroupProps = {
   className?: string;
@@ -41,14 +41,10 @@ export const CustomRadioGroup: React.FC<RadioGroupProps> = ({
                 )
               }
             >
-              {({ checked }) => (
-                <>
-                  {option.element}
-                  <Radio.Label as="p" className="text-sm">
-                    <NoteText>{option.name}</NoteText>
-                  </Radio.Label>
-                </>
-              )}
+              {option.element}
+              <Radio.Label as="p" className="text-sm">
+                <NoteText>{option.name}</NoteText>
+              </Radio.Label>
             </Radio.Option>
           ))}
         </div>
