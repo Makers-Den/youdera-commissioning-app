@@ -2,8 +2,7 @@
 
 import { Container } from '@src/components/container/Container';
 import React from 'react';
-import { CustomRadioGroup } from 'ui/radio-group/CustomRadioGroup';
-import { RadioGroup } from 'ui/radio-group/RadioGroup';
+import { CheckboxGroup } from 'ui/checkboxes/CheckboxGroup';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 
 const options = [
@@ -16,15 +15,23 @@ export const Development = () => {
 
   return (
     <Container title="Development Page">
-      <RadioGroup
+      {/* <RadioGroup
         options={options}
         selected={selected}
         onChange={e => {
           setSelected(e);
         }}
-      />
+      /> */}
 
-      <CustomRadioGroup
+      {/* <CustomRadioGroup
+        options={options}
+        selected={selected}
+        onChange={e => {
+          setSelected(e);
+        }}
+      /> */}
+
+      <CheckboxGroup
         options={options}
         selected={selected}
         onChange={e => {
