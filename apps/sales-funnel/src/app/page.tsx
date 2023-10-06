@@ -1,5 +1,6 @@
 'use client';
 
+import { AddressInput } from '@src/page-components/AddressInput';
 import { BuildingType } from '@src/page-components/BuildingType';
 import { ContactSales } from '@src/page-components/ContactSales';
 import { useFlowStore } from '@src/store/flow';
@@ -9,8 +10,9 @@ export default function Home() {
   return (
     <>
       {/* {currentView === 'buildingType' && <Development />} */}
-      {currentView === 'buildingType' && <BuildingType />}
       {currentView === 'contactSales' && <ContactSales />}
+      {currentView === 'buildingType' && <BuildingType />}
+      {currentView === 'addressInput' && <AddressInput />}
     </>
   );
 }

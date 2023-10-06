@@ -1,19 +1,37 @@
 import { create } from 'zustand';
 
+export const viewNames = [
+  'buildingType',
+  'contactSales',
+  'addressInput',
+  'roofSummary',
+  'energyConsumptionPersons',
+  'energyConsumptionSpace',
+  'energyConsumptionCommercialYearly',
+  'energyConsumptionWater',
+  'energyConsumptionBigConsumers',
+  'energyConsumptionYearly',
+  'estimatePP',
+  // ? 'estimateModify',
+  // ? 'requestOffer'...
+] as const;
+
+export type ViewNames = (typeof viewNames)[number];
+
 // Linked list like data structure, we can easily insert views in between
-type View = { previous: string | null; next: string | null; data?: any };
-type Views = Record<string, View>;
+type View = { previous: ViewNames | null; next: ViewNames | null; data?: any };
+type Views = Record<ViewNames, View>;
 
 const views: Views = {
   buildingType: {
     previous: null,
     next: 'addressInput',
   },
-  // This is added based on the selected option in buildingType screen
-  // contactSales: {
-  //   previous: buildingType,
-  //   next: 'addressInput',
-  // }
+  // ? This is added based on the selected option in buildingType screen
+  contactSales: {
+    previous: 'buildingType',
+    next: 'addressInput',
+  },
   addressInput: {
     previous: 'buildingType',
     next: 'roofSummary',
@@ -24,31 +42,31 @@ const views: Views = {
   },
   energyConsumptionPersons: {
     previous: 'roofSummary',
-    next: 'energyConsumptionHeating',
+    next: 'energyConsumptionSpace',
   },
   energyConsumptionSpace: {
     previous: 'roofSummary',
     next: 'energyConsumptionWater',
   },
-  // Based on the selected option in welcome screen, only for commercial building type
-  // energyConsumptionCommercialYearly: {
-  //   previous: 'energyConsumptionSpace',
-  //   next: 'energyConsumptionWater',
-  // },
+  // ? Based on the selected option in welcome screen, only for commercial building type
+  energyConsumptionCommercialYearly: {
+    previous: 'energyConsumptionSpace',
+    next: 'energyConsumptionWater',
+  },
   energyConsumptionWater: {
     previous: 'energyConsumptionPersons',
     next: 'energyConsumptionBigConsumers',
   },
   energyConsumptionBigConsumers: {
     previous: 'energyConsumptionWater',
-    next: 'energyConsumptionElectricity',
+    next: 'energyConsumptionYearly',
   },
   energyConsumptionYearly: {
-    previous: 'energyConsumptionSpace',
-    next: 'energyConsumptionWater',
+    previous: 'energyConsumptionBigConsumers',
+    next: 'estimatePP',
   },
   estimatePP: {
-    previous: 'energyConsumptionElectricity',
+    previous: 'energyConsumptionYearly',
     next: 'roofSummary',
   },
   // ? I assume EstimateModify doesn't have to be a state
@@ -58,7 +76,7 @@ const views: Views = {
 type FlowState = {
   next: () => void;
   back: () => void;
-  currentView: string;
+  currentView: ViewNames;
   views: Views;
 };
 
