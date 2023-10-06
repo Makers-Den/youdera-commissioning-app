@@ -30,8 +30,7 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   onChange,
   selected,
 }) => (
-  <div className="w-full px-4 py-16">
-    <div className="mx-auto w-full max-w-md">
+    <div className="w-full max-w-md px-4 py-16">
       <Radio value={selected} onChange={(value: Option) => onChange(value)}>
         <Radio.Label className="sr-only">{label}</Radio.Label>
         <div className="space-y-2">
@@ -59,5 +58,4 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
         </div>
       </Radio>
     </div>
-  </div>
 );

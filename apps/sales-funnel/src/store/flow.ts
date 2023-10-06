@@ -1,21 +1,39 @@
 import { create } from 'zustand';
 
+export const viewNames = [
+  'buildingType',
+  'contactSales',
+  'addressInput',
+  'roofSummary',
+  'energyConsumptionPersons',
+  'energyConsumptionSpace',
+  'energyConsumptionCommercialYearly',
+  'energyConsumptionWater',
+  'energyConsumptionBigConsumers',
+  'energyConsumptionYearly',
+  'estimatePP',
+  // ? 'estimateModify',
+  // ? 'requestOffer'...
+] as const;
+
+export type ViewNames = (typeof viewNames)[number];
+
 // Linked list like data structure, we can easily insert views in between
-type View = { previous: string | null; next: string | null; data?: any };
-type Views = Record<string, View>;
+type View = { previous: ViewNames | null; next: ViewNames | null; data?: any };
+type Views = Record<ViewNames, View>;
 
 const views: Views = {
-  welcome: {
+  buildingType: {
     previous: null,
     next: 'addressInput',
   },
-  // This is added based on the selected option in welcome screen
-  // contactSales: {
-  //   previous: welcome,
-  //   next: 'addressInput',
-  // }
+  // ? This is added based on the selected option in buildingType screen
+  contactSales: {
+    previous: 'buildingType',
+    next: 'addressInput',
+  },
   addressInput: {
-    previous: 'welcome',
+    previous: 'buildingType',
     next: 'roofSummary',
   },
   roofSummary: {
@@ -24,47 +42,59 @@ const views: Views = {
   },
   energyConsumptionPersons: {
     previous: 'roofSummary',
-    next: 'energyConsumptionHeating',
+    next: 'energyConsumptionSpace',
   },
   energyConsumptionSpace: {
     previous: 'roofSummary',
     next: 'energyConsumptionWater',
   },
-  // Based on the selected option in welcome screen, only for commercial building type
-  // energyConsumptionCommercialYearly: {
-  //   previous: 'energyConsumptionSpace',
-  //   next: 'energyConsumptionWater',
-  // },
+  // ? Based on the selected option in welcome screen, only for commercial building type
+  energyConsumptionCommercialYearly: {
+    previous: 'energyConsumptionSpace',
+    next: 'energyConsumptionWater',
+  },
   energyConsumptionWater: {
     previous: 'energyConsumptionPersons',
     next: 'energyConsumptionBigConsumers',
   },
   energyConsumptionBigConsumers: {
     previous: 'energyConsumptionWater',
-    next: 'energyConsumptionElectricity',
+    next: 'energyConsumptionYearly',
   },
   energyConsumptionYearly: {
-    previous: 'energyConsumptionSpace',
-    next: 'energyConsumptionWater',
+    previous: 'energyConsumptionBigConsumers',
+    next: 'estimatePP',
   },
   estimatePP: {
-    previous: 'energyConsumptionElectricity',
+    previous: 'energyConsumptionYearly',
     next: 'roofSummary',
   },
   // ? I assume EstimateModify doesn't have to be a state
   // ? The enitre RequestOffer flow is in a modal, so I am not sure if we want it to be state, but if we do, we can add it here
 };
 
+const flowDataName = [
+  'buildingType', //BuildingType
+  'streetAddress', //AddressInput
+];
+type FlowDataNames = (typeof flowDataName)[number];
+type FlowData = Partial<Record<FlowDataNames, string>>;
+
 type FlowState = {
   next: () => void;
   back: () => void;
-  currentView: string;
+  currentView: ViewNames;
+  data: FlowData;
+  setData: (data: FlowData) => void;
   views: Views;
 };
 
 export const useFlowStore = create<FlowState>(set => ({
   views,
-  currentView: 'welcome',
+  currentView: 'buildingType',
+  data: {},
+  setData: (newData: FlowData) =>
+    set(state => ({ data: { ...state.data, ...newData } })),
   next: () =>
     set(state => {
       const nextView = views[state.currentView].next;

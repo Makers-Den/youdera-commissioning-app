@@ -1,34 +1,43 @@
 import React, { ReactNode } from 'react';
-import { H1 } from 'ui/typography/Typography';
+import { H1, H2 } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 
 import styles from './Container.module.css';
 
 export const Container = ({
   title,
+  subTitle,
   children,
   clippedTitle,
   leftSection,
 }: {
   title: string;
+  subTitle?: string;
   children: ReactNode;
   clippedTitle?: boolean;
   leftSection?: ReactNode;
 }) => (
   <>
-    <main className="row-span-full grid h-full min-h-[calc(100vh-4rem)] grid-cols-1 bg-white md:grid-cols-2">
-      <div className="col-span-1 hidden h-full bg-red-400 md:flex">
+    <main className="min-h-[calc(100vh-4rem)] row-span-full grid h-full grid-cols-1 bg-white md:grid-cols-2">
+      <div className="relative col-span-1 hidden h-full bg-red-400 md:flex">
         {leftSection}
       </div>
-      <div className="col-span-1 flex w-full flex-col ">
+      <div className="relative col-span-1 flex w-full flex-col ">
         <div
           className={clsxm(
-            'bg-brand-one-400 p-4',
+            'bg-brand-one-400 p-4 text-white md:px-12 lg:px-24',
             clippedTitle && 'pb-6',
             clippedTitle && styles.roundedClip,
           )}
         >
-          <H1 weight="medium">{title}</H1>
+          <H1 weight="medium" className="max-w-xs">
+            {title}
+          </H1>
+        </div>
+        <div className="-mt-3 w-full bg-gray-300 px-4 pb-6 pt-8 md:px-12 lg:px-24">
+          <H2 weight="medium" className="max-w-xs">
+            {subTitle}
+          </H2>
         </div>
         {children}
       </div>

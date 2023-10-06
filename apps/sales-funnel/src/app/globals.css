@@ -5,5 +5,5 @@
 @import 'ui/styles.css';
 
 body {
-  @apply font-primary text-white;
+  @apply font-primary text-gray-1000;
 }
