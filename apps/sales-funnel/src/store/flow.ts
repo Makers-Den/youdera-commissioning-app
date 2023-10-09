@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 export const viewNames = [
   'buildingType',
@@ -95,22 +96,35 @@ type FlowState = {
   views: Views;
 };
 
-export const useFlowStore = create<FlowState>(set => ({
-  views,
-  currentView: 'buildingType',
-  data: {},
-  setData: (newData: FlowData) =>
-    set(state => ({ data: { ...state.data, ...newData } })),
-  next: () =>
-    set(state => {
-      const nextView = views[state.currentView].next;
-      if (!nextView) return state;
-      return { currentView: nextView };
+export const useFlowStore = create<FlowState>()(
+  persist(
+    set => ({
+      views,
+      currentView: 'buildingType',
+      data: {},
+      setData: (newData: FlowData) =>
+        set(state => ({ data: { ...state.data, ...newData } })),
+      next: () =>
+        set(state => {
+          const nextView = views[state.currentView].next;
+          if (!nextView) return state;
+          return { currentView: nextView };
+        }),
+      back: () =>
+        set(state => {
+          const previousView = views[state.currentView].previous;
+          if (!previousView) return state;
+          return { currentView: previousView };
+        }),
     }),
-  back: () =>
-    set(state => {
-      const previousView = views[state.currentView].previous;
-      if (!previousView) return state;
-      return { currentView: previousView };
-    }),
-}));
+    {
+      name: 'states', // name of the item in the storage (must be unique)
+      storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
+      partialize: state => ({
+        currentView: state.currentView,
+        data: state.data,
+        views: state.views,
+      }),
+    },
+  ),
+);
