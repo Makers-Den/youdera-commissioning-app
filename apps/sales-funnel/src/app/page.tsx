@@ -13,7 +13,6 @@ import { useFlowStore } from '@src/store/flow';
 
 export default function Home() {
   const { currentView } = useFlowStore();
-  console.log('currentView', currentView);
   return (
     <>
       {/* {currentView === 'buildingType' && <Development />} */}

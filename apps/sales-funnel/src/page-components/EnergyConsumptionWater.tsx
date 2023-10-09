@@ -35,7 +35,7 @@ const options: RadioGroupOption[] = [
 ];
 
 export const EnergyConsumptionWater = () => {
-  const { next, setData, back } = useFlowStore();
+  const { next, setData, back, data } = useFlowStore();
 
   const handleChange = (primaryWaterHeating: string) => {
     setData({ primaryWaterHeating });
@@ -68,7 +68,12 @@ export const EnergyConsumptionWater = () => {
       </div>
 
       <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
-        <Button variant="main-orange" className="px-10" onClick={next}>
+        <Button
+          variant="main-orange"
+          className="px-10"
+          onClick={next}
+          disabled={!data.primaryWaterHeating}
+        >
           Next
         </Button>
         <Button variant="additional-white" className="px-10" onClick={back}>

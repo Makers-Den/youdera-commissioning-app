@@ -29,7 +29,7 @@ const options: RadioGroupOption[] = [
 ];
 
 export const EnergyConsumptionPersons = () => {
-  const { next, setData, back } = useFlowStore();
+  const { next, setData, back, data } = useFlowStore();
 
   const handleChange = (peopleInHousehold: string) => {
     setData({ peopleInHousehold });
@@ -59,7 +59,12 @@ export const EnergyConsumptionPersons = () => {
       </div>
 
       <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
-        <Button variant="main-orange" className="px-10" onClick={next}>
+        <Button
+          variant="main-orange"
+          className="px-10"
+          onClick={next}
+          disabled={!data.peopleInHousehold}
+        >
           Next
         </Button>
         <Button variant="additional-white" className="px-10" onClick={back}>
