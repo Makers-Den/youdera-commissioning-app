@@ -125,6 +125,7 @@ export const useFlowStore = create<FlowState>()(
         data: state.data,
         views: state.views,
       }),
+      skipHydration: true,
     },
   ),
 );
