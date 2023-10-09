@@ -11,18 +11,20 @@ import { EnergyConsumptionYearly } from '@src/page-components/EnergyConsumptionY
 import { EstimatePP } from '@src/page-components/EstimatePP';
 import { RoofSummary } from '@src/page-components/RoofSummary';
 import { useFlowStore } from '@src/store/flow';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const { currentView } = useFlowStore();
+  const [hasHydrated, setHasHydrated] = useState(false);
 
   // Rehydrate the store on page load
   useEffect(() => {
     useFlowStore.persist.rehydrate();
+    setHasHydrated(true);
   }, []);
 
   // TODO add a loading state?
-  if (!useFlowStore?.persist?.hasHydrated) return null;
+  if (!hasHydrated) return null;
 
   return (
     <>
