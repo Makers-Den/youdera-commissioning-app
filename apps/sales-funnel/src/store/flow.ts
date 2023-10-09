@@ -45,7 +45,7 @@ const views: Views = {
     next: 'energyConsumptionSpace',
   },
   energyConsumptionSpace: {
-    previous: 'roofSummary',
+    previous: 'energyConsumptionPersons',
     next: 'energyConsumptionWater',
   },
   // ? Based on the selected option in welcome screen, only for commercial building type
@@ -70,13 +70,14 @@ const views: Views = {
     next: 'roofSummary',
   },
   // ? I assume EstimateModify doesn't have to be a state
-  // ? The enitre RequestOffer flow is in a modal, so I am not sure if we want it to be state, but if we do, we can add it here
+  // ? The entire RequestOffer flow is in a modal, so I am not sure if we want it to be state, but if we do, we can add it here
 };
 
 const flowDataName = [
   'buildingType', //BuildingType
   'streetAddress', //AddressInput
   'peopleInHousehold', //EnergyConsumptionPersons
+  'primarySpaceHeating', //EnergyConsumptionSpace
 ] as const;
 
 type FlowDataNames = typeof flowDataName[number];

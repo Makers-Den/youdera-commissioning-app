@@ -49,13 +49,13 @@ export const EnergyConsumptionPersons = () => {
       }
       title="Energy consumption"
     >
-      <div className="flex flex-col gap-7">
+      <div className="z-10 flex flex-col gap-7">
         <CustomRadioGroup
           label="How many people live in your household?"
           options={options}
           onChange={handleChange}
         />
-        <NoteText>This will help us estimate your kWh usage per yeat.</NoteText>
+        <NoteText>This will help us estimate your kWh usage per year.</NoteText>
       </div>
 
       <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
@@ -67,7 +67,7 @@ export const EnergyConsumptionPersons = () => {
         </Button>
       </div>
 
-      <BulbSvg className={clsxm('absolute -left-12 bottom-32')} />
+      <BulbSvg className={clsxm('absolute -left-12 bottom-24 ')} />
     </Container>
   );
 };
