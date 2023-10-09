@@ -20,7 +20,7 @@ export const Container = ({
   className?: string;
 }) => (
   <>
-    <main className="min-h-[calc(100vh-4rem)] row-span-full grid h-full grid-cols-1 bg-white md:grid-cols-2">
+    <main className="row-span-full grid h-full min-h-[calc(100vh-4rem)] grid-cols-1 bg-white md:grid-cols-2">
       <div className="relative col-span-1 hidden h-full bg-red-400 md:flex">
         {leftSection}
       </div>
@@ -45,7 +45,7 @@ export const Container = ({
         )}
         <div
           className={clsxm(
-            'relative flex flex-1 flex-col justify-between overflow-hidden bg-white p-5 md:px-12 md:py-7 lg:px-24',
+            'relative flex flex-1 flex-col justify-between gap-16 overflow-hidden bg-white p-5 md:px-12 md:py-7 lg:px-24',
             className,
           )}
         >

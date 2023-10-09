@@ -19,11 +19,11 @@ export const RoofSummary = () => {
           TODO
         </div>
       </div>
-      <div className="flex flex-col gap-4 p-5 md:px-12 md:py-7 lg:px-24">
-        <Button variant="main-orange" className="z-10" onClick={next}>
+      <div className="z-10 flex flex-col justify-between gap-4 p-5 md:flex-row-reverse md:px-12 md:py-7 lg:px-24">
+        <Button variant="main-orange" className="px-10" onClick={next}>
           Next
         </Button>
-        <Button variant="additional-white" className="z-10" onClick={back}>
+        <Button variant="additional-white" className="px-10" onClick={back}>
           Back
         </Button>
       </div>

@@ -16,7 +16,7 @@ export const viewNames = [
   // ? 'requestOffer'...
 ] as const;
 
-export type ViewNames = (typeof viewNames)[number];
+export type ViewNames = typeof viewNames[number];
 
 // Linked list like data structure, we can easily insert views in between
 type View = { previous: ViewNames | null; next: ViewNames | null; data?: any };
@@ -76,8 +76,10 @@ const views: Views = {
 const flowDataName = [
   'buildingType', //BuildingType
   'streetAddress', //AddressInput
-];
-type FlowDataNames = (typeof flowDataName)[number];
+  'peopleInHousehold', //EnergyConsumptionPersons
+] as const;
+
+type FlowDataNames = typeof flowDataName[number];
 type FlowData = Partial<Record<FlowDataNames, string>>;
 
 type FlowState = {
