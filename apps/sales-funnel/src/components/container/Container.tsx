@@ -10,12 +10,14 @@ export const Container = ({
   children,
   clippedTitle,
   leftSection,
+  className,
 }: {
   title: string;
   subTitle?: string;
   children: ReactNode;
   clippedTitle?: boolean;
   leftSection?: ReactNode;
+  className?: string;
 }) => (
   <>
     <main className="min-h-[calc(100vh-4rem)] row-span-full grid h-full grid-cols-1 bg-white md:grid-cols-2">
@@ -34,12 +36,21 @@ export const Container = ({
             {title}
           </H1>
         </div>
-        <div className="-mt-3 w-full bg-gray-300 px-4 pb-6 pt-8 md:px-12 lg:px-24">
-          <H2 weight="medium" className="max-w-xs">
-            {subTitle}
-          </H2>
+        {subTitle && (
+          <div className="-mt-3 w-full bg-gray-300 px-4 pb-6 pt-8 md:px-12 lg:px-24">
+            <H2 weight="medium" className="max-w-xs">
+              {subTitle}
+            </H2>
+          </div>
+        )}
+        <div
+          className={clsxm(
+            'relative flex flex-1 flex-col justify-between overflow-hidden bg-white p-5 md:px-12 md:py-7 lg:px-24',
+            className,
+          )}
+        >
+          {children}
         </div>
-        {children}
       </div>
     </main>
     {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}

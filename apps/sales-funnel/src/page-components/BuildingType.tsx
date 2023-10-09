@@ -5,7 +5,6 @@ import { HomeSvg } from '@src/components/svgs/HomeSvg';
 import { IndustrialSvg } from '@src/components/svgs/IndustrialSvg';
 import { useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
-import { useState } from 'react';
 import {
   type Option as RadioOption,
   CustomRadioGroup,
@@ -62,19 +61,15 @@ export const BuildingType = () => {
   panels in 5 minutes"
       subTitle="Estimate how much you can save by installing solar on your property."
     >
-      <div className="relative flex flex-1 flex-col justify-between overflow-hidden bg-white p-5 md:px-12 md:py-7 lg:px-24">
-        <div className="z-10 flex flex-col items-center gap-20 md:items-start">
-          <CustomRadioGroup
-            label="Start by telling us what sort of building it is you intend to install solar panels on."
-            options={options}
-            onChange={handleChange}
-            className="grid-cols-2"
-          />
-        </div>
-        <SunSvg
-          className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
-        />
-      </div>
+      <CustomRadioGroup
+        label="Start by telling us what sort of building it is you intend to install solar panels on."
+        options={options}
+        onChange={handleChange}
+        className="grid-cols-2"
+      />
+      <SunSvg
+        className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
+      />
     </Container>
   );
 };

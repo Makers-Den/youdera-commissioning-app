@@ -20,7 +20,7 @@ export const CustomRadioGroup: React.FC<RadioGroupProps> = ({
   className,
   optionClassName,
 }) => (
-  <div className="w-full max-w-md">
+  <div className="z-10 w-full max-w-md">
     {label && <BodyText className="text-gray-1000 mb-6">{label}</BodyText>}
     <Radio onChange={value => onChange(value)}>
       <Radio.Label className="sr-only">{label}</Radio.Label>
