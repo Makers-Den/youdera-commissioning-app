@@ -15,7 +15,6 @@ export default function Home() {
   const { currentView } = useFlowStore();
   return (
     <>
-      {/* {currentView === 'buildingType' && <Development />} */}
       {currentView === 'contactSales' && <ContactSales />}
       {currentView === 'buildingType' && <BuildingType />}
       {currentView === 'addressInput' && <AddressInput />}

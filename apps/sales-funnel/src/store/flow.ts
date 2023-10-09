@@ -79,10 +79,11 @@ const flowDataName = [
   'peopleInHousehold', //EnergyConsumptionPersons
   'primarySpaceHeating', //EnergyConsumptionSpace
   'primaryWaterHeating', //EnergyConsumptionWater
+  'bigEnergyConsumers', //EnergyConsumptionBigConsumers
 ] as const;
 
 type FlowDataNames = typeof flowDataName[number];
-type FlowData = Partial<Record<FlowDataNames, string>>;
+type FlowData = Partial<Record<FlowDataNames, string | string[]>>;
 
 type FlowState = {
   next: () => void;
