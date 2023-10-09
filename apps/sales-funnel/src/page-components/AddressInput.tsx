@@ -15,10 +15,10 @@ const options = [
   { label: 'Address 3', key: 'address3' },
 ];
 export const AddressInput = () => {
-  const { next, setData, back } = useFlowStore();
+  const { next, setData, back, data } = useFlowStore();
 
-  const handleChange = (addressInput: string) => {
-    setData({ addressInput });
+  const handleChange = (streetAddress: string) => {
+    setData({ streetAddress });
     next();
   };
 
@@ -43,6 +43,7 @@ export const AddressInput = () => {
           options={options}
           placeholder="Address"
           noOptionsString="No address found"
+          value={options.find(option => option.key === data.streetAddress)}
           onChange={addressInput => handleChange(addressInput?.key || '')}
         />
       </div>

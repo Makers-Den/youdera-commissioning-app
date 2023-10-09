@@ -38,7 +38,7 @@ const options: RadioOption[] = [
 ];
 
 export const BuildingType = () => {
-  const { next, setData } = useFlowStore();
+  const { next, setData, data } = useFlowStore();
 
   const handleChange = (buildingType: string) => {
     setData({ buildingType });
@@ -66,6 +66,7 @@ export const BuildingType = () => {
         options={options}
         onChange={handleChange}
         className="grid-cols-2"
+        defaultValue={data.buildingType as string | undefined}
       />
       <SunSvg
         className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}

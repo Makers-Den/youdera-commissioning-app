@@ -10,14 +10,16 @@ type CheckboxGroupProps = {
   label?: string;
   options: OptionType[];
   onChange: (value: string[]) => void;
+  defaultValue?: OptionType[];
 };
 
 export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   options,
   label,
   onChange,
+  defaultValue = [],
 }) => {
-  const [selected, setSelected] = React.useState<OptionType[]>([]);
+  const [selected, setSelected] = React.useState<OptionType[]>(defaultValue);
 
   const handleClick = (e: OptionType) => {
     if (selected?.find(item => item.value === e.value)) {

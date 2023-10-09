@@ -55,7 +55,7 @@ const views: Views = {
     next: 'energyConsumptionWater',
   },
   energyConsumptionWater: {
-    previous: 'energyConsumptionPersons',
+    previous: 'energyConsumptionSpace',
     next: 'energyConsumptionBigConsumers',
   },
   energyConsumptionBigConsumers: {
@@ -87,7 +87,7 @@ const flowDataName = [
 type FlowDataNames = typeof flowDataName[number];
 type FlowData = Partial<Record<FlowDataNames, string | string[]>>;
 
-type FlowState = {
+export type FlowState = {
   next: () => void;
   back: () => void;
   currentView: ViewNames;
@@ -118,7 +118,7 @@ export const useFlowStore = create<FlowState>()(
         }),
     }),
     {
-      name: 'states', // name of the item in the storage (must be unique)
+      name: 'flowStates', // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
       partialize: state => ({
         currentView: state.currentView,

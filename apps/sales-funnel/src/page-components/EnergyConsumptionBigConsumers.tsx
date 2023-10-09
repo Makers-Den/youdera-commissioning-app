@@ -56,6 +56,9 @@ export const EnergyConsumptionBigConsumers = () => {
           options={options}
           onChange={handleChange}
           label="Do you have any of these big energy consumers in your household?"
+          defaultValue={options.filter(option =>
+            data.bigEnergyConsumers?.includes(option.value),
+          )}
         />
         <NoteText>
           This helps us establish energy usage patterns as well as estimate kWh

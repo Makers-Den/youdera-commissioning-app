@@ -43,6 +43,7 @@ export const EnergyConsumptionYearly = () => {
           type="number"
           className="max-w-xs"
           onChange={handleChange}
+          value={data.yearlyConsumption as string | undefined}
         />
         <NoteText>Our estimate is HARDCODED kWh</NoteText>
       </div>

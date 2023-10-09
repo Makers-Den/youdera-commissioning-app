@@ -11,6 +11,7 @@ type RadioGroupProps = {
   label?: string;
   options: Option[];
   onChange: (value: string) => void;
+  defaultValue?: string;
 };
 
 export const CustomRadioGroup: React.FC<RadioGroupProps> = ({
@@ -19,10 +20,14 @@ export const CustomRadioGroup: React.FC<RadioGroupProps> = ({
   onChange,
   className,
   optionClassName,
+  defaultValue,
 }) => (
   <div className="z-10 w-full max-w-md">
     {label && <BodyText className="text-gray-1000 mb-6">{label}</BodyText>}
-    <Radio onChange={value => onChange(value)}>
+    <Radio
+      onChange={(value: string) => onChange(value)}
+      defaultValue={defaultValue}
+    >
       <Radio.Label className="sr-only">{label}</Radio.Label>
       <div className={clsxm('grid grid-cols-3 gap-4', className)}>
         {options.map(option => (
