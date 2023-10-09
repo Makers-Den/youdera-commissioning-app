@@ -80,6 +80,7 @@ const flowDataName = [
   'primarySpaceHeating', //EnergyConsumptionSpace
   'primaryWaterHeating', //EnergyConsumptionWater
   'bigEnergyConsumers', //EnergyConsumptionBigConsumers
+  'yearlyConsumption', //EnergyConsumptionYearly
 ] as const;
 
 type FlowDataNames = typeof flowDataName[number];

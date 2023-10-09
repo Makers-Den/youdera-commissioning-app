@@ -8,6 +8,7 @@ import { EnergyConsumptionPersons } from '@src/page-components/EnergyConsumption
 import { EnergyConsumptionSpace } from '@src/page-components/EnergyConsumptionSpace';
 import { EnergyConsumptionWater } from '@src/page-components/EnergyConsumptionWater';
 import { EnergyConsumptionYearly } from '@src/page-components/EnergyConsumptionYearly';
+import { EstimatePP } from '@src/page-components/EstimatePP';
 import { RoofSummary } from '@src/page-components/RoofSummary';
 import { useFlowStore } from '@src/store/flow';
 
@@ -28,6 +29,7 @@ export default function Home() {
         <EnergyConsumptionBigConsumers />
       )}
       {currentView === 'energyConsumptionYearly' && <EnergyConsumptionYearly />}
+      {currentView === 'estimatePP' && <EstimatePP />}
     </>
   );
 }
