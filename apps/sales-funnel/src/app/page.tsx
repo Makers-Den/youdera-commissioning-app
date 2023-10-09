@@ -28,8 +28,8 @@ export default function Home() {
 
   return (
     <>
-      {currentView === 'contactSales' && <ContactSales />}
       {currentView === 'buildingType' && <BuildingType />}
+      {currentView === 'contactSales' && <ContactSales />}
       {currentView === 'addressInput' && <AddressInput />}
       {currentView === 'roofSummary' && <RoofSummary />}
       {currentView === 'energyConsumptionPersons' && (

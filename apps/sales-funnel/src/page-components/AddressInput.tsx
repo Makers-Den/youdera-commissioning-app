@@ -52,7 +52,7 @@ export const AddressInput = () => {
           variant="main-orange"
           className="px-10"
           onClick={next}
-          disabled={!data.primarySpaceHeating}
+          disabled={!data.streetAddress}
         >
           Next
         </Button>

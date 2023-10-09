@@ -3,7 +3,7 @@ import { AgriculturalSvg } from '@src/components/svgs/AgriculturalSvg';
 import { CommercialSvg } from '@src/components/svgs/CommercialSvg';
 import { HomeSvg } from '@src/components/svgs/HomeSvg';
 import { IndustrialSvg } from '@src/components/svgs/IndustrialSvg';
-import { useFlowStore } from '@src/store/flow';
+import { useFlowStore, views } from '@src/store/flow';
 import Image from 'next/image';
 import { Button } from 'ui/buttons/Button';
 import {
@@ -39,11 +39,21 @@ const options: RadioOption[] = [
 ];
 
 export const BuildingType = () => {
-  const { next, setData, data } = useFlowStore();
+  const { next, setData, setViews, data } = useFlowStore();
 
   const handleChange = (buildingType: string) => {
     setData({ buildingType });
-    next();
+    //TODO type this
+    if (buildingType === 'industrial') {
+      setViews({
+        buildingType: {
+          next: 'contactSales',
+          previous: null,
+        },
+      });
+    } else {
+      setViews({ buildingType: views.buildingType });
+    }
   };
 
   return (
@@ -74,7 +84,7 @@ export const BuildingType = () => {
           variant="main-orange"
           className="px-10"
           onClick={next}
-          disabled={!data.primarySpaceHeating}
+          disabled={!data.buildingType}
         >
           Next
         </Button>

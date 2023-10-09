@@ -23,7 +23,7 @@ export type ViewNames = typeof viewNames[number];
 type View = { previous: ViewNames | null; next: ViewNames | null; data?: any };
 type Views = Record<ViewNames, View>;
 
-const views: Views = {
+export const views: Views = {
   buildingType: {
     previous: null,
     next: 'addressInput',
@@ -31,7 +31,7 @@ const views: Views = {
   // ? This is added based on the selected option in buildingType screen
   contactSales: {
     previous: 'buildingType',
-    next: 'addressInput',
+    next: null,
   },
   addressInput: {
     previous: 'buildingType',
@@ -88,12 +88,13 @@ type FlowDataNames = typeof flowDataName[number];
 type FlowData = Partial<Record<FlowDataNames, string | string[]>>;
 
 export type FlowState = {
-  next: () => void;
-  back: () => void;
   currentView: ViewNames;
   data: FlowData;
-  setData: (data: FlowData) => void;
   views: Views;
+  setData: (data: FlowData) => void;
+  setViews: (views: Partial<Views>) => void;
+  next: () => void;
+  back: () => void;
 };
 
 export const useFlowStore = create<FlowState>()(
@@ -102,17 +103,19 @@ export const useFlowStore = create<FlowState>()(
       views,
       currentView: 'buildingType',
       data: {},
-      setData: (newData: FlowData) =>
+      setData: newData =>
         set(state => ({ data: { ...state.data, ...newData } })),
+      setViews: newViews =>
+        set(state => ({ views: { ...state.views, ...newViews } })),
       next: () =>
         set(state => {
-          const nextView = views[state.currentView].next;
+          const nextView = state.views[state.currentView].next;
           if (!nextView) return state;
           return { currentView: nextView };
         }),
       back: () =>
         set(state => {
-          const previousView = views[state.currentView].previous;
+          const previousView = state.views[state.currentView].previous;
           if (!previousView) return state;
           return { currentView: previousView };
         }),
