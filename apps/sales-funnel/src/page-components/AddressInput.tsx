@@ -3,6 +3,7 @@ import { useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import { Button } from 'ui/buttons/Button';
 import { AutocompleteSelect } from 'ui/select/AutocompleteSelect';
+import { BodyText } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 
 import { SunSvg } from '../components/svgs/SunSvg';
@@ -34,15 +35,18 @@ export const AddressInput = () => {
         />
       }
       title="Address of building"
-      subTitle="Estimate how much you can save by installing solar on your property."
     >
-      <AutocompleteSelect
-        label="Street Address"
-        options={options}
-        placeholder="Address"
-        noOptionsString="No address found"
-        onChange={addressInput => handleChange(addressInput?.key || '')}
-      />
+      <div className="flex flex-col gap-7">
+        <BodyText>Enter the address of the building.</BodyText>
+        <AutocompleteSelect
+          label="Street Address"
+          options={options}
+          placeholder="Address"
+          noOptionsString="No address found"
+          onChange={addressInput => handleChange(addressInput?.key || '')}
+        />
+      </div>
+
       <Button variant="additional-white" className="z-10" onClick={back}>
         Back
       </Button>

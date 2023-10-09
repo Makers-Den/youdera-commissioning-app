@@ -3,6 +3,7 @@
 import { AddressInput } from '@src/page-components/AddressInput';
 import { BuildingType } from '@src/page-components/BuildingType';
 import { ContactSales } from '@src/page-components/ContactSales';
+import { RoofSummary } from '@src/page-components/RoofSummary';
 import { useFlowStore } from '@src/store/flow';
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       {currentView === 'contactSales' && <ContactSales />}
       {currentView === 'buildingType' && <BuildingType />}
       {currentView === 'addressInput' && <AddressInput />}
+      {currentView === 'roofSummary' && <RoofSummary />}
     </>
   );
 }
