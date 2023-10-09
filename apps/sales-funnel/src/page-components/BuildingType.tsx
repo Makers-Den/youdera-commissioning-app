@@ -5,7 +5,6 @@ import { HomeSvg } from '@src/components/svgs/HomeSvg';
 import { IndustrialSvg } from '@src/components/svgs/IndustrialSvg';
 import { useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
-import { useState } from 'react';
 import {
   type Option as RadioOption,
   CustomRadioGroup,
