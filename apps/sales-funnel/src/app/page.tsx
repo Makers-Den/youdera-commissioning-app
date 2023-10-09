@@ -8,14 +8,26 @@ import { EnergyConsumptionPersons } from '@src/page-components/EnergyConsumption
 import { EnergyConsumptionSpace } from '@src/page-components/EnergyConsumptionSpace';
 import { EnergyConsumptionWater } from '@src/page-components/EnergyConsumptionWater';
 import { EnergyConsumptionYearly } from '@src/page-components/EnergyConsumptionYearly';
+import { EstimatePP } from '@src/page-components/EstimatePP';
 import { RoofSummary } from '@src/page-components/RoofSummary';
 import { useFlowStore } from '@src/store/flow';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const { currentView } = useFlowStore();
+  const [hasHydrated, setHasHydrated] = useState(false);
+
+  // Rehydrate the store on page load
+  useEffect(() => {
+    useFlowStore.persist.rehydrate();
+    setHasHydrated(true);
+  }, []);
+
+  // TODO add a loading state?
+  if (!hasHydrated) return null;
+
   return (
     <>
-      {/* {currentView === 'buildingType' && <Development />} */}
       {currentView === 'contactSales' && <ContactSales />}
       {currentView === 'buildingType' && <BuildingType />}
       {currentView === 'addressInput' && <AddressInput />}
@@ -29,6 +41,7 @@ export default function Home() {
         <EnergyConsumptionBigConsumers />
       )}
       {currentView === 'energyConsumptionYearly' && <EnergyConsumptionYearly />}
+      {currentView === 'estimatePP' && <EstimatePP />}
     </>
   );
 }

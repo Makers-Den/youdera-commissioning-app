@@ -1,38 +1,51 @@
 import React from 'react';
-import clsxm from '../utils/clsxm';
-import { BodyText } from '../typography/Typography';
-import { SvgIcon } from '../svg-icons/SvgIcon';
 
-type Option = { name: string; value: string };
+import { SvgIcon } from '../svg-icons/SvgIcon';
+import { BodyText } from '../typography/Typography';
+import clsxm from '../utils/clsxm';
+
+type OptionType = { name: string; value: string };
 
 type CheckboxGroupProps = {
-  className?: string;
   label?: string;
-  options: Option[];
-  defaultOption?: Option;
-  onChange: (value: Option) => void;
-  selected: Option[] | undefined;
+  options: OptionType[];
+  onChange: (value: string[]) => void;
+  defaultValue?: OptionType[];
 };
 
 export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   options,
   label,
-  selected,
   onChange,
+  defaultValue = [],
 }) => {
+  const [selected, setSelected] = React.useState<OptionType[]>(defaultValue);
+
+  const handleClick = (e: OptionType) => {
+    if (selected?.find(item => item.value === e.value)) {
+      const filteredSelection = selected.filter(item => item.value !== e.value);
+
+      setSelected(filteredSelection);
+      onChange(filteredSelection.map(item => item.value));
+      return;
+    }
+    onChange([...selected, e].map(item => item.value));
+    setSelected([...selected, e]);
+  };
+
   return (
-    <div className="w-full p-4 ">
-      {label && <BodyText className="mb-4">{label}</BodyText>}
-      <div className="mx-auto flex w-full max-w-md flex-col gap-2">
+    <div className="w-full">
+      {label && <BodyText className="mb-4 max-w-md">{label}</BodyText>}
+      <div className="flex w-full max-w-md flex-col gap-2">
         {options.map(option => (
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
           <Option
             key={option.name}
-            option={option}
             label={option.name}
             isChecked={
               selected?.find(item => item.value === option.value) !== undefined
             }
-            onClick={() => onChange(option)}
+            onClick={() => handleClick(option)}
           />
         ))}
       </div>
@@ -44,11 +57,12 @@ type OptionProps = {
   label?: string;
   isChecked: boolean;
   onClick: () => void;
-  option: Option;
 };
+
 const Option = React.forwardRef<HTMLInputElement, OptionProps>(
   ({ label, isChecked, onClick }, ref) => (
-    <div
+    <button
+      type="button"
       className={clsxm(
         'relative flex cursor-pointer rounded-md border border-gray-600 px-5 py-4 focus:outline-none',
         isChecked && 'border-brand-one-400 border',
@@ -78,6 +92,6 @@ const Option = React.forwardRef<HTMLInputElement, OptionProps>(
           <BodyText className={clsxm('text-gray-1000 ml-3')}>{label}</BodyText>
         </div>
       </div>
-    </div>
+    </button>
   ),
 );

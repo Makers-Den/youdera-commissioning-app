@@ -54,6 +54,7 @@ export const EnergyConsumptionPersons = () => {
           label="How many people live in your household?"
           options={options}
           onChange={handleChange}
+          defaultValue={data?.peopleInHousehold as string | undefined}
         />
         <NoteText>This will help us estimate your kWh usage per year.</NoteText>
       </div>

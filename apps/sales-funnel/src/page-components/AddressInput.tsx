@@ -15,11 +15,10 @@ const options = [
   { label: 'Address 3', key: 'address3' },
 ];
 export const AddressInput = () => {
-  const { next, setData, back } = useFlowStore();
+  const { next, setData, back, data } = useFlowStore();
 
-  const handleChange = (addressInput: string) => {
-    setData({ addressInput });
-    next();
+  const handleChange = (streetAddress: string) => {
+    setData({ streetAddress });
   };
 
   return (
@@ -43,13 +42,24 @@ export const AddressInput = () => {
           options={options}
           placeholder="Address"
           noOptionsString="No address found"
+          value={options.find(option => option.key === data.streetAddress)}
           onChange={addressInput => handleChange(addressInput?.key || '')}
         />
       </div>
 
-      <Button variant="additional-white" className="z-10" onClick={back}>
-        Back
-      </Button>
+      <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+        <Button
+          variant="main-orange"
+          className="px-10"
+          onClick={next}
+          disabled={!data.primarySpaceHeating}
+        >
+          Next
+        </Button>
+        <Button variant="additional-white" className="px-10" onClick={back}>
+          Back
+        </Button>
+      </div>
       <SunSvg
         className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
       />

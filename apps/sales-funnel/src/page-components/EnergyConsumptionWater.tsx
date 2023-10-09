@@ -60,6 +60,7 @@ export const EnergyConsumptionWater = () => {
           label="How do you primarily heat your water?"
           options={options}
           onChange={handleChange}
+          defaultValue={data?.primaryWaterHeating as string | undefined}
         />
         <NoteText>
           This helps us establish energy usage patterns as well as estimate kWh

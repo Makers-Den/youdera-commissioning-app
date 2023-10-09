@@ -52,6 +52,7 @@ export const EnergyConsumptionSpace = () => {
           label="How do you primarily heat your house?"
           options={options}
           onChange={handleChange}
+          defaultValue={data?.primarySpaceHeating as string | undefined}
         />
         <NoteText>
           This helps us establish energy usage patterns as well as estimate kWh
