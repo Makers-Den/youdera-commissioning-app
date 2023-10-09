@@ -78,6 +78,7 @@ const flowDataName = [
   'streetAddress', //AddressInput
   'peopleInHousehold', //EnergyConsumptionPersons
   'primarySpaceHeating', //EnergyConsumptionSpace
+  'primaryWaterHeating', //EnergyConsumptionWater
 ] as const;
 
 type FlowDataNames = typeof flowDataName[number];
