@@ -5,6 +5,7 @@ import { HomeSvg } from '@src/components/svgs/HomeSvg';
 import { IndustrialSvg } from '@src/components/svgs/IndustrialSvg';
 import { useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
+import { Button } from 'ui/buttons/Button';
 import {
   type Option as RadioOption,
   CustomRadioGroup,
@@ -68,6 +69,16 @@ export const BuildingType = () => {
         className="grid-cols-2"
         defaultValue={data.buildingType as string | undefined}
       />
+      <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+        <Button
+          variant="main-orange"
+          className="px-10"
+          onClick={next}
+          disabled={!data.primarySpaceHeating}
+        >
+          Next
+        </Button>
+      </div>
       <SunSvg
         className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
       />

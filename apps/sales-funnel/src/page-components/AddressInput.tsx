@@ -19,7 +19,6 @@ export const AddressInput = () => {
 
   const handleChange = (streetAddress: string) => {
     setData({ streetAddress });
-    next();
   };
 
   return (
@@ -48,9 +47,19 @@ export const AddressInput = () => {
         />
       </div>
 
-      <Button variant="additional-white" className="z-10" onClick={back}>
-        Back
-      </Button>
+      <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+        <Button
+          variant="main-orange"
+          className="px-10"
+          onClick={next}
+          disabled={!data.primarySpaceHeating}
+        >
+          Next
+        </Button>
+        <Button variant="additional-white" className="px-10" onClick={back}>
+          Back
+        </Button>
+      </div>
       <SunSvg
         className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
       />
