@@ -1,7 +1,4 @@
-import {
-  Container,
-  containerPadding,
-} from '@src/components/container/Container';
+import { Container } from '@src/components/container/Container';
 import { useFlowStore } from '@src/store/flow';
 import React from 'react';
 import { Button } from 'ui/buttons/Button';
@@ -99,75 +96,92 @@ export const EstimatePP = () => {
         </div>
       </section>
 
-      <section className={clsxm('flex flex-col gap-3', containerPadding)}>
-        <div className="flex gap-4 px-4 md:p-0">
+      <section className={clsxm('flex flex-col gap-3 p-0', ' lg:px-24')}>
+        <div className="flex gap-4 px-4 md:px-12 lg:p-0 ">
           <H2 weight="medium">How to pay for your system</H2>
           <SvgIcon name="Savings" />
         </div>
-        <div className="grid grid-cols-3">
-          <div className="col-span-1 row-span-5 grid">
-            <Label className="bg-gray-200 p-4 text-gray-600" weight="medium">
+        <div className="grid w-full grid-cols-3">
+          {/* First Column */}
+          <div className="col-span-1 col-start-1 flex items-center bg-gray-200">
+            <Label
+              className="col-span-1 col-start-1 p-4 text-gray-600"
+              weight="medium"
+            >
               Financing option
             </Label>
-            <div className="row-span-1 flex h-14 items-center px-4">
-              <Label className="text-gray-600">Net cost</Label>
-            </div>
-            <div className="row-span-1 flex h-14 items-center bg-gray-200 px-4">
-              <Label className=" text-gray-600">Est. monthly payment</Label>
-            </div>
-            <div className="row-span-1 flex h-14 items-center px-4">
-              <Label className="text-gray-600">Solar price per kWh</Label>
-            </div>
-            <div className="bg-brand-one-400 row-span-1 flex h-14 items-center px-4">
-              <Label className=" text-white" weight="medium">
-                Savings over 25 years
-              </Label>
-            </div>
           </div>
-          <div className="bg-gray-1000 col-span-1 row-span-5 grid text-white">
-            <div className="flex gap-2 p-4">
-              <BodyText className="text-brand-one-400" weight="medium">
-                Power Purchase
-              </BodyText>
-              <button type="button">
-                <SvgIcon name="Info" className="h-5 w-5" />
-              </button>
-            </div>
-            <div className="mx-4 flex  h-14 items-center gap-2 border-b border-white/10">
+          <div className="col-span-1 col-start-1 row-span-1 flex h-14 items-center px-4">
+            <Label className="text-gray-600">Net cost</Label>
+          </div>
+          <div className="col-span-1 col-start-1 row-span-1 flex h-14 items-center bg-gray-200 px-4">
+            <Label className=" text-gray-600">Est. monthly payment</Label>
+          </div>
+          <div className="col-span-1 col-start-1 row-span-1 flex h-14 items-center px-4">
+            <Label className="text-gray-600">Solar price per kWh</Label>
+          </div>
+          <div className="bg-brand-one-400 col-span-1 col-start-1 row-span-1 flex h-14 items-center px-4">
+            <Label className=" text-white" weight="medium">
+              Savings over 25 years
+            </Label>
+          </div>
+
+          {/* Second Column */}
+          <div className="bg-gray-1000 col-span-1 col-start-2 row-start-1 flex gap-2 p-4">
+            <BodyText className="text-brand-one-400" weight="medium">
+              Power Purchase
+            </BodyText>
+            <button type="button">
+              <SvgIcon name="Info" className="h-5 w-5 text-white" />
+            </button>
+          </div>
+
+          <div className="bg-gray-1000 col-span-1 col-start-2 row-span-1 row-start-2 flex  text-white">
+            <div className="mx-4 flex h-14 w-full items-center gap-2 border-b  border-white/10 text-white">
               <BodyText weight="medium">0 €</BodyText>
               <button type="button">
                 <SvgIcon name="Info" />
               </button>
             </div>
-            <div className="mx-4 flex  h-14 items-center gap-2 border-b border-white/10">
+          </div>
+
+          <div className="bg-gray-1000 col-span-1 col-start-2 row-span-1 row-start-3 flex  text-white">
+            <div className="mx-4 flex h-14 w-full items-center gap-2 border-b  border-white/10 text-white">
               <BodyText weight="medium">150 €</BodyText>
               <button type="button">
                 <SvgIcon name="Info" />
               </button>
             </div>
-            <div className="mx-4 flex  h-14 items-center gap-2 border-b border-white/10">
+          </div>
+
+          <div className="bg-gray-1000 col-span-1 col-start-2 row-span-1 row-start-4 flex  text-white">
+            <div className="mx-4 flex h-14 w-full items-center gap-2 border-b  border-white/10 text-white">
               <BodyText weight="medium">0,19 €</BodyText>
               <button type="button">
                 <SvgIcon name="Info" />
               </button>
             </div>
-            <div className="mx-4 flex  h-14 items-center gap-2 border-b border-white/10">
-              <BodyText weight="medium">70 000 €</BodyText>
-              <button type="button">
-                <SvgIcon name="Info" />
-              </button>
-            </div>
           </div>
-          <div className="col-span-1 row-span-5 grid bg-gray-300">
-            <div className="flex gap-2 p-4">
-              <BodyText className="text-brand-one-400" weight="medium">
-                Direct Purchase
-              </BodyText>
-              <button type="button">
-                <SvgIcon name="Info" className="h-5 w-5" />
-              </button>
-            </div>
-            <div className="mx-4 flex h-14 items-center gap-2 border-b border-black/10">
+
+          <div className="bg-gray-1000 col-span-1 col-start-2 row-span-1 row-start-5  flex h-14  items-center gap-2 px-4 text-white">
+            <BodyText weight="medium">70 000 €</BodyText>
+            <button type="button">
+              <SvgIcon name="Info" />
+            </button>
+          </div>
+
+          {/* Third Column */}
+          <div className="col-start-3 row-start-1 flex gap-2 bg-gray-300 p-4">
+            <BodyText className="text-brand-one-400" weight="medium">
+              Direct Purchase
+            </BodyText>
+            <button type="button">
+              <SvgIcon name="Info" className="h-5 w-5" />
+            </button>
+          </div>
+
+          <div className="text-gray-1000 col-span-1 col-start-3 row-span-1 row-start-2 flex  bg-gray-300">
+            <div className="mx-4 flex h-14 w-full items-center gap-2  border-b border-black/10">
               <BodyText className="text-gray-1000" weight="medium">
                 12 000 €
               </BodyText>
@@ -175,7 +189,10 @@ export const EstimatePP = () => {
                 <SvgIcon name="Info" />
               </button>
             </div>
-            <div className="mx-4 flex h-14 items-center gap-2 border-b border-black/10">
+          </div>
+
+          <div className="text-gray-1000 col-span-1 col-start-3 row-span-1 row-start-3 flex  bg-gray-300">
+            <div className="mx-4 flex h-14 w-full items-center gap-2  border-b border-black/10">
               <BodyText className=" text-gray-1000" weight="medium">
                 0 €
               </BodyText>
@@ -183,15 +200,21 @@ export const EstimatePP = () => {
                 <SvgIcon name="Info" />
               </button>
             </div>
-            <div className="mx-4 flex h-14 items-center gap-2 border-b border-black/10">
-              <BodyText className="text-gray-1000" weight="medium">
+          </div>
+
+          <div className="text-gray-1000 col-span-1 col-start-3 row-span-1 row-start-4 flex  bg-gray-300">
+            <div className="mx-4 flex h-14 w-full items-center gap-2  border-b border-black/10">
+              <BodyText className=" text-gray-1000" weight="medium">
                 0 €
               </BodyText>
               <button type="button">
                 <SvgIcon name="Info" />
               </button>
             </div>
-            <div className="mx-4 flex h-14 items-center gap-2">
+          </div>
+
+          <div className="text-gray-1000 col-span-1 col-start-3 row-span-1 row-start-5 flex  bg-gray-300">
+            <div className="mx-4 flex h-14 w-full items-center gap-2 ">
               <BodyText weight="medium" className="text-gray-1000">
                 82 000 €
               </BodyText>
