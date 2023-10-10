@@ -5,11 +5,6 @@ import { Button } from 'ui/buttons/Button';
 export const RoofSummary = () => {
   const { next, setData, back } = useFlowStore();
 
-  //   const handleChange = (addressInput: string) => {
-  //     setData({ addressInput });
-  //     next();
-  //   };
-
   return (
     <Container title="Roof Summary" className="p-0 md:px-0 md:py-0 lg:px-0">
       <div className="flex flex-col gap-7">

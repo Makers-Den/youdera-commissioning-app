@@ -1,33 +1,31 @@
 import { RadioGroup as Radio } from '@headlessui/react';
+import React from 'react';
 
 import { BodyText, NoteText } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
-export type Option = { name: string; value: string; element?: React.ReactNode };
+export type Option<T> = { name: string; value: T; element?: React.ReactNode };
 
-type RadioGroupProps = {
+type RadioGroupProps<T> = {
   className?: string;
   optionClassName?: string;
   label?: string;
-  options: Option[];
-  onChange: (value: string) => void;
-  defaultValue?: string;
+  options: Option<T>[];
+  onChange: (value: T) => void;
+  defaultValue?: T;
 };
 
-export const CustomRadioGroup: React.FC<RadioGroupProps> = ({
+export const CustomRadioGroup = <T extends string>({
   options,
   label,
   onChange,
   className,
   optionClassName,
   defaultValue,
-}) => (
+}: RadioGroupProps<T>) => (
   <div className="z-10 w-full max-w-md">
     {label && <BodyText className="text-gray-1000 mb-6">{label}</BodyText>}
-    <Radio
-      onChange={(value: string) => onChange(value)}
-      defaultValue={defaultValue}
-    >
+    <Radio onChange={(value: T) => onChange(value)} defaultValue={defaultValue}>
       <Radio.Label className="sr-only">{label}</Radio.Label>
       <div className={clsxm('grid grid-cols-3 gap-4', className)}>
         {options.map(option => (

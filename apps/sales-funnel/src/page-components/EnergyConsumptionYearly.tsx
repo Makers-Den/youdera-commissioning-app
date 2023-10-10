@@ -1,6 +1,6 @@
 import { Container } from '@src/components/container/Container';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
-import { useFlowStore } from '@src/store/flow';
+import { FlowData, useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import React from 'react';
 import { Button } from 'ui/buttons/Button';
@@ -14,7 +14,7 @@ export const EnergyConsumptionYearly = () => {
   const { next, setData, back, data } = useFlowStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const yearlyConsumption: string = e.target.value;
+    const yearlyConsumption: FlowData['yearlyConsumption'] = e.target.value;
     setData({ yearlyConsumption });
   };
 
@@ -43,7 +43,7 @@ export const EnergyConsumptionYearly = () => {
           type="number"
           className="max-w-xs"
           onChange={handleChange}
-          value={data.yearlyConsumption as string | undefined}
+          value={data?.yearlyConsumption}
         />
         <NoteText>Our estimate is HARDCODED kWh</NoteText>
       </div>

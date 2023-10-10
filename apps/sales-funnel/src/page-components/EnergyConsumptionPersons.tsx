@@ -6,7 +6,7 @@ import { OnePersonSvg } from '@src/components/svgs/OnePersonSvg';
 import { SixPersonSvg } from '@src/components/svgs/SixPersonSvg';
 import { ThreePersonSvg } from '@src/components/svgs/ThreePersonSvg';
 import { TwoPersonSvg } from '@src/components/svgs/TwoPersonSvg';
-import { useFlowStore } from '@src/store/flow';
+import { FlowData, useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import React from 'react';
 import { Button } from 'ui/buttons/Button';
@@ -19,7 +19,7 @@ import clsxm from 'ui/utils/clsxm';
 
 import ConsumptionIllustration from '../../public/ConsumptionIllustration.webp';
 
-const options: RadioGroupOption[] = [
+const options: RadioGroupOption<FlowData['peopleInHousehold']>[] = [
   { name: '1', value: '1', element: <OnePersonSvg /> },
   { name: '2', value: '2', element: <TwoPersonSvg /> },
   { name: '3', value: '3', element: <ThreePersonSvg /> },
@@ -31,7 +31,7 @@ const options: RadioGroupOption[] = [
 export const EnergyConsumptionPersons = () => {
   const { next, setData, back, data } = useFlowStore();
 
-  const handleChange = (peopleInHousehold: string) => {
+  const handleChange = (peopleInHousehold: FlowData['peopleInHousehold']) => {
     setData({ peopleInHousehold });
   };
 
@@ -54,7 +54,7 @@ export const EnergyConsumptionPersons = () => {
           label="How many people live in your household?"
           options={options}
           onChange={handleChange}
-          defaultValue={data?.peopleInHousehold as string | undefined}
+          defaultValue={data?.peopleInHousehold}
         />
         <NoteText>This will help us estimate your kWh usage per year.</NoteText>
       </div>

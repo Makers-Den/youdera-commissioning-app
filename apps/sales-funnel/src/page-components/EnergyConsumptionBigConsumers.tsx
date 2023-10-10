@@ -1,24 +1,26 @@
 import { Container } from '@src/components/container/Container';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
-import { useFlowStore } from '@src/store/flow';
+import { FlowData, useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import React from 'react';
 import { Button } from 'ui/buttons/Button';
-import { CheckboxGroup } from 'ui/checkboxes/CheckboxGroup';
-import { type Option as RadioGroupOption } from 'ui/radio-group/CustomRadioGroup';
+import {
+  type OptionType as CheckboxOption,
+  CheckboxGroup,
+} from 'ui/checkboxes/CheckboxGroup';
 import { NoteText } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 
 import ConsumptionIllustration from '../../public/ConsumptionIllustration.webp';
 
-const options: RadioGroupOption[] = [
+const options: CheckboxOption<FlowData['bigEnergyConsumers'][number]>[] = [
   {
     name: 'Sauna',
     value: 'sauna',
   },
   {
     name: 'Indoor pool',
-    value: 'indoor pool',
+    value: 'pool',
   },
   {
     name: 'Air Conditioning',
@@ -33,7 +35,7 @@ const options: RadioGroupOption[] = [
 export const EnergyConsumptionBigConsumers = () => {
   const { next, setData, back, data } = useFlowStore();
 
-  const handleChange = (bigEnergyConsumers: string[]) => {
+  const handleChange = (bigEnergyConsumers: FlowData['bigEnergyConsumers']) => {
     setData({ bigEnergyConsumers });
   };
 

@@ -3,7 +3,7 @@ import { BulbSvg } from '@src/components/svgs/BulbSvg';
 import { ElectricalSvg } from '@src/components/svgs/ElectricalSvg';
 import { FireSvg } from '@src/components/svgs/FireSvg';
 import { HeatpumpSvg } from '@src/components/svgs/HeatpumpSvg';
-import { useFlowStore } from '@src/store/flow';
+import { FlowData, useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import React from 'react';
 import { Button } from 'ui/buttons/Button';
@@ -16,7 +16,7 @@ import clsxm from 'ui/utils/clsxm';
 
 import ConsumptionIllustration from '../../public/ConsumptionIllustration.webp';
 
-const options: RadioGroupOption[] = [
+const options: RadioGroupOption<FlowData['primarySpaceHeating']>[] = [
   { name: 'Electrical', value: 'electrical', element: <ElectricalSvg /> },
   { name: 'Heatpump', value: 'heatpump', element: <HeatpumpSvg /> },
   {
@@ -29,7 +29,9 @@ const options: RadioGroupOption[] = [
 export const EnergyConsumptionSpace = () => {
   const { next, setData, back, data } = useFlowStore();
 
-  const handleChange = (primarySpaceHeating: string) => {
+  const handleChange = (
+    primarySpaceHeating: FlowData['primarySpaceHeating'],
+  ) => {
     setData({ primarySpaceHeating });
   };
 
@@ -52,7 +54,7 @@ export const EnergyConsumptionSpace = () => {
           label="How do you primarily heat your house?"
           options={options}
           onChange={handleChange}
-          defaultValue={data?.primarySpaceHeating as string | undefined}
+          defaultValue={data?.primarySpaceHeating}
         />
         <NoteText>
           This helps us establish energy usage patterns as well as estimate kWh

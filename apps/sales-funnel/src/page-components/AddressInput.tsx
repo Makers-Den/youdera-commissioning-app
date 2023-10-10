@@ -1,5 +1,5 @@
 import { Container } from '@src/components/container/Container';
-import { useFlowStore } from '@src/store/flow';
+import { FlowData, useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import { Button } from 'ui/buttons/Button';
 import { AutocompleteSelect } from 'ui/select/AutocompleteSelect';
@@ -17,7 +17,7 @@ const options = [
 export const AddressInput = () => {
   const { next, setData, back, data } = useFlowStore();
 
-  const handleChange = (streetAddress: string) => {
+  const handleChange = (streetAddress: FlowData['streetAddress']) => {
     setData({ streetAddress });
   };
 

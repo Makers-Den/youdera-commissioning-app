@@ -4,24 +4,24 @@ import { SvgIcon } from '../svg-icons/SvgIcon';
 import { BodyText } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
-type OptionType = { name: string; value: string };
+export type OptionType<T> = { name: string; value: T };
 
-type CheckboxGroupProps = {
+type CheckboxGroupProps<T> = {
   label?: string;
-  options: OptionType[];
-  onChange: (value: string[]) => void;
-  defaultValue?: OptionType[];
+  options: OptionType<T>[];
+  onChange: (value: T[]) => void;
+  defaultValue?: OptionType<T>[];
 };
 
-export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
+export const CheckboxGroup = <T extends string>({
   options,
   label,
   onChange,
   defaultValue = [],
-}) => {
-  const [selected, setSelected] = React.useState<OptionType[]>(defaultValue);
+}: CheckboxGroupProps<T>) => {
+  const [selected, setSelected] = React.useState<OptionType<T>[]>(defaultValue);
 
-  const handleClick = (e: OptionType) => {
+  const handleClick = (e: OptionType<T>) => {
     if (selected?.find(item => item.value === e.value)) {
       const filteredSelection = selected.filter(item => item.value !== e.value);
 

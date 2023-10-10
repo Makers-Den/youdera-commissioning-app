@@ -74,24 +74,28 @@ export const views: Views = {
   // ? The entire RequestOffer flow is in a modal, so I am not sure if we want it to be state, but if we do, we can add it here
 };
 
-const flowDataName = [
-  'buildingType', //BuildingType
-  'streetAddress', //AddressInput
-  'peopleInHousehold', //EnergyConsumptionPersons
-  'primarySpaceHeating', //EnergyConsumptionSpace
-  'primaryWaterHeating', //EnergyConsumptionWater
-  'bigEnergyConsumers', //EnergyConsumptionBigConsumers
-  'yearlyConsumption', //EnergyConsumptionYearly
-] as const;
+export type FlowData = {
+  buildingType: 'home' | 'industrial' | 'agricultural' | 'commercial'; //BuildingType
+  streetAddress: string; //AddressInput
+  peopleInHousehold: '1' | '2' | '3' | '4' | '5' | '5+'; //EnergyConsumptionPersons
+  primarySpaceHeating: 'electrical' | 'heatpump' | 'other'; //EnergyConsumptionSpace
+  primaryWaterHeating: 'electrical' | 'heatpump' | 'other'; //EnergyConsumptionWater
+  bigEnergyConsumers: (
+    | 'sauna'
+    | 'pool'
+    | 'air conditioning'
+    | 'electric vehicle'
+  )[]; //EnergyConsumptionBigConsumers
+  yearlyConsumption: string; //EnergyConsumptionYearly
+};
 
-type FlowDataNames = typeof flowDataName[number];
-type FlowData = Partial<Record<FlowDataNames, string | string[]>>;
+export type PartialFlowData = Partial<FlowData>;
 
 export type FlowState = {
   currentView: ViewNames;
-  data: FlowData;
+  data: PartialFlowData;
   views: Views;
-  setData: (data: FlowData) => void;
+  setData: (data: PartialFlowData) => void;
   setViews: (views: Partial<Views>) => void;
   next: () => void;
   back: () => void;

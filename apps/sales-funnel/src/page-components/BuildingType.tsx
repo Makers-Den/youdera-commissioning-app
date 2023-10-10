@@ -3,7 +3,7 @@ import { AgriculturalSvg } from '@src/components/svgs/AgriculturalSvg';
 import { CommercialSvg } from '@src/components/svgs/CommercialSvg';
 import { HomeSvg } from '@src/components/svgs/HomeSvg';
 import { IndustrialSvg } from '@src/components/svgs/IndustrialSvg';
-import { useFlowStore, views } from '@src/store/flow';
+import { FlowData, useFlowStore, views } from '@src/store/flow';
 import Image from 'next/image';
 import { Button } from 'ui/buttons/Button';
 import {
@@ -15,7 +15,7 @@ import clsxm from 'ui/utils/clsxm';
 import { SunSvg } from '../components/svgs/SunSvg';
 import Illustration from '../../public/Illustration.webp';
 
-const options: RadioOption[] = [
+const options: RadioOption<FlowData['buildingType']>[] = [
   {
     name: 'Single or Multi-family home',
     value: 'home',
@@ -41,9 +41,8 @@ const options: RadioOption[] = [
 export const BuildingType = () => {
   const { next, setData, setViews, data } = useFlowStore();
 
-  const handleChange = (buildingType: string) => {
+  const handleChange = (buildingType: FlowData['buildingType']) => {
     setData({ buildingType });
-    //TODO type this
     if (buildingType === 'industrial') {
       setViews({
         buildingType: {
@@ -75,9 +74,9 @@ export const BuildingType = () => {
       <CustomRadioGroup
         label="Start by telling us what sort of building it is you intend to install solar panels on."
         options={options}
-        onChange={handleChange}
+        onChange={value => handleChange(value)}
         className="grid-cols-2"
-        defaultValue={data.buildingType as string | undefined}
+        defaultValue={data.buildingType}
       />
       <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
         <Button
