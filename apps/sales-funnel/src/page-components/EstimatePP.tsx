@@ -1,19 +1,26 @@
-import { Container } from '@src/components/container/Container';
+import {
+  Container,
+  containerPadding,
+} from '@src/components/container/Container';
 import { useFlowStore } from '@src/store/flow';
 import React from 'react';
 import { Button } from 'ui/buttons/Button';
 import { SvgIcon } from 'ui/svg-icons/SvgIcon';
 import { BodyText, H2, Label, NoteText } from 'ui/typography/Typography';
+import clsxm from 'ui/utils/clsxm';
 
 export const EstimatePP = () => {
   const { next } = useFlowStore();
   return (
-    <Container title="You can save 70 000 €" clippedTitle>
-      {/* Color of the text */}
-      <div className="bg-gray-1000 flex flex-col gap-6 text-gray-300">
+    <Container
+      title="You can save 70 000 €"
+      clippedTitle
+      className="-mt-3 justify-start gap-3"
+      withoutPadding
+    >
+      <section className="bg-gray-1000 text-gray-450 flex flex-col gap-6 px-4 pb-6 pt-8 md:px-12 lg:px-24">
         <div className="flex items-center justify-between">
           <H2 weight="medium">Your Solar System</H2>
-
           <Button variant="main-gray">
             <SvgIcon name="Wrench" className="mr-4" />
             Modify System
@@ -27,27 +34,30 @@ export const EstimatePP = () => {
         </div>
         <div className="grid grid-cols-2 gap-6 border-b border-current pb-4">
           <div className="flex items-center gap-4">
-            <BodyText>22x</BodyText>
+            <BodyText className="text-white">22x</BodyText>
             <div className="flex flex-col items-center gap-1">
               <SvgIcon name="SolarPanelAlt" className="text-brand-one-400" />
               <NoteText>410W</NoteText>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <BodyText>1x</BodyText>
+            <BodyText className="text-white">1x</BodyText>
             <div className="flex flex-col items-center gap-1">
               <SvgIcon name="BatteryAlt" className="text-brand-one-400" />
               <NoteText>1,6 kWh</NoteText>
             </div>
           </div>
         </div>
-        <div className="b-4 grid grid-cols-2 gap-6">
+
+        <div className="grid grid-cols-2 gap-6">
           <div className="flex items-center gap-4">
-            <SvgIcon name="Lightning" />
+            <div className="flex w-8 items-center justify-center">
+              <SvgIcon name="Lightning" />
+            </div>
             <div className="flex flex-col ">
               <Label>Yearly output</Label>
               <div className="flex gap-2">
-                <BodyText>9500 kWh</BodyText>
+                <BodyText className="text-white">9500 kWh</BodyText>
                 <button type="button">
                   <SvgIcon name="Info" />
                 </button>
@@ -55,11 +65,13 @@ export const EstimatePP = () => {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <SvgIcon name="MeterAlt" />
+            <div className="flex w-8 items-center justify-end">
+              <SvgIcon name="MeterAlt" />
+            </div>
             <div className="flex flex-col ">
               <Label>System power</Label>
               <div className="flex gap-2">
-                <BodyText>9,0 kWp</BodyText>
+                <BodyText className="text-white">9,0 kWp</BodyText>
                 <button type="button">
                   <SvgIcon name="Info" />
                 </button>
@@ -67,23 +79,28 @@ export const EstimatePP = () => {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <SvgIcon name="Coverage" />
+            <div className="flex w-8 items-center justify-center">
+              <SvgIcon name="Coverage" />
+            </div>
             <div className="flex flex-col ">
               <Label>Own energy usage coverage</Label>
-              <BodyText>48%</BodyText>
+              <BodyText className="text-white">48%</BodyText>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <SvgIcon name="Leaf" />
+            <div className="flex w-8 items-center justify-center">
+              <SvgIcon name="Leaf" />
+            </div>
             <div className="flex flex-col ">
               <Label>CO2 saved per year</Label>
-              <BodyText>25 000 kg</BodyText>
+              <BodyText className="text-white">25 000 kg</BodyText>
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex flex-col gap-3">
-        <div className="flex gap-4">
+      </section>
+
+      <section className={clsxm('flex flex-col gap-3', containerPadding)}>
+        <div className="flex gap-4 px-4 md:p-0">
           <H2 weight="medium">How to pay for your system</H2>
           <SvgIcon name="Savings" />
         </div>
@@ -92,16 +109,16 @@ export const EstimatePP = () => {
             <Label className="bg-gray-200 p-4 text-gray-600" weight="medium">
               Financing option
             </Label>
-            <div className="flex h-14 items-center px-4">
+            <div className="row-span-1 flex h-14 items-center px-4">
               <Label className="text-gray-600">Net cost</Label>
             </div>
-            <div className="flex h-14 items-center bg-gray-200 px-4">
+            <div className="row-span-1 flex h-14 items-center bg-gray-200 px-4">
               <Label className=" text-gray-600">Est. monthly payment</Label>
             </div>
-            <div className="flex h-14 items-center px-4">
+            <div className="row-span-1 flex h-14 items-center px-4">
               <Label className="text-gray-600">Solar price per kWh</Label>
             </div>
-            <div className="bg-brand-one-400 flex h-14 items-center px-4">
+            <div className="bg-brand-one-400 row-span-1 flex h-14 items-center px-4">
               <Label className=" text-white" weight="medium">
                 Savings over 25 years
               </Label>
@@ -184,7 +201,10 @@ export const EstimatePP = () => {
             </div>
           </div>
         </div>
-      </div>
+      </section>
+      <section className="h-96 w-full bg-red-500">
+        Here we will put graph
+      </section>
     </Container>
   );
 };
