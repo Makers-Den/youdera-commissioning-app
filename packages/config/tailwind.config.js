@@ -77,6 +77,10 @@ module.exports = {
         large: '0px 7px 15px rgba(40, 46, 124, 0.1)',
       },
 
+      boxShadow: {
+        '3xl': '0px -2px 2px 0px rgba(0, 0, 0, 0.10)',
+      },
+
       borderRadius: {
         button: '0.25rem',
       },
