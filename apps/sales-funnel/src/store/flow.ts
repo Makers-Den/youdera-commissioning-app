@@ -8,7 +8,7 @@ export const viewNames = [
   'roofSummary',
   'energyConsumptionPersons',
   'energyConsumptionSpace',
-  'energyConsumptionCommercialYearly',
+  'energyConsumptionCommercial',
   'energyConsumptionWater',
   'energyConsumptionBigConsumers',
   'energyConsumptionYearly',
@@ -41,17 +41,17 @@ export const views: Views = {
     previous: 'addressInput',
     next: 'energyConsumptionPersons',
   },
+  // ? Based on the selected option in welcome screen, only for commercial building type
+  energyConsumptionCommercial: {
+    previous: 'roofSummary',
+    next: 'estimatePP',
+  },
   energyConsumptionPersons: {
     previous: 'roofSummary',
     next: 'energyConsumptionSpace',
   },
   energyConsumptionSpace: {
     previous: 'energyConsumptionPersons',
-    next: 'energyConsumptionWater',
-  },
-  // ? Based on the selected option in welcome screen, only for commercial building type
-  energyConsumptionCommercialYearly: {
-    previous: 'energyConsumptionSpace',
     next: 'energyConsumptionWater',
   },
   energyConsumptionWater: {

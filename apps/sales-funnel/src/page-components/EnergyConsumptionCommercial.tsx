@@ -10,7 +10,7 @@ import clsxm from 'ui/utils/clsxm';
 
 import ConsumptionIllustration from '../../public/ConsumptionIllustration.webp';
 
-export const EnergyConsumptionYearly = () => {
+export const EnergyConsumptionCommercial = () => {
   const { next, setData, back, data } = useFlowStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,8 +34,7 @@ export const EnergyConsumptionYearly = () => {
     >
       <div className="z-10 flex flex-col gap-7">
         <BodyText>
-          We estimate your energy consumption to HARDCODED per year. If this not
-          correct, please input it manually.
+          Please fill in the yearly kWh consumption of your commercial property.
         </BodyText>
         <Input
           label="Yearly kWh consumption"
@@ -45,7 +44,11 @@ export const EnergyConsumptionYearly = () => {
           onChange={handleChange}
           value={data?.yearlyConsumption}
         />
-        <NoteText>Our estimate is HARDCODED kWh</NoteText>
+        <NoteText>
+          For properties with consumption larger than 2 mWh
+          <br />
+          we suggest reaching out to sales directly.
+        </NoteText>
       </div>
 
       <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">

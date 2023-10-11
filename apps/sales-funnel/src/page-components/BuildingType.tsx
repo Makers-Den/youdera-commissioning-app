@@ -51,7 +51,22 @@ export const BuildingType = () => {
         },
       });
     } else {
-      setViews({ buildingType: views.buildingType });
+      setViews({
+        buildingType: views.buildingType,
+      });
+    }
+
+    if (buildingType === 'commercial') {
+      setViews({
+        roofSummary: {
+          previous: 'addressInput',
+          next: 'energyConsumptionCommercial',
+        },
+      });
+    } else {
+      setViews({
+        roofSummary: views.roofSummary,
+      });
     }
   };
 
