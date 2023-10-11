@@ -4,6 +4,8 @@ import clsxm from 'ui/utils/clsxm';
 
 import styles from './Container.module.css';
 
+export const containerPadding = 'p-5 md:px-12 md:py-7 lg:px-24';
+
 export const Container = ({
   title,
   subTitle,
@@ -11,6 +13,7 @@ export const Container = ({
   clippedTitle,
   leftSection,
   className,
+  withoutPadding,
 }: {
   title: string;
   subTitle?: string;
@@ -18,16 +21,17 @@ export const Container = ({
   clippedTitle?: boolean;
   leftSection?: ReactNode;
   className?: string;
+  withoutPadding?: boolean;
 }) => (
   <>
     <main className="row-span-full grid h-full min-h-[calc(100vh-4rem)] grid-cols-1 bg-white md:grid-cols-2">
-      <div className="relative col-span-1 hidden h-full bg-red-400 md:flex">
+      <div className="relative col-span-1 hidden h-full bg-white md:flex">
         {leftSection}
       </div>
       <div className="relative col-span-1 flex w-full flex-col ">
         <div
           className={clsxm(
-            'bg-brand-one-400 p-4 text-white md:px-12 lg:px-24',
+            'bg-brand-one-400 z-10 p-4 text-white md:px-12 lg:px-24',
             clippedTitle && 'pb-6',
             clippedTitle && styles.roundedClip,
           )}
@@ -45,7 +49,8 @@ export const Container = ({
         )}
         <div
           className={clsxm(
-            'relative flex flex-1 flex-col justify-between gap-16 overflow-hidden bg-white p-5 md:px-12 md:py-7 lg:px-24',
+            'relative flex flex-1 flex-col justify-between gap-16 overflow-hidden bg-white',
+            !withoutPadding && containerPadding,
             className,
           )}
         >

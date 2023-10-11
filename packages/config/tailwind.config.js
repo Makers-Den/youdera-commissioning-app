@@ -36,6 +36,7 @@ module.exports = {
           100: '#F6F7FA',
           300: '#E3E6F2',
           400: '#D9DDE9',
+          450: '#CCCCCC',
           500: '#C0C9DF',
           600: '#6D7381',
           700: '#656B7A',
@@ -74,6 +75,10 @@ module.exports = {
         small: '0px 1px 3px rgba(0, 0, 0, 0.25)',
         medium: '0px 3px 4px rgba(0, 0, 0, 0.25)',
         large: '0px 7px 15px rgba(40, 46, 124, 0.1)',
+      },
+
+      boxShadow: {
+        '3xl': '0px -2px 2px 0px rgba(0, 0, 0, 0.10)',
       },
 
       borderRadius: {
