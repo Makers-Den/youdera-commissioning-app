@@ -1,4 +1,5 @@
 import { Container } from '@src/components/container/Container';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { AgriculturalSvg } from '@src/components/svgs/AgriculturalSvg';
 import { CommercialSvg } from '@src/components/svgs/CommercialSvg';
 import { HomeSvg } from '@src/components/svgs/HomeSvg';
@@ -14,6 +15,10 @@ import clsxm from 'ui/utils/clsxm';
 
 import { SunSvg } from '../components/svgs/SunSvg';
 import Illustration from '../../public/Illustration.webp';
+import { Form } from '@src/components/forms/Form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { CustomRadioGroupField } from '@src/components/forms/CustomRadioGroupField';
 
 const options: RadioOption<FlowData['buildingType']>[] = [
   {
@@ -38,8 +43,24 @@ const options: RadioOption<FlowData['buildingType']>[] = [
   },
 ];
 
+export const BuildingTypeSchema = z.object({
+  buildingType: z.enum(["home" , "industrial" , "agricultural" , "commercial"]),
+});
+
+export type BuildingTypeType = z.infer<typeof BuildingTypeSchema>;
+
+
+
 export const BuildingType = () => {
   const { next, setData, setViews, data } = useFlowStore();
+
+  const methods = useForm<BuildingTypeType>({
+    resolver: zodResolver(BuildingTypeSchema),
+    // defaultValues
+  });
+
+  const { handleSubmit, formState, reset } = methods;
+  
 
   const handleChange = (buildingType: FlowData['buildingType']) => {
     setData({ buildingType });
@@ -70,6 +91,41 @@ export const BuildingType = () => {
     }
   };
 
+  const onSubmit: SubmitHandler<BuildingTypeType> = async (data, e) => {
+    e?.preventDefault();
+    const { buildingType } = data;
+
+    setData({ buildingType });
+
+    if (buildingType === 'industrial') {
+      setViews({
+        buildingType: {
+          next: 'contactSales',
+          previous: null,
+        },
+      });
+    } else {
+      setViews({
+        buildingType: views.buildingType,
+      });
+    }
+
+    if (buildingType === 'commercial') {
+      setViews({
+        roofSummary: {
+          previous: 'addressInput',
+          next: 'energyConsumptionCommercial',
+        },
+      });
+    } else {
+      setViews({
+        roofSummary: views.roofSummary,
+      });
+    }
+
+    next();
+  };
+
   return (
     <Container
       clippedTitle
@@ -86,23 +142,25 @@ export const BuildingType = () => {
   panels in 5 minutes"
       subTitle="Estimate how much you can save by installing solar on your property."
     >
-      <CustomRadioGroup
-        label="Start by telling us what sort of building it is you intend to install solar panels on."
-        options={options}
-        onChange={value => handleChange(value)}
-        className="grid-cols-2"
-        defaultValue={data.buildingType}
-      />
-      <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
-        <Button
-          variant="main-orange"
-          className="px-10"
-          onClick={next}
-          disabled={!data.buildingType}
-        >
-          Next
-        </Button>
-      </div>
+      {/* TODO do something with the fact that we have to reapply these on form ? */}
+      <Form className='z-10 flex flex-col justify-between gap-16' onSubmit={handleSubmit(onSubmit)} {...methods}>
+        <CustomRadioGroupField
+          name="buildingType"
+          label="Start by telling us what sort of building it is you intend to install solar panels on."
+          className="grid-cols-2"
+          options={options}
+          onChange={value => handleChange(value)}
+        />
+        <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+          <Button
+            type='submit'
+            variant="main-orange"
+            className="px-10"
+          >
+            Next
+          </Button>
+        </div>
+      </Form>
       <SunSvg
         className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
       />
