@@ -4,6 +4,7 @@ import { AddressInput } from '@src/page-components/AddressInput';
 import { BuildingType } from '@src/page-components/BuildingType';
 import { ContactSales } from '@src/page-components/ContactSales';
 import { EnergyConsumptionBigConsumers } from '@src/page-components/EnergyConsumptionBigConsumers';
+import { EnergyConsumptionCommercial } from '@src/page-components/EnergyConsumptionCommercial';
 import { EnergyConsumptionPersons } from '@src/page-components/EnergyConsumptionPersons';
 import { EnergyConsumptionSpace } from '@src/page-components/EnergyConsumptionSpace';
 import { EnergyConsumptionWater } from '@src/page-components/EnergyConsumptionWater';
@@ -32,6 +33,9 @@ export default function Home() {
       {currentView === 'contactSales' && <ContactSales />}
       {currentView === 'addressInput' && <AddressInput />}
       {currentView === 'roofSummary' && <RoofSummary />}
+      {currentView === 'energyConsumptionCommercial' && (
+        <EnergyConsumptionCommercial />
+      )}
       {currentView === 'energyConsumptionPersons' && (
         <EnergyConsumptionPersons />
       )}

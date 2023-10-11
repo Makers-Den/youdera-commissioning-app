@@ -8,7 +8,7 @@ export const viewNames = [
   'roofSummary',
   'energyConsumptionPersons',
   'energyConsumptionSpace',
-  'energyConsumptionCommercialYearly',
+  'energyConsumptionCommercial',
   'energyConsumptionWater',
   'energyConsumptionBigConsumers',
   'energyConsumptionYearly',
@@ -41,17 +41,17 @@ export const views: Views = {
     previous: 'addressInput',
     next: 'energyConsumptionPersons',
   },
+  // ? Based on the selected option in welcome screen, only for commercial building type
+  energyConsumptionCommercial: {
+    previous: 'roofSummary',
+    next: 'estimatePP',
+  },
   energyConsumptionPersons: {
     previous: 'roofSummary',
     next: 'energyConsumptionSpace',
   },
   energyConsumptionSpace: {
     previous: 'energyConsumptionPersons',
-    next: 'energyConsumptionWater',
-  },
-  // ? Based on the selected option in welcome screen, only for commercial building type
-  energyConsumptionCommercialYearly: {
-    previous: 'energyConsumptionSpace',
     next: 'energyConsumptionWater',
   },
   energyConsumptionWater: {
@@ -86,7 +86,17 @@ export type FlowData = {
     | 'air conditioning'
     | 'electric vehicle'
   )[]; //EnergyConsumptionBigConsumers
-  yearlyConsumption: string; //EnergyConsumptionYearly
+  yearlyConsumption: string; //EnergyConsumptionYearly or EnergyConsumptionCommercial
+  openingDays: (
+    | 'monday'
+    | 'tuesday'
+    | 'wednesday'
+    | 'thursday'
+    | 'friday'
+    | 'saturday'
+    | 'sunday'
+  )[]; //EnergyConsumptionCommercial
+  openingTimes: [from: number, to: number];
 };
 
 export type PartialFlowData = Partial<FlowData>;

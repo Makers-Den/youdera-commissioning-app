@@ -5,18 +5,38 @@ import Image from 'next/image';
 import React from 'react';
 import { Button } from 'ui/buttons/Button';
 import { Input } from 'ui/inputs/Input';
+import { TimeRangeInput } from 'ui/range-inputs/TimeRangeInput';
+import { type OptionType,HorizontalSelect } from 'ui/select/HorizontalSelect';
 import { BodyText, NoteText } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 
 import ConsumptionIllustration from '../../public/ConsumptionIllustration.webp';
 
-export const EnergyConsumptionYearly = () => {
+export const EnergyConsumptionCommercial = () => {
   const { next, setData, back, data } = useFlowStore();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const yearlyConsumption: FlowData['yearlyConsumption'] = e.target.value;
     setData({ yearlyConsumption });
   };
+
+  const handleDaysSelection = (openingDays: FlowData["openingDays"]) => {
+    setData({openingDays})
+  }
+
+  const handleTime = (openingTimes: FlowData["openingTimes"]) => {
+    setData({openingTimes})
+  }
+
+  const options: OptionType<FlowData["openingDays"][number]>[] = [
+    {name:'M', value:'monday'},
+    {name:'T', value:"tuesday"},
+    {name:'W', value:"wednesday"},
+    {name:'T', value:"thursday"},
+    {name:'F', value:"friday"},
+    {name:'S', value:"saturday"},
+    {name:'S', value:"sunday"}
+  ]
 
   return (
     <Container
@@ -34,18 +54,23 @@ export const EnergyConsumptionYearly = () => {
     >
       <div className="z-10 flex flex-col gap-7">
         <BodyText>
-          We estimate your energy consumption to HARDCODED per year. If this not
-          correct, please input it manually.
+          Please fill in the yearly kWh consumption of your commercial property.
         </BodyText>
         <Input
           label="Yearly kWh consumption"
           units="kWh"
           type="number"
           className="max-w-xs"
-          onChange={handleChange}
+          onChange={handleInputChange}
           value={data?.yearlyConsumption}
         />
-        <NoteText>Our estimate is HARDCODED kWh</NoteText>
+        <NoteText>
+          For properties with consumption larger than 2 mWh
+          <br />
+          we suggest reaching out to sales directly.
+        </NoteText>
+        <HorizontalSelect label="Regular opening days" options={options} onChange={handleDaysSelection} />
+        <TimeRangeInput onChange={handleTime}/>
       </div>
 
       <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
@@ -53,7 +78,7 @@ export const EnergyConsumptionYearly = () => {
           variant="main-orange"
           className="px-10"
           onClick={next}
-          disabled={!data.yearlyConsumption}
+          disabled={!data.yearlyConsumption || !data?.openingDays || !data?.openingTimes}
         >
           Next
         </Button>
