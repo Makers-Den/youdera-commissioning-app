@@ -6,6 +6,7 @@ import React from 'react';
 import { Button } from 'ui/buttons/Button';
 import { Input } from 'ui/inputs/Input';
 import { TimeRangeInput } from 'ui/range-inputs/TimeRangeInput';
+import { type OptionType,HorizontalSelect } from 'ui/select/HorizontalSelect';
 import { BodyText, NoteText } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 
@@ -18,6 +19,16 @@ export const EnergyConsumptionCommercial = () => {
     const yearlyConsumption: FlowData['yearlyConsumption'] = e.target.value;
     setData({ yearlyConsumption });
   };
+
+  const options: OptionType<'monday' | 'tuesday' | 'wednesday' | 'thursday' |'friday' | 'saturday' | 'sunday' >[] = [
+    {name:'M', value:'monday'},
+    {name:'T', value:"tuesday"},
+    {name:'W', value:"wednesday"},
+    {name:'T', value:"thursday"},
+    {name:'F', value:"friday"},
+    {name:'S', value:"saturday"},
+    {name:'S', value:"sunday"}
+  ]
 
   return (
     <Container
@@ -50,6 +61,7 @@ export const EnergyConsumptionCommercial = () => {
           <br />
           we suggest reaching out to sales directly.
         </NoteText>
+        <HorizontalSelect options={options} onChange={()=>console.log('deez nuts')} />
         <TimeRangeInput />
       </div>
 

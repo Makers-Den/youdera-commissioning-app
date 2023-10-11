@@ -27,7 +27,10 @@ export const TimeRangeInput = () => {
         max={MAX}
         minDistance={1}
         withTracks
-        className="w-full h-5 flex items-center [&>.track-1]:bg-brand-one-400"
+        className={clsxm(
+          'w-full h-5 flex items-center [&>.track-1]:bg-brand-one-400',
+          '[&>.track-0]:h-[2px] [&>.track-2]:h-[2px]',
+        )}
         onChange={setValues}
         renderThumb={(props, state) => (
           <div
@@ -51,7 +54,10 @@ export const TimeRangeInput = () => {
         renderTrack={props => (
           <div
             {...props}
-            className={clsxm(props.className, 'bg-gray-1000 w-auto h-1')}
+            className={clsxm(
+              props.className,
+              'bg-gray-1000 w-auto h-1 rounded-full',
+            )}
           />
         )}
       />
