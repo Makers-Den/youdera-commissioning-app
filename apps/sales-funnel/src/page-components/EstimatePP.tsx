@@ -35,22 +35,30 @@ export const EstimatePP = () => {
             src={EstimateIllustration.src}
           />
           <div className="z-20 mx-auto px-4 pb-6 md:px-12 lg:px-24">
-            <div className="mt-4 flex max-w-md flex-col gap-4">
+            <div className="flex max-w-md flex-col">
+              <div className="pb-4" />
               <H1 weight="medium">Get a PDF offer in your email </H1>
+              <div className="pb-4" />
               <BodyText>
                 You’ll get link to re-access your estimate so you can review it
                 any time.
               </BodyText>
+              <div className="pb-4" />
               <Button className="w-full">REQUEST OFFER</Button>
-              <div className="mb-8 block h-96 w-full bg-red-500 ">
+              <div className="pb-6" />
+              <div className="block h-96 w-full bg-red-500 ">
                 Here we will put graph
               </div>
+              <div className="pb-12" />
+
               <div className="flex w-full items-center justify-between gap-4 rounded-xl bg-white px-6 py-5">
                 <H3 weight="medium">
                   You will recoup your investment in 12 years
                 </H3>
                 <RecoupSvg className="text-brand-one-400 shrink-0" />
               </div>
+              <div className="pb-12" />
+
               <div className="flex w-full items-center justify-between gap-4 rounded-xl bg-white px-6 py-5">
                 <SvgIcon
                   name="Leaf"
@@ -68,7 +76,7 @@ export const EstimatePP = () => {
     >
       {/* TODO Container? */}
       <section className="bg-gray-1000 text-gray-450 px-4 pb-6 pt-9 md:px-12 lg:px-24">
-        <div className="mx-auto flex flex-col gap-6 md:max-w-md">
+        <div className="flex flex-col gap-6 md:max-w-md">
           <div className="flex items-center justify-between">
             <H2 weight="medium">Your Solar System</H2>
             <Button variant="main-gray" className="whitespace-nowrap">
@@ -82,7 +90,7 @@ export const EstimatePP = () => {
               <SvgIcon name="Info" />
             </button>
           </div>
-          <div className="grid grid-cols-2 gap-6 border-b border-current pb-4">
+          <div className="grid grid-cols-2 gap-6 border-b border-white/10 pb-4">
             <div className="flex items-center gap-4">
               <BodyText className="text-white">22x</BodyText>
               <div className="flex flex-col items-center gap-1">
@@ -152,7 +160,7 @@ export const EstimatePP = () => {
 
       <section className={clsxm('p-0 md:mb-9 lg:px-24 ')}>
         {/* TODO Container refactor */}
-        <div className="mx-auto flex flex-col md:max-w-md">
+        <div className="flex flex-col lg:max-w-md">
           <div className="flex gap-4 px-4 py-3 md:px-12 md:py-5 lg:px-0 ">
             <H2 weight="medium">How to pay for your system</H2>
             <SvgIcon name="Savings" />
@@ -286,7 +294,7 @@ export const EstimatePP = () => {
         Here we will put graph
       </section>
 
-      <div className="mb-8 hidden w-full justify-center px-4 md:flex md:px-12 lg:px-24">
+      <div className="mb-8 hidden w-full px-4 md:flex md:px-12 lg:px-24">
         <Button className="w-full md:max-w-md">REQUEST OFFER</Button>
       </div>
 
