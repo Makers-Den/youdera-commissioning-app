@@ -5,6 +5,7 @@ import Image from 'next/image';
 import React from 'react';
 import { Button } from 'ui/buttons/Button';
 import { Input } from 'ui/inputs/Input';
+import { TimeRangeInput } from 'ui/range-inputs/TimeRangeInput';
 import { BodyText, NoteText } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 
@@ -49,6 +50,7 @@ export const EnergyConsumptionCommercial = () => {
           <br />
           we suggest reaching out to sales directly.
         </NoteText>
+        <TimeRangeInput />
       </div>
 
       <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
