@@ -15,12 +15,20 @@ import ConsumptionIllustration from '../../public/ConsumptionIllustration.webp';
 export const EnergyConsumptionCommercial = () => {
   const { next, setData, back, data } = useFlowStore();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const yearlyConsumption: FlowData['yearlyConsumption'] = e.target.value;
     setData({ yearlyConsumption });
   };
 
-  const options: OptionType<'monday' | 'tuesday' | 'wednesday' | 'thursday' |'friday' | 'saturday' | 'sunday' >[] = [
+  const handleDaysSelection = (openingDays: FlowData["openingDays"]) => {
+    setData({openingDays})
+  }
+
+  const handleTime = (openingTimes: FlowData["openingTimes"]) => {
+    setData({openingTimes})
+  }
+
+  const options: OptionType<FlowData["openingDays"][number]>[] = [
     {name:'M', value:'monday'},
     {name:'T', value:"tuesday"},
     {name:'W', value:"wednesday"},
@@ -53,7 +61,7 @@ export const EnergyConsumptionCommercial = () => {
           units="kWh"
           type="number"
           className="max-w-xs"
-          onChange={handleChange}
+          onChange={handleInputChange}
           value={data?.yearlyConsumption}
         />
         <NoteText>
@@ -61,8 +69,8 @@ export const EnergyConsumptionCommercial = () => {
           <br />
           we suggest reaching out to sales directly.
         </NoteText>
-        <HorizontalSelect options={options} onChange={()=>console.log('deez nuts')} />
-        <TimeRangeInput />
+        <HorizontalSelect label="Regular opening days" options={options} onChange={handleDaysSelection} />
+        <TimeRangeInput onChange={handleTime}/>
       </div>
 
       <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
@@ -70,7 +78,7 @@ export const EnergyConsumptionCommercial = () => {
           variant="main-orange"
           className="px-10"
           onClick={next}
-          disabled={!data.yearlyConsumption}
+          disabled={!data.yearlyConsumption || !data?.openingDays || !data?.openingTimes}
         >
           Next
         </Button>

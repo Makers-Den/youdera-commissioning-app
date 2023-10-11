@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BodyText } from '../typography/Typography';
+import { BodyText, Label } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
 export type OptionType<T> = { name: string; value: T };
@@ -33,8 +33,8 @@ export const HorizontalSelect = <T extends string>({
   };
 
   return (
-    <div className="w-full">
-      {label && <BodyText className="mb-4 max-w-md">{label}</BodyText>}
+    <div className="w-full flex flex-col gap-2">
+      {label && <Label className="max-w-md">{label}</Label>}
       <div className="flex w-full">
         {options.map(option => (
           // eslint-disable-next-line @typescript-eslint/no-use-before-define

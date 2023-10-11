@@ -86,7 +86,17 @@ export type FlowData = {
     | 'air conditioning'
     | 'electric vehicle'
   )[]; //EnergyConsumptionBigConsumers
-  yearlyConsumption: string; //EnergyConsumptionYearly
+  yearlyConsumption: string; //EnergyConsumptionYearly or EnergyConsumptionCommercial
+  openingDays: (
+    | 'monday'
+    | 'tuesday'
+    | 'wednesday'
+    | 'thursday'
+    | 'friday'
+    | 'saturday'
+    | 'sunday'
+  )[]; //EnergyConsumptionCommercial
+  openingTimes: [from: number, to: number];
 };
 
 export type PartialFlowData = Partial<FlowData>;

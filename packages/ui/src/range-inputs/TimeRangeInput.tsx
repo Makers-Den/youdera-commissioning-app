@@ -7,8 +7,16 @@ import clsxm from '../utils/clsxm';
 const MIN = 0;
 const MAX = 24;
 
-export const TimeRangeInput = () => {
-  const [values, setValues] = useState([MIN, MAX]);
+export const TimeRangeInput = ({
+  onChange,
+}: {
+  onChange: (value: [from: number, to: number]) => void;
+}) => {
+  const [values, setValues] = useState<[from: number, to: number]>([MIN, MAX]);
+  const handleChange = (value: [from: number, to: number]) => {
+    setValues(value);
+    onChange(value);
+  };
   return (
     <div className="flex flex-col">
       <Label>Opening time</Label>
@@ -31,7 +39,7 @@ export const TimeRangeInput = () => {
           'w-full h-5 flex items-center [&>.track-1]:bg-brand-one-400',
           '[&>.track-0]:h-[2px] [&>.track-2]:h-[2px]',
         )}
-        onChange={setValues}
+        onChange={handleChange}
         renderThumb={(props, state) => (
           <div
             {...props}
