@@ -11,7 +11,7 @@ export type RadioGroupProps<T> = {
   optionClassName?: string;
   label?: string;
   options: Option<T>[];
-  onChange: (value: T) => void;
+  onChange?: (value: T) => void;
   defaultValue?: T;
 };
 
