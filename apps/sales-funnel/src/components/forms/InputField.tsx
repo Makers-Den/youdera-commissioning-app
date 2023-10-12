@@ -5,10 +5,10 @@ import { Field } from './Field';
 
 export const InputField = ({
   name,
-  className,
+  fieldClassName,
   ...props
-}: InputProps & { name: string }) => (
-  <Field name={name} className={className}>
+}: InputProps & { name: string; fieldClassName?: string }) => (
+  <Field name={name} className={fieldClassName}>
     {(field, fieldState) => (
       <Input validity={fieldState.error && 'invalid'} {...props} {...field} />
     )}

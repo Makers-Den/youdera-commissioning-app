@@ -19,17 +19,17 @@ const options = [
   { label: 'Address 3', key: 'address3' },
 ];
 
-export const BuildingTypeSchema = z.object({
+export const AddressInputSchema = z.object({
   streetAddress: z.object({ key: z.string(), label: z.string() }),
 });
 
-export type BuildingTypeType = z.infer<typeof BuildingTypeSchema>;
+export type AddressInputType = z.infer<typeof AddressInputSchema>;
 
 export const AddressInput = () => {
   const { next, setData, back, data } = useFlowStore();
 
-  const methods = useForm<BuildingTypeType>({
-    resolver: zodResolver(BuildingTypeSchema),
+  const methods = useForm<AddressInputType>({
+    resolver: zodResolver(AddressInputSchema),
     defaultValues: {
       streetAddress: options.find(option => option.key === data.streetAddress),
     },
@@ -37,7 +37,7 @@ export const AddressInput = () => {
 
   const { handleSubmit } = methods;
 
-  const onSubmit: SubmitHandler<BuildingTypeType> = async (data, e) => {
+  const onSubmit: SubmitHandler<AddressInputType> = async data => {
     const {
       streetAddress: { key: streetAddress },
     } = data;

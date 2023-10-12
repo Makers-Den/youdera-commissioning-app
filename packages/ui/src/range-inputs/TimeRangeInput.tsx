@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Slider from 'react-slider';
 
 import { BodyText, Label, NoteText } from '../typography/Typography';
@@ -7,15 +7,20 @@ import clsxm from '../utils/clsxm';
 const MIN = 0;
 const MAX = 24;
 
-export const TimeRangeInput = ({
-  onChange,
-}: {
-  onChange: (value: [from: number, to: number]) => void;
-}) => {
-  const [values, setValues] = useState<[from: number, to: number]>([MIN, MAX]);
+export type TimeRangeInputProps = {
+  onChange?: (value: { from: number; to: number }) => void;
+  value?: { from: number; to: number };
+};
+export const TimeRangeInput = ({ onChange, value }: TimeRangeInputProps) => {
+  const [valueState, setValueState] = React.useState<
+    [from: number, to: number]
+  >([value?.from || MIN, value?.to || MAX]);
   const handleChange = (value: [from: number, to: number]) => {
-    setValues(value);
-    onChange(value);
+    setValueState(value);
+    onChange?.({
+      from: value[0],
+      to: value[1],
+    });
   };
   return (
     <div className="flex flex-col">
@@ -24,13 +29,13 @@ export const TimeRangeInput = ({
       <div className="w-full flex justify-between text-gray-500">
         <NoteText>{MIN}:00</NoteText>
         <NoteText className="text-gray-1000">
-          {values[1] - values[0]} hours
+          {valueState[1] - valueState[0]} hours
         </NoteText>
         <NoteText>{MAX}:00</NoteText>
       </div>
       <div className="mb-1" />
       <Slider
-        value={values}
+        value={valueState}
         min={MIN}
         max={MAX}
         minDistance={1}

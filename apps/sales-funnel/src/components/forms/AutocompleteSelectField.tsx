@@ -8,10 +8,10 @@ import { Field } from './Field';
 
 export const AutocompleteSelectField = ({
   name,
-  className,
+  fieldClassName,
   ...props
-}: AutocompleteSelectProps & { name: string }) => (
-  <Field name={name} className={className}>
+}: AutocompleteSelectProps & { name: string; fieldClassName?: string }) => (
+  <Field name={name} className={fieldClassName}>
     {(field, fieldState) => (
       <AutocompleteSelect
         validity={fieldState.error && 'invalid'}

@@ -1,3 +1,4 @@
+import { ErrorMessage } from '@hookform/error-message';
 import React, { ReactNode } from 'react';
 import type {
   ControllerFieldState,
@@ -6,7 +7,7 @@ import type {
   UseFormStateReturn,
 } from 'react-hook-form';
 import { useController } from 'react-hook-form';
-import { BodyText } from 'ui/typography/Typography';
+import { Label } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 
 type FieldProps = {
@@ -25,9 +26,13 @@ export const Field = ({ name, className, children }: FieldProps) => {
   return (
     <div className={clsxm('flex flex-col gap-1', className)}>
       {children(field, fieldState, formState)}
-      {errorMessage && (
-        <BodyText className="text-red-500">{errorMessage}</BodyText>
-      )}
+      <ErrorMessage
+        errors={formState.errors}
+        name={name}
+        render={({ message }) => (
+          <Label className="text-danger-400">{message}</Label>
+        )}
+      />
     </div>
   );
 };
