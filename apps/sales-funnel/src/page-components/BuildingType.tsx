@@ -1,24 +1,23 @@
-import { Container } from '@src/components/container/Container';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Container } from '@src/components/container/Container';
+import { CustomRadioGroupField } from '@src/components/forms/CustomRadioGroupField';
+import { Form } from '@src/components/forms/Form';
 import { AgriculturalSvg } from '@src/components/svgs/AgriculturalSvg';
 import { CommercialSvg } from '@src/components/svgs/CommercialSvg';
 import { HomeSvg } from '@src/components/svgs/HomeSvg';
 import { IndustrialSvg } from '@src/components/svgs/IndustrialSvg';
 import { FlowData, useFlowStore, views } from '@src/store/flow';
 import Image from 'next/image';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from 'ui/buttons/Button';
 import {
   type Option as RadioOption,
-  CustomRadioGroup,
 } from 'ui/radio-group/CustomRadioGroup';
 import clsxm from 'ui/utils/clsxm';
+import { z } from 'zod';
 
 import { SunSvg } from '../components/svgs/SunSvg';
 import Illustration from '../../public/Illustration.webp';
-import { Form } from '@src/components/forms/Form';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { CustomRadioGroupField } from '@src/components/forms/CustomRadioGroupField';
 
 const options: RadioOption<FlowData['buildingType']>[] = [
   {
@@ -56,10 +55,12 @@ export const BuildingType = () => {
 
   const methods = useForm<BuildingTypeType>({
     resolver: zodResolver(BuildingTypeSchema),
-    // defaultValues
+    defaultValues: {
+      buildingType: data.buildingType,
+    }
   });
 
-  const { handleSubmit, formState, reset } = methods;
+  const { handleSubmit } = methods;
   
 
   const handleChange = (buildingType: FlowData['buildingType']) => {

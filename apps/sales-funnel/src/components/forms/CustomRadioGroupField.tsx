@@ -1,9 +1,10 @@
 import React from 'react';
-import { Field } from './Field';
 import {
   CustomRadioGroup,
   RadioGroupProps,
 } from 'ui/radio-group/CustomRadioGroup';
+
+import { Field } from './Field';
 
 export const CustomRadioGroupField = <T,>({
   name,
@@ -12,17 +13,14 @@ export const CustomRadioGroupField = <T,>({
 }: Omit<RadioGroupProps<T>, 'defaultValue'> & {
   name: string;
   fieldClassName?: string;
-}) => {
-  console.log(props.className);
-  return (
-    <Field name={name} className={fieldClassName}>
-      {(field, fieldState, formState) => (
-        <CustomRadioGroup
-          {...props}
-          {...field}
-          defaultValue={formState?.defaultValues?.[name]}
-        />
-      )}
-    </Field>
-  );
-};
+}) => (
+  <Field name={name} className={fieldClassName}>
+    {(field, fieldState, formState) => (
+      <CustomRadioGroup
+        {...props}
+        {...field}
+        defaultValue={formState?.defaultValues?.[name]}
+      />
+    )}
+  </Field>
+);
