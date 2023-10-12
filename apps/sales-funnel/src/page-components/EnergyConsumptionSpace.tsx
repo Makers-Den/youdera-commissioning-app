@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { BoxesRadioGroupField } from '@src/components/forms/BoxesRadioGroupField';
 import { LayoutContainer } from '@src/components/container/LayoutContainer';
-import { CustomRadioGroupField } from '@src/components/forms/CustomRadioGroupField';
 import { Form } from '@src/components/forms/Form';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
 import { ElectricalSvg } from '@src/components/svgs/ElectricalSvg';
@@ -11,9 +11,7 @@ import Image from 'next/image';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from 'ui/buttons/Button';
-import {
-  type Option as RadioGroupOption,
-} from 'ui/radio-group/CustomRadioGroup';
+import { type Option as RadioGroupOption } from 'ui/radio-group/BoxesRadioGroup';
 import { NoteText } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
@@ -31,7 +29,7 @@ const options: RadioGroupOption<FlowData['primarySpaceHeating']>[] = [
 ];
 
 const EnergyConsumptionSpaceSchema = z.object({
-  primarySpaceHeating: z.enum(["electrical", "heatpump", "other"]),
+  primarySpaceHeating: z.enum(['electrical', 'heatpump', 'other']),
 });
 
 type EnergyConsumptionSpaceType = z.infer<typeof EnergyConsumptionSpaceSchema>;
@@ -43,16 +41,16 @@ export const EnergyConsumptionSpace = () => {
     resolver: zodResolver(EnergyConsumptionSpaceSchema),
     defaultValues: {
       primarySpaceHeating: data.primarySpaceHeating,
-    }
+    },
   });
 
   const { handleSubmit } = methods;
 
-  const onSubmit: SubmitHandler<EnergyConsumptionSpaceType> = async (data) => {
+  const onSubmit: SubmitHandler<EnergyConsumptionSpaceType> = async data => {
     const { primarySpaceHeating } = data;
     setData({ primarySpaceHeating });
     next();
-  }
+  };
 
   return (
     <LayoutContainer
@@ -68,35 +66,33 @@ export const EnergyConsumptionSpace = () => {
       }
       title="Energy consumption"
     >
-      <Form className='container containerPadding' onSubmit={handleSubmit(onSubmit)} {...methods}>
+      <Form
+        className="containerPadding container"
+        onSubmit={handleSubmit(onSubmit)}
+        {...methods}
+      >
+        <div className="z-10 flex flex-col gap-7">
+          <BoxesRadioGroupField
+            name="primarySpaceHeating"
+            label="How do you primarily heat your house?"
+            options={options}
+          />
+          <NoteText>
+            This helps us establish energy usage patterns as well as estimate
+            kWh usage.
+          </NoteText>
+        </div>
 
-      <div className="z-10 flex flex-col gap-7">
-        <CustomRadioGroupField
-          name="primarySpaceHeating"
-          label="How do you primarily heat your house?"
-          options={options}
-        />
-        <NoteText>
-          This helps us establish energy usage patterns as well as estimate kWh
-          usage.
-        </NoteText>
-      </div>
-
-      <div className="buttonContainer">
-        <Button
-          variant="main-orange"
-          className="px-10"
-          type="submit"
-        >
-          Next
-        </Button>
-        <Button variant="additional-white" className="px-10" onClick={back}>
-          Back
-        </Button>
-      </div>
-      <BulbSvg className={clsxm('absolute bottom-24 left-14')} />
+        <div className="buttonContainer">
+          <Button variant="main-orange" className="px-10" type="submit">
+            Next
+          </Button>
+          <Button variant="additional-white" className="px-10" onClick={back}>
+            Back
+          </Button>
+        </div>
+        <BulbSvg className={clsxm('absolute bottom-24 left-14')} />
       </Form>
-
     </LayoutContainer>
   );
 };

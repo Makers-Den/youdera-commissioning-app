@@ -15,7 +15,7 @@ export type RadioGroupProps<T> = {
   defaultValue?: T;
 };
 
-export const CustomRadioGroup = <T extends string>({
+export const BoxesRadioGroup = <T extends string>({
   options,
   label,
   onChange,
