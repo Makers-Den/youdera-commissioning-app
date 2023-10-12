@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { CustomRadioGroupField } from '@src/components/forms/CustomRadioGroupField';
 import { Form } from '@src/components/forms/Form';
 import { AgriculturalSvg } from '@src/components/svgs/AgriculturalSvg';
@@ -128,7 +128,7 @@ export const BuildingType = () => {
   };
 
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -143,8 +143,7 @@ export const BuildingType = () => {
   panels in 5 minutes"
       subTitle="Estimate how much you can save by installing solar on your property."
     >
-      {/* TODO do something with the fact that we have to reapply these on form ? */}
-      <Form className='z-10 flex flex-col justify-between gap-16' onSubmit={handleSubmit(onSubmit)} {...methods}>
+      <Form className='container containerPadding' onSubmit={handleSubmit(onSubmit)} {...methods}>
         <CustomRadioGroupField
           name="buildingType"
           label="Start by telling us what sort of building it is you intend to install solar panels on."
@@ -152,7 +151,7 @@ export const BuildingType = () => {
           options={options}
           onChange={value => handleChange(value)}
         />
-        <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+        <div className="buttonContainer">
           <Button
             type='submit'
             variant="main-orange"
@@ -161,10 +160,10 @@ export const BuildingType = () => {
             Next
           </Button>
         </div>
-      </Form>
       <SunSvg
         className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
       />
-    </Container>
+      </Form>
+    </LayoutContainer>
   );
 };

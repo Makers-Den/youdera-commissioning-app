@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { CustomRadioGroupField } from '@src/components/forms/CustomRadioGroupField';
 import { Form } from '@src/components/forms/Form';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
@@ -57,7 +57,7 @@ export const EnergyConsumptionPersons = () => {
   }
  
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -70,7 +70,7 @@ export const EnergyConsumptionPersons = () => {
       }
       title="Energy consumption"
     >
-      <Form  className='flex flex-1 flex-col justify-between gap-16 bg-white' onSubmit={handleSubmit(onSubmit)} {...methods}>
+      <Form  className='container containerPadding' onSubmit={handleSubmit(onSubmit)} {...methods}>
       <div className="z-10 flex flex-col gap-7">
         <CustomRadioGroupField
           name="peopleInHousehold"
@@ -80,7 +80,7 @@ export const EnergyConsumptionPersons = () => {
         <NoteText>This will help us estimate your kWh usage per year.</NoteText>
       </div>
 
-      <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+      <div className="buttonContainer">
         <Button
           variant="main-orange"
           className="px-10"
@@ -92,9 +92,9 @@ export const EnergyConsumptionPersons = () => {
           Back
         </Button>
       </div>
+      <BulbSvg className={clsxm('absolute -left-12 bottom-24 ')} />
     </Form>
 
-      <BulbSvg className={clsxm('absolute -left-12 bottom-24 ')} />
-    </Container>
+    </LayoutContainer>
   );
 };

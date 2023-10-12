@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { CustomRadioGroupField } from '@src/components/forms/CustomRadioGroupField';
 import { Form } from '@src/components/forms/Form';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
@@ -63,7 +63,7 @@ export const EnergyConsumptionWater = () => {
   }
 
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -76,7 +76,7 @@ export const EnergyConsumptionWater = () => {
       }
       title="Energy consumption"
     >
-      <Form className='flex flex-1 flex-col justify-between gap-16 bg-white' onSubmit={handleSubmit(onSubmit)} {...methods}>
+      <Form className='container containerPadding' onSubmit={handleSubmit(onSubmit)} {...methods}>
         <div className="z-10 flex flex-col gap-7">
           <CustomRadioGroupField
             name="primaryWaterHeating"
@@ -89,7 +89,7 @@ export const EnergyConsumptionWater = () => {
           </NoteText>
         </div>
 
-        <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+        <div className="buttonContainer">
           <Button
             variant="main-orange"
             className="px-10"
@@ -101,11 +101,11 @@ export const EnergyConsumptionWater = () => {
             Back
           </Button>
         </div>
-      </Form>
-
       <BulbSvg
         className={clsxm('absolute bottom-24 left-1/2 -translate-x-1/2')}
       />
-    </Container>
+      </Form>
+
+    </LayoutContainer>
   );
 };

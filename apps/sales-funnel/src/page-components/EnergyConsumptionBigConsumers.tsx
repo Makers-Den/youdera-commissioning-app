@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { CheckboxGroupField } from '@src/components/forms/CheckboxGroupField';
 import { Form } from '@src/components/forms/Form';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
@@ -65,7 +65,7 @@ export const EnergyConsumptionBigConsumers = () => {
   }
 
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -78,7 +78,7 @@ export const EnergyConsumptionBigConsumers = () => {
       }
       title="Energy consumption"
     >
-      <Form  className='flex flex-1 flex-col justify-between gap-16 bg-white' onSubmit={handleSubmit(onSubmit)} {...methods}>
+      <Form  className='container containerPadding' onSubmit={handleSubmit(onSubmit)} {...methods}>
       <div className="z-10 flex flex-col gap-7">
         <CheckboxGroupField
           name="bigEnergyConsumers"
@@ -91,7 +91,7 @@ export const EnergyConsumptionBigConsumers = () => {
         </NoteText>
       </div>
 
-      <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+      <div className="buttonContainer">
         <Button
           variant="main-orange"
           className="px-10"
@@ -105,6 +105,6 @@ export const EnergyConsumptionBigConsumers = () => {
       </div>
             </Form>
       <BulbSvg className={clsxm('absolute bottom-24 left-1/2')} />
-    </Container>
+    </LayoutContainer>
   );
 };

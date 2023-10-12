@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { AutocompleteSelectField } from '@src/components/forms/AutocompleteSelectField';
 import { Form } from '@src/components/forms/Form';
 import { useFlowStore } from '@src/store/flow';
@@ -46,7 +46,7 @@ export const AddressInput = () => {
   };
 
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -59,10 +59,9 @@ export const AddressInput = () => {
       }
       title="Address of building"
     >
-      {/* TODO container */}
       <Form
         onSubmit={handleSubmit(onSubmit)}
-        className="relative flex flex-1 flex-col justify-between gap-16 overflow-hidden "
+        className="container containerPadding"
         {...methods}
       >
         <div className="flex flex-col gap-7">
@@ -84,10 +83,10 @@ export const AddressInput = () => {
             Back
           </Button>
         </div>
+        <SunSvg
+          className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
+        />
       </Form>
-      <SunSvg
-        className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
-      />
-    </Container>
+    </LayoutContainer>
   );
 };
