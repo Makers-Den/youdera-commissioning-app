@@ -22,7 +22,6 @@ type FieldProps = {
 
 export const Field = ({ name, className, children }: FieldProps) => {
   const { field, fieldState, formState } = useController({ name });
-  const errorMessage = fieldState.error?.message;
   return (
     <div className={clsxm('flex flex-col gap-1', className)}>
       {children(field, fieldState, formState)}

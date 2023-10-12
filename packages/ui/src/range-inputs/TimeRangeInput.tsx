@@ -15,6 +15,7 @@ export const TimeRangeInput = ({ onChange, value }: TimeRangeInputProps) => {
   const [valueState, setValueState] = React.useState<
     [from: number, to: number]
   >([value?.from || MIN, value?.to || MAX]);
+
   const handleChange = (value: [from: number, to: number]) => {
     setValueState(value);
     onChange?.({

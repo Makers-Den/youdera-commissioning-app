@@ -47,7 +47,7 @@ export const EnergyConsumptionCommercial = () => {
     defaultValues: {
       yearlyConsumption: data.yearlyConsumption,
       openingDays: options.filter(option => data.openingDays?.includes(option.value)),
-      openingTimes: {from: data.openingTimes?.from, to:  data.openingTimes?.to} 
+      openingTimes: {from: data.openingTimes?.from || 8, to:  data.openingTimes?.to || 16} 
     }
   });
   const { handleSubmit } = methods;
