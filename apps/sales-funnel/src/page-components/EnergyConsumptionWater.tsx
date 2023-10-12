@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
 import { BoxesRadioGroupField } from '@src/components/forms/BoxesRadioGroupField';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { Form } from '@src/components/forms/Form';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
 import { ElectricalBoilerSvg } from '@src/components/svgs/ElectricalBoilerSvg';
@@ -61,7 +61,7 @@ export const EnergyConsumptionWater = () => {
   };
 
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -75,7 +75,7 @@ export const EnergyConsumptionWater = () => {
       title="Energy consumption"
     >
       <Form
-        className="flex flex-1 flex-col justify-between gap-16 bg-white"
+        className="containerPadding container"
         onSubmit={handleSubmit(onSubmit)}
         {...methods}
       >
@@ -91,7 +91,7 @@ export const EnergyConsumptionWater = () => {
           </NoteText>
         </div>
 
-        <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+        <div className="buttonContainer">
           <Button variant="main-orange" className="px-10" type="submit">
             Next
           </Button>
@@ -99,11 +99,10 @@ export const EnergyConsumptionWater = () => {
             Back
           </Button>
         </div>
+        <BulbSvg
+          className={clsxm('absolute bottom-24 left-1/2 -translate-x-1/2')}
+        />
       </Form>
-
-      <BulbSvg
-        className={clsxm('absolute bottom-24 left-1/2 -translate-x-1/2')}
-      />
-    </Container>
+    </LayoutContainer>
   );
 };

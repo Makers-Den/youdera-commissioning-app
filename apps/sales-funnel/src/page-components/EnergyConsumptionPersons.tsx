@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
 import { BoxesRadioGroupField } from '@src/components/forms/BoxesRadioGroupField';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { Form } from '@src/components/forms/Form';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
 import { FivePersonSvg } from '@src/components/svgs/FivePersonSvg';
@@ -57,7 +57,7 @@ export const EnergyConsumptionPersons = () => {
   };
 
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -71,7 +71,7 @@ export const EnergyConsumptionPersons = () => {
       title="Energy consumption"
     >
       <Form
-        className="flex flex-1 flex-col justify-between gap-16 bg-white"
+        className="containerPadding container"
         onSubmit={handleSubmit(onSubmit)}
         {...methods}
       >
@@ -86,7 +86,7 @@ export const EnergyConsumptionPersons = () => {
           </NoteText>
         </div>
 
-        <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+        <div className="buttonContainer">
           <Button variant="main-orange" className="px-10" type="submit">
             Next
           </Button>
@@ -94,9 +94,8 @@ export const EnergyConsumptionPersons = () => {
             Back
           </Button>
         </div>
+        <BulbSvg className={clsxm('absolute -left-12 bottom-24 ')} />
       </Form>
-
-      <BulbSvg className={clsxm('absolute -left-12 bottom-24 ')} />
-    </Container>
+    </LayoutContainer>
   );
 };

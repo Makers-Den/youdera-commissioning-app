@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
 import { BoxesRadioGroupField } from '@src/components/forms/BoxesRadioGroupField';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { Form } from '@src/components/forms/Form';
 import { AgriculturalSvg } from '@src/components/svgs/AgriculturalSvg';
 import { CommercialSvg } from '@src/components/svgs/CommercialSvg';
@@ -123,7 +123,7 @@ export const BuildingType = () => {
   };
 
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -138,9 +138,8 @@ export const BuildingType = () => {
   panels in 5 minutes"
       subTitle="Estimate how much you can save by installing solar on your property."
     >
-      {/* TODO do something with the fact that we have to reapply these on form ? */}
       <Form
-        className="z-10 flex flex-col justify-between gap-16"
+        className="containerPadding container"
         onSubmit={handleSubmit(onSubmit)}
         {...methods}
       >
@@ -151,15 +150,15 @@ export const BuildingType = () => {
           options={options}
           onChange={value => handleChange(value)}
         />
-        <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+        <div className="buttonContainer">
           <Button type="submit" variant="main-orange" className="px-10">
             Next
           </Button>
         </div>
+        <SunSvg
+          className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
+        />
       </Form>
-      <SunSvg
-        className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
-      />
-    </Container>
+    </LayoutContainer>
   );
 };

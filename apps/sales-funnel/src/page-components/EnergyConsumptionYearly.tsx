@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { Form } from '@src/components/forms/Form';
 import { InputField } from '@src/components/forms/InputField';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
@@ -41,7 +41,7 @@ export const EnergyConsumptionYearly = () => {
   };
 
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -56,7 +56,7 @@ export const EnergyConsumptionYearly = () => {
     >
       <Form
         onSubmit={handleSubmit(onSubmit)}
-        className="relative flex flex-1 flex-col justify-between gap-16 overflow-hidden "
+        className="container containerPadding"
         {...methods}
       >
         <div className="z-10 flex flex-col gap-7">
@@ -74,7 +74,7 @@ export const EnergyConsumptionYearly = () => {
           <NoteText>Our estimate is HARDCODED kWh</NoteText>
         </div>
 
-        <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+        <div className="buttonContainer">
           <Button variant="main-orange" className="px-10" type="submit">
             Next
           </Button>
@@ -84,6 +84,6 @@ export const EnergyConsumptionYearly = () => {
         </div>
       </Form>
       <BulbSvg className={clsxm('absolute bottom-24 left-1/2')} />
-    </Container>
+    </LayoutContainer>
   );
 };

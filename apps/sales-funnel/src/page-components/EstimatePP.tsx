@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { SavingsGraph } from '@src/components/graphs/SavingsGraph';
 import { RecoupSvg } from '@src/components/svgs/RecoupSvg';
 import Image from 'next/image';
@@ -19,18 +19,18 @@ import clsxm from 'ui/utils/clsxm';
 import EstimateIllustration from '../../public/EstimateIllustration.webp';
 
 export const EstimatePP = () => (
-  <Container
+  <LayoutContainer
     title="You can save 70 000 €"
     clippedTitle
-    className="-mt-4 justify-start gap-0"
-    withoutPadding
     leftSection={<LeftSection />}
   >
-    <SystemDetailsSection />
-    <SavingsSection />
-    <SavingsGraph />
-    <RequestButtons />
-  </Container>
+    <div className="-mt-4 justify-start gap-0">
+      <SystemDetailsSection />
+      <SavingsSection />
+      <SavingsGraph />
+      <RequestButtons />
+    </div>
+  </LayoutContainer>
 );
 
 const LeftSection = () => (
@@ -42,9 +42,8 @@ const LeftSection = () => (
       sizes="50vw"
       src={EstimateIllustration.src}
     />
-    <div className="z-20 mx-auto px-4 pb-6 md:px-12 lg:px-24">
+    <div className="z-20 containerPadding !pt-4">
       <div className="flex max-w-md flex-col">
-        <div className="pb-4" />
         <H1 weight="medium">Get a PDF offer in your email </H1>
         <div className="pb-4" />
         <BodyText>
@@ -80,9 +79,8 @@ const LeftSection = () => (
   </>
 );
 
-//TODO Container refactor ?
 const SystemDetailsSection = () => (
-  <section className="bg-gray-1000 text-gray-450 px-4 pb-6 pt-9 md:px-12 lg:px-24">
+  <section className="bg-gray-1000 text-gray-450 containerPadding !pt-9">
     <div className="flex flex-col gap-6 md:max-w-md">
       <div className="flex items-center justify-between">
         <H2 weight="medium">Your Solar System</H2>
@@ -167,8 +165,7 @@ const SystemDetailsSection = () => (
 );
 
 const SavingsSection = () => (
-  <section className={clsxm('p-0 md:mb-9 lg:px-24 ')}>
-    {/* TODO Container refactor */}
+  <section className={clsxm('p-0 md:mb-9 lg:px-24')}>
     <div className="flex flex-col lg:max-w-md">
       <div className="flex gap-4 px-4 py-3 md:px-12 md:py-5 lg:px-0 ">
         <H2 weight="medium">How to pay for your system</H2>
