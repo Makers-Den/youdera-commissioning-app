@@ -1,4 +1,7 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Container } from '@src/components/container/Container';
+import { CustomRadioGroupField } from '@src/components/forms/CustomRadioGroupField';
+import { Form } from '@src/components/forms/Form';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
 import { FivePersonSvg } from '@src/components/svgs/FivePersonSvg';
 import { FourPersonSvg } from '@src/components/svgs/FourPersonSvg';
@@ -9,13 +12,14 @@ import { TwoPersonSvg } from '@src/components/svgs/TwoPersonSvg';
 import { FlowData, useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from 'ui/buttons/Button';
 import {
   type Option as RadioGroupOption,
-  CustomRadioGroup,
 } from 'ui/radio-group/CustomRadioGroup';
 import { NoteText } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
+import { z } from 'zod';
 
 import ConsumptionIllustration from '../../public/ConsumptionIllustration.webp';
 
@@ -28,13 +32,30 @@ const options: RadioGroupOption<FlowData['peopleInHousehold']>[] = [
   { name: '5+', value: '5+', element: <SixPersonSvg /> },
 ];
 
+const EnergyConsumptionPersonsSchema = z.object({
+  peopleInHousehold: z.enum(["1", "2", "3", "4", "5", "5+"]),
+});
+
+type EnergyConsumptionPersonsType = z.infer<typeof EnergyConsumptionPersonsSchema>;
+
 export const EnergyConsumptionPersons = () => {
   const { next, setData, back, data } = useFlowStore();
 
-  const handleChange = (peopleInHousehold: FlowData['peopleInHousehold']) => {
-    setData({ peopleInHousehold });
-  };
+  const methods = useForm<EnergyConsumptionPersonsType>({
+    resolver: zodResolver(EnergyConsumptionPersonsSchema),
+    defaultValues: {
+      peopleInHousehold: data.peopleInHousehold,
+    }
+  });
 
+  const { handleSubmit } = methods;
+
+  const onSubmit: SubmitHandler<EnergyConsumptionPersonsType> = async (data) => {
+    const { peopleInHousehold } = data;
+    setData({ peopleInHousehold });
+    next();
+  }
+ 
   return (
     <Container
       clippedTitle
@@ -49,12 +70,12 @@ export const EnergyConsumptionPersons = () => {
       }
       title="Energy consumption"
     >
+      <Form  className='flex flex-1 flex-col justify-between gap-16 bg-white' onSubmit={handleSubmit(onSubmit)} {...methods}>
       <div className="z-10 flex flex-col gap-7">
-        <CustomRadioGroup
+        <CustomRadioGroupField
+          name="peopleInHousehold"
           label="How many people live in your household?"
           options={options}
-          onChange={handleChange}
-          defaultValue={data?.peopleInHousehold}
         />
         <NoteText>This will help us estimate your kWh usage per year.</NoteText>
       </div>
@@ -63,8 +84,7 @@ export const EnergyConsumptionPersons = () => {
         <Button
           variant="main-orange"
           className="px-10"
-          onClick={next}
-          disabled={!data.peopleInHousehold}
+          type="submit"
         >
           Next
         </Button>
@@ -72,6 +92,7 @@ export const EnergyConsumptionPersons = () => {
           Back
         </Button>
       </div>
+    </Form>
 
       <BulbSvg className={clsxm('absolute -left-12 bottom-24 ')} />
     </Container>

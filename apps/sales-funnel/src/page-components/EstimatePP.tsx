@@ -2,7 +2,6 @@
 import { Container } from '@src/components/container/Container';
 import { SavingsGraph } from '@src/components/graphs/SavingsGraph';
 import { RecoupSvg } from '@src/components/svgs/RecoupSvg';
-import { useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import React from 'react';
 import { Button } from 'ui/buttons/Button';
@@ -19,23 +18,20 @@ import clsxm from 'ui/utils/clsxm';
 
 import EstimateIllustration from '../../public/EstimateIllustration.webp';
 
-export const EstimatePP = () => {
-  const { next } = useFlowStore();
-  return (
-    <Container
-      title="You can save 70 000 €"
-      clippedTitle
-      className="-mt-4 justify-start gap-0"
-      withoutPadding
-      leftSection={<LeftSection />}
-    >
-      <SystemDetailsSection />
-      <SavingsSection />
-      <SavingsGraph />
-      <RequestButtons />
-    </Container>
-  );
-};
+export const EstimatePP = () => (
+  <Container
+    title="You can save 70 000 €"
+    clippedTitle
+    className="-mt-4 justify-start gap-0"
+    withoutPadding
+    leftSection={<LeftSection />}
+  >
+    <SystemDetailsSection />
+    <SavingsSection />
+    <SavingsGraph />
+    <RequestButtons />
+  </Container>
+);
 
 const LeftSection = () => (
   <>

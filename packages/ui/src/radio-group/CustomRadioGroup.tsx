@@ -6,12 +6,12 @@ import clsxm from '../utils/clsxm';
 
 export type Option<T> = { name: string; value: T; element?: React.ReactNode };
 
-type RadioGroupProps<T> = {
+export type RadioGroupProps<T> = {
   className?: string;
   optionClassName?: string;
   label?: string;
   options: Option<T>[];
-  onChange: (value: T) => void;
+  onChange?: (value: T) => void;
   defaultValue?: T;
 };
 

@@ -1,15 +1,19 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Container } from '@src/components/container/Container';
+import { CheckboxGroupField } from '@src/components/forms/CheckboxGroupField';
+import { Form } from '@src/components/forms/Form';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
 import { FlowData, useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from 'ui/buttons/Button';
 import {
   type OptionType as CheckboxOption,
-  CheckboxGroup,
 } from 'ui/checkboxes/CheckboxGroup';
 import { NoteText } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
+import { z } from 'zod';
 
 import ConsumptionIllustration from '../../public/ConsumptionIllustration.webp';
 
@@ -32,12 +36,33 @@ const options: CheckboxOption<FlowData['bigEnergyConsumers'][number]>[] = [
   },
 ];
 
+const EnergyConsumptionBigConsumersSchema = z.object({
+  bigEnergyConsumers: z.array(
+    z.object({name: z.string(), value: z.enum(["sauna", "pool", "air conditioning", "electric vehicle"])}))
+  .min(1, {message: "Please select at least one day"}),
+});
+
+type EnergyConsumptionBigConsumersType = z.infer<typeof EnergyConsumptionBigConsumersSchema>;
+
 export const EnergyConsumptionBigConsumers = () => {
   const { next, setData, back, data } = useFlowStore();
 
-  const handleChange = (bigEnergyConsumers: FlowData['bigEnergyConsumers']) => {
-    setData({ bigEnergyConsumers });
-  };
+  const methods = useForm<EnergyConsumptionBigConsumersType>({
+    resolver: zodResolver(EnergyConsumptionBigConsumersSchema),
+    defaultValues: {
+      bigEnergyConsumers: options.filter(option =>
+        data.bigEnergyConsumers?.includes(option.value),
+      ),
+    }
+  });
+  
+  const { handleSubmit } = methods;
+
+  const onSubmit: SubmitHandler<EnergyConsumptionBigConsumersType> = async (data) => {
+    const { bigEnergyConsumers } = data;
+    setData({ bigEnergyConsumers: bigEnergyConsumers.map((option)=> option.value) });
+    next();
+  }
 
   return (
     <Container
@@ -53,14 +78,12 @@ export const EnergyConsumptionBigConsumers = () => {
       }
       title="Energy consumption"
     >
+      <Form  className='flex flex-1 flex-col justify-between gap-16 bg-white' onSubmit={handleSubmit(onSubmit)} {...methods}>
       <div className="z-10 flex flex-col gap-7">
-        <CheckboxGroup
+        <CheckboxGroupField
+          name="bigEnergyConsumers"
           options={options}
-          onChange={handleChange}
           label="Do you have any of these big energy consumers in your household?"
-          defaultValue={options.filter(option =>
-            data.bigEnergyConsumers?.includes(option.value),
-          )}
         />
         <NoteText>
           This helps us establish energy usage patterns as well as estimate kWh
@@ -72,12 +95,7 @@ export const EnergyConsumptionBigConsumers = () => {
         <Button
           variant="main-orange"
           className="px-10"
-          onClick={next}
-          disabled={
-            data.bigEnergyConsumers
-              ? data.bigEnergyConsumers?.length <= 0
-              : true
-          }
+          type="submit"
         >
           Next
         </Button>
@@ -85,7 +103,7 @@ export const EnergyConsumptionBigConsumers = () => {
           Back
         </Button>
       </div>
-
+            </Form>
       <BulbSvg className={clsxm('absolute bottom-24 left-1/2')} />
     </Container>
   );
