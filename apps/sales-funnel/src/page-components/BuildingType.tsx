@@ -42,11 +42,11 @@ const options: RadioOption<FlowData['buildingType']>[] = [
   },
 ];
 
-export const BuildingTypeSchema = z.object({
+const BuildingTypeSchema = z.object({
   buildingType: z.enum(["home" , "industrial" , "agricultural" , "commercial"]),
 });
 
-export type BuildingTypeType = z.infer<typeof BuildingTypeSchema>;
+type BuildingTypeType = z.infer<typeof BuildingTypeSchema>;
 
 
 

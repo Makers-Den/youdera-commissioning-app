@@ -19,11 +19,11 @@ const options = [
   { label: 'Address 3', key: 'address3' },
 ];
 
-export const AddressInputSchema = z.object({
+const AddressInputSchema = z.object({
   streetAddress: z.object({ key: z.string(), label: z.string() }),
 });
 
-export type AddressInputType = z.infer<typeof AddressInputSchema>;
+type AddressInputType = z.infer<typeof AddressInputSchema>;
 
 export const AddressInput = () => {
   const { next, setData, back, data } = useFlowStore();

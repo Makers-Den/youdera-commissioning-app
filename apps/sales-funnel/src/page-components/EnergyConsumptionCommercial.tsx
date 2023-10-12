@@ -27,7 +27,7 @@ const options: OptionType<FlowData["openingDays"][number]>[] = [
   {name:'S', value:"sunday"}
 ]
 
-export const EnergyConsumptionSchema = z.object({
+const EnergyConsumptionSchema = z.object({
   yearlyConsumption: z.string().min(1),
   openingDays: z.array(
     z.object({name: z.string(), value: z.enum(["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"])}))
@@ -38,7 +38,7 @@ export const EnergyConsumptionSchema = z.object({
   })
 });
 
-export type EnergyConsumptionType = z.infer<typeof EnergyConsumptionSchema>;
+type EnergyConsumptionType = z.infer<typeof EnergyConsumptionSchema>;
 
 export const EnergyConsumptionCommercial = () => {
   const { next, setData, back, data } = useFlowStore();
