@@ -6,10 +6,10 @@ import clsxm from '../utils/clsxm';
 
 export type OptionType<T> = { name: string; value: T };
 
-type CheckboxGroupProps<T> = {
+export type CheckboxGroupProps<T> = {
   label?: string;
   options: OptionType<T>[];
-  onChange: (value: T[]) => void;
+  onChange?: (value: OptionType<T>[]) => void;
   defaultValue?: OptionType<T>[];
 };
 
@@ -26,10 +26,10 @@ export const CheckboxGroup = <T extends string>({
       const filteredSelection = selected.filter(item => item.value !== e.value);
 
       setSelected(filteredSelection);
-      onChange(filteredSelection.map(item => item.value));
+      onChange?.(filteredSelection);
       return;
     }
-    onChange([...selected, e].map(item => item.value));
+    onChange?.([...selected, e]);
     setSelected([...selected, e]);
   };
 

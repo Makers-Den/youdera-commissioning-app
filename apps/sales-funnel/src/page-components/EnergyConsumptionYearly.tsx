@@ -1,21 +1,43 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Container } from '@src/components/container/Container';
+import { Form } from '@src/components/forms/Form';
+import { InputField } from '@src/components/forms/InputField';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
-import { FlowData, useFlowStore } from '@src/store/flow';
+import { useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from 'ui/buttons/Button';
-import { Input } from 'ui/inputs/Input';
 import { BodyText, NoteText } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
+import { z } from 'zod';
 
 import ConsumptionIllustration from '../../public/ConsumptionIllustration.webp';
+
+const EnergyConsumptionYearlySchema = z.object({
+  yearlyConsumption: z.string(),
+});
+
+type EnergyConsumptionYearlyType = z.infer<
+  typeof EnergyConsumptionYearlySchema
+>;
 
 export const EnergyConsumptionYearly = () => {
   const { next, setData, back, data } = useFlowStore();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const yearlyConsumption: FlowData['yearlyConsumption'] = e.target.value;
+  const methods = useForm<EnergyConsumptionYearlyType>({
+    resolver: zodResolver(EnergyConsumptionYearlySchema),
+    defaultValues: {
+      yearlyConsumption: data.yearlyConsumption,
+    },
+  });
+
+  const { handleSubmit } = methods;
+
+  const onSubmit: SubmitHandler<EnergyConsumptionYearlyType> = async data => {
+    const { yearlyConsumption } = data;
     setData({ yearlyConsumption });
+    next();
   };
 
   return (
@@ -32,36 +54,35 @@ export const EnergyConsumptionYearly = () => {
       }
       title="Energy consumption"
     >
-      <div className="z-10 flex flex-col gap-7">
-        <BodyText>
-          We estimate your energy consumption to HARDCODED per year. If this not
-          correct, please input it manually.
-        </BodyText>
-        <Input
-          label="Yearly kWh consumption"
-          units="kWh"
-          type="number"
-          className="max-w-xs"
-          onChange={handleChange}
-          value={data?.yearlyConsumption}
-        />
-        <NoteText>Our estimate is HARDCODED kWh</NoteText>
-      </div>
+      <Form
+        onSubmit={handleSubmit(onSubmit)}
+        className="relative flex flex-1 flex-col justify-between gap-16 overflow-hidden "
+        {...methods}
+      >
+        <div className="z-10 flex flex-col gap-7">
+          <BodyText>
+            We estimate your energy consumption to HARDCODED per year. If this
+            not correct, please input it manually.
+          </BodyText>
+          <InputField
+            name="yearlyConsumption"
+            label="Yearly kWh consumption"
+            units="kWh"
+            type="number"
+            className="max-w-xs"
+          />
+          <NoteText>Our estimate is HARDCODED kWh</NoteText>
+        </div>
 
-      <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
-        <Button
-          variant="main-orange"
-          className="px-10"
-          onClick={next}
-          disabled={!data.yearlyConsumption}
-        >
-          Next
-        </Button>
-        <Button variant="additional-white" className="px-10" onClick={back}>
-          Back
-        </Button>
-      </div>
-
+        <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+          <Button variant="main-orange" className="px-10" type="submit">
+            Next
+          </Button>
+          <Button variant="additional-white" className="px-10" onClick={back}>
+            Back
+          </Button>
+        </div>
+      </Form>
       <BulbSvg className={clsxm('absolute bottom-24 left-1/2')} />
     </Container>
   );

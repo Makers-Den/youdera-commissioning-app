@@ -96,7 +96,7 @@ export type FlowData = {
     | 'saturday'
     | 'sunday'
   )[]; //EnergyConsumptionCommercial
-  openingTimes: [from: number, to: number];
+  openingTimes: { from: number; to: number }; //EnergyConsumptionCommercial
 };
 
 export type PartialFlowData = Partial<FlowData>;
