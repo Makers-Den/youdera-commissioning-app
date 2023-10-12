@@ -17,7 +17,7 @@ export const ContactSales = () => {
           </BodyText>
           <HandWithPhoneSvg className="mr-8" />
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="buttonContainer">
           <Button className="font-medium">BOOK A CALL WITH SALES</Button>
           <Button
             variant="additional-white"

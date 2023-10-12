@@ -151,7 +151,7 @@ export const BuildingType = () => {
           options={options}
           onChange={value => handleChange(value)}
         />
-        <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse md:max-w-md">
+        <div className="buttonContainer">
           <Button
             type='submit'
             variant="main-orange"
