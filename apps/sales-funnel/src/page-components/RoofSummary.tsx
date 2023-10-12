@@ -3,7 +3,7 @@ import { useFlowStore } from '@src/store/flow';
 import { Button } from 'ui/buttons/Button';
 
 export const RoofSummary = () => {
-  const { next, setData, back } = useFlowStore();
+  const { next, back } = useFlowStore();
 
   return (
     <Container title="Roof Summary" className="p-0 md:px-0 md:py-0 lg:px-0">

@@ -50,7 +50,7 @@ export const EnergyConsumptionPersons = () => {
 
   const { handleSubmit } = methods;
 
-  const onSubmit: SubmitHandler<EnergyConsumptionPersonsType> = async (data, e) => {
+  const onSubmit: SubmitHandler<EnergyConsumptionPersonsType> = async (data) => {
     const { peopleInHousehold } = data;
     setData({ peopleInHousehold });
     next();

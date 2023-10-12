@@ -48,7 +48,7 @@ export const EnergyConsumptionSpace = () => {
 
   const { handleSubmit } = methods;
 
-  const onSubmit: SubmitHandler<EnergyConsumptionSpaceType> = async (data, e) => {
+  const onSubmit: SubmitHandler<EnergyConsumptionSpaceType> = async (data) => {
     const { primarySpaceHeating } = data;
     setData({ primarySpaceHeating });
     next();

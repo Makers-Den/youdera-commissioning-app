@@ -58,7 +58,7 @@ export const EnergyConsumptionBigConsumers = () => {
   
   const { handleSubmit } = methods;
 
-  const onSubmit: SubmitHandler<EnergyConsumptionBigConsumersType> = async (data, e) => {
+  const onSubmit: SubmitHandler<EnergyConsumptionBigConsumersType> = async (data) => {
     const { bigEnergyConsumers } = data;
     setData({ bigEnergyConsumers: bigEnergyConsumers.map((option)=> option.value) });
     next();

@@ -12,7 +12,7 @@ export const HorizontalSelectField = <T extends string>({
   ...props
 }: HorizontalSelectProps<T> & { name: string; fieldClassName?: string }) => (
   <Field name={name} className={fieldClassName}>
-    {(field, fieldState) => (
+    {field => (
       <HorizontalSelect {...props} {...field} defaultValue={field.value} />
     )}
   </Field>

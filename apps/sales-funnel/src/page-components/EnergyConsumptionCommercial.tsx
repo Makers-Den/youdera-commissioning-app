@@ -52,7 +52,7 @@ export const EnergyConsumptionCommercial = () => {
   });
   const { handleSubmit } = methods;
 
-  const onSubmit: SubmitHandler<EnergyConsumptionType> = async (data, e) => {
+  const onSubmit: SubmitHandler<EnergyConsumptionType> = async (data) => {
     const {openingDays, openingTimes,yearlyConsumption} = data;
     setData({
       openingDays:openingDays.map(option => option.value),

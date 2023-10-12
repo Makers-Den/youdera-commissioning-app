@@ -56,7 +56,7 @@ export const EnergyConsumptionWater = () => {
 
   const { handleSubmit } = methods;
 
-  const onSubmit: SubmitHandler<EnergyConsumptionWaterType> = async (data, e) => {
+  const onSubmit: SubmitHandler<EnergyConsumptionWaterType> = async (data) => {
     const { primaryWaterHeating } = data;
     setData({ primaryWaterHeating });
     next();

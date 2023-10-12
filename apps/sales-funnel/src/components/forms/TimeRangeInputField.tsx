@@ -15,6 +15,6 @@ export const TimeRangeInputField = ({
   fieldClassName?: string;
 }) => (
   <Field name={name} className={fieldClassName}>
-    {(field, fieldState) => <TimeRangeInput {...props} {...field} />}
+    {field => <TimeRangeInput {...props} {...field} />}
   </Field>
 );
