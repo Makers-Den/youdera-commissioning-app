@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Container } from '@src/components/container/Container';
-import { CustomRadioGroupField } from '@src/components/forms/CustomRadioGroupField';
+import { BoxesRadioGroupField } from '@src/components/forms/BoxesRadioGroupField';
 import { Form } from '@src/components/forms/Form';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
 import { FivePersonSvg } from '@src/components/svgs/FivePersonSvg';
@@ -14,9 +14,7 @@ import Image from 'next/image';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from 'ui/buttons/Button';
-import {
-  type Option as RadioGroupOption,
-} from 'ui/radio-group/CustomRadioGroup';
+import { type Option as RadioGroupOption } from 'ui/radio-group/BoxesRadioGroup';
 import { NoteText } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
@@ -33,10 +31,12 @@ const options: RadioGroupOption<FlowData['peopleInHousehold']>[] = [
 ];
 
 const EnergyConsumptionPersonsSchema = z.object({
-  peopleInHousehold: z.enum(["1", "2", "3", "4", "5", "5+"]),
+  peopleInHousehold: z.enum(['1', '2', '3', '4', '5', '5+']),
 });
 
-type EnergyConsumptionPersonsType = z.infer<typeof EnergyConsumptionPersonsSchema>;
+type EnergyConsumptionPersonsType = z.infer<
+  typeof EnergyConsumptionPersonsSchema
+>;
 
 export const EnergyConsumptionPersons = () => {
   const { next, setData, back, data } = useFlowStore();
@@ -45,17 +45,17 @@ export const EnergyConsumptionPersons = () => {
     resolver: zodResolver(EnergyConsumptionPersonsSchema),
     defaultValues: {
       peopleInHousehold: data.peopleInHousehold,
-    }
+    },
   });
 
   const { handleSubmit } = methods;
 
-  const onSubmit: SubmitHandler<EnergyConsumptionPersonsType> = async (data) => {
+  const onSubmit: SubmitHandler<EnergyConsumptionPersonsType> = async data => {
     const { peopleInHousehold } = data;
     setData({ peopleInHousehold });
     next();
-  }
- 
+  };
+
   return (
     <Container
       clippedTitle
@@ -70,29 +70,31 @@ export const EnergyConsumptionPersons = () => {
       }
       title="Energy consumption"
     >
-      <Form  className='flex flex-1 flex-col justify-between gap-16 bg-white' onSubmit={handleSubmit(onSubmit)} {...methods}>
-      <div className="z-10 flex flex-col gap-7">
-        <CustomRadioGroupField
-          name="peopleInHousehold"
-          label="How many people live in your household?"
-          options={options}
-        />
-        <NoteText>This will help us estimate your kWh usage per year.</NoteText>
-      </div>
+      <Form
+        className="flex flex-1 flex-col justify-between gap-16 bg-white"
+        onSubmit={handleSubmit(onSubmit)}
+        {...methods}
+      >
+        <div className="z-10 flex flex-col gap-7">
+          <BoxesRadioGroupField
+            name="peopleInHousehold"
+            label="How many people live in your household?"
+            options={options}
+          />
+          <NoteText>
+            This will help us estimate your kWh usage per year.
+          </NoteText>
+        </div>
 
-      <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
-        <Button
-          variant="main-orange"
-          className="px-10"
-          type="submit"
-        >
-          Next
-        </Button>
-        <Button variant="additional-white" className="px-10" onClick={back}>
-          Back
-        </Button>
-      </div>
-    </Form>
+        <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+          <Button variant="main-orange" className="px-10" type="submit">
+            Next
+          </Button>
+          <Button variant="additional-white" className="px-10" onClick={back}>
+            Back
+          </Button>
+        </div>
+      </Form>
 
       <BulbSvg className={clsxm('absolute -left-12 bottom-24 ')} />
     </Container>

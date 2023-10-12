@@ -15,7 +15,7 @@ export type RadioGroupProps<T> = {
   defaultValue?: T;
 };
 
-export const CustomRadioGroup = <T extends string>({
+export const BoxesRadioGroup = <T extends string>({
   options,
   label,
   onChange,
@@ -25,7 +25,10 @@ export const CustomRadioGroup = <T extends string>({
 }: RadioGroupProps<T>) => (
   <div className="z-10 w-full max-w-md">
     {label && <BodyText className="text-gray-1000 mb-6">{label}</BodyText>}
-    <Radio onChange={(value: T) => onChange(value)} defaultValue={defaultValue}>
+    <Radio
+      onChange={(value: T) => onChange?.(value)}
+      defaultValue={defaultValue}
+    >
       <Radio.Label className="sr-only">{label}</Radio.Label>
       <div className={clsxm('grid grid-cols-3 gap-4', className)}>
         {options.map(option => (

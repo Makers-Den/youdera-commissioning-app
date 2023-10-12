@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Container } from '@src/components/container/Container';
-import { CustomRadioGroupField } from '@src/components/forms/CustomRadioGroupField';
+import { BoxesRadioGroupField } from '@src/components/forms/BoxesRadioGroupField';
 import { Form } from '@src/components/forms/Form';
 import { AgriculturalSvg } from '@src/components/svgs/AgriculturalSvg';
 import { CommercialSvg } from '@src/components/svgs/CommercialSvg';
@@ -10,9 +10,7 @@ import { FlowData, useFlowStore, views } from '@src/store/flow';
 import Image from 'next/image';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from 'ui/buttons/Button';
-import {
-  type Option as RadioOption,
-} from 'ui/radio-group/CustomRadioGroup';
+import { type Option as RadioOption } from 'ui/radio-group/BoxesRadioGroup';
 import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
 
@@ -43,12 +41,10 @@ const options: RadioOption<FlowData['buildingType']>[] = [
 ];
 
 const BuildingTypeSchema = z.object({
-  buildingType: z.enum(["home" , "industrial" , "agricultural" , "commercial"]),
+  buildingType: z.enum(['home', 'industrial', 'agricultural', 'commercial']),
 });
 
 type BuildingTypeType = z.infer<typeof BuildingTypeSchema>;
-
-
 
 export const BuildingType = () => {
   const { next, setData, setViews, data } = useFlowStore();
@@ -57,11 +53,10 @@ export const BuildingType = () => {
     resolver: zodResolver(BuildingTypeSchema),
     defaultValues: {
       buildingType: data.buildingType,
-    }
+    },
   });
 
   const { handleSubmit } = methods;
-  
 
   const handleChange = (buildingType: FlowData['buildingType']) => {
     setData({ buildingType });
@@ -144,8 +139,12 @@ export const BuildingType = () => {
       subTitle="Estimate how much you can save by installing solar on your property."
     >
       {/* TODO do something with the fact that we have to reapply these on form ? */}
-      <Form className='z-10 flex flex-col justify-between gap-16' onSubmit={handleSubmit(onSubmit)} {...methods}>
-        <CustomRadioGroupField
+      <Form
+        className="z-10 flex flex-col justify-between gap-16"
+        onSubmit={handleSubmit(onSubmit)}
+        {...methods}
+      >
+        <BoxesRadioGroupField
           name="buildingType"
           label="Start by telling us what sort of building it is you intend to install solar panels on."
           className="grid-cols-2"
@@ -153,11 +152,7 @@ export const BuildingType = () => {
           onChange={value => handleChange(value)}
         />
         <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
-          <Button
-            type='submit'
-            variant="main-orange"
-            className="px-10"
-          >
+          <Button type="submit" variant="main-orange" className="px-10">
             Next
           </Button>
         </div>
