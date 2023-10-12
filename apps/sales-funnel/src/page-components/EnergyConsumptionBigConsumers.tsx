@@ -78,7 +78,7 @@ export const EnergyConsumptionBigConsumers = () => {
       }
       title="Energy consumption"
     >
-      <Form  className='flex flex-1 flex-col justify-between gap-16 bg-white' onSubmit={handleSubmit(onSubmit)} {...methods}>
+      <Form  className='container containerPadding' onSubmit={handleSubmit(onSubmit)} {...methods}>
       <div className="z-10 flex flex-col gap-7">
         <CheckboxGroupField
           name="bigEnergyConsumers"
@@ -91,7 +91,7 @@ export const EnergyConsumptionBigConsumers = () => {
         </NoteText>
       </div>
 
-      <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+      <div className="buttonContainer">
         <Button
           variant="main-orange"
           className="px-10"

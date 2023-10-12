@@ -4,24 +4,18 @@ import clsxm from 'ui/utils/clsxm';
 
 import styles from './Container.module.css';
 
-export const containerPadding = 'p-5 md:px-12 md:py-7 lg:px-24';
-
 export const Container = ({
   title,
   subTitle,
   children,
   clippedTitle,
   leftSection,
-  className,
-  withoutPadding,
 }: {
   title: string;
   subTitle?: string;
   children: ReactNode;
   clippedTitle?: boolean;
   leftSection?: ReactNode;
-  className?: string;
-  withoutPadding?: boolean;
 }) => (
   <>
     <main className="row-span-full grid h-full min-h-[calc(100vh-4rem)] grid-cols-1 bg-white md:grid-cols-2">
@@ -47,15 +41,7 @@ export const Container = ({
             </H2>
           </div>
         )}
-        <div
-          className={clsxm(
-            'relative flex flex-1 flex-col justify-between gap-16 overflow-hidden bg-white',
-            !withoutPadding && containerPadding,
-            className,
-          )}
-        >
-          {children}
-        </div>
+        {children}
       </div>
     </main>
     {/* eslint-disable-next-line @typescript-eslint/no-use-before-define */}

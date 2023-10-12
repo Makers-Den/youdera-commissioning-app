@@ -77,7 +77,7 @@ export const EnergyConsumptionCommercial = () => {
       title="Energy consumption"
     >
       {/* TODO do something with the fact that we have to reapply these on form ? */}
-      <Form className='z-10 flex flex-col justify-between gap-16' onSubmit={handleSubmit(onSubmit)} {...methods}>
+      <Form className='container containerPadding' onSubmit={handleSubmit(onSubmit)} {...methods}>
       <div className="z-10 flex flex-col gap-7">
         <BodyText>
           Please fill in the yearly kWh consumption of your commercial property.
@@ -98,7 +98,7 @@ export const EnergyConsumptionCommercial = () => {
         <TimeRangeInputField name="openingTimes" />
       </div>
 
-      <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+      <div className="buttonContainer">
         <Button
           variant="main-orange"
           className="px-10"

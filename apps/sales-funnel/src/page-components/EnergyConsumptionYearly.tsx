@@ -56,7 +56,7 @@ export const EnergyConsumptionYearly = () => {
     >
       <Form
         onSubmit={handleSubmit(onSubmit)}
-        className="relative flex flex-1 flex-col justify-between gap-16 overflow-hidden "
+        className="container containerPadding"
         {...methods}
       >
         <div className="z-10 flex flex-col gap-7">
@@ -74,7 +74,7 @@ export const EnergyConsumptionYearly = () => {
           <NoteText>Our estimate is HARDCODED kWh</NoteText>
         </div>
 
-        <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+        <div className="buttonContainer">
           <Button variant="main-orange" className="px-10" type="submit">
             Next
           </Button>
