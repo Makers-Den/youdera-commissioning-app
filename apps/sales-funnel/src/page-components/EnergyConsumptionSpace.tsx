@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { CustomRadioGroupField } from '@src/components/forms/CustomRadioGroupField';
 import { Form } from '@src/components/forms/Form';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
@@ -55,7 +55,7 @@ export const EnergyConsumptionSpace = () => {
   }
 
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -97,6 +97,6 @@ export const EnergyConsumptionSpace = () => {
       <BulbSvg className={clsxm('absolute bottom-24 left-14')} />
       </Form>
 
-    </Container>
+    </LayoutContainer>
   );
 };

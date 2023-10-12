@@ -2,9 +2,9 @@ import React, { ReactNode } from 'react';
 import { H1, H2 } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 
-import styles from './Container.module.css';
+import styles from './LayoutContainer.module.css';
 
-export const Container = ({
+export const LayoutContainer = ({
   title,
   subTitle,
   children,

@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { Form } from '@src/components/forms/Form';
 import { InputField } from '@src/components/forms/InputField';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
@@ -41,7 +41,7 @@ export const EnergyConsumptionYearly = () => {
   };
 
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -84,6 +84,6 @@ export const EnergyConsumptionYearly = () => {
         </div>
       </Form>
       <BulbSvg className={clsxm('absolute bottom-24 left-1/2')} />
-    </Container>
+    </LayoutContainer>
   );
 };

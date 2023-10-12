@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { Form } from '@src/components/forms/Form';
 import { HorizontalSelectField } from '@src/components/forms/HorizontalSelectField';
 import { InputField } from '@src/components/forms/InputField';
@@ -63,7 +63,7 @@ export const EnergyConsumptionCommercial = () => {
   };
 
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -76,7 +76,6 @@ export const EnergyConsumptionCommercial = () => {
       }
       title="Energy consumption"
     >
-      {/* TODO do something with the fact that we have to reapply these on form ? */}
       <Form className='container containerPadding' onSubmit={handleSubmit(onSubmit)} {...methods}>
       <div className="z-10 flex flex-col gap-7">
         <BodyText>
@@ -113,6 +112,6 @@ export const EnergyConsumptionCommercial = () => {
       </Form>
 
       <BulbSvg className={clsxm('absolute bottom-24 left-1/2')} />
-    </Container>
+    </LayoutContainer>
   );
 };

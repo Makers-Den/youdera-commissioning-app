@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { CustomRadioGroupField } from '@src/components/forms/CustomRadioGroupField';
 import { Form } from '@src/components/forms/Form';
 import { AgriculturalSvg } from '@src/components/svgs/AgriculturalSvg';
@@ -128,7 +128,7 @@ export const BuildingType = () => {
   };
 
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -143,7 +143,6 @@ export const BuildingType = () => {
   panels in 5 minutes"
       subTitle="Estimate how much you can save by installing solar on your property."
     >
-      {/* TODO do something with the fact that we have to reapply these on form ? */}
       <Form className='container containerPadding' onSubmit={handleSubmit(onSubmit)} {...methods}>
         <CustomRadioGroupField
           name="buildingType"
@@ -165,6 +164,6 @@ export const BuildingType = () => {
         className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
       />
       </Form>
-    </Container>
+    </LayoutContainer>
   );
 };

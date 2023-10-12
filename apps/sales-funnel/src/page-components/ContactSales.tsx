@@ -1,4 +1,4 @@
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { useFlowStore } from '@src/store/flow';
 import { Button } from 'ui/buttons/Button';
 import { BodyText } from 'ui/typography/Typography';
@@ -8,7 +8,7 @@ import { HandWithPhoneSvg } from '../components/svgs/HandWithPhoneSvg';
 export const ContactSales = () => {
   const { back } = useFlowStore();
   return (
-    <Container clippedTitle title="Consult with sales">
+    <LayoutContainer clippedTitle title="Consult with sales">
       <div className="container containerPadding">
         <div className="flex flex-col items-center gap-20">
           <BodyText className="text-black">
@@ -28,6 +28,6 @@ export const ContactSales = () => {
           </Button>
         </div>
       </div>
-    </Container>
+    </LayoutContainer>
   );
 };

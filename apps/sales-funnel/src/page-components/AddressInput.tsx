@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { AutocompleteSelectField } from '@src/components/forms/AutocompleteSelectField';
 import { Form } from '@src/components/forms/Form';
 import { useFlowStore } from '@src/store/flow';
@@ -46,7 +46,7 @@ export const AddressInput = () => {
   };
 
   return (
-    <Container
+    <LayoutContainer
       clippedTitle
       leftSection={
         <Image
@@ -87,6 +87,6 @@ export const AddressInput = () => {
           className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
         />
       </Form>
-    </Container>
+    </LayoutContainer>
   );
 };

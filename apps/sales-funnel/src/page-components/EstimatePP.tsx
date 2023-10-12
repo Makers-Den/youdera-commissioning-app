@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { SavingsGraph } from '@src/components/graphs/SavingsGraph';
 import { RecoupSvg } from '@src/components/svgs/RecoupSvg';
 import Image from 'next/image';
@@ -19,7 +19,7 @@ import clsxm from 'ui/utils/clsxm';
 import EstimateIllustration from '../../public/EstimateIllustration.webp';
 
 export const EstimatePP = () => (
-  <Container
+  <LayoutContainer
     title="You can save 70 000 €"
     clippedTitle
     leftSection={<LeftSection />}
@@ -30,7 +30,7 @@ export const EstimatePP = () => (
       <SavingsGraph />
       <RequestButtons />
     </div>
-  </Container>
+  </LayoutContainer>
 );
 
 const LeftSection = () => (
@@ -79,7 +79,6 @@ const LeftSection = () => (
   </>
 );
 
-//TODO Container refactor ?
 const SystemDetailsSection = () => (
   <section className="bg-gray-1000 text-gray-450 containerPadding !pt-9">
     <div className="flex flex-col gap-6 md:max-w-md">
@@ -167,7 +166,6 @@ const SystemDetailsSection = () => (
 
 const SavingsSection = () => (
   <section className={clsxm('p-0 md:mb-9 lg:px-24')}>
-    {/* TODO Container refactor */}
     <div className="flex flex-col lg:max-w-md">
       <div className="flex gap-4 px-4 py-3 md:px-12 md:py-5 lg:px-0 ">
         <H2 weight="medium">How to pay for your system</H2>

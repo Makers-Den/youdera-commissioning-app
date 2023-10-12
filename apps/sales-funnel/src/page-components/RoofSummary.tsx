@@ -1,4 +1,4 @@
-import { Container } from '@src/components/container/Container';
+import { LayoutContainer } from '@src/components/container/LayoutContainer';
 import { useFlowStore } from '@src/store/flow';
 import { Button } from 'ui/buttons/Button';
 
@@ -6,7 +6,7 @@ export const RoofSummary = () => {
   const { next, back } = useFlowStore();
 
   return (
-    <Container title="Roof Summary">
+    <LayoutContainer title="Roof Summary">
       <div className="flex flex-col gap-7">
         <div className="h-96 w-full bg-red-400" />
         <div className="flex flex-col gap-5 p-5 md:px-12 md:py-7 lg:px-24">
@@ -22,6 +22,6 @@ export const RoofSummary = () => {
           Back
         </Button>
       </div>
-    </Container>
+    </LayoutContainer>
   );
 };
