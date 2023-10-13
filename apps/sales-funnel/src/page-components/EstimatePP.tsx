@@ -29,7 +29,7 @@ import clsxm from 'ui/utils/clsxm';
 import EstimateIllustration from '../../public/EstimateIllustration.webp';
 
 export const EstimatePP = () => {
-  const { currentView, setCurrentView } = useFlowStore();
+  const { currentView, setCurrentView, setData } = useFlowStore();
   const requestFlowViews: ViewNames[] = [
     'requestOffer',
     'roofAge',
@@ -45,7 +45,7 @@ export const EstimatePP = () => {
     React.useState(isRequestFlow);
 
   const openRequestDialog = () => {
-    //TODO reset all the requestOfferFlow data (after we finish all views and add all the relevant data fields)
+    setData({ requestOffer: undefined });
     setCurrentView('requestOffer');
     setIsRequestDialogOpened(true);
   };

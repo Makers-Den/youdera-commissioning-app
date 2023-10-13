@@ -24,7 +24,7 @@ const RequestOfferSchema = z.object({
   title: z.object({ key: z.string(), label: z.string() }),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  email: z.string().min(1),
+  email: z.string().email(),
   phoneNumber: z.string().min(1),
   newsletter: z.boolean(),
 });
