@@ -64,7 +64,11 @@ export const EstimatePP = () => {
         <SavingsGraph />
         <RequestButtons openRequestDialog={openRequestDialog} />
       </div>
-      <Dialog open={isRequestDialogOpened} onClose={closeRequestDialog}>
+      <Dialog
+        open={isRequestDialogOpened}
+        onClose={closeRequestDialog}
+        className="flex min-h-[min(700px,calc(100vh_-_2rem))] flex-col"
+      >
         {currentView === 'requestOffer' && <RequestOffer />}
         {currentView === 'roofAge' && <RoofAge />}
         {currentView === 'roofMaterial' && <RoofMaterial />}
