@@ -18,7 +18,7 @@ export const LayoutContainer = ({
   leftSection?: ReactNode;
 }) => (
   <>
-    <main className="row-span-full grid h-full min-h-[calc(100vh-4rem)] grid-cols-1 bg-white md:grid-cols-2">
+    <main className="row-span-full grid h-full min-h-[calc(100vh-4rem)] grid-cols-1 bg-white md:grid-cols-2 overflow-hidden">
       <div className="relative col-span-1 hidden h-full bg-white md:flex">
         {leftSection}
       </div>

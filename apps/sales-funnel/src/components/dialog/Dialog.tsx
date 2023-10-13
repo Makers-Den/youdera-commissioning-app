@@ -1,7 +1,8 @@
-import { Transition, Dialog as HeadlessDialog } from '@headlessui/react';
+import { Dialog as HeadlessDialog,Transition } from '@headlessui/react';
 import React, { Fragment, ReactNode, useContext } from 'react';
 import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
+
 import { CrossSvg } from '../svgs/CrossSvg';
 
 const DialogContext = React.createContext({ onClose: () => {} });

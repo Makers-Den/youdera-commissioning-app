@@ -151,7 +151,7 @@ export const BuildingType = () => {
           options={options}
           onChange={value => handleChange(value)}
         />
-        <div className="buttonContainer">
+        <div className="buttonContainer md:max-w-container">
           <Button
             type='submit'
             variant="main-orange"

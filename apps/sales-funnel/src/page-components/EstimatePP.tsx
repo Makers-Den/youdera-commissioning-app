@@ -43,7 +43,7 @@ const LeftSection = () => (
       src={EstimateIllustration.src}
     />
     <div className="z-20 containerPadding !pt-4">
-      <div className="flex max-w-md flex-col">
+      <div className="flex max-w-container flex-col">
         <H1 weight="medium">Get a PDF offer in your email </H1>
         <div className="pb-4" />
         <BodyText>
@@ -81,7 +81,7 @@ const LeftSection = () => (
 
 const SystemDetailsSection = () => (
   <section className="bg-gray-1000 text-gray-450 containerPadding !pt-9">
-    <div className="flex flex-col gap-6 md:max-w-md">
+    <div className="flex flex-col gap-6 md:max-w-container">
       <div className="flex items-center justify-between">
         <H2 weight="medium">Your Solar System</H2>
         <Button variant="main-gray" className="whitespace-nowrap">
@@ -166,7 +166,7 @@ const SystemDetailsSection = () => (
 
 const SavingsSection = () => (
   <section className={clsxm('p-0 md:mb-9 lg:px-24')}>
-    <div className="flex flex-col lg:max-w-md">
+    <div className="flex flex-col lg:max-w-container">
       <div className="flex gap-4 px-4 py-3 md:px-12 md:py-5 lg:px-0 ">
         <H2 weight="medium">How to pay for your system</H2>
         <SvgIcon name="Savings" />
@@ -301,7 +301,7 @@ const SavingsSection = () => (
 const RequestButtons = () => (
   <>
     <div className="mb-8 hidden w-full px-4 md:flex md:px-12 lg:px-24">
-      <Button className="w-full md:max-w-md">REQUEST OFFER</Button>
+      <Button className="w-full md:max-w-container">REQUEST OFFER</Button>
     </div>
 
     <div className="shadow-3xl fixed bottom-0 flex w-full flex-col gap-4 bg-white p-4 pb-8 md:hidden md:px-12">

@@ -30,32 +30,30 @@ export const RadioGroup: React.FC<RadioGroupProps> = ({
   onChange,
   selected,
 }) => (
-    <div className="w-full max-w-md px-4 py-16">
-      <Radio value={selected} onChange={(value: Option) => onChange(value)}>
-        <Radio.Label className="sr-only">{label}</Radio.Label>
-        <div className="space-y-2">
-          {options.map(option => (
-            <Radio.Option
-              key={option.name}
-              value={option.value}
-              className={({ checked }) =>
-                clsxm(
-                  'relative flex cursor-pointer rounded-md border border-gray-600 px-5 py-4 focus:outline-none',
-                  checked && 'border-brand-one-400 border',
-                )
-              }
-            >
-              {({ checked }) => (
-                <div className="flex w-full items-center gap-3">
-                  <RadioButton checked={checked} />
-                  <BodyText className="text-gray-1000">
-                    {option.name}
-                  </BodyText>
-                </div>
-              )}
-            </Radio.Option>
-          ))}
-        </div>
-      </Radio>
-    </div>
+  <div className="w-full max-w-container px-4 py-16">
+    <Radio value={selected} onChange={(value: Option) => onChange(value)}>
+      <Radio.Label className="sr-only">{label}</Radio.Label>
+      <div className="space-y-2">
+        {options.map(option => (
+          <Radio.Option
+            key={option.name}
+            value={option.value}
+            className={({ checked }) =>
+              clsxm(
+                'relative flex cursor-pointer rounded-md border border-gray-600 px-5 py-4 focus:outline-none',
+                checked && 'border-brand-one-400 border',
+              )
+            }
+          >
+            {({ checked }) => (
+              <div className="flex w-full items-center gap-3">
+                <RadioButton checked={checked} />
+                <BodyText className="text-gray-1000">{option.name}</BodyText>
+              </div>
+            )}
+          </Radio.Option>
+        ))}
+      </div>
+    </Radio>
+  </div>
 );

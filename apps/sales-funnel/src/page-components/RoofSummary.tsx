@@ -7,20 +7,28 @@ export const RoofSummary = () => {
 
   return (
     <LayoutContainer title="Roof Summary">
-      <div className="flex flex-col gap-7">
-        <div className="h-96 w-full bg-red-400" />
-        <div className="flex flex-col gap-5 p-5 md:px-12 md:py-7 lg:px-24">
-          <Button variant="additional-white">Change SELECTED BUILDING</Button>
-          TODO
+      <div className="container w-full">
+        <div className="flex flex-col gap-7 w-full">
+          <div className="h-96 w-full bg-red-400" />
+          <div className="containerPadding">
+            <div className="md:max-w-container flex flex-col gap-4">
+              <Button variant="additional-white">
+                Change SELECTED BUILDING
+              </Button>
+              TODO
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="buttonContainer containerPadding">
-        <Button variant="main-orange" className="px-10" onClick={next}>
-          Next
-        </Button>
-        <Button variant="additional-white" className="px-10" onClick={back}>
-          Back
-        </Button>
+        <div className="containerPadding">
+          <div className="md:max-w-container buttonContainer">
+            <Button variant="main-orange" className="px-10" onClick={next}>
+              Next
+            </Button>
+            <Button variant="additional-white" className="px-10" onClick={back}>
+              Back
+            </Button>
+          </div>
+        </div>
       </div>
     </LayoutContainer>
   );

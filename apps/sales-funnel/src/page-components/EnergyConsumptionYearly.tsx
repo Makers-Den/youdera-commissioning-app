@@ -69,12 +69,12 @@ export const EnergyConsumptionYearly = () => {
             label="Yearly kWh consumption"
             units="kWh"
             type="number"
-            className="max-w-xs"
+            className="md:max-w-container"
           />
           <NoteText>Our estimate is HARDCODED kWh</NoteText>
         </div>
 
-        <div className="buttonContainer">
+        <div className="buttonContainer md:max-w-container">
           <Button variant="main-orange" className="px-10" type="submit">
             Next
           </Button>

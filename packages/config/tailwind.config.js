@@ -88,6 +88,10 @@ module.exports = {
       animation: {
         'spin-slow': 'spin 45s linear infinite',
       },
+
+      maxWidth: {
+        container: '28rem',
+      },
     },
   },
   plugins: [],

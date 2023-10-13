@@ -77,7 +77,7 @@ export const EnergyConsumptionCommercial = () => {
       title="Energy consumption"
     >
       <Form className='container containerPadding' onSubmit={handleSubmit(onSubmit)} {...methods}>
-      <div className="z-10 flex flex-col gap-7">
+      <div className="z-10 flex flex-col gap-7 md:max-w-container">
         <BodyText>
           Please fill in the yearly kWh consumption of your commercial property.
         </BodyText>
@@ -86,7 +86,6 @@ export const EnergyConsumptionCommercial = () => {
           label="Yearly kWh consumption"
           units="kWh"
           type="number"
-          className="max-w-xs"
         />
         <NoteText>
           For properties with consumption larger than 2 mWh
@@ -97,7 +96,7 @@ export const EnergyConsumptionCommercial = () => {
         <TimeRangeInputField name="openingTimes" />
       </div>
 
-      <div className="buttonContainer">
+      <div className="buttonContainer md:max-w-container">
         <Button
           variant="main-orange"
           className="px-10"

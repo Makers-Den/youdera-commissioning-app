@@ -64,7 +64,7 @@ export const AddressInput = () => {
         className="container containerPadding"
         {...methods}
       >
-        <div className="flex flex-col gap-7">
+        <div className="flex flex-col gap-7 md:max-w-container">
           <BodyText>Enter the address of the building.</BodyText>
           <AutocompleteSelectField
             name="streetAddress"
@@ -75,7 +75,7 @@ export const AddressInput = () => {
           />
         </div>
 
-        <div className="z-10 flex flex-col justify-between gap-4 md:flex-row-reverse">
+        <div className="buttonContainer md:max-w-container">
           <Button type="submit" variant="main-orange" className="px-10">
             Next
           </Button>
@@ -83,10 +83,10 @@ export const AddressInput = () => {
             Back
           </Button>
         </div>
-        <SunSvg
-          className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
-        />
       </Form>
+      <SunSvg
+        className={clsxm('animate-spin-slow absolute -bottom-44 -right-32')}
+      />
     </LayoutContainer>
   );
 };

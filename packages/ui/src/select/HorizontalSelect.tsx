@@ -34,7 +34,7 @@ export const HorizontalSelect = <T extends string>({
 
   return (
     <div className="w-full flex flex-col gap-2">
-      {label && <Label className="max-w-md">{label}</Label>}
+      {label && <Label className="max-w-container">{label}</Label>}
       <div className="flex w-full">
         {options.map(option => (
           // eslint-disable-next-line @typescript-eslint/no-use-before-define

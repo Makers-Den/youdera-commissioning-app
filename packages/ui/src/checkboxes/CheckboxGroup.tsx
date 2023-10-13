@@ -35,8 +35,8 @@ export const CheckboxGroup = <T extends string>({
 
   return (
     <div className="w-full">
-      {label && <BodyText className="mb-4 max-w-md">{label}</BodyText>}
-      <div className="flex w-full max-w-md flex-col gap-2">
+      {label && <BodyText className="mb-4 max-w-container">{label}</BodyText>}
+      <div className="flex w-full max-w-container flex-col gap-2">
         {options.map(option => (
           // eslint-disable-next-line @typescript-eslint/no-use-before-define
           <Option

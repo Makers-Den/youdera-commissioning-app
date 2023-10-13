@@ -80,7 +80,7 @@ export const EnergyConsumptionPersons = () => {
         <NoteText>This will help us estimate your kWh usage per year.</NoteText>
       </div>
 
-      <div className="buttonContainer">
+      <div className="buttonContainer md:max-w-container">
         <Button
           variant="main-orange"
           className="px-10"

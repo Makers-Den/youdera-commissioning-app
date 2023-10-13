@@ -23,7 +23,7 @@ export const CustomRadioGroup = <T extends string>({
   optionClassName,
   defaultValue,
 }: RadioGroupProps<T>) => (
-  <div className="z-10 w-full max-w-md">
+  <div className="z-10 w-full max-w-container">
     {label && <BodyText className="text-gray-1000 mb-6">{label}</BodyText>}
     <Radio
       onChange={(value: T) => onChange?.(value)}

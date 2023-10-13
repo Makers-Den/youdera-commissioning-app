@@ -89,7 +89,7 @@ export const EnergyConsumptionWater = () => {
           </NoteText>
         </div>
 
-        <div className="buttonContainer">
+        <div className="buttonContainer md:max-w-container">
           <Button
             variant="main-orange"
             className="px-10"
