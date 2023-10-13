@@ -17,9 +17,8 @@ import clsxm from 'ui/utils/clsxm';
 const Login = () => {
   const intl = useIntl();
   const router = useRouter();
-  const [areCredentialsValid, setAreCredentialsValid] = useState<
-    'valid' | 'invalid' | undefined
-  >();
+  const [areCredentialsValid, setAreCredentialsValid] =
+    useState<'valid' | 'invalid' | undefined>();
 
   const { loginMutation, isAuthenticated, userInfoQuery } = useAuth();
 
@@ -115,7 +114,7 @@ const Login = () => {
           <Checkbox
             label={intl.formatMessage({ defaultMessage: 'Remember me' })}
             onClick={handleChangeRememberUser}
-            isChecked={rememberUser}
+            value={rememberUser ? 'checked' : undefined}
             disabled={!!areCredentialsValid}
             dataCy="remember"
           />

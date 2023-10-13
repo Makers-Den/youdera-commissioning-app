@@ -4,15 +4,13 @@ import { SvgIcon } from '../svg-icons/SvgIcon';
 import { Label } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
-type CheckboxProps = {
-  isChecked: boolean;
+export type CheckboxProps = {
   label?: string;
   dataCy?: string;
-  onClick: () => void;
 } & React.ComponentPropsWithRef<'input'>;
 
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ label, isChecked, onClick, dataCy, ...rest }, ref) => (
+  ({ label, onClick, dataCy, value, className, ...rest }, ref) => (
     <div className="flex items-center">
       <label className="relative flex items-center hover:cursor-pointer">
         <input
@@ -21,8 +19,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           onClick={onClick}
           className="hidden"
           disabled={rest.disabled}
+          value={value}
+          {...rest}
         />
-        {isChecked ? (
+        {!value ? (
           <span
             aria-hidden="true"
             className={clsxm(
@@ -32,7 +32,9 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             data-cy={dataCy}
           />
         ) : (
-          <span className="bg-brand-two-400 h-4 w-4 rounded-sm">
+          <span
+            className={clsxm('bg-brand-two-400 h-4 w-4 rounded-sm', className)}
+          >
             <SvgIcon
               name="Check"
               aria-hidden="true"
