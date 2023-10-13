@@ -8,7 +8,8 @@ export type Option<T> = { name: string; value: T; element?: React.ReactNode };
 
 export type RadioGroupProps<T> = {
   className?: string;
-  optionClassName?: string;
+  optionClassName?: (checked: boolean) => string;
+  labelClassName?: string;
   label?: string;
   options: Option<T>[];
   onChange?: (value: T) => void;
@@ -21,9 +22,10 @@ export const BoxesRadioGroup = <T extends string>({
   onChange,
   className,
   optionClassName,
+  labelClassName,
   defaultValue,
 }: RadioGroupProps<T>) => (
-  <div className="z-10 w-full max-w-container">
+  <div className="max-w-container z-10 w-full">
     {label && <BodyText className="text-gray-1000 mb-6">{label}</BodyText>}
     <Radio
       onChange={(value: T) => onChange?.(value)}
@@ -42,12 +44,14 @@ export const BoxesRadioGroup = <T extends string>({
                 'transition-colors duration-300 ease-in-out [&>svg]:transition-colors [&>svg]:duration-300 [&>svg]:ease-in-out',
                 checked &&
                   'border-brand-one-400 [&>svg]:text-brand-one-400 border',
-                optionClassName,
+                optionClassName?.(checked),
               )
             }
           >
             {option.element}
-            <NoteText className="text-center">{option.name}</NoteText>
+            <NoteText className={clsxm('text-center', labelClassName)}>
+              {option.name}
+            </NoteText>
           </Radio.Option>
         ))}
       </div>
