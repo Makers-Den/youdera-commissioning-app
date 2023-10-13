@@ -75,7 +75,11 @@ export const RequestOffer = () => {
           Get a PDF of your offer as well as a link to your saved offer and
           estimate
         </BodyText>
-        <Form className="grid " onSubmit={handleSubmit(onSubmit)} {...methods}>
+        <Form
+          className="flex flex-col"
+          onSubmit={handleSubmit(onSubmit)}
+          {...methods}
+        >
           <div className="my-6 flex flex-col gap-4">
             <SelectField name="title" placeholder="Select title" label="Title">
               {titleOptions.map(value => (
