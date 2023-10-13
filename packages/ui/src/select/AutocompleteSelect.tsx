@@ -81,6 +81,7 @@ export const AutocompleteSelect = React.forwardRef<
                       'disabled:cursor-not-allowed disabled:border-gray-500 disabled:bg-gray-400 disabled:placeholder:font-medium disabled:placeholder:text-gray-800',
                       validity && validityStyle[validity].input,
                     )}
+                    // @ts-ignore
                     displayValue={(option: AutocompleteSelectOption) =>
                       option?.label
                     }
@@ -125,7 +126,7 @@ export const AutocompleteSelect = React.forwardRef<
                   )}
                 >
                   {filteredOptions.length === 0 && query !== '' ? (
-                    <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
+                    <div className="relative cursor-default select-none px-4 py-2 text-gray-700">
                       {noOptionsString}
                     </div>
                   ) : (
