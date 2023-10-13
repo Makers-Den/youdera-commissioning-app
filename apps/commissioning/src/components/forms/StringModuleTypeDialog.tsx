@@ -3,7 +3,7 @@ import { Module } from '@src/api/youdera/apiTypes';
 import { useModulesQuery } from '@src/api/youdera/hooks/modules/hooks';
 import React, { useEffect } from 'react';
 import {
-  DeepPartial,
+  DefaultValues,
   FieldValues,
   useForm,
   UseFormRegister,
@@ -39,10 +39,14 @@ export type StringModuleTypeDialogProps<
   open: DialogProps['open'];
   onClose: (resetForm: () => void) => void;
   className?: string;
-  onSubmit: (values: z.infer<ResolverType>, resetForm: () => void, modifiedStringId?: number | undefined) => void;
+  onSubmit: (
+    values: z.infer<ResolverType>,
+    resetForm: () => void,
+    modifiedStringId?: number | undefined,
+  ) => void;
   resolver: ResolverType;
   modifiedStringId?: number;
-  defaultValues?: DeepPartial<z.infer<ResolverType>>;
+  defaultValues?: DefaultValues<z.TypeOf<ResolverType>>;
 };
 
 export const StringModuleTypeDialog = <
@@ -98,11 +102,11 @@ export const StringModuleTypeDialog = <
           title={
             modifiedStringId
               ? intl.formatMessage({
-                defaultMessage: 'Modify String',
-              })
+                  defaultMessage: 'Modify String',
+                })
               : intl.formatMessage({
-                defaultMessage: 'Add String',
-              })
+                  defaultMessage: 'Add String',
+                })
           }
         />
         <SvgIcon
@@ -113,7 +117,9 @@ export const StringModuleTypeDialog = <
       </DialogHeader>
       <DialogContent className="flex flex-col gap-5">
         <Form
-          onSubmit={handleSubmit(values => onSubmit(values, reset, modifiedStringId))}
+          onSubmit={handleSubmit(values =>
+            onSubmit(values, reset, modifiedStringId),
+          )}
           className="flex flex-col gap-5"
           {...method}
         >
