@@ -1,12 +1,120 @@
-import { DialogHeader, DialogTitle } from '@src/components/dialog/Dialog';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { DialogContent, DialogHeader } from '@src/components/dialog/Dialog';
+import { CheckboxField } from '@src/components/forms/CheckboxField';
+import { Form } from '@src/components/forms/Form';
+import { InputField } from '@src/components/forms/InputField';
+import { SelectField } from '@src/components/forms/SelectField';
+import { useFlowStore } from '@src/store/flow';
 import React from 'react';
-import { H1 } from 'ui/typography/Typography';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { Button } from 'ui/buttons/Button';
+import { SelectOption } from 'ui/select/Select';
+import { BodyText, H1 } from 'ui/typography/Typography';
+import { z } from 'zod';
 
-export const RequestOffer = () => (
-  <>
-    <DialogHeader>
-      <H1>Request Offer</H1>
-    </DialogHeader>
-    <DialogTitle title="ABC" />
-  </>
-);
+const titleOptions = [
+  { key: 'mr', label: 'Mr.' },
+  { key: 'mrs', label: 'Mrs.' },
+  { key: 'ms', label: 'Ms.' },
+  { key: 'dr', label: 'Dr.' },
+  { key: 'prof', label: 'Prof.' },
+];
+
+const RequestOfferSchema = z.object({
+  title: z.object({ key: z.string(), label: z.string() }),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  email: z.string().min(1),
+  phoneNumber: z.string().min(1),
+  newsletter: z.boolean(),
+});
+
+type RequestOfferType = z.infer<typeof RequestOfferSchema>;
+
+export const RequestOffer = () => {
+  const { next, setData, data } = useFlowStore();
+  const methods = useForm<RequestOfferType>({
+    resolver: zodResolver(RequestOfferSchema),
+    defaultValues: {
+      email: data.requestOffer?.email,
+      firstName: data.requestOffer?.firstName,
+      lastName: data.requestOffer?.lastName,
+      newsletter: data.requestOffer?.newsletter || false,
+      phoneNumber: data.requestOffer?.phoneNumber,
+      title: titleOptions.find(
+        option => option.key === data.requestOffer?.title,
+      ),
+    },
+  });
+  const { handleSubmit } = methods;
+
+  const onSubmit: SubmitHandler<RequestOfferType> = async formData => {
+    const { title, email, firstName, lastName, newsletter, phoneNumber } =
+      formData;
+
+    setData({
+      requestOffer: {
+        ...(data?.requestOffer || {}),
+        title: title.key,
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        newsletter,
+      },
+    });
+    next();
+  };
+  return (
+    <>
+      <DialogHeader>
+        <H1>Request Offer</H1>
+      </DialogHeader>
+      <DialogContent>
+        <BodyText>
+          Get a PDF of your offer as well as a link to your saved offer and
+          estimate
+        </BodyText>
+        <Form className="grid " onSubmit={handleSubmit(onSubmit)} {...methods}>
+          <div className="my-6 flex flex-col gap-4">
+            <SelectField name="title" placeholder="Select title" label="Title">
+              {titleOptions.map(value => (
+                <SelectOption value={value}>{() => value.label}</SelectOption>
+              ))}
+            </SelectField>
+            <div className="flex gap-4">
+              <InputField
+                name="firstName"
+                label="First name"
+                placeholder="E.g. John"
+              />
+              <InputField
+                name="lastName"
+                label="Last name"
+                placeholder="E.g. Smith"
+              />
+            </div>
+            <InputField
+              name="email"
+              label="Email"
+              placeholder="E.g. john@example.org"
+            />
+            <InputField
+              name="phoneNumber"
+              label="Phone number"
+              placeholder="E.g. +49 170 1919123"
+            />
+          </div>
+          <CheckboxField
+            name="newsletter"
+            label="I want to subscribe to the newsletter"
+            className="bg-brand-one-400"
+          />
+          <Button type="submit" className="mt-11">
+            Submit
+          </Button>
+        </Form>
+      </DialogContent>
+    </>
+  );
+};

@@ -1,3 +1,4 @@
+import { DeepPartial } from 'react-hook-form';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -135,9 +136,24 @@ export type FlowData = {
     | 'sunday'
   )[]; //EnergyConsumptionCommercial
   openingTimes: { from: number; to: number }; //EnergyConsumptionCommercial
+  // ? Perhaps use union types instead of strings here
+  requestOffer: {
+    title: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    newsletter: boolean;
+    roofAge: string;
+    roofMaterial: string;
+    ownership: string;
+    timeframe: string;
+    serviceInterest: string;
+    notes: string;
+  }; // RequestOfferFlow
 };
 
-export type PartialFlowData = Partial<FlowData>;
+export type PartialFlowData = DeepPartial<FlowData>;
 
 export type FlowState = {
   currentView: ViewNames;
