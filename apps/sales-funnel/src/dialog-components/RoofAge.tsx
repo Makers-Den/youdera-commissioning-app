@@ -61,9 +61,9 @@ export const RoofAge = () => {
             options={roofAgeOptions}
             name="roofAge"
             label="When was your roof built (or renovated)?"
-            className="mb-4 mt-11"
+            className="mt-11"
           />
-          <NoteText>
+          <NoteText className="mt-4">
             Roof age can tell us what materials can be found within the roof.
           </NoteText>
           <Button type="submit" className="mt-11">
