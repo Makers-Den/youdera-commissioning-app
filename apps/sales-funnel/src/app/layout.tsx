@@ -1,5 +1,7 @@
+import { LocalizationProvider } from '@src/components/LocalizationProvider';
 import { Navbar } from '@src/components/Navbar';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 import './globals.css';
 
@@ -8,15 +10,27 @@ export const metadata: Metadata = {
   description: 'Younergy - sales funnel app',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = 'en';
+
+  let messages;
+
+  try {
+    messages = (await import(`../../content/compiled-locales/${locale}.json`))
+      .default;
+  } catch (error) {
+    notFound();
+  }
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className="flex min-h-screen flex-col bg-white">
-        <Navbar />
+        <LocalizationProvider messages={messages} locale={locale}>
+          <Navbar />
+        </LocalizationProvider>
         {children}
       </body>
     </html>
