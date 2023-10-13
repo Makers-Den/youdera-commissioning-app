@@ -3,15 +3,14 @@ import { RadioGroup as Radio } from '@headlessui/react';
 import { BodyText } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
-type Option = { name: string; value: string };
+export type Option<T> = { name: string; value: T };
 
-type RadioGroupProps = {
-  className?: string;
+export type RadioGroupProps<T> = {
   label?: string;
-  options: Option[];
-  defaultOption?: Option;
-  onChange: (value: Option) => void;
-  selected: Option | undefined;
+  options: Option<T>[];
+  onChange?: (value: T) => void;
+  defaultValue?: T;
+  className?: string;
 };
 
 const RadioButton = ({ checked }: { checked: boolean }) => (
@@ -24,16 +23,21 @@ const RadioButton = ({ checked }: { checked: boolean }) => (
   />
 );
 
-export const RadioGroup: React.FC<RadioGroupProps> = ({
+export const RadioGroup = <T extends string>({
   options,
   label,
   onChange,
-  selected,
-}) => (
-  <div className="w-full max-w-container px-4 py-16">
-    <Radio value={selected} onChange={(value: Option) => onChange(value)}>
-      <Radio.Label className="sr-only">{label}</Radio.Label>
-      <div className="space-y-2">
+  defaultValue,
+  className,
+}: RadioGroupProps<T>) => (
+  <div className={clsxm('max-w-container w-full', className)}>
+    <Radio
+      defaultValue={defaultValue}
+      onChange={(value: T) => onChange?.(value)}
+      className="flex flex-col"
+    >
+      {label && <Radio.Label className="mb-6">{label}</Radio.Label>}
+      <div className="flex flex-col gap-2">
         {options.map(option => (
           <Radio.Option
             key={option.name}
