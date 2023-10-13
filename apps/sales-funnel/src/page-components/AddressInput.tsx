@@ -12,7 +12,6 @@ import { z } from 'zod';
 
 import { SunSvg } from '../components/svgs/SunSvg';
 import Illustration from '../../public/Illustration.webp';
-import { PillsRadioGroup } from 'ui/radio-group/PillsRadioGroup';
 
 const options = [
   { label: 'Address 1', key: 'address1' },
