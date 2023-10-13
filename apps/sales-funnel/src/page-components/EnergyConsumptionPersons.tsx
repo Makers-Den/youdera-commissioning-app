@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LayoutContainer } from '@src/components/container/LayoutContainer';
-import { CustomRadioGroupField } from '@src/components/forms/CustomRadioGroupField';
+import { BoxesRadioGroupField } from '@src/components/forms/BoxesRadioGroupField';
 import { Form } from '@src/components/forms/Form';
 import { BulbSvg } from '@src/components/svgs/BulbSvg';
 import { FivePersonSvg } from '@src/components/svgs/FivePersonSvg';
@@ -14,9 +14,7 @@ import Image from 'next/image';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from 'ui/buttons/Button';
-import {
-  type Option as RadioGroupOption,
-} from 'ui/radio-group/CustomRadioGroup';
+import { type Option as RadioGroupOption } from 'ui/radio-group/BoxesRadioGroup';
 import { NoteText } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
@@ -33,10 +31,12 @@ const options: RadioGroupOption<FlowData['peopleInHousehold']>[] = [
 ];
 
 const EnergyConsumptionPersonsSchema = z.object({
-  peopleInHousehold: z.enum(["1", "2", "3", "4", "5", "5+"]),
+  peopleInHousehold: z.enum(['1', '2', '3', '4', '5', '5+']),
 });
 
-type EnergyConsumptionPersonsType = z.infer<typeof EnergyConsumptionPersonsSchema>;
+type EnergyConsumptionPersonsType = z.infer<
+  typeof EnergyConsumptionPersonsSchema
+>;
 
 export const EnergyConsumptionPersons = () => {
   const { next, setData, back, data } = useFlowStore();
@@ -45,17 +45,17 @@ export const EnergyConsumptionPersons = () => {
     resolver: zodResolver(EnergyConsumptionPersonsSchema),
     defaultValues: {
       peopleInHousehold: data.peopleInHousehold,
-    }
+    },
   });
 
   const { handleSubmit } = methods;
 
-  const onSubmit: SubmitHandler<EnergyConsumptionPersonsType> = async (data) => {
+  const onSubmit: SubmitHandler<EnergyConsumptionPersonsType> = async data => {
     const { peopleInHousehold } = data;
     setData({ peopleInHousehold });
     next();
-  }
- 
+  };
+
   return (
     <LayoutContainer
       clippedTitle
@@ -72,7 +72,7 @@ export const EnergyConsumptionPersons = () => {
     >
       <Form  className='container containerPadding' onSubmit={handleSubmit(onSubmit)} {...methods}>
       <div className="z-10 flex flex-col gap-7">
-        <CustomRadioGroupField
+        <BoxesRadioGroupField
           name="peopleInHousehold"
           label="How many people live in your household?"
           options={options}
@@ -94,7 +94,6 @@ export const EnergyConsumptionPersons = () => {
       </div>
       <BulbSvg className={clsxm('absolute -left-12 bottom-24 ')} />
     </Form>
-
     </LayoutContainer>
   );
 };

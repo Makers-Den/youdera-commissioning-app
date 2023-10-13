@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  CustomRadioGroup,
+  BoxesRadioGroup,
   RadioGroupProps,
-} from 'ui/radio-group/CustomRadioGroup';
+} from 'ui/radio-group/BoxesRadioGroup';
 
 import { Field } from './Field';
 
-export const CustomRadioGroupField = <T,>({
+export const BoxesRadioGroupField = <T,>({
   name,
   fieldClassName,
   ...props
@@ -16,7 +16,7 @@ export const CustomRadioGroupField = <T,>({
 }) => (
   <Field name={name} className={fieldClassName}>
     {(field, fieldState, formState) => (
-      <CustomRadioGroup
+      <BoxesRadioGroup
         {...props}
         {...field}
         defaultValue={formState?.defaultValues?.[name]}
