@@ -11,7 +11,7 @@ import { EnergyConsumptionWater } from '@src/page-components/EnergyConsumptionWa
 import { EnergyConsumptionYearly } from '@src/page-components/EnergyConsumptionYearly';
 import { EstimatePP } from '@src/page-components/EstimatePP';
 import { RoofSummary } from '@src/page-components/RoofSummary';
-import { useFlowStore } from '@src/store/flow';
+import { useFlowStore, ViewNames } from '@src/store/flow';
 import { useEffect, useState } from 'react';
 
 export function HomePage() {
@@ -26,6 +26,18 @@ export function HomePage() {
 
   // TODO add a loading state?
   if (!hasHydrated) return null;
+
+  const inEstimateView: ViewNames[] = [
+    'estimatePP',
+    'requestOffer',
+    'roofAge',
+    'roofMaterial',
+    'ownership',
+    'timeframe',
+    'serviceInterest',
+    'notes',
+    'thankYou',
+  ];
 
   return (
     <>
@@ -45,7 +57,7 @@ export function HomePage() {
         <EnergyConsumptionBigConsumers />
       )}
       {currentView === 'energyConsumptionYearly' && <EnergyConsumptionYearly />}
-      {currentView === 'estimatePP' && <EstimatePP />}
+      {inEstimateView.includes(currentView) && <EstimatePP />}
     </>
   );
 }

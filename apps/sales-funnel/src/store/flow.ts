@@ -1,3 +1,4 @@
+import { DeepPartial } from 'react-hook-form';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -14,7 +15,14 @@ export const viewNames = [
   'energyConsumptionYearly',
   'estimatePP',
   // ? 'estimateModify',
-  // ? 'requestOffer'...
+  'requestOffer',
+  'roofAge',
+  'roofMaterial',
+  'ownership',
+  'timeframe',
+  'serviceInterest',
+  'notes',
+  'thankYou',
 ] as const;
 
 export type ViewNames = typeof viewNames[number];
@@ -70,8 +78,39 @@ export const views: Views = {
     previous: 'energyConsumptionYearly',
     next: 'roofSummary',
   },
-  // ? I assume EstimateModify doesn't have to be a state
-  // ? The entire RequestOffer flow is in a modal, so I am not sure if we want it to be state, but if we do, we can add it here
+  // TODO  EstimateModify
+  requestOffer: {
+    previous: 'estimatePP',
+    next: 'roofAge',
+  },
+  roofAge: {
+    previous: 'requestOffer',
+    next: 'roofMaterial',
+  },
+  roofMaterial: {
+    previous: 'roofAge',
+    next: 'ownership',
+  },
+  ownership: {
+    previous: 'roofMaterial',
+    next: 'timeframe',
+  },
+  timeframe: {
+    previous: 'ownership',
+    next: 'serviceInterest',
+  },
+  serviceInterest: {
+    previous: 'timeframe',
+    next: 'notes',
+  },
+  notes: {
+    previous: 'serviceInterest',
+    next: 'thankYou',
+  },
+  thankYou: {
+    previous: 'notes',
+    next: 'estimatePP',
+  },
 };
 
 export type FlowData = {
@@ -97,9 +136,24 @@ export type FlowData = {
     | 'sunday'
   )[]; //EnergyConsumptionCommercial
   openingTimes: { from: number; to: number }; //EnergyConsumptionCommercial
+  // ? Perhaps use union types instead of strings here
+  requestOffer: {
+    title: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    newsletter: boolean;
+    roofAge: string;
+    roofMaterial: string;
+    ownership: string;
+    timeframe: string;
+    serviceInterest: string;
+    notes: string;
+  }; // RequestOfferFlow
 };
 
-export type PartialFlowData = Partial<FlowData>;
+export type PartialFlowData = DeepPartial<FlowData>;
 
 export type FlowState = {
   currentView: ViewNames;
@@ -107,6 +161,7 @@ export type FlowState = {
   views: Views;
   setData: (data: PartialFlowData) => void;
   setViews: (views: Partial<Views>) => void;
+  setCurrentView(view: ViewNames): void;
   next: () => void;
   back: () => void;
 };
@@ -121,6 +176,7 @@ export const useFlowStore = create<FlowState>()(
         set(state => ({ data: { ...state.data, ...newData } })),
       setViews: newViews =>
         set(state => ({ views: { ...state.views, ...newViews } })),
+      setCurrentView: view => set({ currentView: view }),
       next: () =>
         set(state => {
           const nextView = state.views[state.currentView].next;
