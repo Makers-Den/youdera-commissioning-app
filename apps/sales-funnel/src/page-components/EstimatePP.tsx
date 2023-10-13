@@ -1,7 +1,17 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { LayoutContainer } from '@src/components/container/LayoutContainer';
+import { Dialog } from '@src/components/dialog/Dialog';
 import { SavingsGraph } from '@src/components/graphs/SavingsGraph';
 import { RecoupSvg } from '@src/components/svgs/RecoupSvg';
+import { Notes } from '@src/dialog-components/Notes';
+import { Ownership } from '@src/dialog-components/Ownership';
+import { RequestOffer } from '@src/dialog-components/RequestOffer';
+import { RoofAge } from '@src/dialog-components/RoofAge';
+import { RoofMaterial } from '@src/dialog-components/RoofMaterial';
+import { ServiceInterest } from '@src/dialog-components/ServiceInterest';
+import { ThankYou } from '@src/dialog-components/ThankYou';
+import { Timeframe } from '@src/dialog-components/Timeframe';
+import { useFlowStore, ViewNames } from '@src/store/flow';
 import Image from 'next/image';
 import React from 'react';
 import { Button } from 'ui/buttons/Button';
@@ -18,22 +28,61 @@ import clsxm from 'ui/utils/clsxm';
 
 import EstimateIllustration from '../../public/EstimateIllustration.webp';
 
-export const EstimatePP = () => (
-  <LayoutContainer
-    title="You can save 70 000 €"
-    clippedTitle
-    leftSection={<LeftSection />}
-  >
-    <div className="-mt-4 justify-start gap-0">
-      <SystemDetailsSection />
-      <SavingsSection />
-      <SavingsGraph />
-      <RequestButtons />
-    </div>
-  </LayoutContainer>
-);
+export const EstimatePP = () => {
+  const { currentView, setCurrentView } = useFlowStore();
+  const requestFlowViews: ViewNames[] = [
+    'requestOffer',
+    'roofAge',
+    'roofMaterial',
+    'ownership',
+    'timeframe',
+    'serviceInterest',
+    'notes',
+    'thankYou',
+  ];
+  const isRequestFlow = requestFlowViews.includes(currentView);
+  const [isRequestDialogOpened, setIsRequestDialogOpened] =
+    React.useState(isRequestFlow);
 
-const LeftSection = () => (
+  const openRequestDialog = () => {
+    //TODO reset all the requestOfferFlow data (after we finish all views and add all the relevant data fields)
+    setCurrentView('requestOffer');
+    setIsRequestDialogOpened(true);
+  };
+
+  const closeRequestDialog = () => setIsRequestDialogOpened(false);
+
+  return (
+    <LayoutContainer
+      title="You can save 70 000 €"
+      clippedTitle
+      leftSection={<LeftSection openRequestDialog={openRequestDialog} />}
+    >
+      <div className="-mt-4 justify-start gap-0">
+        <SystemDetailsSection />
+        <SavingsSection />
+        <SavingsGraph />
+        <RequestButtons openRequestDialog={openRequestDialog} />
+      </div>
+      <Dialog open={isRequestDialogOpened} onClose={closeRequestDialog}>
+        {currentView === 'requestOffer' && <RequestOffer />}
+        {currentView === 'roofAge' && <RoofAge />}
+        {currentView === 'roofMaterial' && <RoofMaterial />}
+        {currentView === 'ownership' && <Ownership />}
+        {currentView === 'timeframe' && <Timeframe />}
+        {currentView === 'serviceInterest' && <ServiceInterest />}
+        {currentView === 'notes' && <Notes />}
+        {currentView === 'thankYou' && <ThankYou />}
+      </Dialog>
+    </LayoutContainer>
+  );
+};
+
+const LeftSection = ({
+  openRequestDialog,
+}: {
+  openRequestDialog: () => void;
+}) => (
   <>
     <Image
       fill
@@ -42,8 +91,8 @@ const LeftSection = () => (
       sizes="50vw"
       src={EstimateIllustration.src}
     />
-    <div className="z-20 containerPadding !pt-4">
-      <div className="flex max-w-container flex-col">
+    <div className="containerPadding z-20 !pt-4">
+      <div className="max-w-container flex flex-col">
         <H1 weight="medium">Get a PDF offer in your email </H1>
         <div className="pb-4" />
         <BodyText>
@@ -51,7 +100,9 @@ const LeftSection = () => (
           time.
         </BodyText>
         <div className="pb-4" />
-        <Button className="w-full">REQUEST OFFER</Button>
+        <Button onClick={openRequestDialog} className="w-full">
+          REQUEST OFFER
+        </Button>
         <div className="pb-6" />
         <div className="block h-96 w-full bg-red-500 ">
           Here we will put graph
@@ -81,7 +132,7 @@ const LeftSection = () => (
 
 const SystemDetailsSection = () => (
   <section className="bg-gray-1000 text-gray-450 containerPadding !pt-9">
-    <div className="flex flex-col gap-6 md:max-w-container">
+    <div className="md:max-w-container flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <H2 weight="medium">Your Solar System</H2>
         <Button variant="main-gray" className="whitespace-nowrap">
@@ -166,7 +217,7 @@ const SystemDetailsSection = () => (
 
 const SavingsSection = () => (
   <section className={clsxm('p-0 md:mb-9 lg:px-24')}>
-    <div className="flex flex-col lg:max-w-container">
+    <div className="lg:max-w-container flex flex-col">
       <div className="flex gap-4 px-4 py-3 md:px-12 md:py-5 lg:px-0 ">
         <H2 weight="medium">How to pay for your system</H2>
         <SvgIcon name="Savings" />
@@ -298,10 +349,16 @@ const SavingsSection = () => (
   </section>
 );
 
-const RequestButtons = () => (
+const RequestButtons = ({
+  openRequestDialog,
+}: {
+  openRequestDialog: () => void;
+}) => (
   <>
     <div className="mb-8 hidden w-full px-4 md:flex md:px-12 lg:px-24">
-      <Button className="w-full md:max-w-container">REQUEST OFFER</Button>
+      <Button className="md:max-w-container w-full" onClick={openRequestDialog}>
+        REQUEST OFFER
+      </Button>
     </div>
 
     <div className="shadow-3xl fixed bottom-0 flex w-full flex-col gap-4 bg-white p-4 pb-8 md:hidden md:px-12">
@@ -309,7 +366,9 @@ const RequestButtons = () => (
         Get a PDF offer in your email as well as a link to re-access your
         estimate by requesting an offer
       </NoteText>
-      <Button className="w-full">REQUEST OFFER</Button>
+      <Button onClick={openRequestDialog} className="w-full">
+        REQUEST OFFER
+      </Button>
     </div>
     <div className="block h-[136px] md:hidden" />
   </>

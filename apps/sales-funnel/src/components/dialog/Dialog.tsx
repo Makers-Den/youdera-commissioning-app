@@ -1,4 +1,4 @@
-import { Dialog as HeadlessDialog,Transition } from '@headlessui/react';
+import { Dialog as HeadlessDialog, Transition } from '@headlessui/react';
 import React, { Fragment, ReactNode, useContext } from 'react';
 import { Typography } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
@@ -32,7 +32,7 @@ export const DialogHeader = ({ className, children }: DialogHeaderProps) => {
       )}
     >
       {children}
-      <CrossSvg onClick={onClose} className="h-auto w-7" />
+      <CrossSvg onClick={onClose} className="h-auto w-7 cursor-pointer" />
     </div>
   );
 };
@@ -61,7 +61,7 @@ export const Dialog = ({ className, children, open, onClose }: DialogProps) => {
         <HeadlessDialog
           as="div"
           open={open}
-          className="relative z-20"
+          className="relative z-50"
           onClose={onClose}
         >
           <Transition.Child
