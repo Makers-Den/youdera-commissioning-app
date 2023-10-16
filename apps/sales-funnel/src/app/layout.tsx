@@ -2,6 +2,7 @@ import { LocalizationProvider } from '@src/components/LocalizationProvider';
 import { Navbar } from '@src/components/Navbar';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { currentLocale } from 'next-i18n-router';
 
 import './globals.css';
 
@@ -15,7 +16,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const locale = 'en';
+  const locale = currentLocale() || 'en';
 
   let messages;
 
@@ -25,6 +26,7 @@ export default async function RootLayout({
   } catch (error) {
     notFound();
   }
+
   return (
     <html lang={locale}>
       <body className="flex min-h-screen flex-col bg-white">
