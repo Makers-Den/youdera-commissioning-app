@@ -7,6 +7,7 @@ import { useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import { BodyText, NoteText } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
@@ -23,6 +24,7 @@ type EnergyConsumptionYearlyType = z.infer<
 >;
 
 export const EnergyConsumptionYearly = () => {
+  const intl = useIntl();
   const { next, setData, back, data } = useFlowStore();
 
   const methods = useForm<EnergyConsumptionYearlyType>({
@@ -47,39 +49,55 @@ export const EnergyConsumptionYearly = () => {
         <Image
           fill
           className="object-cover object-right-bottom"
-          alt="Home with solar panels"
+          alt={intl.formatMessage({
+            defaultMessage: 'Home with solar panels',
+          })}
           sizes="50vw"
           src={ConsumptionIllustration.src}
         />
       }
-      title="Energy consumption"
+      title={intl.formatMessage({
+        defaultMessage: 'Energy consumption',
+      })}
     >
       <Form
         onSubmit={handleSubmit(onSubmit)}
-        className="container containerPadding"
+        className="containerPadding container"
         {...methods}
       >
         <div className="z-10 flex flex-col gap-7">
           <BodyText>
-            We estimate your energy consumption to HARDCODED per year. If this
-            not correct, please input it manually.
+            {intl.formatMessage({
+              defaultMessage:
+                'We estimate your energy consumption to HARDCODED per year. If this not correct, please input it manually.',
+            })}
           </BodyText>
           <InputField
             name="yearlyConsumption"
-            label="Yearly kWh consumption"
+            label={intl.formatMessage({
+              defaultMessage: 'Yearly kWh consumption',
+            })}
             units="kWh"
             type="number"
             className="md:max-w-container"
           />
-          <NoteText>Our estimate is HARDCODED kWh</NoteText>
+          <NoteText>
+            {intl.formatMessage({
+              defaultMessage: 'Our estimate is HARDCODED kWh',
+            })}
+          </NoteText>
         </div>
 
         <div className="buttonContainer md:max-w-container">
           <Button variant="main-orange" className="px-10" type="submit">
-            Next
+            {intl.formatMessage({
+              defaultMessage: 'Next',
+            })}
           </Button>
           <Button variant="additional-white" className="px-10" onClick={back}>
-            Back
+            {intl.formatMessage({
+              defaultMessage: 'Back',
+            })}
           </Button>
         </div>
       </Form>

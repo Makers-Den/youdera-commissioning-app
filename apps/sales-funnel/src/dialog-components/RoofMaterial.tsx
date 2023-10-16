@@ -6,9 +6,10 @@ import { useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import { Option as BoxesRadioGroupOption } from 'ui/radio-group/BoxesRadioGroup';
-import { BodyText, H1 } from 'ui/typography/Typography';
+import { H1 } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
 import { z } from 'zod';
 
@@ -19,33 +20,6 @@ const TileElement = () => (
     <Image src={TileImage.src} alt="Tile Image" fill className="object-cover" />
   </div>
 );
-const roofAgeOptions: BoxesRadioGroupOption<any>[] = [
-  {
-    name: 'Reform tiles',
-    value: 'reform tiles',
-    element: <TileElement />,
-  },
-  {
-    name: 'Waves tiles',
-    value: 'waves tiles',
-    element: <TileElement />,
-  },
-  {
-    name: 'Stone slate',
-    value: 'stone slate',
-    element: <TileElement />,
-  },
-  {
-    name: 'Flat tiles',
-    value: 'flat tiles',
-    element: <TileElement />,
-  },
-  {
-    name: 'Metal trapez',
-    value: 'metal trapez',
-    element: <TileElement />,
-  },
-];
 
 const RoofMaterialSchema = z.object({
   roofMaterial: z.string(),
@@ -54,6 +28,45 @@ const RoofMaterialSchema = z.object({
 type RoofMaterialType = z.infer<typeof RoofMaterialSchema>;
 
 export const RoofMaterial = () => {
+  const intl = useIntl();
+  const roofAgeOptions: BoxesRadioGroupOption<any>[] = [
+    {
+      name: intl.formatMessage({
+        defaultMessage: 'Reform tiles',
+      }),
+      value: 'reform tiles',
+      element: <TileElement />,
+    },
+    {
+      name: intl.formatMessage({
+        defaultMessage: 'Waves tiles',
+      }),
+      value: 'waves tiles',
+      element: <TileElement />,
+    },
+    {
+      name: intl.formatMessage({
+        defaultMessage: 'Stone slate',
+      }),
+      value: 'stone slate',
+      element: <TileElement />,
+    },
+    {
+      name: intl.formatMessage({
+        defaultMessage: 'Flat tiles',
+      }),
+      value: 'flat tiles',
+      element: <TileElement />,
+    },
+    {
+      name: intl.formatMessage({
+        defaultMessage: 'Metal trapez',
+      }),
+      value: 'metal trapez',
+      element: <TileElement />,
+    },
+  ];
+
   const { back, next, setData, data } = useFlowStore();
   const methods = useForm<RoofMaterialType>({
     resolver: zodResolver(RoofMaterialSchema),
@@ -75,10 +88,13 @@ export const RoofMaterial = () => {
   return (
     <>
       <DialogHeader>
-        <H1>Roof Material</H1>
+        <H1>
+          {intl.formatMessage({
+            defaultMessage: 'Roof Material',
+          })}
+        </H1>
       </DialogHeader>
       <DialogContent className="flex flex-1 flex-col">
-        <BodyText>What is the primary material of your roof?</BodyText>
         <Form
           className="flex flex-1 flex-col justify-between"
           onSubmit={handleSubmit(onSubmit)}
@@ -87,7 +103,9 @@ export const RoofMaterial = () => {
           <BoxesRadioGroupField
             options={roofAgeOptions}
             name="roofMaterial"
-            label="When was your roof built (or renovated)?"
+            label={intl.formatMessage({
+              defaultMessage: 'What is the primary material of your roof?',
+            })}
             className="mt-11 grid-cols-2 "
             optionClassName={checked =>
               clsxm(
@@ -98,14 +116,20 @@ export const RoofMaterial = () => {
             labelClassName="text-left ml-1 my-1"
           />
           <div className="mt-11 flex flex-col">
-            <Button type="submit">Next</Button>
+            <Button type="submit">
+              {intl.formatMessage({
+                defaultMessage: 'Next',
+              })}
+            </Button>
             <Button
               type="button"
               onClick={back}
               variant="additional-white"
               className="mt-3"
             >
-              Back
+              {intl.formatMessage({
+                defaultMessage: 'Back',
+              })}
             </Button>
           </div>
         </Form>

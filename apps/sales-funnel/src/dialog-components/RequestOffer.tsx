@@ -7,18 +7,11 @@ import { SelectField } from '@src/components/forms/SelectField';
 import { useFlowStore } from '@src/store/flow';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import { SelectOption } from 'ui/select/Select';
 import { BodyText, H1 } from 'ui/typography/Typography';
 import { z } from 'zod';
-
-const titleOptions = [
-  { key: 'mr', label: 'Mr.' },
-  { key: 'mrs', label: 'Mrs.' },
-  { key: 'ms', label: 'Ms.' },
-  { key: 'dr', label: 'Dr.' },
-  { key: 'prof', label: 'Prof.' },
-];
 
 const RequestOfferSchema = z.object({
   title: z.object({ key: z.string(), label: z.string() }),
@@ -32,6 +25,41 @@ const RequestOfferSchema = z.object({
 type RequestOfferType = z.infer<typeof RequestOfferSchema>;
 
 export const RequestOffer = () => {
+  const intl = useIntl();
+
+  const titleOptions = [
+    {
+      key: 'mr',
+      label: intl.formatMessage({
+        defaultMessage: 'Mr.',
+      }),
+    },
+    {
+      key: 'mrs',
+      label: intl.formatMessage({
+        defaultMessage: 'Mrs.',
+      }),
+    },
+    {
+      key: 'ms',
+      label: intl.formatMessage({
+        defaultMessage: 'Ms.',
+      }),
+    },
+    {
+      key: 'dr',
+      label: intl.formatMessage({
+        defaultMessage: 'Dr.',
+      }),
+    },
+    {
+      key: 'prof',
+      label: intl.formatMessage({
+        defaultMessage: 'Prof.',
+      }),
+    },
+  ];
+
   const { next, setData, data } = useFlowStore();
   const methods = useForm<RequestOfferType>({
     resolver: zodResolver(RequestOfferSchema),
@@ -68,12 +96,18 @@ export const RequestOffer = () => {
   return (
     <>
       <DialogHeader>
-        <H1>Request Offer</H1>
+        <H1>
+          {intl.formatMessage({
+            defaultMessage: 'Request Offer',
+          })}
+        </H1>
       </DialogHeader>
       <DialogContent className="flex flex-1 flex-col">
         <BodyText>
-          Get a PDF of your offer as well as a link to your saved offer and
-          estimate
+          {intl.formatMessage({
+            defaultMessage:
+              'Get a PDF of your offer as well as a link to your saved offer and estimate',
+          })}
         </BodyText>
         <Form
           className="flex flex-1 flex-col justify-between"
@@ -89,33 +123,53 @@ export const RequestOffer = () => {
             <div className="flex gap-4">
               <InputField
                 name="firstName"
-                label="First name"
-                placeholder="E.g. John"
+                label={intl.formatMessage({
+                  defaultMessage: 'First name',
+                })}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'E.g. John',
+                })}
               />
               <InputField
                 name="lastName"
-                label="Last name"
-                placeholder="E.g. Smith"
+                label={intl.formatMessage({
+                  defaultMessage: 'Last name',
+                })}
+                placeholder={intl.formatMessage({
+                  defaultMessage: 'E.g. Smith',
+                })}
               />
             </div>
             <InputField
               name="email"
-              label="Email"
-              placeholder="E.g. john@example.org"
+              label={intl.formatMessage({
+                defaultMessage: 'Email',
+              })}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'E.g. john@example.org',
+              })}
             />
             <InputField
               name="phoneNumber"
-              label="Phone number"
-              placeholder="E.g. +49 170 1919123"
+              label={intl.formatMessage({
+                defaultMessage: 'Phone number',
+              })}
+              placeholder={intl.formatMessage({
+                defaultMessage: 'E.g. +49 170 1919123',
+              })}
             />
             <CheckboxField
               name="newsletter"
-              label="I want to subscribe to the newsletter"
+              label={intl.formatMessage({
+                defaultMessage: 'I want to subscribe to the newsletter',
+              })}
               className="bg-brand-one-400 mt-2"
             />
           </div>
           <Button type="submit" className="mt-11">
-            Submit
+            {intl.formatMessage({
+              defaultMessage: 'Submit',
+            })}
           </Button>
         </Form>
       </DialogContent>
