@@ -30,8 +30,8 @@ export default async function RootLayout({
       <body className="flex min-h-screen flex-col bg-white">
         <LocalizationProvider messages={messages} locale={locale}>
           <Navbar />
+          {children}
         </LocalizationProvider>
-        {children}
       </body>
     </html>
   );
