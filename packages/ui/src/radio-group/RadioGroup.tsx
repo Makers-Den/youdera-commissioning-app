@@ -3,7 +3,7 @@ import { RadioGroup as Radio } from '@headlessui/react';
 import { BodyText } from '../typography/Typography';
 import clsxm from '../utils/clsxm';
 
-export type Option<T> = { name: string; value: T };
+export type Option<T> = { name: string; value: T; description?: string };
 
 export type RadioGroupProps<T> = {
   label?: string;
@@ -50,9 +50,21 @@ export const RadioGroup = <T extends string>({
             }
           >
             {({ checked }) => (
-              <div className="flex w-full items-center gap-3">
-                <RadioButton checked={checked} />
-                <BodyText className="text-gray-1000">{option.name}</BodyText>
+              <div className="flex flex-col gap-2">
+                <div className="flex w-full items-center gap-3">
+                  <RadioButton checked={checked} />
+                  <BodyText
+                    className={clsxm(
+                      'text-gray-1000',
+                      option?.description && 'font-bold',
+                    )}
+                  >
+                    {option.name}
+                  </BodyText>
+                </div>
+                {option?.description && (
+                  <BodyText className="ml-9">{option.description}</BodyText>
+                )}
               </div>
             )}
           </Radio.Option>

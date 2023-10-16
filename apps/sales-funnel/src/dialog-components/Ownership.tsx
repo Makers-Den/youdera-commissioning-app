@@ -45,7 +45,7 @@ export const Ownership = () => {
       <DialogHeader>
         <H1>Ownership</H1>
       </DialogHeader>
-      <DialogContent className="flex-1">
+      <DialogContent className="flex flex-1 flex-col">
         <Form
           className="flex flex-1 flex-col justify-between"
           onSubmit={handleSubmit(onSubmit)}
