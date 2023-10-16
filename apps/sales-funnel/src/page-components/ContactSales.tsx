@@ -1,4 +1,5 @@
 import { LayoutContainer } from '@src/components/container/LayoutContainer';
+import { ButtonLink } from '@src/components/link/ButtonLink';
 import { useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import { Button } from 'ui/buttons/Button';
@@ -24,7 +25,7 @@ export const ContactSales = () => {
       }
     >
       <div className="containerPadding container">
-        <div className="flex flex-col items-center gap-20 md:max-w-container">
+        <div className="md:max-w-container flex flex-col items-center gap-20">
           <BodyText className="text-black">
             We’re not able to give you an automated offer for the given choice,
             but you can talk to us directly instead.
@@ -32,7 +33,13 @@ export const ContactSales = () => {
           <HandWithPhoneSvg className="mr-8" />
         </div>
         <div className="buttonContainer md:max-w-container">
-          <Button className="font-medium">BOOK A CALL WITH SALES</Button>
+          <ButtonLink
+            href="https://calendly.com/"
+            openInNewTab
+            variant="main-gray"
+          >
+            Book a call with sales
+          </ButtonLink>
           <Button
             variant="additional-white"
             className="font-medium"
