@@ -48,35 +48,37 @@ export const RoofAge = () => {
       <DialogHeader>
         <H1>Roof Age</H1>
       </DialogHeader>
-      <DialogContent>
+      <DialogContent className="flex flex-1 flex-col">
         <BodyText>
           For a more accurate offer we have just few more questions.
         </BodyText>
         <Form
-          className="flex flex-col"
+          className="flex flex-1 flex-col justify-between"
           onSubmit={handleSubmit(onSubmit)}
           {...methods}
         >
-          <RadioGroupField
-            options={roofAgeOptions}
-            name="roofAge"
-            label="When was your roof built (or renovated)?"
-            className="mt-11"
-          />
-          <NoteText className="mt-4">
-            Roof age can tell us what materials can be found within the roof.
-          </NoteText>
-          <Button type="submit" className="mt-11">
-            Next
-          </Button>
-          <Button
-            type="button"
-            onClick={back}
-            variant="additional-white"
-            className="mt-3"
-          >
-            Back
-          </Button>
+          <div className="flex flex-col">
+            <RadioGroupField
+              options={roofAgeOptions}
+              name="roofAge"
+              label="When was your roof built (or renovated)?"
+              className="mt-11"
+            />
+            <NoteText className="mt-4">
+              Roof age can tell us what materials can be found within the roof.
+            </NoteText>
+          </div>
+          <div className="mt-11 flex flex-col">
+            <Button type="submit">Next</Button>
+            <Button
+              type="button"
+              onClick={back}
+              variant="additional-white"
+              className="mt-3"
+            >
+              Back
+            </Button>
+          </div>
         </Form>
       </DialogContent>
     </>

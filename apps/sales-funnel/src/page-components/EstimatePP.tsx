@@ -50,7 +50,10 @@ export const EstimatePP = () => {
     setIsRequestDialogOpened(true);
   };
 
-  const closeRequestDialog = () => setIsRequestDialogOpened(false);
+  const closeRequestDialog = () => {
+    setCurrentView('estimatePP');
+    setIsRequestDialogOpened(false);
+  };
 
   return (
     <LayoutContainer
@@ -76,7 +79,9 @@ export const EstimatePP = () => {
         {currentView === 'timeframe' && <Timeframe />}
         {currentView === 'serviceInterest' && <ServiceInterest />}
         {currentView === 'notes' && <Notes />}
-        {currentView === 'thankYou' && <ThankYou />}
+        {currentView === 'thankYou' && (
+          <ThankYou onClose={closeRequestDialog} />
+        )}
       </Dialog>
     </LayoutContainer>
   );

@@ -54,8 +54,10 @@ export const Notes = () => {
         >
           <div className="flex flex-col gap-6">
             <BodyText>
-              Is there something else you’d would like to relay to us as
-              information?
+              {intl.formatMessage({
+                defaultMessage:
+                  'Is there something else you’d would like to relay to us as information?',
+              })}
             </BodyText>
             <TextAreaField label="Notes" name="notes" />
           </div>

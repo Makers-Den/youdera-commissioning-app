@@ -77,10 +77,10 @@ export const RoofMaterial = () => {
       <DialogHeader>
         <H1>Roof Material</H1>
       </DialogHeader>
-      <DialogContent>
+      <DialogContent className="flex flex-1 flex-col">
         <BodyText>What is the primary material of your roof?</BodyText>
         <Form
-          className="flex flex-col"
+          className="flex flex-1 flex-col justify-between"
           onSubmit={handleSubmit(onSubmit)}
           {...methods}
         >
@@ -97,17 +97,17 @@ export const RoofMaterial = () => {
             }
             labelClassName="text-left ml-1 my-1"
           />
-          <Button type="submit" className="mt-11">
-            Next
-          </Button>
-          <Button
-            type="button"
-            onClick={back}
-            variant="additional-white"
-            className="mt-3"
-          >
-            Back
-          </Button>
+          <div className="mt-11 flex flex-col">
+            <Button type="submit">Next</Button>
+            <Button
+              type="button"
+              onClick={back}
+              variant="additional-white"
+              className="mt-3"
+            >
+              Back
+            </Button>
+          </div>
         </Form>
       </DialogContent>
     </>

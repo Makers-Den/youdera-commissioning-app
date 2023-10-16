@@ -70,17 +70,17 @@ export const RequestOffer = () => {
       <DialogHeader>
         <H1>Request Offer</H1>
       </DialogHeader>
-      <DialogContent>
+      <DialogContent className="flex flex-1 flex-col">
         <BodyText>
           Get a PDF of your offer as well as a link to your saved offer and
           estimate
         </BodyText>
         <Form
-          className="flex flex-col"
+          className="flex flex-1 flex-col justify-between"
           onSubmit={handleSubmit(onSubmit)}
           {...methods}
         >
-          <div className="my-6 flex flex-col gap-4">
+          <div className="mt-6 flex flex-col gap-4">
             <SelectField name="title" placeholder="Select title" label="Title">
               {titleOptions.map(value => (
                 <SelectOption value={value}>{() => value.label}</SelectOption>
@@ -108,12 +108,12 @@ export const RequestOffer = () => {
               label="Phone number"
               placeholder="E.g. +49 170 1919123"
             />
+            <CheckboxField
+              name="newsletter"
+              label="I want to subscribe to the newsletter"
+              className="bg-brand-one-400 mt-2"
+            />
           </div>
-          <CheckboxField
-            name="newsletter"
-            label="I want to subscribe to the newsletter"
-            className="bg-brand-one-400"
-          />
           <Button type="submit" className="mt-11">
             Submit
           </Button>

@@ -48,7 +48,7 @@ export const Timeframe = () => {
       <DialogHeader>
         <H1>Timeframe</H1>
       </DialogHeader>
-      <DialogContent className="flex-1">
+      <DialogContent className="flex flex-1 flex-col">
         <Form
           className="flex flex-1 flex-col justify-between"
           onSubmit={handleSubmit(onSubmit)}
