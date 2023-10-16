@@ -11,7 +11,7 @@ import { BodyText, H1 } from 'ui/typography/Typography';
 import { z } from 'zod';
 
 const NotesSchema = z.object({
-  notes: z.string().min(1),
+  notes: z.string().optional(),
 });
 
 type NotesType = z.infer<typeof NotesSchema>;
