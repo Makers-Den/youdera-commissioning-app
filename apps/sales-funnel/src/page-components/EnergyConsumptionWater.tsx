@@ -10,6 +10,7 @@ import { FlowData, useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import { type Option as RadioGroupOption } from 'ui/radio-group/BoxesRadioGroup';
 import { NoteText } from 'ui/typography/Typography';
@@ -18,24 +19,6 @@ import { z } from 'zod';
 
 import ConsumptionIllustration from '../../public/ConsumptionIllustration.webp';
 
-const options: RadioGroupOption<FlowData['primaryWaterHeating']>[] = [
-  {
-    name: 'Electrical Boiler',
-    value: 'electrical',
-    element: <ElectricalBoilerSvg />,
-  },
-  {
-    name: 'Heatpump Boiler',
-    value: 'heatpump',
-    element: <HeatpumpBoilerSvg />,
-  },
-  {
-    name: 'Oil, Gas, Wood, Remote, Other',
-    value: 'other',
-    element: <FireSvg />,
-  },
-];
-
 const EnergyConsumptionWaterSchema = z.object({
   primaryWaterHeating: z.enum(['electrical', 'heatpump', 'other']),
 });
@@ -43,7 +26,28 @@ const EnergyConsumptionWaterSchema = z.object({
 type EnergyConsumptionWaterType = z.infer<typeof EnergyConsumptionWaterSchema>;
 
 export const EnergyConsumptionWater = () => {
+  const intl = useIntl();
   const { next, setData, back, data } = useFlowStore();
+
+  const options: RadioGroupOption<FlowData['primaryWaterHeating']>[] = [
+    {
+      name: intl.formatMessage({ defaultMessage: 'Electrical Boiler' }),
+      value: 'electrical',
+      element: <ElectricalBoilerSvg />,
+    },
+    {
+      name: intl.formatMessage({ defaultMessage: 'Heatpump Boiler' }),
+      value: 'heatpump',
+      element: <HeatpumpBoilerSvg />,
+    },
+    {
+      name: intl.formatMessage({
+        defaultMessage: 'Oil, Gas, Wood, Remote, Other',
+      }),
+      value: 'other',
+      element: <FireSvg />,
+    },
+  ];
 
   const methods = useForm<EnergyConsumptionWaterType>({
     resolver: zodResolver(EnergyConsumptionWaterSchema),
@@ -67,12 +71,12 @@ export const EnergyConsumptionWater = () => {
         <Image
           fill
           className="object-cover object-right-bottom"
-          alt="Home with solar panels"
+          alt={intl.formatMessage({ defaultMessage: 'Home with solar panels' })}
           sizes="50vw"
           src={ConsumptionIllustration.src}
         />
       }
-      title="Energy consumption"
+      title={intl.formatMessage({ defaultMessage: 'Energy consumption' })}
     >
       <Form
         className="containerPadding container"
@@ -82,25 +86,25 @@ export const EnergyConsumptionWater = () => {
         <div className="z-10 flex flex-col gap-7">
           <BoxesRadioGroupField
             name="primaryWaterHeating"
-            label="How do you primarily heat your water?"
+            label={intl.formatMessage({
+              defaultMessage: 'How do you primarily heat your water?',
+            })}
             options={options}
           />
           <NoteText>
-            This helps us establish energy usage patterns as well as estimate
-            kWh usage.
+            {intl.formatMessage({
+              defaultMessage: ` This helps us establish energy usage patterns as well as estimate
+            kWh usage.`,
+            })}
           </NoteText>
         </div>
 
         <div className="buttonContainer md:max-w-container">
-          <Button
-            variant="main-orange"
-            className="px-10"
-            type="submit"
-          >
-            Next
+          <Button variant="main-orange" className="px-10" type="submit">
+            {intl.formatMessage({ defaultMessage: 'Next' })}
           </Button>
           <Button variant="additional-white" className="px-10" onClick={back}>
-            Back
+            {intl.formatMessage({ defaultMessage: 'Back' })}
           </Button>
         </div>
         <BulbSvg

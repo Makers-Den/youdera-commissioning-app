@@ -5,6 +5,7 @@ import { Form } from '@src/components/forms/Form';
 import { useFlowStore } from '@src/store/flow';
 import Image from 'next/image';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import { BodyText } from 'ui/typography/Typography';
 import clsxm from 'ui/utils/clsxm';
@@ -26,6 +27,7 @@ const AddressInputSchema = z.object({
 type AddressInputType = z.infer<typeof AddressInputSchema>;
 
 export const AddressInput = () => {
+  const intl = useIntl();
   const { next, setData, back, data } = useFlowStore();
 
   const methods = useForm<AddressInputType>({
@@ -52,35 +54,41 @@ export const AddressInput = () => {
         <Image
           fill
           className="object-cover object-right-bottom"
-          alt="Home with solar panels"
+          alt={intl.formatMessage({ defaultMessage: 'Home with solar panels' })}
           sizes="50vw"
           src={Illustration.src}
         />
       }
-      title="Address of building"
+      title={intl.formatMessage({ defaultMessage: 'Address of building' })}
     >
       <Form
         onSubmit={handleSubmit(onSubmit)}
-        className="container containerPadding"
+        className="containerPadding container"
         {...methods}
       >
-        <div className="flex flex-col gap-7 md:max-w-container">
-          <BodyText>Enter the address of the building.</BodyText>
+        <div className="md:max-w-container flex flex-col gap-7">
+          <BodyText>
+            {intl.formatMessage({
+              defaultMessage: 'Enter the address of the building.',
+            })}
+          </BodyText>
           <AutocompleteSelectField
             name="streetAddress"
-            label="Street Address"
+            label={intl.formatMessage({ defaultMessage: 'Street Address' })}
             options={options}
-            placeholder="Address"
-            noOptionsString="No address found"
+            placeholder={intl.formatMessage({ defaultMessage: 'Address' })}
+            noOptionsString={intl.formatMessage({
+              defaultMessage: 'No address found',
+            })}
           />
         </div>
 
         <div className="buttonContainer md:max-w-container">
           <Button type="submit" variant="main-orange" className="px-10">
-            Next
+            {intl.formatMessage({ defaultMessage: 'Next' })}
           </Button>
           <Button variant="additional-white" className="px-10" onClick={back}>
-            Back
+            {intl.formatMessage({ defaultMessage: 'Back' })}
           </Button>
         </div>
       </Form>

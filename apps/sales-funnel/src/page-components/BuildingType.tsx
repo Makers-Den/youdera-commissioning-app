@@ -9,6 +9,7 @@ import { IndustrialSvg } from '@src/components/svgs/IndustrialSvg';
 import { FlowData, useFlowStore, views } from '@src/store/flow';
 import Image from 'next/image';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useIntl } from 'react-intl';
 import { Button } from 'ui/buttons/Button';
 import { type Option as RadioOption } from 'ui/radio-group/BoxesRadioGroup';
 import clsxm from 'ui/utils/clsxm';
@@ -16,29 +17,6 @@ import { z } from 'zod';
 
 import { SunSvg } from '../components/svgs/SunSvg';
 import Illustration from '../../public/Illustration.webp';
-
-const options: RadioOption<FlowData['buildingType']>[] = [
-  {
-    name: 'Single or Multi-family home',
-    value: 'home',
-    element: <HomeSvg />,
-  },
-  {
-    name: 'Industrial',
-    value: 'industrial',
-    element: <IndustrialSvg />,
-  },
-  {
-    name: 'Agricultural',
-    value: 'agricultural',
-    element: <AgriculturalSvg />,
-  },
-  {
-    name: 'Commercial',
-    value: 'commercial',
-    element: <CommercialSvg />,
-  },
-];
 
 const BuildingTypeSchema = z.object({
   buildingType: z.enum(['home', 'industrial', 'agricultural', 'commercial']),
@@ -48,6 +26,7 @@ type BuildingTypeType = z.infer<typeof BuildingTypeSchema>;
 
 export const BuildingType = () => {
   const { next, setData, setViews, data } = useFlowStore();
+  const intl = useIntl();
 
   const methods = useForm<BuildingTypeType>({
     resolver: zodResolver(BuildingTypeSchema),
@@ -55,6 +34,31 @@ export const BuildingType = () => {
       buildingType: data.buildingType,
     },
   });
+
+  const options: RadioOption<FlowData['buildingType']>[] = [
+    {
+      name: intl.formatMessage({
+        defaultMessage: 'Single or Multi-family home',
+      }),
+      value: 'home',
+      element: <HomeSvg />,
+    },
+    {
+      name: intl.formatMessage({ defaultMessage: 'Industrial' }),
+      value: 'industrial',
+      element: <IndustrialSvg />,
+    },
+    {
+      name: intl.formatMessage({ defaultMessage: 'Agricultural' }),
+      value: 'agricultural',
+      element: <AgriculturalSvg />,
+    },
+    {
+      name: intl.formatMessage({ defaultMessage: 'Commercial' }),
+      value: 'commercial',
+      element: <CommercialSvg />,
+    },
+  ];
 
   const { handleSubmit } = methods;
 
@@ -129,14 +133,19 @@ export const BuildingType = () => {
         <Image
           fill
           className="object-cover object-right-bottom"
-          alt="Home with solar panels"
+          alt={intl.formatMessage({ defaultMessage: 'Home with solar panels' })}
           sizes="50vw"
           src={Illustration.src}
         />
       }
-      title="Get an offer for solar
-  panels in 5 minutes"
-      subTitle="Estimate how much you can save by installing solar on your property."
+      title={intl.formatMessage({
+        defaultMessage: `Get an offer for solar
+  panels in 5 minutes`,
+      })}
+      subTitle={intl.formatMessage({
+        defaultMessage:
+          'Estimate how much you can save by installing solar on your property.',
+      })}
     >
       <Form
         className="containerPadding container"
@@ -145,18 +154,17 @@ export const BuildingType = () => {
       >
         <BoxesRadioGroupField
           name="buildingType"
-          label="Start by telling us what sort of building it is you intend to install solar panels on."
+          label={intl.formatMessage({
+            defaultMessage:
+              'Start by telling us what sort of building it is you intend to install solar panels on.',
+          })}
           className="grid-cols-2"
           options={options}
           onChange={value => handleChange(value)}
         />
         <div className="buttonContainer md:max-w-container">
-          <Button
-            type='submit'
-            variant="main-orange"
-            className="px-10"
-          >
-            Next
+          <Button type="submit" variant="main-orange" className="px-10">
+            {intl.formatMessage({ defaultMessage: 'Next' })}
           </Button>
         </div>
         <SunSvg
